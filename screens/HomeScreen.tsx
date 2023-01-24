@@ -25,21 +25,11 @@ import { LanguageContext } from '../LanguageContext';
 //import 'Intl';
 //import 'intl/locale-data/jsonp/en'
 // import { firebase } from '../firebase';
-import registerForPushNotificationsAsync from './helper/TokenDevice';
+
 import { number } from 'yup';
-import * as Notifications from 'expo-notifications';
+
 import { formatter } from '../utils';
 
-
-
-Notifications.setNotificationHandler({
-	handleNotification: async () => ({
-		shouldShowAlert: true,
-		shouldPlaySound: true,
-		shouldSetBadge: true,
-		allowBadge: true,
-	}),
-});
 
 
 export default function HomeScreen({ navigation, route }: RootTabScreenProps<'Home'>) {

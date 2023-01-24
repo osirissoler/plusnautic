@@ -154,6 +154,17 @@
 	"plomeria":"Plumbing",
 	"electricidad":"Electricity",
 	"painting":"Painting",
-	"anyRentCreatedYet":"There are not any rent"
+	"anyRentCreatedYet":"There are not any rent",
+	"maintenance":"My services",
+	"listServices": "List",
+	"EstimatedPrice":"Estimated price",
+	"acceptedRequest":"Are you sure you want to accept this request?",
+	"price":"Price",
+	"payout":"Payout",
+	"home":"Go Home",
+	"Accept":"Accept",
+	"TypeServices":"Type Services"
+	
+	
 	
 }

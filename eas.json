@@ -20,12 +20,6 @@
 				"image": "latest"
 			}
 		}
-	},
-	"submit": {
-		"production": {
-			"android": {
-				"serviceAccountKeyPath": "pc-api-7570426307891176108-241-74d9ff77d77b.json"
-			}
-		}
 	}
+	
 }

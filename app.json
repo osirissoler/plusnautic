@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Plusnautic",
-    "slug": "Plusnautic",
+    "slug": "plusnautic",
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/plusnauticIcon.png",
-    "scheme": "properties-clients",
+    "scheme": "plusnautic",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/plusnauticIcon.png",
@@ -21,13 +21,13 @@
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "com.Plusnautic.app",
+      "bundleIdentifier": "com.plusnautica2.app",
       "buildNumber": "1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you change your profile image.",
         "NSCameraUsageDescription": "The app uses your camera to let you take a picture and set it as your profile image.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": " it is not necessary Properties_Clients_KC"
+        "NSLocationAlwaysAndWhenInUseUsageDescription": " it is not necessary plusnautic"
       }
     },
     "android": {
@@ -36,7 +36,7 @@
         "foregroundImage": "./assets/images/adaptive-icon_coopharma.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.Plusnautic.app",
+      "package": "com.plusnautica2.app",
       "versionCode": 18,
       "permissions": [
         "android.permission.CAMERA",
@@ -59,7 +59,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "4f0b4099-8753-401c-854c-5d4bb00a1009"
+        "projectId": "7873c811-f59a-4c3a-85c6-4de0584dae63"
       }
     }
   }

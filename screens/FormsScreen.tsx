@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
     productAdd: {
         marginTop: 20,
         alignSelf: 'center',
-        backgroundColor: '#FF4E02',
+        backgroundColor: '#5f7ceb',
         height: 60,
         width: '100%',
         justifyContent: 'center',

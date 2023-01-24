@@ -41,6 +41,8 @@ import Step1Screen from '../screens/Steps/Step1Screen';
 import Step2Screen from '../screens/Steps/Step2Screen';
 import Step3Screen from '../screens/Steps/Step3Screen';
 import ActivityScreen from '../screens/ActivitisScreen';
+import AcceptedScreen from '../screens/Maintenance/AcceptedScreen';
+import ListScreen from '../screens/Maintenance/ListScreen';
 
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -195,6 +197,27 @@ function RootNavigator({ route }: any) {
 					headerTitle: translation.t('AplicationForOccunpacy') /* Checkout */,
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' }
+				}}
+			/>
+			<Stack.Screen
+				name='ListScreen'
+				component={ListScreen}
+				options={{
+					headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			{/* AcceptedScreen */}
+			<Stack.Screen
+				name='Accept'
+				component={AcceptedScreen}
+				options={{
+					// headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
 				}}
 			/>
 			<Stack.Screen name='Root' component={BottomTabNavigator} options={{ headerShown: false }} />

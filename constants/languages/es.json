@@ -154,5 +154,14 @@
 	"plomeria":"Plomería",
 	"electricidad":"Electricidad",
 	"painting":"Pintura",
-	"anyRentCreatedYet":"No hay renta creada"
+	"anyRentCreatedYet":"No hay renta creada",
+	"maintenance":"Mis servicios",
+	"listServices": "Lista",
+	"EstimatedPrice":"Precio estimado",
+	"acceptedRequest":"Está seguro que quiere aceptar esta solicitud",
+	"price":"Precio",
+	"payout":"Pago",
+	"home":"Inicio",
+	"Accept":"Aceptar",
+	"TypeServices":"Tipos de servicio"
 }

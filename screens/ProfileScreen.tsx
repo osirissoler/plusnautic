@@ -262,6 +262,13 @@ export default function ProfileScreen({ navigation }: any) {
 						<Text style={styles.optionText}>{translation.t('deleteAccount') /* Log Out */}</Text>
 						<AntDesign style={styles.optionIconDelete} name='delete' size={16} />
 					</Pressable>
+					<Pressable
+						style={styles.option}
+						onPress={() => navigation.navigate('ListScreen')}
+					>
+						<Text style={styles.optionText}>{translation.t('maintenance') /* Log Out */}</Text>
+						<AntDesign style={styles.optionIcon} name='right' size={16} />
+					</Pressable>
 				</View>
 				<View style={styles.footer}>
 					{/* <Text style={styles.footerText}>{translation.t('profileTermsText') /* Terms & Conditions }</Text> */}
