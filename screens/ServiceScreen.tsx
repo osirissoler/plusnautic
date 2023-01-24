@@ -217,7 +217,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 			const data = {
 				...values,
 				typeServices_id: id,
-				pharmacy_id: 534,
+				pharmacy_id: 536,
 				user_id: user_id,
 				product_id: product_id,
 				token:token
@@ -270,8 +270,8 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 		let result;
 		if (type == 2) {
 			result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				allowsEditing: true,
+				mediaTypes: ImagePicker.MediaTypeOptions.All,
+				allowsEditing: false,
 				allowsMultipleSelection: true,
 				selectionLimit: 10,
 				aspect: [4, 3],
@@ -315,8 +315,6 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 		}
 
 	}
-
-
 
 	return (
 		<>
