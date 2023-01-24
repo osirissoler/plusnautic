@@ -270,7 +270,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 		let result;
 		if (type == 2) {
 			result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.All,
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
 				allowsEditing: false,
 				allowsMultipleSelection: true,
 				selectionLimit: 10,
