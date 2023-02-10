@@ -76,7 +76,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
         sendDataPut(url, data).then((response) => {
             if (response.ok) {
                 showErrorToastGood('Request made correctly')
-                navigation.navigate('ListScreen')
+                navigation.navigate('Profile')
             }
         });
     }
@@ -206,8 +206,8 @@ export default function AcceptedScreen({ navigation, route }: any) {
                         </View>
                     </View>
 
-                   {(items.ServicesStatus_code != 'COMPLETADO') && <View style={{ height: '18%' }}>
-                        {(!items.accepted) ?
+                   {(items.ServicesStatus_code != 'COMPLETADO' && items.ServicesStatus_code != 'PROCCESING') && <View style={{ height: '18%' }}>
+                        {(!items.accepted) ? 
                             <TouchableOpacity
                                 style={{
                                     alignSelf: 'center',

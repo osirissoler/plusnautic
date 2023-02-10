@@ -58,7 +58,7 @@ export default function ListScreen({ navigation }: any) {
     }
 
     return (
-        
+
         <View style={styles.body}>
             <Loading showLoading={showLoading} translation={translation} />
             <View style={{ height: '20%' }}>
@@ -79,7 +79,7 @@ export default function ListScreen({ navigation }: any) {
                     horizontal
                     refreshing={fetching}
                     data={typeServices}
-                    onRefresh={getTypeServices}P
+                    onRefresh={getTypeServices} P
                     renderItem={({ item }: any) => (
                         <View>
                             <View style={{ alignItems: 'center', }}>
@@ -88,7 +88,7 @@ export default function ListScreen({ navigation }: any) {
                                     onPress={() => {
                                         filterServicesPrice(item.id)
                                         setText((translation.locale.includes('en') && item.name) ||
-                                        translation.locale.includes('es') && item.nombre)
+                                            translation.locale.includes('es') && item.nombre)
                                     }}
                                 >
                                     <View style={{ height: 40, width: 40, marginBottom: 10 }}>
@@ -139,7 +139,9 @@ export default function ListScreen({ navigation }: any) {
                                             <Text>{formatter(item.price)}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontWeight: 'bold' }}>{translation.t('payout')} </Text>
+                                            <Text style={{ fontWeight: 'bold' }}>Status{
+                                                // translation.t('payout') Status
+                                            } </Text>
                                             <Text>{
                                                 (translation.locale.includes('en') && item.ServicesStatus_name) ||
                                                 translation.locale.includes('es') && item.ServicesStatus_nombre
@@ -150,7 +152,19 @@ export default function ListScreen({ navigation }: any) {
                                 <View style={{ paddingRight: 10 }}>
                                     <View style={{ marginHorizontal: 10 }}>
                                         <Ionicons name="md-exit-outline" size={25} color="#5f7ceb" />
+
                                     </View>
+                                    {(item.ServicesStatus_code == 'ACEPTADO') && <View>
+                                        <Text>
+                                        {translation.t('checkoutPayNowText')}
+                                        </Text>
+                                    </View>}
+
+                                    {(item.ServicesStatus_code == 'PENDING') && <View>
+                                        <Text>
+                                        { translation.t('Accept')}
+                                        </Text>
+                                    </View>}
                                 </View>
                             </View>
                         </TouchableOpacity>
