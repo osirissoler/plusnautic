@@ -38,8 +38,8 @@ export default function AcceptedScreen({ navigation, route }: any) {
     const [placetoPayUrl, setplacetoPayUrl]: any = useState('')
     const [showLoading, setShowLoading]: any = useState(false);
     const [requestId, setrequestId]: any = useState('')
-    
 
+    console.log("aqu")
     useEffect(() => {
         fillMarkedDatesAll()
     }, [])
@@ -103,7 +103,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
     async function getIpClient() {
         try {
             const response = await axios.get('https://api.ipify.org?format=json');
-           
+
             return response.data.ip
         } catch (error) {
             console.error(error);
@@ -206,8 +206,8 @@ export default function AcceptedScreen({ navigation, route }: any) {
                         </View>
                     </View>
 
-                   {(items.ServicesStatus_code != 'COMPLETADO' && items.ServicesStatus_code != 'PROCCESING') && <View style={{ height: '18%' }}>
-                        {(!items.accepted) ? 
+                    {(items.ServicesStatus_code != 'COMPLETADO' && items.ServicesStatus_code != 'PROCCESING') && <View style={{ height: '18%' }}>
+                        {(!items.accepted) ?
                             <TouchableOpacity
                                 style={{
                                     alignSelf: 'center',
@@ -248,7 +248,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
                                         color: '#ffffff',
                                         fontSize: 18,
                                         fontWeight: '500'
-                                    }}>{ translation.t('Accept')}</Text>
+                                    }}>{translation.t('Accept')}</Text>
                                 </View>
                             </TouchableOpacity> :
                             <TouchableOpacity
