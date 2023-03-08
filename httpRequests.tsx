@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3005/api'
-//'https://lobster-app-aitkr.ondigitalocean.app/api';
+const baseUrl = //'http://localhost:3005/api'
+'https://lobster-app-aitkr.ondigitalocean.app/api';
 
 const fetchData = async (url: string) => {
 	try {

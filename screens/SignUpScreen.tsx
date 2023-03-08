@@ -52,11 +52,12 @@ export default function SignUpScreen({ navigation }: any) {
 		setShowLoading(true);
 		const url = '/user/createClient';
 		const data = {
-			firstName: values.fullName,
+			first_name: values.fullName,
 			lastName: '',
 			email: values.email,
 			phone: values.phone,
-			password: values.password
+			password: values.password,
+			pharmacy_id:536
 		};
 		console.log(data)
 		sendData(url, data)

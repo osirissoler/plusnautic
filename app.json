@@ -8,7 +8,7 @@
     "scheme": "plusnautic",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/plusnauticIcon.png",
+      "image": "./assets/images/fulllogo.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
