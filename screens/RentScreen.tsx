@@ -117,7 +117,7 @@ export default function RentScreen({ navigation, route }:any) {
 				// console.log("is active")
 				setListProducts([])
 				setisFilteredActive(false)
-				//console.log("listproduct",listProducts)
+				
 			}
 			//console.log("make request",initial,limit)
 			if (response['pharmacyproduct'] != undefined && response['pharmacyproduct'].length > 0) {
@@ -132,19 +132,17 @@ export default function RentScreen({ navigation, route }:any) {
 					// 	return !duplicate;
 					// })
 				)
-				// console.log("pharmacyproduct",listProducts)
+				
 				// 	const duplicate = seen.has(el.product_id);
 				// 	seen.add(el.product_id);
 				// 	return !duplicate;
 				//   })
 
-				//console.log(listProducts)
+				
 
 			}
-			// else{
-			// 		setListProducts([])
-			// 	}
-			// console.log(listProducts)
+			
+			
 		}
 		)
         })
@@ -154,25 +152,16 @@ export default function RentScreen({ navigation, route }:any) {
 	}
 
 	const getMoreProducts = () => {
-		//auxProduct = listProducts
+		
 		if (currentPageProducts.length > 0 && currentPageProducts != undefined) {
-			//setListProducts([])
-			// setinitial(limit)
+			
 			setlimit(limit + itemsQuatityByPage)
 			getProducts()
-			//	newArray.push(...listProducts,...currentPageProducts)
-			//console.log('test',newArray)
-			//auxProduct=newArray ;
-			//console.log(auxProduct)
-			//	 setListProducts(newArray//.filter((el:any) => {
-			// 		const duplicate = seen.has(el.pharmacy_product_id);
-			// 		seen.add(el.pharmacy_product_id);
-			// 		return !duplicate;
-			// 	  })
-			//)
+			
+			
 
 		}
-		//console.log("get more products",listProducts)
+		
 	}
 	const getCategories = () => {
 		
