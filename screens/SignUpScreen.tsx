@@ -57,7 +57,7 @@ export default function SignUpScreen({ navigation }: any) {
 			email: values.email,
 			phone: values.phone,
 			password: values.password,
-			pharmacy_id:536
+			
 		};
 		console.log(data)
 		sendData(url, data)
@@ -200,11 +200,11 @@ export default function SignUpScreen({ navigation }: any) {
 				<Formik
 					validationSchema={validationSchema}
 					initialValues={{
-						fullName: '',
-						email: '',
-						phone: '',
-						password: '',
-						passwordConfirmation: ''
+						fullName: 'test',
+						email: 'test@test.com',
+						phone: '43242342',
+						password: 'Test123456',
+						passwordConfirmation: 'Test123456'
 					}}
 					onSubmit={(values: any) => onSignUp(values)}
 				>

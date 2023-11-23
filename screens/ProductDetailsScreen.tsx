@@ -39,7 +39,6 @@ export default function ProductDetailsScreen({ navigation, route }: any) {
 			const url = '/products/getPharmaciesProductByid';
 
 			const params = route.params;
-			console.log(params, "params")
 			const data = {
 				id: params.productId,
 				pharmacy_id: 536
@@ -52,17 +51,17 @@ export default function ProductDetailsScreen({ navigation, route }: any) {
 						
 						setProduct(product);
 						const url2 = `/imagen/getImgs/${product.product_id}`
-						//console.log(product)
+						
 						fetchData(url2).then((response2: any) => {
 							if (response2.ok) {
-								// console.log(response2)
+								
 								setProduct_imgs([{ url: product.product_img }, ...response2.imagens])
 								setProduct_img({ url: product.product_img })
 
 							}
 
 						})
-						// console.log(product.product_id, url2)
+						
 						setProductPrice(product.price);
 					} else {
 						setProduct({});
