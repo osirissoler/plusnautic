@@ -163,8 +163,7 @@
 	"payout":"Payout",
 	"home":"Go Home",
 	"Accept":"Accept",
-	"TypeServices":"Type Services"
-	
-	
-	
+	"TypeServices":"Type Services",
+	"Engine": "Engine",
+	"Year": "Year"
 }

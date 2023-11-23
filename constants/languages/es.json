@@ -163,5 +163,7 @@
 	"payout":"Pago",
 	"home":"Inicio",
 	"Accept":"Aceptar",
-	"TypeServices":"Tipos de servicio"
+	"TypeServices":"Tipos de servicio",
+	"Engine": "Motor",
+	"Year": "Año"
 }

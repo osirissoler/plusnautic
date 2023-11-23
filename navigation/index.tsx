@@ -19,6 +19,7 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import FormsScreen from '../screens/FormsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LanguageScreen from '../screens/LanguageScreen';
+import RecordBoats from '../screens/RecordBoats';
 import ListPharmaciesScreen from '../screens/ListPharmaciesScreen';
 import ListProductsScreen from '../screens/ListProductsScreen';
 import MyOrderDetailsScreen from '../screens/MyOrderDetailsScreen';
@@ -100,6 +101,16 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='SelectLanguage'
 				component={SelectLanguageScreen}
+				options={{
+					headerTitle: translation.t('languageTitle'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			<Stack.Screen
+				name='RecordBoats'
+				component={RecordBoats}
 				options={{
 					headerTitle: translation.t('languageTitle'),
 					headerStyle: { backgroundColor: '#fff' },

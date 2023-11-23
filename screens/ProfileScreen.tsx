@@ -19,8 +19,9 @@ export default function ProfileScreen({ navigation }: any) {
 	useEffect(() => {
 		checkLoggedUser(
 			(id: string) => {
+				console.log(id)
 				setShowLoading(true);
-				const url = '/user/getUserById';
+				const url = `/user/getUserById/${id}`;
 				const data = { user_id: id };
 				sendData(url, data).then((response) => {
 					hideLoadingModal(() => {
@@ -206,8 +207,8 @@ export default function ProfileScreen({ navigation }: any) {
 				<View style={{ marginLeft: 15 }}>
 					{Object.keys(user).length > 0 && (
 						<>
-							<Text style={styles.profileText}>{user.first_name + ' ' + user.last_name}</Text>
-							<Text style={styles.profileText}>{user.email}</Text>
+							{/* <Text style={styles.profileText}>{user.first_name}</Text>
+							<Text style={styles.profileText}>{user.email}</Text> */}
 						</>
 					)}
 				</View>
@@ -227,6 +228,10 @@ export default function ProfileScreen({ navigation }: any) {
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable> */}
 					<Pressable style={styles.option} onPress={() => navigation.navigate('SelectLanguage')}>
+						<Text style={styles.optionText}>{translation.t('languageTitle')}</Text>
+						<AntDesign style={styles.optionIcon} name='right' size={16} />
+					</Pressable>
+					<Pressable style={styles.option} onPress={() => navigation.navigate('RecordBoats')}>
 						<Text style={styles.optionText}>{translation.t('languageTitle')}</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
