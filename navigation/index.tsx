@@ -45,8 +45,11 @@ import ActivityScreen from '../screens/ActivitisScreen';
 import AcceptedScreen from '../screens/Maintenance/AcceptedScreen';
 import ListScreen from '../screens/Maintenance/ListScreen';
 
+
+
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import SelectMarinasScreen from '../screens/SelectMarinasScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -73,6 +76,11 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='Language'
 				component={LanguageScreen}
+				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Marinas'
+				component={SelectMarinasScreen}
 				options={{ headerShown: false, animation: 'fade' }}
 			/>
 			<Stack.Screen name='Step1' component={Step1Screen} options={{ headerShown: false, animation: 'fade' }} />
