@@ -167,6 +167,8 @@
 	"RegisterBoat": "Register a Boat",
 	"Save": "Save",
 	"Engine": "Engine",
-	"Year": "Year"
+	"Year": "Year",
+	"Marine": "Marine",
+	"ChooseMarine": "Choose marine"
 
 }

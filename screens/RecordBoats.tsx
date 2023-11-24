@@ -12,11 +12,7 @@ import { AntDesign, FontAwesome, Octicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as yup from "yup";
 import HeaderComponent from "../components/Header";
-import {
-  checkStorage,
-  Container,
-  Loading,
-} from "../components/Shared";
+import { checkStorage, Container, Loading } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
@@ -27,24 +23,23 @@ export default function RecordBoats({ navigation }: any) {
   const [showLoading, setShowLoading]: any = useState(false);
   const [engineInputsCounter, setEngineInputsCounter] = useState(1);
   const [userId, setUserId] = useState(0);
-  const [pharmacyValues, setPharmacyValues] = useState([])
-  const [pharmacyIdSelected, setPharmacyIdSelected] = useState(0)
+  const [pharmacyValues, setPharmacyValues] = useState([]);
+  const [pharmacyIdSelected, setPharmacyIdSelected] = useState(0);
 
   useEffect(() => {
     checkStorage("USER_LOGGED", async (id: any) => {
       setUserId(id);
-      const url = `/userPharmacy/getUserPharmacyByUserId/${id}`
+      const url = `/userPharmacy/getUserPharmacyByUserId/${id}`;
 
       fetchData(url).then((res) => {
         const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
-            label: pharmacy.pharmacy_name,
-            value: pharmacy.pharmacy_id
-          }));
-    
-          setPharmacyValues(mappedValues);
-      })
-    });
+          label: pharmacy.pharmacy_name,
+          value: pharmacy.pharmacy_id,
+        }));
 
+        setPharmacyValues(mappedValues);
+      });
+    });
   }, []);
 
   const validationSchema = yup.object().shape({
@@ -115,7 +110,7 @@ export default function RecordBoats({ navigation }: any) {
   };
 
   const redirectToProfile = () => {
-    navigation.navigate('Profile')
+    navigation.navigate("Profile");
   };
 
   const incrementCounter = () => {
@@ -152,46 +147,46 @@ export default function RecordBoats({ navigation }: any) {
 
   return (
     <Container
-      style={{ backgroundColor: "#fff",  height: "95%" }}
+      style={{ backgroundColor: "#fff", height: "95%" }}
       keyboard={true}
     >
       <HeaderComponent navigation={navigation} />
       <Loading showLoading={showLoading} translation={translation} />
-        <Formik
-          validationSchema={validationSchema}
-          initialValues={{
-            boat_name: "",
-            engine_1: "",
-            engineYear_1: "",
-            engine_2: "",
-            engineYear_2: "",
-            engine_3: "",
-            engineYear_3: "",
-            engine_4: "",
-            engineYear_4: "",
-            engine_5: "",
-            engineYear_5: "",
-            engine_6: "",
-            engineYear_6: "",
-            boat_hull: "",
-            electric_plant: "",
-            air_conditioner: "",
-            pharmacy_id: '',
-          }}
-          onSubmit={(values: any) => recordBoat(values)}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            setFieldValue,
-            isValid,
-            errors,
-            touched,
-          }: any) => (
-            <View>
-        <ScrollView style={{ padding: 10, height: "80%" }}>
+      <Formik
+        validationSchema={validationSchema}
+        initialValues={{
+          boat_name: "",
+          engine_1: "",
+          engineYear_1: "",
+          engine_2: "",
+          engineYear_2: "",
+          engine_3: "",
+          engineYear_3: "",
+          engine_4: "",
+          engineYear_4: "",
+          engine_5: "",
+          engineYear_5: "",
+          engine_6: "",
+          engineYear_6: "",
+          boat_hull: "",
+          electric_plant: "",
+          air_conditioner: "",
+          pharmacy_id: "",
+        }}
+        onSubmit={(values: any) => recordBoat(values)}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          setFieldValue,
+          isValid,
+          errors,
+          touched,
+        }: any) => (
+          <View>
+            <ScrollView style={{ padding: 10, height: "80%" }}>
               <View style={{}}>
                 <Text style={styles.labelInput}>Boat name</Text>
                 <TextInput
@@ -222,223 +217,231 @@ export default function RecordBoats({ navigation }: any) {
                   onBlur={handleBlur("air_conditioner")}
                   value={values.air_conditioner}
                 />
-                  <View>
-                    <Text style={styles.labelInput}>Marina</Text>
-                    <Dropdown
-                      style={styles.dropdown}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      inputSearchStyle={styles.inputSearchStyle}
-                      iconStyle={styles.iconStyle}
-                      data={pharmacyValues}
-                      search
-                      maxHeight={300}
-                      labelField="label"
-                      valueField="value"
-                      placeholder='Elige marina'
-                      searchPlaceholder="Search..."
-                      value={values.pharmacy_id}
-                      onChange={(items) => {
-                        setFieldValue('pharmacy_id', items.value); 
-                      }}
-                      renderLeftIcon={() => (
-                        <AntDesign
-                          style={styles.icon}
-                          color="black"
-                          name="Safety"
-                          size={20}
-                        />
-                      )}
-                    />
-                  </View>
+                <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Marine")}
+                  </Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={pharmacyValues}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={translation.t("ChooseMarine")}
+                    searchPlaceholder="Search..."
+                    value={values.pharmacy_id}
+                    onChange={(items) => {
+                      setFieldValue("pharmacy_id", items.value);
+                    }}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color="black"
+                        name="Safety"
+                        size={20}
+                      />
+                    )}
+                  />
+                </View>
               </View>
 
               <View style={{}}>
                 <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.labelInput}>Engine 1</Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 20,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() => decrementCounter(setFieldValue)}
                     >
-                      <Text style={styles.labelInput}>Engine 1</Text>
+                      <Octicons name="dash" size={30} color="red" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() => incrementCounter()}
+                    >
+                      <AntDesign name="pluscircle" size={30} color="green" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={handleChange("engine_1")}
+                  onBlur={handleBlur("engine_1")}
+                  value={values.engine_1}
+                />
 
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          gap: 20
-                        }}
-                      >
-                        <TouchableOpacity
-                          style={styles.addButton}
-                          onPress={() => decrementCounter(setFieldValue)}
-                        >
-                          <Octicons name="dash" size={30} color="red" />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.addButton}
-                          onPress={() => incrementCounter()}
-                        >
-                          <AntDesign name="pluscircle" size={30} color="green" />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                    <TextInput
-                      style={styles.textInput}
-                      onChangeText={handleChange("engine_1")}
-                      onBlur={handleBlur("engine_1")}
-                      value={values.engine_1}
-                    />
+                <Text style={styles.labelInput}>
+                  {translation.t("Year") + " 1"}
+                </Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={handleChange("engineYear_1")}
+                  onBlur={handleBlur("engineYear_1")}
+                  value={values.engineYear_1}
+                  keyboardType="numeric"
+                />
 
+                {engineInputsCounter >= 2 && (
+                  <>
                     <Text style={styles.labelInput}>
-                      {translation.t("Year") + " 1"}
+                      {translation.t("Engine") + " 2"}
                     </Text>
                     <TextInput
                       style={styles.textInput}
-                      onChangeText={handleChange("engineYear_1")}
-                      onBlur={handleBlur("engineYear_1")}
-                      value={values.engineYear_1}
+                      onChangeText={handleChange("engine_2")}
+                      onBlur={handleBlur("engine_2")}
+                      value={values.engine_2}
+                    />
+                    <Text style={styles.labelInput}>
+                      {translation.t("Year") + " 2"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engineYear_2")}
+                      onBlur={handleBlur("engineYear_2")}
+                      value={values.engineYear_2}
                       keyboardType="numeric"
                     />
+                  </>
+                )}
 
-                    {engineInputsCounter >= 2 && (
-                      <>
-                        <Text style={styles.labelInput}>
-                          {translation.t("Engine") + " 2"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engine_2")}
-                          onBlur={handleBlur("engine_2")}
-                          value={values.engine_2}
-                        />
-                        <Text style={styles.labelInput}>
-                          {translation.t("Year") + " 2"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engineYear_2")}
-                          onBlur={handleBlur("engineYear_2")}
-                          value={values.engineYear_2}
-                          keyboardType="numeric"
-                        />
-                      </>
-                    )}
+                {engineInputsCounter >= 3 && (
+                  <>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Engine") + " 3"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engine_3")}
+                      onBlur={handleBlur("engine_3")}
+                      value={values.engine_3}
+                    />
+                    <Text style={styles.labelInput}>
+                      {translation.t("Year") + " 3"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engineYear_3")}
+                      onBlur={handleBlur("engineYear_3")}
+                      value={values.engineYear_3}
+                      keyboardType="numeric"
+                    />
+                  </>
+                )}
 
-                    {engineInputsCounter >= 3 && (
-                      <>
-                        <Text style={styles.labelInput}>
-                          {translation.t("Engine") + " 3"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engine_3")}
-                          onBlur={handleBlur("engine_3")}
-                          value={values.engine_3}
-                        />
-                        <Text style={styles.labelInput}>
-                          {translation.t("Year") + " 3"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engineYear_3")}
-                          onBlur={handleBlur("engineYear_3")}
-                          value={values.engineYear_3}
-                          keyboardType="numeric"
-                        />
-                      </>
-                    )}
+                {engineInputsCounter >= 4 && (
+                  <>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Engine") + " 4"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engine_4")}
+                      onBlur={handleBlur("engine_4")}
+                      value={values.engine_4}
+                    />
+                    <Text style={styles.labelInput}>
+                      {translation.t("Year") + " 4"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engineYear_4")}
+                      onBlur={handleBlur("engineYear_4")}
+                      value={values.engineYear_4}
+                      keyboardType="numeric"
+                    />
+                  </>
+                )}
 
-                    {engineInputsCounter >= 4 && (
-                      <>
-                        <Text style={styles.labelInput}>
-                          {translation.t("Engine") + " 4"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engine_4")}
-                          onBlur={handleBlur("engine_4")}
-                          value={values.engine_4}
-                        />
-                        <Text style={styles.labelInput}>
-                          {translation.t("Year") + " 4"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engineYear_4")}
-                          onBlur={handleBlur("engineYear_4")}
-                          value={values.engineYear_4}
-                          keyboardType="numeric"
-                        />
-                      </>
-                    )}
+                {engineInputsCounter >= 5 && (
+                  <>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Engine") + " 5"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engine_5")}
+                      onBlur={handleBlur("engine_5")}
+                      value={values.engine_5}
+                    />
+                    <Text style={styles.labelInput}>
+                      {translation.t("Year") + " 5"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engineYear_5")}
+                      onBlur={handleBlur("engineYear_5")}
+                      value={values.engineYear_5}
+                      keyboardType="numeric"
+                    />
+                  </>
+                )}
 
-                    {engineInputsCounter >= 5 && (
-                      <>
-                        <Text style={styles.labelInput}>
-                          {translation.t("Engine") + " 5"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engine_5")}
-                          onBlur={handleBlur("engine_5")}
-                          value={values.engine_5}
-                        />
-                        <Text style={styles.labelInput}>
-                          {translation.t("Year") + " 5"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engineYear_5")}
-                          onBlur={handleBlur("engineYear_5")}
-                          value={values.engineYear_5}
-                          keyboardType="numeric"
-                        />
-                      </>
-                    )}
-
-                    {engineInputsCounter >= 6 && (
-                      <>
-                        <Text style={styles.labelInput}>
-                          {translation.t("Engine") + " 6"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engine_6")}
-                          onBlur={handleBlur("engine_6")}
-                          value={values.engine_6}
-                        />
-                        <Text style={styles.labelInput}>
-                          {translation.t("Year") + " 6"}
-                        </Text>
-                        <TextInput
-                          style={styles.textInput}
-                          onChangeText={handleChange("engineYear_6")}
-                          onBlur={handleBlur("engineYear_6")}
-                          value={values.engineYear_6}
-                          keyboardType="numeric"
-                        />
-                      </>
-                    )}
+                {engineInputsCounter >= 6 && (
+                  <>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Engine") + " 6"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engine_6")}
+                      onBlur={handleBlur("engine_6")}
+                      value={values.engine_6}
+                    />
+                    <Text style={styles.labelInput}>
+                      {translation.t("Year") + " 6"}
+                    </Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange("engineYear_6")}
+                      onBlur={handleBlur("engineYear_6")}
+                      value={values.engineYear_6}
+                      keyboardType="numeric"
+                    />
+                  </>
+                )}
               </View>
-        </ScrollView>
+            </ScrollView>
 
-              <View style={{ height: "20%", padding: 10 }}>
-                <TouchableOpacity
-				  style={isValid ? styles.registerButton : styles.registerButtonDisabled}
-                  disabled={!isValid}
-                  onPress={() => {handleSubmit()}}
-                >
-                  <Text style={styles.registerButtonText}>
-                    {translation.t("Save")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              </View>
-          )}
-        </Formik>
+            <View style={{ height: "20%", padding: 10 }}>
+              <TouchableOpacity
+                style={
+                  isValid
+                    ? styles.registerButton
+                    : styles.registerButtonDisabled
+                }
+                disabled={!isValid}
+                onPress={() => {
+                  handleSubmit();
+                }}
+              >
+                <Text style={styles.registerButtonText}>
+                  {translation.t("Save")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </Container>
   );
 }

@@ -167,5 +167,7 @@
 	"RegisterBoat": "Registrar un bote",
 	"Save": "Guardar",
 	"Engine": "Motor",
-	"Year": "Año"
+	"Year": "Año",
+	"Marine": "Marina",
+	"ChooseMarine": "Elige la marina"
 }
