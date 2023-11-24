@@ -17,26 +17,25 @@ export default function ProfileScreen({ navigation }: any) {
 	const [user, setUser]: any = useState({});
 
 	useEffect(() => {
-		checkLoggedUser(
-			(id: string) => {
-				console.log(id)
-				setShowLoading(true);
-				const url = `/user/getUserById/${id}`;
-				const data = { user_id: id };
-				sendData(url, data).then((response) => {
-					hideLoadingModal(() => {
-						const user = response['user'];
-						setUser(user);
-						if (user.img) {
-							let img = user.img;
-							if (!img.includes('https://')) {
-								img = 'https://' + user.img;
-							}
-							setProfileImage({ uri: img });
-						} else setProfileImage(require('../assets/images/profile_avatar.png'));
-					});
+		checkLoggedUser((id: string) => {
+			console.log(id)
+			setShowLoading(true);
+			const url = `/user/getUserById/${id}`;
+			const data = { user_id: id };
+			sendData(url, data).then((response) => {
+				hideLoadingModal(() => {
+					const user = response['user'];
+					setUser(user);
+					if (user.img) {
+						let img = user.img;
+						if (!img.includes('https://')) {
+							img = 'https://' + user.img;
+						}
+						setProfileImage({ uri: img });
+					} else setProfileImage(require('../assets/images/profile_avatar.png'));
 				});
-			},
+			});
+		},
 			navigation,
 			translation
 		);
@@ -117,7 +116,7 @@ export default function ProfileScreen({ navigation }: any) {
 
 		const url = '/user/updateClientImage/' + user.id;
 		const data = formData;
-		
+
 		sendData(url, data).then((response) => {
 			hideLoadingModal(() => {
 				if (Object.keys(response).length > 0) {
@@ -232,6 +231,10 @@ export default function ProfileScreen({ navigation }: any) {
 					</Pressable>
 					<Pressable style={styles.option} onPress={() => navigation.navigate('RecordBoats')}>
 						<Text style={styles.optionText}>{translation.t('RegisterBoat')}</Text>
+						<AntDesign style={styles.optionIcon} name='right' size={16} />
+					</Pressable>
+					<Pressable style={styles.option} onPress={() => navigation.navigate('Marinas')}>
+						<Text style={styles.optionText}>Marinas</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
 					<Pressable

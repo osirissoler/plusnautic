@@ -37,16 +37,10 @@ export default function SelectMarinasScreen({ navigation }: any) {
                     list.push({ name: element.name, id: element.id, img: element.img, selected: false })
                 });
             } else {
-
             }
             setFetching(false)
-
         })
-
     }
-
-
-    
 
     const selectPharmacy = (index: any) => {
         list[index].selected = !list[index].selected
@@ -92,8 +86,7 @@ export default function SelectMarinasScreen({ navigation }: any) {
                 <Text>Buscador</Text>
             </View>
             <View style={{ height: '75%' }}>
-                <FlatList
-                    // columnWrapperStyle={{ justifyContent: 'space-around' }}
+                {/* <FlatList
                     refreshing={fetching}
                     data={list}
                     onRefresh={getPharmacies}
@@ -101,7 +94,6 @@ export default function SelectMarinasScreen({ navigation }: any) {
                         <TouchableOpacity style={styles.productCard} onPress={() => {
                             selectPharmacy(index)
                             setFetching(true)
-
                         }
 
                         }>
@@ -121,36 +113,12 @@ export default function SelectMarinasScreen({ navigation }: any) {
                                         marginTop: 20
                                     }}
                                 >
-                                    <Pressable
-
-
-                                    >
-                                        {/* <AntDesign name='plus' size={18} style={styles.productAddIcon} /> */}
-                                        {/* {(item.selected == true) ? <AntDesign name="checksquareo" size={24} color="green" style={styles.productAddIcon} />
-                                            : <AntDesign name="minussquareo" size={24} color="black" style={styles.productAddIcon} />} */}
-                                        {/* <CheckBox
-                                            checked={true}
-                                            color={"red"}
-                                            // disabled={false}
-                                            onPress={() => {selectPharmacy(index) }}
-                                        /> */}
-                                        {/* <InputController value={{ index: index, selected: item.selected }} ></InputController> */}
-                                        <CheckBox
-                                            checked={item.selected}
-                                            checkedColor="green"
-                                            onPress={() => {
-                                                selectPharmacy(index)
-                                                setFetching(true)
-                                            }}
-                                        />
-                                    </Pressable>
                                 </View>
                             </View>
                         </TouchableOpacity>
                     )}
-                // numColumns={1}
                 >
-                </FlatList>
+                </FlatList> */}
             </View>
             <View style={{ height: '10%', marginHorizontal: 15, marginTop: 10 }}>
                 <TouchableOpacity style={styles.registerButton} onPress={() => {
