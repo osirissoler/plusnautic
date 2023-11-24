@@ -164,6 +164,9 @@
 	"home":"Go Home",
 	"Accept":"Accept",
 	"TypeServices":"Type Services",
+	"RegisterBoat": "Register a Boat",
+	"Save": "Save",
 	"Engine": "Engine",
 	"Year": "Year"
+
 }

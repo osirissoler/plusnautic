@@ -164,6 +164,8 @@
 	"home":"Inicio",
 	"Accept":"Aceptar",
 	"TypeServices":"Tipos de servicio",
+	"RegisterBoat": "Registrar un bote",
+	"Save": "Guardar",
 	"Engine": "Motor",
 	"Year": "Año"
 }

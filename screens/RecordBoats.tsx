@@ -1,57 +1,42 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import HeaderComponent from '../components/Header';
-import { checkStorage, Container, Loading } from '../components/Shared';
+import { checkLoggedUser, checkStorage, Container, Loading } from '../components/Shared';
 import { BottomPopup } from '../components/BottomPopup';
 import { sendData } from '../httpRequests';
 import Toast from 'react-native-root-toast';
 import asyncStorage from '@react-native-async-storage/async-storage';
 import { LanguageContext } from '../LanguageContext';
 import { CheckBox, Separator } from "react-native-btr";
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 export default function RecordBoats({ navigation }: any) {
 	const { translation } = React.useContext(LanguageContext);
 	const [showLoading, setShowLoading]: any = useState(false);
 	const [termAndCoditionAccepted, settermAndCoditionAccepted] = useState(false)
     const [engineInputsCounter, setEngineInputsCounter] = useState(1)
+    const [userId, setUserId] = useState(0)
+
+    useEffect(() => {
+        checkStorage('USER_LOGGED', (id: any) => {
+            setUserId(id)
+        })
+    }, [])
 
 	const validationSchema = yup.object().shape({
-		fullName: yup.string().required(translation.t('signUpFullNameRequiredText') /* First name is required */),
-		phone: yup.string().required(translation.t('signUpPhoneNumberRequiredText') /* Phone number is required */),
-		email: yup
-			.string()
-			.email(translation.t('signUpEmailValidationText') /* Please enter valid email */)
-			.required(translation.t('signUpEmailRequiredText') /* Email is required */),
-		password: yup
-			.string()
-			.matches(
-				/\w*[a-z]\w*/,
-				translation.t('signUpPasswordValidationSmallLetterText') /*Password must have a small letter */
-			)
-			.matches(
-				/\w*[A-Z]\w*/,
-				translation.t('signUpPasswordValidationCapitalLetterText') /* Password must have a capital letter */
-			)
-			.matches(/\d/, translation.t('signUpPasswordValidationNumberText') /* Password must have a number */)
-			.min(
-				8,
-				({ min }: any) =>
-					translation.t('signUpPasswordValidationCharactersText') +
-					min /* `Password must be at least ${min} characters` */
-			)
-			.required(translation.t('signUpPasswordRequiredText') /* Password is required */),
-		passwordConfirmation: yup
-			.string()
-			.oneOf([yup.ref('password')], translation.t('signUpPasswordMatchErrorText') /* Passwords do not match */)
-			.required(translation.t('signUpPasswordConfirmationRequiredText') /* Confirm password is required */)
-	});
+		boat_name: yup.string().required(),
+		engine_1: yup.string().required(),
+		engineYear_1: yup.string().required(),
+		boat_hull: yup.string().required(),
+		electric_plant: yup.string().required(),
+        air_conditioner: yup.string().required(),
+		pharmacy_id: yup.string().required(),
+    });
 
 	const recordBoat = (values: any) => {
 		setShowLoading(true);
-		const url = '/user/createClient';
+		const url = '/boatsRecords/createBoatRecord';
 		const data = {
             boat_name: values.boat_name,
 		    engine_1: values.engine_1,
@@ -69,45 +54,21 @@ export default function RecordBoats({ navigation }: any) {
             boat_hull: values.boat_hull,
             electric_plant: values.electric_plant,
             air_conditioner: values.air_conditioner,
-            pharmacy_id: values.pharmacy_id
-			
+            pharmacy_id: values.pharmacy_id,
+			user_id: userId
 		};
-		console.log(data)
+
 		sendData(url, data)
 			.then((response) => {
 				hideLoadingModal(() => {
 					if (response.ok) {
-						console.log(response.ok, "aqui1");
-						const url = '/auth/login';
-						sendData(url, values).then((response: any) => {
-							setAuthUser(response.id);
-						});
+                        showSuccessToast(response.message);
+                        redirectToProfile()
 					} else {
 						showErrorToast(response.message);
-						console.log(response, "aqui2");
 					}
 				});
 			})
-			.catch((error) => {
-				hideLoadingModal(() => {
-					showErrorToast(translation.t('httpConnectionError'));
-
-				});
-			});
-	};
-
-	const setAuthUser = (id: number) => {
-		asyncStorage.setItem('USER_LOGGED', id + '');
-		navigation.reset({
-			index: 0,
-			routes: [
-				{
-					name: 'Root',
-					params: { phId: 536 },
-					screen: 'Home'
-				}
-			]
-		});
 	};
 
 	const hideLoadingModal = (callback: Function) => {
@@ -124,17 +85,57 @@ export default function RecordBoats({ navigation }: any) {
 		});
 	};
 
-	let popupRef: any = React.createRef();
-
-	const onShowPopup = () => {
-		popupRef.show();
+    const showSuccessToast = (message: string) => {
+		Toast.show(message, {
+			duration: Toast.durations.LONG,
+			containerStyle: { backgroundColor: 'green', width: '80%' }
+		});
 	};
+
+    const redirectToProfile = () => {
+		navigation.reset({
+			index: 0,
+			routes: [{ name: 'Profile' }]
+		});
+	};
+
+    const incrementCounter = (setFieldValue: any) => {
+        engineInputsCounter < 6 && setEngineInputsCounter(engineInputsCounter + 1)
+    }
+
+    const decrementCounter = (setFieldValue: any) => {
+        engineInputsCounter > 1 &&  setEngineInputsCounter(engineInputsCounter - 1)
+        if(engineInputsCounter <= 2) {
+            setFieldValue('engine_2', '')
+            setFieldValue('engineYear_2', '')
+        }
+
+        if(engineInputsCounter <= 3) {
+            setFieldValue('engine_3', '')
+            setFieldValue('engineYear_3', '')
+        }
+
+        if(engineInputsCounter <= 4) {
+            setFieldValue('engine_4', '')
+            setFieldValue('engineYear_4', '')
+        }
+
+        if(engineInputsCounter <= 5) {
+            setFieldValue('engine_5', '')
+            setFieldValue('engineYear_5', '')
+        }
+
+        if(engineInputsCounter <= 6) {
+            setFieldValue('engine_6', '')
+            setFieldValue('engineYear_6', '')
+        }
+    }
+    console.log(engineInputsCounter)
 
 	return (
 		<Container style={{ backgroundColor: '#fff', flex: 1, height: '100%' }} keyboard={true}>
 			<HeaderComponent navigation={navigation} />
 			<Loading showLoading={showLoading} translation={translation} />
-			<Text style={styles.title}>{translation.t('signUpTitle')}</Text>
 			<ScrollView style={{ padding: 10 }}>
 				<Formik
 					validationSchema={validationSchema}
@@ -155,12 +156,12 @@ export default function RecordBoats({ navigation }: any) {
 						boat_hull: 'Bote G23',
                         electric_plant: 'Planta Q931',
                         air_conditioner: 'Aire K9',
-                        // pharmacy_id: 'Una marina'
+                        pharmacy_id: '536'
                         
 					}}
 					onSubmit={(values: any) => recordBoat(values)}
 				>
-					{({ handleChange, handleBlur, handleSubmit, values, isValid, errors, touched }: any) => (
+					{({ handleChange, handleBlur, handleSubmit, values, setFieldValue, isValid, errors, touched }: any) => (
 						<View>
 							<Text style={styles.labelInput}>
 								Boat name
@@ -204,9 +205,9 @@ export default function RecordBoats({ navigation }: any) {
 							</Text>
 							<TextInput
 								style={styles.textInput}
-								onChangeText={handleChange('phone')}
-								onBlur={handleBlur('phone')}
-								value={values.phone}
+								onChangeText={handleChange('pharmacy_id')}
+								onBlur={handleBlur('pharmacy_id')}
+								value={values.pharmacy_id}
 								keyboardType='numeric'
 							/>
 
@@ -214,10 +215,10 @@ export default function RecordBoats({ navigation }: any) {
 							    <Text style={styles.labelInput}>Engine 1</Text>
 
                                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <TouchableOpacity style={styles.addButton} onPress={() => engineInputsCounter > 1 &&  setEngineInputsCounter(engineInputsCounter - 1)}>
+                                <TouchableOpacity style={styles.addButton} onPress={() => decrementCounter(setFieldValue)}>
                                     <Text>remove engine</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.addButton} onPress={() => engineInputsCounter < 6 && setEngineInputsCounter(engineInputsCounter + 1)}>
+                                <TouchableOpacity style={styles.addButton} onPress={() => incrementCounter(setFieldValue)}>
                                     <Text>Add engine</Text>
                                 </TouchableOpacity>
                                 </View>
@@ -330,10 +331,10 @@ export default function RecordBoats({ navigation }: any) {
 
                             <TouchableOpacity
 								style={styles.registerButton}
-								onPress={() => (Object.keys(errors).length > 0 ? onShowPopup() : handleSubmit())}
+								onPress={() => handleSubmit()}
 							>
 								<Text style={styles.registerButtonText} >
-									{translation.t('signUpButtonText') /*  Register */}
+									{translation.t('Save')}
 								</Text>
 							</TouchableOpacity>
 

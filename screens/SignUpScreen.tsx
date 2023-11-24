@@ -68,6 +68,7 @@ export default function SignUpScreen({ navigation }: any) {
 						const url = '/auth/login';
 						sendData(url, values).then((response: any) => {
 							setAuthUser(response.id);
+							// redirectToRecordBoats()
 						});
 					} else {
 						showErrorToast(response.message);
@@ -94,6 +95,13 @@ export default function SignUpScreen({ navigation }: any) {
 					screen: 'Home'
 				}
 			]
+		});
+	};
+	
+	const redirectToRecordBoats = () => {
+		navigation.reset({
+			index: 0,
+			routes: [{ name: 'RecordBoats' }]
 		});
 	};
 

@@ -156,7 +156,6 @@ export default function ProfileScreen({ navigation }: any) {
 	};
 
 	const supportedURL = "https://coopharma-83beb.web.app/termsandconditions";
-
 	const unsupportedURL = "slack://open?team=123456";
 
 	const OpenURLButton = ({ url, children }) => {
@@ -232,7 +231,7 @@ export default function ProfileScreen({ navigation }: any) {
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
 					<Pressable style={styles.option} onPress={() => navigation.navigate('RecordBoats')}>
-						<Text style={styles.optionText}>{translation.t('languageTitle')}</Text>
+						<Text style={styles.optionText}>{translation.t('RegisterBoat')}</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
 					<Pressable

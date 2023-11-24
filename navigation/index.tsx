@@ -112,7 +112,7 @@ function RootNavigator({ route }: any) {
 				name='RecordBoats'
 				component={RecordBoats}
 				options={{
-					headerTitle: translation.t('languageTitle'),
+					headerTitle: translation.t('RegisterBoat'),
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' },
 					animation: 'slide_from_right'
