@@ -23,7 +23,7 @@ export default function MyBoats({ navigation }: any) {
 
   useEffect(() => {
 	  checkStorage("USER_LOGGED", async (id: any) => {
-		setUserId(id);
+	setUserId(id);
 		setShowLoading(true)
       const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
 	  hideLoadingModal(() => {

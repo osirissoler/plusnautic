@@ -166,7 +166,7 @@ function RootNavigator({ route }: any) {
 				name='MyBoats'
 				component={MyBoats}
 				options={{
-					headerTitle: translation.t('headerTitlePayments') /* Payments */,
+					headerTitle: translation.t('MyBoats') /* Payments */,
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' }
 				}}

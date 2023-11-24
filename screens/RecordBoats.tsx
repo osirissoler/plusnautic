@@ -53,6 +53,30 @@ export default function RecordBoats({ navigation, route }: any) {
         value: pharmacy.pharmacy_id,
       }));
       setPharmacyValues(mappedValues);
+
+      if(initialValues.engine_2 && initialValues.engineYear_2){
+        setEngineInputsCounter(2)
+      }
+
+      if(initialValues.engine_3 && initialValues.engineYear_3){
+        setEngineInputsCounter(3)
+      }
+
+      if(initialValues.engine_4 && initialValues.engineYear_4){
+        setEngineInputsCounter(4)
+      }
+
+      if(initialValues.engine_4 && initialValues.engineYear_4){
+        setEngineInputsCounter(4)
+      }
+
+      if(initialValues.engine_5 && initialValues.engineYear_5){
+        setEngineInputsCounter(5)
+      }
+
+      if(initialValues.engine_6 && initialValues.engineYear_6){
+        setEngineInputsCounter(6)
+      }
     });
   }, []);
 
