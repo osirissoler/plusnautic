@@ -45,8 +45,11 @@ import ActivityScreen from '../screens/ActivitisScreen';
 import AcceptedScreen from '../screens/Maintenance/AcceptedScreen';
 import ListScreen from '../screens/Maintenance/ListScreen';
 
+
+
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import SelectMarinasScreen from '../screens/SelectMarinasScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -74,6 +77,22 @@ function RootNavigator({ route }: any) {
 				name='Language'
 				component={LanguageScreen}
 				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Marinas'
+				component={SelectMarinasScreen}
+				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='RecordBoats'
+				component={RecordBoats}
+				options={{
+					headerTitle: translation.t('RegisterBoat'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right',
+					headerShown: false,
+				}}
 			/>
 			<Stack.Screen name='Step1' component={Step1Screen} options={{ headerShown: false, animation: 'fade' }} />
 			<Stack.Screen name='Step2' component={Step2Screen} options={{ headerShown: false, animation: 'fade' }} />
@@ -108,16 +127,7 @@ function RootNavigator({ route }: any) {
 					animation: 'slide_from_right'
 				}}
 			/>
-			<Stack.Screen
-				name='RecordBoats'
-				component={RecordBoats}
-				options={{
-					headerTitle: translation.t('RegisterBoat'),
-					headerStyle: { backgroundColor: '#fff' },
-					headerTitleStyle: { color: '#000', fontWeight: '400' },
-					animation: 'slide_from_right'
-				}}
-			/>
+			
 			<Stack.Screen
 				name='MyOrders'
 				component={MyOrdersScreen}
@@ -290,7 +300,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				listeners={{
 					tabPress: e => {
 						console.log(e)
-						goHome()
+						// goHome()
 					}
 				}}
 			/>

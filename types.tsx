@@ -38,6 +38,7 @@ export type RootStackParamList = {
   ListScreen:undefined;
   Accept:undefined;
   RecordBoats: undefined;
+  Marinas:undefined
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -51,6 +52,8 @@ export type RootTabParamList = {
   ShoppingCart: undefined;
   Shopper: undefined;
   Profile: undefined;
+  Payments:undefined;
+  Activities:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

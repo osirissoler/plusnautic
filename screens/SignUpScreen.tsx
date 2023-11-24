@@ -67,8 +67,12 @@ export default function SignUpScreen({ navigation }: any) {
 						console.log(response.ok, "aqui1");
 						const url = '/auth/login';
 						sendData(url, values).then((response: any) => {
-							setAuthUser(response.id);
-							// redirectToRecordBoats()
+							if(response.ok){
+								setAuthUser(response.id);
+								// redirectToRecordBoats()
+							}
+							
+							
 						});
 					} else {
 						showErrorToast(response.message);
@@ -86,16 +90,17 @@ export default function SignUpScreen({ navigation }: any) {
 
 	const setAuthUser = (id: number) => {
 		asyncStorage.setItem('USER_LOGGED', id + '');
-		navigation.reset({
-			index: 0,
-			routes: [
-				{
-					name: 'Root',
-					params: { phId: 536 },
-					screen: 'Home'
-				}
-			]
-		});
+		navigation.navigate('Marinas')
+		// navigation.reset({
+		// 	index: 0,
+		// 	routes: [
+		// 		{
+		// 			name: 'Root',
+		// 			params: { phId: 536 },
+		// 			screen: 'Home'
+		// 		}
+		// 	]
+		// });
 	};
 	
 	const redirectToRecordBoats = () => {
