@@ -50,6 +50,7 @@ import ListScreen from '../screens/Maintenance/ListScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SelectMarinasScreen from '../screens/SelectMarinasScreen';
+import MuellesScreen from '../screens/MuellesScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -94,6 +95,17 @@ function RootNavigator({ route }: any) {
 					headerShown: false,
 				}}
 			/>
+			<Stack.Screen
+				name='Muelles'
+				component={MuellesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+
+
+
+
+
+
 			<Stack.Screen name='Step1' component={Step1Screen} options={{ headerShown: false, animation: 'fade' }} />
 			<Stack.Screen name='Step2' component={Step2Screen} options={{ headerShown: false, animation: 'fade' }} />
 			<Stack.Screen name='Step3' component={Step3Screen} options={{ headerShown: false, animation: 'fade' }} />
