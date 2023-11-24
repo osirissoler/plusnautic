@@ -77,7 +77,7 @@ export default function RecordBoats({ navigation }: any) {
       boat_hull: values.boat_hull,
       electric_plant: values.electric_plant,
       air_conditioner: values.air_conditioner,
-      pharmacy_id: pharmacyIdSelected,
+      pharmacy_id: values.pharmacy_id,
       user_id: userId,
     };
 
@@ -115,10 +115,7 @@ export default function RecordBoats({ navigation }: any) {
   };
 
   const redirectToProfile = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Profile" }],
-    });
+    navigation.navigate('Profile')
   };
 
   const incrementCounter = () => {
@@ -163,11 +160,11 @@ export default function RecordBoats({ navigation }: any) {
         <Formik
           validationSchema={validationSchema}
           initialValues={{
-            boat_name: "Bote del duro",
-            engine_1: "Soler Y7",
-            engineYear_1: "2018",
-            engine_2: "Soler U73",
-            engineYear_2: "2019",
+            boat_name: "",
+            engine_1: "",
+            engineYear_1: "",
+            engine_2: "",
+            engineYear_2: "",
             engine_3: "",
             engineYear_3: "",
             engine_4: "",
@@ -176,10 +173,10 @@ export default function RecordBoats({ navigation }: any) {
             engineYear_5: "",
             engine_6: "",
             engineYear_6: "",
-            boat_hull: "Bote G23",
-            electric_plant: "Planta Q931",
-            air_conditioner: "Aire K9",
-            pharmacy_id: "",
+            boat_hull: "",
+            electric_plant: "",
+            air_conditioner: "",
+            pharmacy_id: '',
           }}
           onSubmit={(values: any) => recordBoat(values)}
         >
@@ -271,20 +268,20 @@ export default function RecordBoats({ navigation }: any) {
                           flexDirection: "row",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          gap: 10
+                          gap: 20
                         }}
                       >
                         <TouchableOpacity
                           style={styles.addButton}
                           onPress={() => decrementCounter(setFieldValue)}
                         >
-                          <Octicons name="dash" size={24} color="red" />
+                          <Octicons name="dash" size={30} color="red" />
                         </TouchableOpacity>
                         <TouchableOpacity
                           style={styles.addButton}
                           onPress={() => incrementCounter()}
                         >
-                          <AntDesign name="pluscircle" size={24} color="green" />
+                          <AntDesign name="pluscircle" size={30} color="green" />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -431,8 +428,8 @@ export default function RecordBoats({ navigation }: any) {
               <View style={{ height: "20%", padding: 10 }}>
                 <TouchableOpacity
 				  style={isValid ? styles.registerButton : styles.registerButtonDisabled}
-                //   disabled={!isValid}
-                  onPress={() => {handleSubmit(); console.log(errors)}}
+                  disabled={!isValid}
+                  onPress={() => {handleSubmit()}}
                 >
                   <Text style={styles.registerButtonText}>
                     {translation.t("Save")}

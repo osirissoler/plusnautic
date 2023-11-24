@@ -91,7 +91,7 @@ function RootNavigator({ route }: any) {
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' },
 					animation: 'slide_from_right',
-					headerShown: false,
+					headerShown: true,
 				}}
 			/>
 			<Stack.Screen name='Step1' component={Step1Screen} options={{ headerShown: false, animation: 'fade' }} />
