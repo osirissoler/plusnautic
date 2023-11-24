@@ -27,7 +27,6 @@ import MyOrdersScreen from '../screens/MyOrdersScreen';
 
 import NewCardScreen from '../screens/NewCardScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import PaymentsScreen from '../screens/PaymentsScreen';
 import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RentScreen from '../screens/RentScreen';
@@ -50,6 +49,7 @@ import ListScreen from '../screens/Maintenance/ListScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SelectMarinasScreen from '../screens/SelectMarinasScreen';
+import MyBoats from '../screens/MyBoatsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -146,8 +146,8 @@ function RootNavigator({ route }: any) {
 				}}
 			/>
 			<Stack.Screen
-				name='Payments'
-				component={PaymentsScreen}
+				name='MyBoats'
+				component={MyBoats}
 				options={{
 					headerTitle: translation.t('headerTitlePayments') /* Payments */,
 					headerStyle: { backgroundColor: '#fff' },

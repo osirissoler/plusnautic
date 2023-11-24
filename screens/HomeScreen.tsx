@@ -104,12 +104,6 @@ export default function HomeScreen({ navigation, route }: RootTabScreenProps<'Ho
 				>
 				</FlatList>
 			</View>
-
-
-
-
-
-
 		</Container>
 	);
 }

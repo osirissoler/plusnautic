@@ -38,7 +38,8 @@ export type RootStackParamList = {
   ListScreen:undefined;
   Accept:undefined;
   RecordBoats: undefined;
-  Marinas:undefined
+  Marinas:undefined;
+  MyBoats:undefined
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
