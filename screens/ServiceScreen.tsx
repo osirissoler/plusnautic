@@ -62,23 +62,22 @@ export default function ServiceScreen({ navigation }: any) {
 
 	useEffect(() => {
 		getTypeServices()
-		getProducts()
+		// getProducts()
 	}, [])
 
-	const getProducts = async () => {
-		const url = '/rent/getRentByUser';
-		checkStorage('USER_LOGGED', async (id: any) => {
-			const data = { pharmacy_id: 536, user_id: id, initial: 0, limit: 10 };
-			await sendData(url, data).then((response) => {
-				setListProducts(response.pharmacyproduct)
-			}
-			)
-		})
-	}
+	// const getProducts = async () => {
+	// 	const url = '/rent/getRentByUser';
+	// 	checkStorage('USER_LOGGED', async (id: any) => {
+	// 		const data = { pharmacy_id: 536, user_id: id, initial: 0, limit: 10 };
+	// 		await sendData(url, data).then((response) => {
+	// 			setListProducts(response.pharmacyproduct)
+	// 		}
+	// 		)
+	// 	})
+	// }
 	const getTypeServices = async () => {
 		setFetching(true)
-		let url = `/services/getTypeServiceById/${536}`
-
+		let url = `/services/getTypeService`
 		await fetchData(url).then((response) => {
 			if (response.ok) {
 				setTypeServices(response.services)
@@ -92,38 +91,7 @@ export default function ServiceScreen({ navigation }: any) {
 			<HeaderComponent />
 			<Text style={styles.title}>Services</Text>
 
-			{/* {(apartment_id == 0) && <View style={{ padding: 10 }}>
-				{(Object.keys(listProducts).length > 0 && (
-					<FlatList
-						style={{ height: '35%' }}
-						
-						refreshing={fetching}
-						data={listProducts}
-						onRefresh={getTypeServices}
-						renderItem={({ item }: any) => (
-							<View key={item.pharmacy_product_id}>
-								<TouchableOpacity
-									style={styles.productCard2}
-									onPress={() => { setApartment_id(item.product_id) }}
-									key={item.id}
-								>
-									<View style={styles.productImage}>
-										<Image
-											source={{ uri: item.product_img }}
-											style={{ flex: 1, resizeMode: 'contain' }}
-										/>
-									</View>
-									<View style={{ justifyContent: 'space-between', width: '60%' }}>
-										<Text style={styles.productTitle}>{item.product_name}</Text>
-									</View>
-								</TouchableOpacity>
-
-							</View>
-						)}
-					/>
-				))}
-			</View>} */}
-			 <View>
+			<View>
 				{(Object.keys(typeServices).length > 0 && (
 					<FlatList
 						style={{ height: '85%' }}
@@ -132,7 +100,7 @@ export default function ServiceScreen({ navigation }: any) {
 						data={typeServices}
 						onRefresh={getTypeServices}
 						renderItem={({ item }: any) => (
-							<View>
+							<View style={{width:'32%'}}>
 								<ServiceComponent
 									title={(translation.locale.includes('en') && item.name) || translation.locale.includes('es') && item.nombre}
 									icon={item.img}
@@ -156,7 +124,7 @@ export default function ServiceScreen({ navigation }: any) {
 	);
 }
 
-function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
+function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: any) {
 
 	const { translation } = React.useContext(LanguageContext);
 	const [showModal, setShowModal]: any = useState(false);
@@ -206,7 +174,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 	// };
 
 	const send = async (values: any) => {
-		checkStorage('TOKEN', async(token: any) => {
+		checkStorage('TOKEN', async (token: any) => {
 			if (images.length == 0) {
 				setCountImages(false)
 			} else {
@@ -220,7 +188,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 				pharmacy_id: 536,
 				user_id: user_id,
 				product_id: product_id,
-				token:token
+				token: token
 			}
 			if (images.length >= 1) {
 				await sendData(url, data).then((response) => {
@@ -230,7 +198,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 					}
 				})
 			}
-			
+
 		})
 	}
 
@@ -319,11 +287,12 @@ function ServiceComponent({ title, icon, id, user_id, product_id }: any) {
 	return (
 		<>
 			<View style={{ alignItems: 'center', }}>
-				<TouchableOpacity style={styles.productCard} onPress={() => openModal()}>
+				<TouchableOpacity style={styles.productCard} onPress={() => {navigation.navigate('Solicitudes', {id:id, title})}}>
 					<View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20 }}>
-						<View style={{ height: 50, width: 50, marginBottom: 10 }}>
-							<Image source={{ uri: icon }} style={{ height: '100%', width: 55 }} />
+						<View style={{ height: 50, width: 50, marginBottom: 10,  }}>
+							<Image source={{ uri: icon }} style={{ flex: 1, resizeMode: 'contain' }} />
 						</View>
+{/* Solicitudes */}
 					</View>
 				</TouchableOpacity>
 				<Text style={styles.productTitle}>{title}</Text>
@@ -459,16 +428,6 @@ const styles = StyleSheet.create({
 	},
 	productCard: {
 		padding: 10,
-		// height: 100,
-		// paddingHorizontal: 20,
-		// marginVertical: 10,
-		// marginHorizontal: 20,
-		// borderRadius: 20,
-		// borderWidth: 1,
-		// borderColor: 'rgba(17, 115, 155, 0.3)',
-		// flexDirection: 'row',
-		// justifyContent: 'space-between',
-		// alignItems: 'center'
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#F7F7F7',
@@ -476,15 +435,15 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		width: 100,
 		height: 100,
-
 	},
 	productIcon: {
 		paddingRight: 20,
 		color: '#FB4F03'
 	},
 	productTitle: {
-		fontSize: 18,
-		fontWeight: '500'
+		fontSize: 15,
+		fontWeight: '400',
+		textAlign: 'center'
 	},
 	productPrice: {
 		fontSize: 16,

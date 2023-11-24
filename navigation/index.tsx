@@ -46,11 +46,11 @@ import AcceptedScreen from '../screens/Maintenance/AcceptedScreen';
 import ListScreen from '../screens/Maintenance/ListScreen';
 
 
-
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SelectMarinasScreen from '../screens/SelectMarinasScreen';
 import MuellesScreen from '../screens/MuellesScreen';
+import SendServicesScreen from '../screens/SendServicesScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -98,6 +98,11 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='Muelles'
 				component={MuellesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Solicitudes'
+				component={SendServicesScreen}
 				options={{ headerShown: true, animation: 'fade' }}
 			/>
 
@@ -369,7 +374,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				}}
 				initialParams={route.params}
 			/> */}
-			<BottomTab.Screen
+			{/* <BottomTab.Screen
 				name='Payments'
 				component={RentScreen}
 				options={{
@@ -378,7 +383,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 					tabBarIcon: ({ color }) => <TabBarIcon name='cash-outline' color={color} />
 				}}
 				initialParams={route.params}
-			/>
+			/> */}
 
 			<BottomTab.Screen
 				name='Activities'
