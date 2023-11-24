@@ -229,8 +229,8 @@ export default function ProfileScreen({ navigation }: any) {
 						<Text style={styles.optionText}>{translation.t('languageTitle')}</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
-					<Pressable style={styles.option} onPress={() => navigation.navigate('RecordBoats')}>
-						<Text style={styles.optionText}>{translation.t('RegisterBoat')}</Text>
+					<Pressable style={styles.option} onPress={() => navigation.navigate('MyBoats')}>
+						<Text style={styles.optionText}>{translation.t('MyBoats')}</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable>
 					<Pressable style={styles.option} onPress={() => navigation.navigate('Marinas')}>

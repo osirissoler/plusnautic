@@ -18,27 +18,41 @@ import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import { Dropdown } from "react-native-element-dropdown";
 
-export default function RecordBoats({ navigation }: any) {
+export default function RecordBoats({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [engineInputsCounter, setEngineInputsCounter] = useState(1);
-  const [userId, setUserId] = useState(0);
   const [pharmacyValues, setPharmacyValues] = useState([]);
-  const [pharmacyIdSelected, setPharmacyIdSelected] = useState(0);
+  const [boat, setBoat] = useState(route.params.boats[0])
+  const [initialValues, setInitialValues] = useState({
+    id: boat.id,
+    boat_name: boat.boat_name,
+    engine_1: boat.engine_1,
+    engineYear_1: boat.engineYear_1,
+    engine_2: boat.engine_2,
+    engineYear_2: boat.engineYear_2,
+    engine_3: boat.engine_3,
+    engineYear_3: boat.engineYear_3,
+    engine_4: boat.engine_4,
+    engineYear_4: boat.engineYear_4,
+    engine_5: boat.engine_5,
+    engineYear_5: boat.engineYear_5,
+    engine_6: boat.engine_6,
+    engineYear_6: boat.engineYear_6,
+    boat_hull: boat.boat_hull,
+    electric_plant: boat.electric_plant,
+    air_conditioner: boat.air_conditioner,
+    pharmacy_id: boat.Pharmacy_id,
+  });
 
   useEffect(() => {
-    checkStorage("USER_LOGGED", async (id: any) => {
-      setUserId(id);
-      const url = `/userPharmacy/getUserPharmacyByUserId/${id}`;
-
-      fetchData(url).then((res) => {
-        const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
-          label: pharmacy.pharmacy_name,
-          value: pharmacy.pharmacy_id,
-        }));
-
-        setPharmacyValues(mappedValues);
-      });
+    const url = `/userPharmacy/getUserPharmacyByUserId/${route.params.id}`;
+    fetchData(url).then((res) => {
+      const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
+        label: pharmacy.pharmacy_name,
+        value: pharmacy.pharmacy_id,
+      }));
+      setPharmacyValues(mappedValues);
     });
   }, []);
 
@@ -55,6 +69,7 @@ export default function RecordBoats({ navigation }: any) {
   const recordBoat = (values: any) => {
     setShowLoading(true);
     const url = "/boatsRecords/createBoatRecord";
+    const urlEdit = `/boatsRecords/updateBoatRecordByUser/${values.id}`
     const data = {
       boat_name: values.boat_name,
       engine_1: values.engine_1,
@@ -73,19 +88,32 @@ export default function RecordBoats({ navigation }: any) {
       electric_plant: values.electric_plant,
       air_conditioner: values.air_conditioner,
       pharmacy_id: values.pharmacy_id,
-      user_id: userId,
+      user_id: route.params.id,
     };
 
-    sendData(url, data).then((response) => {
-      hideLoadingModal(() => {
-        if (response.ok) {
-          showSuccessToast(response.message);
-          redirectToProfile();
-        } else {
-          showErrorToast(response.message);
-        }
-      });
-    });
+    if (route.params.editMode) {
+        sendData(urlEdit, data).then((response) => {
+            hideLoadingModal(() => {
+              if (response.ok) {
+                showSuccessToast(response.message);
+                redirectToMyBoats();
+              } else {
+                showErrorToast(response.message);
+              }
+            });
+        });
+    } else {
+        sendData(url, data).then((response) => {
+            hideLoadingModal(() => {
+              if (response.ok) {
+                showSuccessToast(response.message);
+                redirectToMyBoats();
+              } else {
+                showErrorToast(response.message);
+              }
+            });
+        });
+    }
   };
 
   const hideLoadingModal = (callback: Function) => {
@@ -109,8 +137,8 @@ export default function RecordBoats({ navigation }: any) {
     });
   };
 
-  const redirectToProfile = () => {
-    navigation.navigate("Profile");
+  const redirectToMyBoats = () => {
+    navigation.navigate("MyBoats");
   };
 
   const incrementCounter = () => {
@@ -154,25 +182,7 @@ export default function RecordBoats({ navigation }: any) {
       <Loading showLoading={showLoading} translation={translation} />
       <Formik
         validationSchema={validationSchema}
-        initialValues={{
-          boat_name: "",
-          engine_1: "",
-          engineYear_1: "",
-          engine_2: "",
-          engineYear_2: "",
-          engine_3: "",
-          engineYear_3: "",
-          engine_4: "",
-          engineYear_4: "",
-          engine_5: "",
-          engineYear_5: "",
-          engine_6: "",
-          engineYear_6: "",
-          boat_hull: "",
-          electric_plant: "",
-          air_conditioner: "",
-          pharmacy_id: "",
-        }}
+        initialValues={initialValues}
         onSubmit={(values: any) => recordBoat(values)}
       >
         {({
