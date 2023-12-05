@@ -319,7 +319,9 @@ export default function RecordBoats({ navigation, route }: any) {
                 />
                 <Text style={styles.labelInput}>Air conditioner</Text>
                 <TextInput
-                  style={styles.textInput}
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.textArea}
                   onChangeText={handleChange("air_conditioner")}
                   onBlur={handleBlur("air_conditioner")}
                   value={values.air_conditioner}
@@ -628,6 +630,16 @@ const styles = StyleSheet.create({
     paddingRight: 45,
     paddingLeft: 20,
     borderRadius: 5,
+  },
+  textArea: {
+    borderColor: "#F7F7F7",
+    borderWidth: 2,
+    backgroundColor: "#F7F7F7",
+    borderRadius: 5,
+    paddingRight: 45,
+    paddingLeft: 20,
+    textAlignVertical: "top", // Alineación vertical del texto
+    minHeight: 100, // Altura mínima del área de texto
   },
   formInputIcon: {
     position: "relative",
