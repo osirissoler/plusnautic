@@ -7,6 +7,9 @@ import {
   TextInput,
   ScrollView,
   Modal,
+  Alert,
+  ImageBackground,
+  Image,
 } from "react-native";
 import { AntDesign, FontAwesome, Octicons } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -17,13 +20,15 @@ import { fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import { Dropdown } from "react-native-element-dropdown";
+import * as ImagePicker from "expo-image-picker";
 
 export default function RecordBoats({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [engineInputsCounter, setEngineInputsCounter] = useState(1);
   const [pharmacyValues, setPharmacyValues] = useState([]);
-  const [boat, setBoat] = useState(route.params.boats[0])
+  const [boat, setBoat] = useState(route.params.boats[0]);
+  const [boatImage, setBoatImage]: any = useState("");
   const [initialValues, setInitialValues] = useState({
     id: boat.id,
     boat_name: boat.boat_name,
@@ -43,6 +48,7 @@ export default function RecordBoats({ navigation, route }: any) {
     electric_plant: boat.electric_plant,
     air_conditioner: boat.air_conditioner,
     pharmacy_id: boat.Pharmacy_id,
+    img: boat.img,
   });
 
   useEffect(() => {
@@ -78,6 +84,7 @@ export default function RecordBoats({ navigation, route }: any) {
         setEngineInputsCounter(6)
       }
     });
+    setBoatImage(boat.img)
   }, []);
 
   const validationSchema = yup.object().shape({
@@ -91,9 +98,14 @@ export default function RecordBoats({ navigation, route }: any) {
   });
 
   const recordBoat = (values: any) => {
+    if (!boatImage) {
+      showErrorToast("Debe poner una imagen");
+      return;
+    }
+
     setShowLoading(true);
     const url = "/boatsRecords/createBoatRecord";
-    const urlEdit = `/boatsRecords/updateBoatRecordByUser/${values.id}`
+    const urlEdit = `/boatsRecords/updateBoatRecordByUser/${values.id}`;
     const data = {
       boat_name: values.boat_name,
       engine_1: values.engine_1,
@@ -113,30 +125,31 @@ export default function RecordBoats({ navigation, route }: any) {
       air_conditioner: values.air_conditioner,
       pharmacy_id: values.pharmacy_id,
       user_id: route.params.id,
+      img: boatImage,
     };
 
     if (route.params.editMode) {
-        sendData(urlEdit, data).then((response) => {
-            hideLoadingModal(() => {
-              if (response.ok) {
-                showSuccessToast(response.message);
-                redirectToMyBoats();
-              } else {
-                showErrorToast(response.message);
-              }
-            });
+      sendData(urlEdit, data).then((response) => {
+        hideLoadingModal(() => {
+          if (response.ok) {
+            showSuccessToast(response.message);
+            redirectToMyBoats();
+          } else {
+            showErrorToast(response.message);
+          }
         });
+      });
     } else {
-        sendData(url, data).then((response) => {
-            hideLoadingModal(() => {
-              if (response.ok) {
-                showSuccessToast(response.message);
-                redirectToMyBoats();
-              } else {
-                showErrorToast(response.message);
-              }
-            });
+      sendData(url, data).then((response) => {
+        hideLoadingModal(() => {
+          if (response.ok) {
+            showSuccessToast(response.message);
+            redirectToMyBoats();
+          } else {
+            showErrorToast(response.message);
+          }
         });
+      });
     }
   };
 
@@ -197,6 +210,66 @@ export default function RecordBoats({ navigation, route }: any) {
     }
   };
 
+  let openImagePickerAsync = async () => {
+    Alert.alert(
+      translation.t("alertInfoTitle"),
+      "",
+      [
+        {
+          text: translation.t("profilePictureCameraText"), // Take picture
+          onPress: () => {
+            return setProfilePicture(1);
+          },
+        },
+        {
+          text: translation.t("profilePictureGaleryText"), // Upload from galery
+          onPress: () => {
+            return setProfilePicture(2);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const setProfilePicture = async (type: number) => {
+    let result: any;
+
+    if (type === 2) {
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        allowsMultipleSelection: false, // Solo permitir la selección de una imagen
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setBoatImage(result.assets[0].uri);
+      }
+    }
+
+    if (type === 1) {
+      let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert(translation.t("profilePictureGaleryPermissionText"));
+        return;
+      }
+
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setBoatImage(result.assets.uri);
+      }
+    }
+  };
+
   return (
     <Container
       style={{ backgroundColor: "#fff", height: "95%" }}
@@ -246,11 +319,34 @@ export default function RecordBoats({ navigation, route }: any) {
                 />
                 <Text style={styles.labelInput}>Air conditioner</Text>
                 <TextInput
-                  style={styles.textInput}
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.textArea}
                   onChangeText={handleChange("air_conditioner")}
                   onBlur={handleBlur("air_conditioner")}
                   value={values.air_conditioner}
                 />
+                <Text style={styles.labelInput}>Boat Image</Text>
+
+                <TouchableOpacity
+                  style={{
+                    marginVertical: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "35%",
+                    borderWidth: 1,
+                    borderColor: "rgba(0, 0, 0, 0.2)",
+                  }}
+                  onPress={async () => {
+                    openImagePickerAsync();
+                  }}
+                >
+                  <Image
+                    source={{ uri: boatImage ? boatImage : null}}
+                    style={styles.profilePicture}
+                  />
+                </TouchableOpacity>
+
                 <View>
                   <Text style={styles.labelInput}>
                     {translation.t("Marine")}
@@ -535,6 +631,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderRadius: 5,
   },
+  textArea: {
+    borderColor: "#F7F7F7",
+    borderWidth: 2,
+    backgroundColor: "#F7F7F7",
+    borderRadius: 5,
+    paddingRight: 45,
+    paddingLeft: 20,
+    textAlignVertical: "top", // Alineación vertical del texto
+    minHeight: 100, // Altura mínima del área de texto
+  },
   formInputIcon: {
     position: "relative",
     flexDirection: "row",
@@ -603,5 +709,10 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  profilePicture: {
+    height: 100,
+    width: "100%",
+    resizeMode: "cover",
   },
 });

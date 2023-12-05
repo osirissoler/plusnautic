@@ -92,7 +92,7 @@ export default function MyBoats({ navigation }: any) {
             >
               <View style={{ height: 80, width: 80, marginBottom: 10 }}>
                 <Image
-                  source={{ uri: item.img }}
+                  source={{ uri: item.img ? item.img : null }}
                   style={{ flex: 1, resizeMode: "contain" }}
                 />
               </View>
