@@ -22,14 +22,14 @@ export default function HeaderComponent({ screen, navigation, openFilterModal }:
 	return (
 		<View style={styles.header}>
 			<Image style={styles.logo} source={require('../assets/images/slogan.png')} />
-			{screen == 'signin' && (
+			{/* {screen == 'signin' && (
 				<Pressable
 					style={[styles.screenOptions, { justifyContent: 'flex-end', padding: 10 }]}
 					onPress={() => checkUserStorage()}
 				>
 					<Text style={styles.optionText}>{translation.t('headerSkipLabel')}</Text>
 				</Pressable>
-			)}
+			)} */}
 
 			{screen == 'home' && (
 				<View style={[styles.screenOptions, { justifyContent: 'space-between' }]}>

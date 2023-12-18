@@ -45,10 +45,11 @@ import AcceptedScreen from '../screens/Maintenance/AcceptedScreen';
 import ListScreen from '../screens/Maintenance/ListScreen';
 
 
-
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SelectMarinasScreen from '../screens/SelectMarinasScreen';
+import MuellesScreen from '../screens/MuellesScreen';
+import SendServicesScreen from '../screens/SendServicesScreen';
 import MyBoats from '../screens/MyBoatsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -94,6 +95,22 @@ function RootNavigator({ route }: any) {
 					headerShown: true,
 				}}
 			/>
+			<Stack.Screen
+				name='Muelles'
+				component={MuellesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Solicitudes'
+				component={SendServicesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+
+
+
+
+
+
 			<Stack.Screen name='Step1' component={Step1Screen} options={{ headerShown: false, animation: 'fade' }} />
 			<Stack.Screen name='Step2' component={Step2Screen} options={{ headerShown: false, animation: 'fade' }} />
 			<Stack.Screen name='Step3' component={Step3Screen} options={{ headerShown: false, animation: 'fade' }} />
@@ -149,7 +166,7 @@ function RootNavigator({ route }: any) {
 				name='MyBoats'
 				component={MyBoats}
 				options={{
-					headerTitle: translation.t('headerTitlePayments') /* Payments */,
+					headerTitle: translation.t('MyBoats') /* Payments */,
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' }
 				}}
@@ -357,7 +374,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				}}
 				initialParams={route.params}
 			/> */}
-			<BottomTab.Screen
+			{/* <BottomTab.Screen
 				name='Payments'
 				component={RentScreen}
 				options={{
@@ -366,7 +383,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 					tabBarIcon: ({ color }) => <TabBarIcon name='cash-outline' color={color} />
 				}}
 				initialParams={route.params}
-			/>
+			/> */}
 
 			<BottomTab.Screen
 				name='Activities'

@@ -12,14 +12,19 @@ import { fetchData, sendData } from '../httpRequests';
 import Toast from 'react-native-root-toast';
 import { AntDesign } from '@expo/vector-icons';
 import { CheckBox } from "react-native-elements";
+import AdsScreen from './AdsScreen';
 let list: any[] = [];
-export default function SelectMarinasScreen({ navigation }: any) {
+
+export default function MuellesScreen({ navigation, route }:any) {
+    console.log(route.params)
     const { translation } = React.useContext(LanguageContext);
-    const defaultProductImg = 'http://openmart.online/frontend/imgs/no_image.png?'
-    const [listPharmacy, setListPharmacy]: any = useState([
+    const defaultProductImg = 'https://img.freepik.com/vector-premium/muelle-pesca-oceano-ilustracion_155504-1.jpg'
+    const [initialImg, setinitialImage] = useState('https://file-coopharma.nyc3.digitaloceanspaces.com/16817528019excursiones-desde-san-sebastian.jpg');
+    const [listProduct, listProducs]: any = useState([
     ]);
     const [fetching, setFetching]: any = useState(false)
     const [showLoading, setShowLoading]: any = useState(false)
+    const [visible, setVisible] = useState(true);
 
 
 
@@ -29,25 +34,18 @@ export default function SelectMarinasScreen({ navigation }: any) {
 
     const getPharmacies = async () => {
         setFetching(true)
-        let url = `/pharmacies/getPharmacies`
+        let url = `/products/getProductsByPharmacy/${route.params.id}`
         await fetchData(url).then((response) => {
             if (response.ok) {
-                setListPharmacy(response.pharmacy)
-                response.pharmacy.forEach((element: any) => {
-                    list.push({ name: element.name, id: element.id, img: element.img, selected: false })
-                });
+                listProducs(response.pharmacyproduct)
+
             } else {
             }
             setFetching(false)
         })
     }
 
-    const selectPharmacy = (index: any) => {
-        list[index].selected = !list[index].selected
-        setTimeout(() => {
-            setFetching(false)
-        }, 100)
-    }
+
 
     const sendPharmacyUser = async () => {
         checkStorage('USER_LOGGED', async (id: any) => {
@@ -63,49 +61,56 @@ export default function SelectMarinasScreen({ navigation }: any) {
             await sendData(url, { data: newList }).then((response) => {
                 if (response.ok) {
                     navigation.reset({
-                    	index: 0,
-                    	routes: [
-                    		{
-                    			name: 'Root',
-                    			params: { phId: 536 },
-                    			screen: 'Home'
-                    		}
-                    	]
+                        index: 0,
+                        routes: [
+                            {
+                                name: 'Root',
+                                params: { phId: 536 },
+                                screen: 'Home'
+                            }
+                        ]
                     });
                 }
             })
         })
-        
+
     }
 
     return (
         <Container>
             <Loading showLoading={showLoading} translation={translation} />
             <HeaderComponent />
-            <View style={{ height: '10%' }}>
-                <Text>Buscador</Text>
-            </View>
-            <View style={{ height: '75%' }}>
-                {/* <FlatList
+
+            <View style={{ height: '100%' }}>
+                <FlatList
                     refreshing={fetching}
-                    data={list}
+                    data={listProduct}
                     onRefresh={getPharmacies}
+                    style={styles.body}
+                    ListHeaderComponent={
+                        <View>
+                            {(visible)
+                                ? <AdsScreen code={"Services"} img={initialImg} />
+                                : <Image style={styles.headerImage} source={{ uri: initialImg }} />
+                            }
+                        </View>
+                    }
                     renderItem={({ item, index }: any) => (
                         <TouchableOpacity style={styles.productCard} onPress={() => {
-                            selectPharmacy(index)
-                            setFetching(true)
+                            navigation.navigate('ProductDetails', {item})
+                            // ProductDetails
                         }
 
                         }>
                             <View style={styles.productImage}>
                                 <Image
-                                    source={{ uri: item.img ? item.img : defaultProductImg }}
+                                    source={{ uri: item.product_img ? item.product_img : defaultProductImg }}
                                     style={{ flex: 1, resizeMode: 'contain' }}
                                 />
                             </View>
                             <View style={{ justifyContent: 'space-between', width: 160 }}>
-                                <Text style={styles.productTitle}>{item.name}</Text>
-
+                                <Text style={styles.productTitle}>{item.product_name}</Text>
+                                <Text style={styles.productTitle}>{item.product_description}</Text>
                                 <View
                                     style={{
                                         flexDirection: 'row',
@@ -118,17 +123,8 @@ export default function SelectMarinasScreen({ navigation }: any) {
                         </TouchableOpacity>
                     )}
                 >
-                </FlatList> */}
+                </FlatList>
             </View>
-            <View style={{ height: '10%', marginHorizontal: 15, marginTop: 10 }}>
-                <TouchableOpacity style={styles.registerButton} onPress={() => {
-                    sendPharmacyUser();
-                }}>
-                    <Text>Save</Text>
-                </TouchableOpacity>
-            </View>
-
-
         </Container >
     )
 }
@@ -136,13 +132,18 @@ const styles = StyleSheet.create({
     productCard: {
         padding: 10,
         marginVertical: 4,
-        marginHorizontal: 15,
+        // marginHorizontal: 15,
         borderRadius: 20,
         borderWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center'
+    },
+    body: {
+        padding: 20,
+        flexDirection: 'column',
+        marginBottom: 60
     },
     productImage: {
         height: 80,
@@ -157,6 +158,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FE6A00',
         padding: 4,
         borderRadius: 100
+    },
+    headerImage: {
+        marginBottom: 20,
+        height: 180,
+        width: '100%',
+        borderRadius: 10,
+        // aspectRatio:1/1
     },
     productAddIcon: {
         // color: 'white',

@@ -39,6 +39,8 @@ export type RootStackParamList = {
   Accept:undefined;
   RecordBoats: undefined;
   Marinas:undefined;
+  Muelles:undefined;
+  Solicitudes:undefined;
   MyBoats:undefined
 };
 
@@ -55,6 +57,7 @@ export type RootTabParamList = {
   Profile: undefined;
   Payments:undefined;
   Activities:undefined;
+  Muelles:undefined
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
