@@ -163,8 +163,13 @@
 	"payout":"Payout",
 	"home":"Go Home",
 	"Accept":"Accept",
-	"TypeServices":"Type Services"
-	
-	
-	
+	"TypeServices":"Type Services",
+	"RegisterBoat": "Register a Boat",
+	"Save": "Save",
+	"Engine": "Engine",
+	"Year": "Year",
+	"Marine": "Marine",
+	"ChooseMarine": "Choose marine",
+	"MyBoats": "My boats"
+
 }

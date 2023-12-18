@@ -57,7 +57,7 @@ export default function SignUpScreen({ navigation }: any) {
 			email: values.email,
 			phone: values.phone,
 			password: values.password,
-			pharmacy_id:536
+			
 		};
 		console.log(data)
 		sendData(url, data)
@@ -67,7 +67,12 @@ export default function SignUpScreen({ navigation }: any) {
 						console.log(response.ok, "aqui1");
 						const url = '/auth/login';
 						sendData(url, values).then((response: any) => {
-							setAuthUser(response.id);
+							if(response.ok){
+								setAuthUser(response.id);
+								// redirectToRecordBoats()
+							}
+							
+							
 						});
 					} else {
 						showErrorToast(response.message);
@@ -85,15 +90,23 @@ export default function SignUpScreen({ navigation }: any) {
 
 	const setAuthUser = (id: number) => {
 		asyncStorage.setItem('USER_LOGGED', id + '');
+		navigation.navigate('Marinas')
+		// navigation.reset({
+		// 	index: 0,
+		// 	routes: [
+		// 		{
+		// 			name: 'Root',
+		// 			params: { phId: 536 },
+		// 			screen: 'Home'
+		// 		}
+		// 	]
+		// });
+	};
+	
+	const redirectToRecordBoats = () => {
 		navigation.reset({
 			index: 0,
-			routes: [
-				{
-					name: 'Root',
-					params: { phId: 536 },
-					screen: 'Home'
-				}
-			]
+			routes: [{ name: 'RecordBoats' }]
 		});
 	};
 
@@ -200,11 +213,11 @@ export default function SignUpScreen({ navigation }: any) {
 				<Formik
 					validationSchema={validationSchema}
 					initialValues={{
-						fullName: '',
-						email: '',
-						phone: '',
-						password: '',
-						passwordConfirmation: ''
+						fullName: 'test',
+						email: 'test@test.com',
+						phone: '43242342',
+						password: 'Test123456',
+						passwordConfirmation: 'Test123456'
 					}}
 					onSubmit={(values: any) => onSignUp(values)}
 				>

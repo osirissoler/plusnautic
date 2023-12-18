@@ -34,9 +34,14 @@ export type RootStackParamList = {
   ListProducts: undefined;
   ProductDetails: undefined;
   Checkout: undefined;
-  Forms: undefined
-  ListScreen:undefined
-  Accept:undefined
+  Forms: undefined;
+  ListScreen:undefined;
+  Accept:undefined;
+  RecordBoats: undefined;
+  Marinas:undefined;
+  Muelles:undefined;
+  Solicitudes:undefined;
+  MyBoats:undefined
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -50,6 +55,9 @@ export type RootTabParamList = {
   ShoppingCart: undefined;
   Shopper: undefined;
   Profile: undefined;
+  Payments:undefined;
+  Activities:undefined;
+  Muelles:undefined
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
