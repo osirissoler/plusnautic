@@ -135,12 +135,6 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 	const [refre, setRefre]: any = useState(false);
 	const [countImages, setCountImages] = useState(true)
 
-
-
-	const openModal = () => {
-		setShowModal(true);
-	};
-
 	const closeModal = () => {
 		setImages([])
 		setShowModal(false);
@@ -164,14 +158,6 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 			{ cancelable: true, onDismiss: () => setIsSelecting(false) }
 		);
 	};
-
-
-	// const hideLoadingModal = (callback: Function) => {
-	// 	setTimeout(() => {
-	// 		setShowLoading(false);
-	// 		callback();
-	// 	}, 1500);
-	// };
 
 	const send = async (values: any) => {
 		checkStorage('TOKEN', async (token: any) => {
@@ -292,7 +278,6 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 						<View style={{ height: 50, width: 50, marginBottom: 10,  }}>
 							<Image source={{ uri: icon }} style={{ flex: 1, resizeMode: 'contain' }} />
 						</View>
-{/* Solicitudes */}
 					</View>
 				</TouchableOpacity>
 				<Text style={styles.productTitle}>{title}</Text>
