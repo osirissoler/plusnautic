@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 
 import HeaderComponent from '../components/Header';
-import { checkStorage, Container, Loading } from '../components/Shared';
-import { fetchData } from '../httpRequests';
+import { checkLoggedUser, checkStorage, Container, Loading } from '../components/Shared';
+import { fetchData, sendData } from '../httpRequests';
 import { LanguageContext } from '../LanguageContext';
 import AdsScreen from './AdsScreen';
+import asyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen({ navigation, route }:any) {
 	const defaultProductImg = 'http://openmart.online/frontend/imgs/no_image.png?'
@@ -22,6 +23,51 @@ export default function HomeScreen({ navigation, route }:any) {
 	const [showLoading, setShowLoading]: any = useState(false)
 	const [listPharmacy, setListPharmacy]: any = useState([]);
 	const [visible, setVisible] = useState(true);
+
+	useEffect(() => {
+		checkLoggedUser(
+		  (id: string) => {
+			setShowLoading(true);
+			const url = `/user/getUserById/${id}`;
+			const data = { user_id: id };
+			sendData(url, data).then((response) => {
+			  if (response.ok) {
+				setShowLoading(false);
+			  } else {
+				hideLoadingModal(() => {
+					logout()
+				});
+				
+			  }
+			});
+		  },
+		  navigation,
+		  translation
+		);
+		
+	  }, []);
+
+	  const logout = () => {
+		const user = asyncStorage.getItem("USER_LOGGED");
+		if (!!user) {
+		  asyncStorage.removeItem("USER_LOGGED");
+		  redirectToLogin();
+		}
+	  };
+
+	  const redirectToLogin = () => {
+		navigation.reset({
+		  index: 0,
+		  routes: [{ name: "SignIn" }],
+		});
+	  };
+
+	  const hideLoadingModal = (callback: Function) => {
+		setTimeout(() => {
+		  setShowLoading(false);
+		  callback();
+		}, 1500);
+	  };
 
 	useEffect(() => {
 		getPharmaciesByUSer()

@@ -14,6 +14,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 // import * as osiris from 'react-native-image-crop-picker';
 import { string } from 'yup';
+import asyncStorage from '@react-native-async-storage/async-storage';
 
 
 const validationSchema = yup.object().shape({
@@ -32,33 +33,79 @@ export default function ServiceScreen({ navigation }: any) {
 	const [user_id, setUser_id] = useState(true)
 	const [apartment_id, setApartment_id] = useState(0)
 	const [listProducts, setListProducts]: any = useState([]);
+	const [showLoading, setShowLoading]: any = useState(false)
 
 	useEffect(() => {
-		checkStorage('USER_LOGGED', (id: any) => {
+		checkLoggedUser(
+		  (id: string) => {
+			setShowLoading(true);
+			const url = `/user/getUserById/${id}`;
+			const data = { user_id: id };
+			sendData(url, data).then((response) => {
+			  if (response.ok) {
+				setShowLoading(false);
+			  } else {
+				hideLoadingModal(() => {
+					logout()
+				});
+				
+			  }
+			});
+		  },
+		  navigation,
+		  translation
+		);
+		
+	  }, []);
 
-			setUser_id(id)
-			if (!!id) {
+	  const logout = () => {
+		const user = asyncStorage.getItem("USER_LOGGED");
+		if (!!user) {
+		  asyncStorage.removeItem("USER_LOGGED");
+		  redirectToLogin();
+		}
+	  };
 
-			} else {
-				Alert.alert(
-					translation.t('alertWarningTitle'), // Alert
-					translation.t('alertUserAnonymousMessage'), // You need to be logged in to perfom this action.
-					[
-						{
-							text: translation.t('alertGoToLogin'), // Go to Login
-							onPress: () => {
-								navigation.reset({
-									index: 0,
-									routes: [{ name: 'SignIn' }]
-								});
-							}
-						}
-					]
-				);
-			}
+	  const redirectToLogin = () => {
+		navigation.reset({
+		  index: 0,
+		  routes: [{ name: "SignIn" }],
 		});
+	  };
 
-	}, []);
+	  const hideLoadingModal = (callback: Function) => {
+		setTimeout(() => {
+		  setShowLoading(false);
+		  callback();
+		}, 1500);
+	  };
+
+	// useEffect(() => {
+	// 	checkStorage('USER_LOGGED', (id: any) => {
+
+	// 		setUser_id(id)
+	// 		if (!!id) {
+
+	// 		} else {
+	// 			Alert.alert(
+	// 				translation.t('alertWarningTitle'), // Alert
+	// 				translation.t('alertUserAnonymousMessage'), // You need to be logged in to perfom this action.
+	// 				[
+	// 					{
+	// 						text: translation.t('alertGoToLogin'), // Go to Login
+	// 						onPress: () => {
+	// 							navigation.reset({
+	// 								index: 0,
+	// 								routes: [{ name: 'SignIn' }]
+	// 							});
+	// 						}
+	// 					}
+	// 				]
+	// 			);
+	// 		}
+	// 	});
+
+	// }, []);
 
 	useEffect(() => {
 		getTypeServices()
@@ -140,135 +187,135 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 		setShowModal(false);
 	};
 
-	let openImagePickerAsync = async () => {
-		setIsSelecting(true);
-		Alert.alert(
-			translation.t('alertInfoTitle'),
-			'',
-			[
-				{
-					text: translation.t('profilePictureCameraText'), // Take picture
-					onPress: () => pickImg(1)
-				},
-				{
-					text: translation.t('profilePictureGaleryText'), // Upload from galery
-					onPress: () => pickImg(2)
-				}
-			],
-			{ cancelable: true, onDismiss: () => setIsSelecting(false) }
-		);
-	};
+	// let openImagePickerAsync = async () => {
+	// 	setIsSelecting(true);
+	// 	Alert.alert(
+	// 		translation.t('alertInfoTitle'),
+	// 		'',
+	// 		[
+	// 			{
+	// 				text: translation.t('profilePictureCameraText'), // Take picture
+	// 				onPress: () => pickImg(1)
+	// 			},
+	// 			{
+	// 				text: translation.t('profilePictureGaleryText'), // Upload from galery
+	// 				onPress: () => pickImg(2)
+	// 			}
+	// 		],
+	// 		{ cancelable: true, onDismiss: () => setIsSelecting(false) }
+	// 	);
+	// };
 
-	const send = async (values: any) => {
-		checkStorage('TOKEN', async (token: any) => {
-			if (images.length == 0) {
-				setCountImages(false)
-			} else {
-				setCountImages(true)
-			}
+	// const send = async (values: any) => {
+	// 	checkStorage('TOKEN', async (token: any) => {
+	// 		if (images.length == 0) {
+	// 			setCountImages(false)
+	// 		} else {
+	// 			setCountImages(true)
+	// 		}
 
-			let url = `/services/createService`
-			const data = {
-				...values,
-				typeServices_id: id,
-				pharmacy_id: 536,
-				user_id: user_id,
-				product_id: product_id,
-				token: token
-			}
-			if (images.length >= 1) {
-				await sendData(url, data).then((response) => {
-					if (response.ok) {
-						sendFile(response.services.id)
-						setShowLoading(true)
-					}
-				})
-			}
+	// 		let url = `/services/createService`
+	// 		const data = {
+	// 			...values,
+	// 			typeServices_id: id,
+	// 			pharmacy_id: 536,
+	// 			user_id: user_id,
+	// 			product_id: product_id,
+	// 			token: token
+	// 		}
+	// 		if (images.length >= 1) {
+	// 			await sendData(url, data).then((response) => {
+	// 				if (response.ok) {
+	// 					sendFile(response.services.id)
+	// 					setShowLoading(true)
+	// 				}
+	// 			})
+	// 		}
 
-		})
-	}
+	// 	})
+	// }
 
-	const sendFile = async (id: any) => {
-		const url = `/services/saveImagesServices/${id}`
-		images.forEach(async (element: any) => {
-			let fileName = element.uri.split('/').pop();
-			let match = /\.(\w+)$/.exec(fileName);
-			let fileType = match ? `image/${match[1]}` : `image`;
+	// const sendFile = async (id: any) => {
+	// 	const url = `/services/saveImagesServices/${id}`
+	// 	images.forEach(async (element: any) => {
+	// 		let fileName = element.uri.split('/').pop();
+	// 		let match = /\.(\w+)$/.exec(fileName);
+	// 		let fileType = match ? `image/${match[1]}` : `image`;
 
-			let formData = new FormData();
-			formData.append('image', { uri: element.uri, name: fileName, fileType });
-			const data = formData
-			await sendData(url, data).then((response) => {
-				// if (response.ok) {
-				// 	console.log('llego', response)
-				// }
+	// 		let formData = new FormData();
+	// 		formData.append('image', { uri: element.uri, name: fileName, fileType });
+	// 		const data = formData
+	// 		await sendData(url, data).then((response) => {
+	// 			// if (response.ok) {
+	// 			// 	console.log('llego', response)
+	// 			// }
 
-			});
-		});
+	// 		});
+	// 	});
 
-		setTimeout(() => {
-			setImages([])
-			setShowLoading(false);
-			setShowModal(false)
-			showErrorToast('The service has been sent successfully')
-		}, 1500);
-	}
+	// 	setTimeout(() => {
+	// 		setImages([])
+	// 		setShowLoading(false);
+	// 		setShowModal(false)
+	// 		showErrorToast('The service has been sent successfully')
+	// 	}, 1500);
+	// }
 	const showErrorToast = (message: string) => {
 		Toast.show(message, {
 			duration: Toast.durations.LONG,
 			containerStyle: { backgroundColor: 'green', width: '80%' }
 		});
 	};
-	const pickImg = async (type: number) => {
-		let newImages: any = []
-		let result;
-		if (type == 2) {
-			result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				allowsEditing: false,
-				allowsMultipleSelection: true,
-				selectionLimit: 10,
-				aspect: [4, 3],
-				quality: 1,
-			})
-			// newImages.push({ uri: result.uri })
-			// setImages(newImages)
-			// setRefre(true)
+	// const pickImg = async (type: number) => {
+	// 	let newImages: any = []
+	// 	let result;
+	// 	if (type == 2) {
+	// 		result = await ImagePicker.launchImageLibraryAsync({
+	// 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+	// 			allowsEditing: false,
+	// 			allowsMultipleSelection: true,
+	// 			selectionLimit: 10,
+	// 			aspect: [4, 3],
+	// 			quality: 1,
+	// 		})
+	// 		// newImages.push({ uri: result.uri })
+	// 		// setImages(newImages)
+	// 		// setRefre(true)
 
-			if (!result.cancelled) {
-				if (result.selected) {
-					result.selected.forEach(E => {
-						newImages.push({ uri: E.uri })
-					})
-				} else {
-					newImages.push({ uri: result.uri })
-				}
-				setImages(newImages)
-				setRefre(true)
-			}
-		}
+	// 		if (!result.cancelled) {
+	// 			if (result.selected) {
+	// 				result.selected.forEach(E => {
+	// 					newImages.push({ uri: E.uri })
+	// 				})
+	// 			} else {
+	// 				newImages.push({ uri: result.uri })
+	// 			}
+	// 			setImages(newImages)
+	// 			setRefre(true)
+	// 		}
+	// 	}
 
-		if (type == 1) {
-			let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+	// 	if (type == 1) {
+	// 		let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-			if (permissionResult.granted === false) {
-				alert(translation.t('profilePictureGaleryPermissionText'));
-				return;
-			}
-			result = await ImagePicker.launchCameraAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				allowsEditing: true,
-				aspect: [4, 3],
-				quality: 1
-			});
-			if (!result.cancelled) {
-				newImages.push({ uri: result.uri })
-				setImages(newImages)
-				setRefre(true)
-			}
-		}
+	// 		if (permissionResult.granted === false) {
+	// 			alert(translation.t('profilePictureGaleryPermissionText'));
+	// 			return;
+	// 		}
+	// 		result = await ImagePicker.launchCameraAsync({
+	// 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+	// 			allowsEditing: true,
+	// 			aspect: [4, 3],
+	// 			quality: 1
+	// 		});
+	// 		if (!result.cancelled) {
+	// 			newImages.push({ uri: result.uri })
+	// 			setImages(newImages)
+	// 			setRefre(true)
+	// 		}
+	// 	}
 
-	}
+	// }
 
 	return (
 		<>
@@ -283,7 +330,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 				<Text style={styles.productTitle}>{title}</Text>
 			</View>
 
-			<Modal visible={showModal} animationType='slide'>
+			{/* <Modal visible={showModal} animationType='slide'>
 				<Loading showLoading={showLoading} translation={translation} />
 				<View style={{ paddingVertical: 50, paddingHorizontal: 10 }}>
 					<View style={{ position: 'relative', justifyContent: 'center', height: '5%', }}>
@@ -398,7 +445,7 @@ function ServiceComponent({ title, icon, id, user_id, product_id, navigation }: 
 					</View>
 
 				</View>
-			</Modal>
+			</Modal> */}
 		</>
 	);
 }
