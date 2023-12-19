@@ -111,10 +111,6 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
           user_id: id,
         };
       });
-      
-      console.log(list.filter((element: any) => {
-        return element.selected === true;
-      }))
       if (list.some((e) => e.selected === false)) {
         const listFalse = list.filter((e) => {
           return e.selected === false;
