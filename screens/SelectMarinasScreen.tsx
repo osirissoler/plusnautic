@@ -33,11 +33,12 @@ import { fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { AntDesign } from "@expo/vector-icons";
 import { CheckBox } from "react-native-elements";
-import filter from "lodash.filter"
+import filter from "lodash.filter";
 
 let list: any[] = [];
 let listByUser: any[] = [];
-export default function SelectMarinasScreen({ navigation }: any) {
+export default function SelectMarinasScreen({ navigation, route }: any) {
+  const { showBack } = route.params || {};
   const { translation } = React.useContext(LanguageContext);
   const defaultProductImg =
     "http://openmart.online/frontend/imgs/no_image.png?";
@@ -45,10 +46,15 @@ export default function SelectMarinasScreen({ navigation }: any) {
   const [listPharmacyFull, setListPharmacyFull]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [searchQuery, setSearchQuery]: any = useState("")
+  const [searchQuery, setSearchQuery]: any = useState("");
 
   useEffect(() => {
     getPharmacies();
+    if (showBack) {
+      navigation.setOptions({ headerShown: true });
+    } else {
+      navigation.setOptions({ headerShown: false });
+    }
   }, []);
 
   const getPharmacies = async () => {
@@ -67,7 +73,7 @@ export default function SelectMarinasScreen({ navigation }: any) {
       await fetchData(url).then((response) => {
         if (response.ok) {
           setListPharmacy(response.pharmacy);
-          setListPharmacyFull(response.pharmacy)
+          setListPharmacyFull(response.pharmacy);
           list = [];
           response.pharmacy.forEach((element: any) => {
             list.push({
@@ -96,38 +102,33 @@ export default function SelectMarinasScreen({ navigation }: any) {
   const sendPharmacyUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
       const url = "/userPharmacy/createUserPharmacy";
-      const newList = list
-        .filter((element: any) => {
-          return element.selected === true;
-        })
-        .map((e) => {
-          return {
-            pharmacy_id: e.id,
-            user_id: id,
-          };
-        });
-
+      const newList = list.filter((element: any) => {
+        return element.selected === true;
+      })
+      .map((e) => {
+        return {
+          pharmacy_id: e.id,
+          user_id: id,
+        };
+      });
+      
+      console.log(list.filter((element: any) => {
+        return element.selected === true;
+      }))
       if (list.some((e) => e.selected === false)) {
         const listFalse = list.filter((e) => {
           return e.selected === false;
         });
 
-        const newList = listFalse.map((e) => {
+        const newListDelete = listFalse.map((e) => {
           return e.id;
         });
 
-        const url = `/userPharmacy/deleteUserPharmacyById`;
-        sendData(url, { data: newList }).then((res) => {
-          if (res.ok) {
-            console.log("Se borraron");
-          } else {
-            console.log("No se borraron");
-          }
-        });
+        const urlDelete = `/userPharmacy/deleteUserPharmacyById`;
+        sendData(urlDelete, { data: newListDelete })
       }
 
       await sendData(url, { data: newList }).then((response) => {
-        console.log(newList);
         if (response.ok) {
           navigation.reset({
             index: 0,
@@ -143,32 +144,29 @@ export default function SelectMarinasScreen({ navigation }: any) {
       });
     });
   };
-  console.log(listPharmacy)
 
   const handleChange = (query: string) => {
-    setSearchQuery(query)
+    setSearchQuery(query);
     const formattedQuery = query.toLowerCase();
-      const filteredData = filter(listPharmacyFull, (data: any) => {
-      return contains(data, formattedQuery)
+    const filteredData = filter(listPharmacyFull, (data: any) => {
+      return contains(data, formattedQuery);
     });
-    list = filteredData
-  }
+    list = filteredData;
+  };
 
-  const contains = ({name}: any, query: any) => {
-
-    if(name.toLowerCase().includes(query)){
-      return true
+  const contains = ({ name }: any, query: any) => {
+    if (name.toLowerCase().includes(query)) {
+      return true;
     }
-    
+
     return false;
-  }
+  };
 
   return (
     <Container>
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
       <View style={{ height: "10%", padding: 10, gap: 10 }}>
-        <Text>Buscador</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -181,7 +179,9 @@ export default function SelectMarinasScreen({ navigation }: any) {
           autoCorrect={false}
           autoCapitalize="none"
           value={searchQuery}
-          onChangeText={(query) => {handleChange(query)}}
+          onChangeText={(query) => {
+            handleChange(query);
+          }}
         />
       </View>
       <View style={{ height: "75%" }}>

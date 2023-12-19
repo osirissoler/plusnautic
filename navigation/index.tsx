@@ -68,6 +68,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({ route }: any) {
 	const { translation } = React.useContext(LanguageContext);
+	let showBack;
+	
 	return (
 		<Stack.Navigator
 			screenOptions={{
@@ -82,7 +84,8 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='Marinas'
 				component={SelectMarinasScreen}
-				options={{ headerShown: false, animation: 'fade' }}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
 			/>
 			<Stack.Screen
 				name='RecordBoats'
