@@ -53,13 +53,12 @@ export default function ProfileScreen({ navigation }: any) {
                 setProfileImage(require("../assets/images/profile_avatar.png"));
             });
           } else {
-			hideLoadingModal(() => {
-				logout()
-			});
-			
+            hideLoadingModal(() => {
+              logout();
+            });
           }
         });
-		// setShowLoading(false)
+        // setShowLoading(false)
       },
       navigation,
       translation
@@ -186,7 +185,7 @@ export default function ProfileScreen({ navigation }: any) {
   const supportedURL = "https://coopharma-83beb.web.app/termsandconditions";
   const unsupportedURL = "slack://open?team=123456";
 
-  const OpenURLButton = ({ url, children }) => {
+  const OpenURLButton = ({ url, children }: any) => {
     const handlePress = useCallback(async () => {
       // Checking if the link is supported for links with custom URL scheme.
       const supported = await Linking.canOpenURL(url);
