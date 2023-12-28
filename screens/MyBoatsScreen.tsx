@@ -55,7 +55,6 @@ export default function MyBoats({ navigation }: any) {
 
   return (
     <Container>
-      <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
 
       <View style={{ height: "100%" }}>
@@ -74,7 +73,7 @@ export default function MyBoats({ navigation }: any) {
                 }}
               >
                 <Text style={styles.buttonText}>
-                  +
+                {translation.t('add')}
                 </Text>
               </TouchableOpacity>
 			  </View>
