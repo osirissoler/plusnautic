@@ -51,6 +51,7 @@ import SelectMarinasScreen from '../screens/SelectMarinasScreen';
 import MuellesScreen from '../screens/MuellesScreen';
 import SendServicesScreen from '../screens/SendServicesScreen';
 import MyBoats from '../screens/MyBoatsScreen';
+import ProfilegestorScreen from '../screens/gestor/ProfilegestorScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -80,6 +81,12 @@ function RootNavigator({ route }: any) {
 				name='Language'
 				component={LanguageScreen}
 				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Gestor'
+				component={ProfilegestorScreen}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
 			/>
 			<Stack.Screen
 				name='Marinas'

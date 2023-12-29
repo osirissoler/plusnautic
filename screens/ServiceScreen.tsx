@@ -12,7 +12,7 @@ import Toast from 'react-native-root-toast';
 import { AntDesign } from '@expo/vector-icons';
 // import { ImagePicker } from 'expo-image-multiple-picker'
 
-// import * as osiris from 'react-native-image-crop-picker';
+
 import { string } from 'yup';
 import asyncStorage from '@react-native-async-storage/async-storage';
 
