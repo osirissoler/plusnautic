@@ -8,5 +8,5 @@
 // });
 
 export const formatter = (money:any)=>{
-return money? '$'+money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'):'0.00'
+return money? +money.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,'):'0.00'
 }
