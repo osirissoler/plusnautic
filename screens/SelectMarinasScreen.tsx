@@ -169,6 +169,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             padding: 10,
             borderRadius: 8,
             borderColor: "#ccc",
+            marginTop: 10,
+            height: 50
           }}
           placeholder="Search"
           clearButtonMode="always"
@@ -179,6 +181,12 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             handleChange(query);
           }}
         />
+        <FontAwesome
+						style={styles.inputIcon}
+						name={"search"}
+						size={20}
+            color={"#5f7ceb"}
+					/>
       </View>
       <View style={{ height: "75%" }}>
         <FlatList
@@ -244,7 +252,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             sendPharmacyUser();
           }}
         >
-          <Text>Save</Text>
+          <Text style={{color: "#fff", fontWeight: "bold", fontSize: 20}}>Save</Text>
         </TouchableOpacity>
       </View>
     </Container>
@@ -289,4 +297,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
   },
+  inputIcon: {
+		position: 'absolute',
+		right: 15,
+		top: 25,
+		zIndex: 2,
+		padding: 10,
+	},
 });

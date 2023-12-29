@@ -270,6 +270,11 @@ export default function RecordBoats({ navigation, route }: any) {
     }
   };
 
+  const searchDock = async () => {
+    const url = `/products/getProductsByPharmacyPanel/1`
+
+  }
+
   return (
     <Container
       style={{ backgroundColor: "#fff", height: "95%" }}
@@ -362,6 +367,39 @@ export default function RecordBoats({ navigation, route }: any) {
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
+                    placeholder={translation.t("ChooseMarine")}
+                    searchPlaceholder="Search..."
+                    value={values.pharmacy_id}
+                    onChange={(items) => {
+                      setFieldValue("pharmacy_id", items.value);
+                    }}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color="black"
+                        name="Safety"
+                        size={20}
+                      />
+                    )}
+                  />
+                </View>
+
+                <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Docks")}
+                  </Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={pharmacyValues}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    disable={true}
                     placeholder={translation.t("ChooseMarine")}
                     searchPlaceholder="Search..."
                     value={values.pharmacy_id}
