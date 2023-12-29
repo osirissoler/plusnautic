@@ -282,7 +282,7 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
-            onPress={() => navigation.navigate("Marinas")}
+            onPress={() => navigation.navigate("Marinas", {showBack: true})}
           >
             <Text style={styles.optionText}>Marinas</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />

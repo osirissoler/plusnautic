@@ -215,12 +215,12 @@ export default function RecordBoats({ navigation, route }: any) {
       translation.t("alertInfoTitle"),
       "",
       [
-        {
-          text: translation.t("profilePictureCameraText"), // Take picture
-          onPress: () => {
-            return setProfilePicture(1);
-          },
-        },
+        // {
+        //   text: translation.t("profilePictureCameraText"), // Take picture
+        //   onPress: () => {
+        //     return setProfilePicture(1);
+        //   },
+        // },
         {
           text: translation.t("profilePictureGaleryText"), // Upload from galery
           onPress: () => {

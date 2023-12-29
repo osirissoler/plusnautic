@@ -51,6 +51,7 @@ import SelectMarinasScreen from '../screens/SelectMarinasScreen';
 import MuellesScreen from '../screens/MuellesScreen';
 import SendServicesScreen from '../screens/SendServicesScreen';
 import MyBoats from '../screens/MyBoatsScreen';
+import ProfilegestorScreen from '../screens/gestor/ProfilegestorScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -68,6 +69,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({ route }: any) {
 	const { translation } = React.useContext(LanguageContext);
+	let showBack;
+	
 	return (
 		<Stack.Navigator
 			screenOptions={{
@@ -80,9 +83,16 @@ function RootNavigator({ route }: any) {
 				options={{ headerShown: false, animation: 'fade' }}
 			/>
 			<Stack.Screen
+				name='Gestor'
+				component={ProfilegestorScreen}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
 				name='Marinas'
 				component={SelectMarinasScreen}
-				options={{ headerShown: false, animation: 'fade' }}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
 			/>
 			<Stack.Screen
 				name='RecordBoats'
