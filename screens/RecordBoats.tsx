@@ -384,7 +384,7 @@ export default function RecordBoats({ navigation, route }: any) {
                   />
                 </View>
 
-                <View>
+                {/* <View>
                   <Text style={styles.labelInput}>
                     {translation.t("Docks")}
                   </Text>
@@ -415,7 +415,7 @@ export default function RecordBoats({ navigation, route }: any) {
                       />
                     )}
                   />
-                </View>
+                </View> */}
               </View>
 
               <View style={{}}>
