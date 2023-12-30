@@ -239,8 +239,8 @@ export default function ProfileScreen({ navigation }: any) {
         <View style={{ marginLeft: 15 }}>
           {Object.keys(user).length > 0 && (
             <>
-              {/* <Text style={styles.profileText}>{user.first_name}</Text>
-							<Text style={styles.profileText}>{user.email}</Text> */}
+              <Text style={styles.profileText}>{user.first_name}</Text>
+							<Text style={styles.profileText}>{user.email}</Text>
             </>
           )}
         </View>

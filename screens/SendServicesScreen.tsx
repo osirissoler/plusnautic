@@ -15,7 +15,6 @@ import { CheckBox } from "react-native-elements";
 import { Dropdown } from "react-native-element-dropdown";
 let list: any[] = [];
 export default function SendServicesScreen({ navigation, route }: any) {
-    console.log(route.params.id);
     const [boatsRecord, setBoatsRecord]: any = useState([])
     const [boatsRecord_id, setBoatsRecord_id]: any = useState(null)
     const { translation } = React.useContext(LanguageContext);

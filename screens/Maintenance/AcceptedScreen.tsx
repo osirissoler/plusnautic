@@ -29,7 +29,6 @@ import { checkStorage, Loading } from "../../components/Shared";
 import ServicesNotificationPayments from "./ServicesNotificationPayments";
 
 export default function AcceptedScreen({ navigation, route }: any) {
-  
   const { translation } = React.useContext(LanguageContext);
   const [service_id, setService_id]: any = useState(route.params.service_id);
   const [minDate, setMinDate] = useState(moment().format("YYYY-MM-DD"));
@@ -51,7 +50,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [requestId, setrequestId]: any = useState("");
   const [contador, setContador]: any = useState(0);
   const [id, setId]: any = useState(0);
-  console.log("aqu", route.params.item.id);
+  console.log("aqu", route.params.item.signatureUSer);
   useEffect(() => {
     fillMarkedDatesAll();
   }, []);
@@ -287,9 +286,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
             ></Calendar>
           </View>
 
-          <View
-            style={{ height: "10%", justifyContent: "center" }}
-          >
+          <View style={{ height: "10%", justifyContent: "center" }}>
             <View
               style={{
                 height: "30%",
@@ -321,9 +318,33 @@ export default function AcceptedScreen({ navigation, route }: any) {
             </View>
           </View>
 
-          <View style={{ height: "23%" }}>
-            {items.Services.isPaid == true && <ServicesNotificationPayments items={items} navigation={navigation} />}
-          </View>
+          {items.Services.isPaid == true &&
+            items.Services.servicesStatus_id != 3 && (
+              <View style={{ height: "23%" }}>
+                
+                <ServicesNotificationPayments
+                  items={items}
+                  navigation={navigation}
+                />
+              </View>
+            )}
+
+          {items.Services.servicesStatus_id === 3 && (
+            <View style={{ height: "23%", alignItems: "center" }}>
+              <Image
+                source={{
+                  uri: items.signatureUSer,
+                }}
+                style={{ height: 90, width: 150 }}
+              />
+              <View>
+                <Text>-------------------------------</Text>
+                <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+                  Signature
+                </Text>
+              </View>
+            </View>
+          )}
 
           {items.Services.isPaid == false && (
             <View style={{ height: "15%" }}>

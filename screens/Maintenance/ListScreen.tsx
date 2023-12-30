@@ -185,7 +185,7 @@ export default function ListScreen({ navigation }: any) {
                     </Text>
                     <View style={{ flexDirection: "row" }}>
                       <Text style={{ fontWeight: "bold" }}>
-                        {translation.t("price")}{" "}
+                        {translation.t("price")}{""}
                       </Text>
                       <Text>{formatter(item.price)}</Text>
                     </View>

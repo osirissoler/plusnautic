@@ -13,7 +13,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import asyncStorage from "@react-native-async-storage/async-storage";
 import { fetchData, sendData } from "../../httpRequests";
 import { Ionicons } from "@expo/vector-icons";
-import { formatter } from "../../utils";
+import { formatter, formatter2 } from "../../utils";
 import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Loading } from "../../components/Shared";
 import { Rating } from "react-native-elements";
@@ -97,7 +97,7 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
         </Text>
         <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
           <Rating imageSize={25} fractions={1} startingValue={punctuation} />
-          <Text style={{fontWeight:'bold'}}> {formatter(punctuation) }</Text>
+          <Text style={{fontWeight:'bold'}}> {formatter2(punctuation) }</Text>
         </View>
       </View>
       <View style={{ backgroundColor: "white", height: "80%" }}>
