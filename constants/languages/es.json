@@ -170,7 +170,11 @@
 	"Year": "Año",
 	"Marine": "Marina",
 	"ChooseMarine": "Elige la marina",
+	"ChooseDocks": "Elige los muelles",
 	"MyBoats": "Mis botes",
 	"add": "Añadir",
-	"Docks": "Muelles"
+	"Docks": "Muelles",
+	"CreateInvitation": "Create invitation",
+	"Guest": "Invitados"
+
 }

@@ -19,14 +19,17 @@ import { checkStorage, Container, Loading } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
-import { Dropdown } from "react-native-element-dropdown";
+import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 
 export default function RecordBoats({ navigation, route }: any) {
+  // console.log(route.params)
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [engineInputsCounter, setEngineInputsCounter] = useState(1);
   const [pharmacyValues, setPharmacyValues] = useState([]);
+  const [dockValues, setDockValues] = useState([]);
+  const [dockSelected, setDockSelected] = useState([]);
   const [boat, setBoat] = useState(route.params.boats[0]);
   const [boatImage, setBoatImage]: any = useState("");
   const [initialValues, setInitialValues] = useState({
@@ -48,44 +51,63 @@ export default function RecordBoats({ navigation, route }: any) {
     electric_plant: boat.electric_plant,
     air_conditioner: boat.air_conditioner,
     pharmacy_id: boat.Pharmacy_id,
+    docks: boat.docks,
     img: boat.img,
   });
 
   useEffect(() => {
     const url = `/userPharmacy/getUserPharmacyByUserId/${route.params.id}`;
-    fetchData(url).then((res) => {
+    fetchData(url).then(async (res) => {
       const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
         label: pharmacy.pharmacy_name,
         value: pharmacy.pharmacy_id,
       }));
       setPharmacyValues(mappedValues);
 
-      if(initialValues.engine_2 && initialValues.engineYear_2){
-        setEngineInputsCounter(2)
+      if (initialValues.engine_2 && initialValues.engineYear_2) {
+        setEngineInputsCounter(2);
       }
 
-      if(initialValues.engine_3 && initialValues.engineYear_3){
-        setEngineInputsCounter(3)
+      if (initialValues.engine_3 && initialValues.engineYear_3) {
+        setEngineInputsCounter(3);
       }
 
-      if(initialValues.engine_4 && initialValues.engineYear_4){
-        setEngineInputsCounter(4)
+      if (initialValues.engine_4 && initialValues.engineYear_4) {
+        setEngineInputsCounter(4);
       }
 
-      if(initialValues.engine_4 && initialValues.engineYear_4){
-        setEngineInputsCounter(4)
+      if (initialValues.engine_4 && initialValues.engineYear_4) {
+        setEngineInputsCounter(4);
       }
 
-      if(initialValues.engine_5 && initialValues.engineYear_5){
-        setEngineInputsCounter(5)
+      if (initialValues.engine_5 && initialValues.engineYear_5) {
+        setEngineInputsCounter(5);
       }
 
-      if(initialValues.engine_6 && initialValues.engineYear_6){
-        setEngineInputsCounter(6)
+      if (initialValues.engine_6 && initialValues.engineYear_6) {
+        setEngineInputsCounter(6);
       }
+
+      if (route.params.editMode) {
+        await searchDock(boat.Pharmacy_id)
+        // const data = await boat.docks?.split(',').map((a: any) => (dockValues.find((b: any) => (b.value == a))));        console.log(dockValues.find((b: any) => (b.value == 88)))
+        setDockSelected(boat.docks?.split(',').map((item: any) => parseInt(item, 10)));      }
     });
-    setBoatImage(boat.img)
+
+    setBoatImage(boat.img);
   }, []);
+
+  const searchDock = async (id: any) => {
+    const url = `/products/getProductsByPharmacy/${id}`;
+    fetchData(url).then((res: any) => {
+      const mappedValues = res.pharmacyproduct.map((product: any) => ({
+        label: product.product_name,
+        value: product.product_id,
+      }));
+      console.log(mappedValues)
+      setDockValues(mappedValues);
+    });
+  };
 
   const validationSchema = yup.object().shape({
     boat_name: yup.string().required(),
@@ -101,6 +123,11 @@ export default function RecordBoats({ navigation, route }: any) {
     if (!boatImage) {
       showErrorToast("Debe poner una imagen");
       return;
+    }
+
+    if(dockSelected.length < 1) {
+      showErrorToast("Debe seleccionar uno o varios muelles");
+      return
     }
 
     setShowLoading(true);
@@ -125,6 +152,7 @@ export default function RecordBoats({ navigation, route }: any) {
       air_conditioner: values.air_conditioner,
       pharmacy_id: values.pharmacy_id,
       user_id: route.params.id,
+      docks: dockSelected.toString(),
       img: boatImage,
     };
 
@@ -133,10 +161,10 @@ export default function RecordBoats({ navigation, route }: any) {
         hideLoadingModal(() => {
           if (response.ok) {
             showSuccessToast(response.message);
-            redirectToMyBoats();
+            redirectToMyBoats("Mal");
           } else {
             showErrorToast(response.message);
-          }
+          } 
         });
       });
     } else {
@@ -144,7 +172,7 @@ export default function RecordBoats({ navigation, route }: any) {
         hideLoadingModal(() => {
           if (response.ok) {
             showSuccessToast(response.message);
-            redirectToMyBoats();
+            redirectToMyBoats("Bien");
           } else {
             showErrorToast(response.message);
           }
@@ -174,8 +202,8 @@ export default function RecordBoats({ navigation, route }: any) {
     });
   };
 
-  const redirectToMyBoats = () => {
-    navigation.navigate("MyBoats");
+  const redirectToMyBoats = (data: any) => {
+    navigation.navigate("MyBoats", {refresh: data});
   };
 
   const incrementCounter = () => {
@@ -270,11 +298,6 @@ export default function RecordBoats({ navigation, route }: any) {
     }
   };
 
-  const searchDock = async () => {
-    const url = `/products/getProductsByPharmacyPanel/1`
-
-  }
-
   return (
     <Container
       style={{ backgroundColor: "#fff", height: "95%" }}
@@ -347,7 +370,7 @@ export default function RecordBoats({ navigation, route }: any) {
                   }}
                 >
                   <Image
-                    source={{ uri: boatImage ? boatImage : null}}
+                    source={{ uri: boatImage ? boatImage : null }}
                     style={styles.profilePicture}
                   />
                 </TouchableOpacity>
@@ -370,8 +393,9 @@ export default function RecordBoats({ navigation, route }: any) {
                     placeholder={translation.t("ChooseMarine")}
                     searchPlaceholder="Search..."
                     value={values.pharmacy_id}
-                    onChange={(items) => {
+                    onChange={(items: any) => {
                       setFieldValue("pharmacy_id", items.value);
+                      searchDock(items.value);
                     }}
                     renderLeftIcon={() => (
                       <AntDesign
@@ -384,27 +408,27 @@ export default function RecordBoats({ navigation, route }: any) {
                   />
                 </View>
 
-                {/* <View>
+                <View>
                   <Text style={styles.labelInput}>
                     {translation.t("Docks")}
                   </Text>
-                  <Dropdown
+                  <MultiSelect
                     style={styles.dropdown}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
-                    data={pharmacyValues}
+                    data={dockValues}
                     search
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    disable={true}
-                    placeholder={translation.t("ChooseMarine")}
+                    placeholder={translation.t("ChooseDocks")}
                     searchPlaceholder="Search..."
-                    value={values.pharmacy_id}
-                    onChange={(items) => {
-                      setFieldValue("pharmacy_id", items.value);
+                    value={dockSelected}
+                    onChange={(items: any) => {
+                      setDockSelected(items)
+                      console.log(items)
                     }}
                     renderLeftIcon={() => (
                       <AntDesign
@@ -414,8 +438,33 @@ export default function RecordBoats({ navigation, route }: any) {
                         size={20}
                       />
                     )}
+                    renderItem={(item: any) => (
+                      <View style={styles.item}>
+                        <Text style={styles.selectedTextStyle}>
+                          {item.label}
+                        </Text>
+                        <AntDesign
+                          style={styles.icon}
+                          color="black"
+                          name="Safety"
+                          size={20}
+                        />
+                      </View>
+                    )}
+                    renderSelectedItem={(item, unSelect) => (
+                      <TouchableOpacity
+                        onPress={() => unSelect && unSelect(item)}
+                      >
+                        <View style={styles.selectedStyle}>
+                          <Text style={styles.textSelectedStyle}>
+                            {item.label}
+                          </Text>
+                          <AntDesign color="black" name="delete" size={17} />
+                        </View>
+                      </TouchableOpacity>
+                    )}
                   />
-                </View> */}
+                </View>
               </View>
 
               <View style={{}}>
@@ -746,6 +795,36 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
+    fontSize: 16,
+  },
+  item: {
+    padding: 17,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  selectedStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    marginTop: 8,
+    marginRight: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  textSelectedStyle: {
+    marginRight: 5,
     fontSize: 16,
   },
   profilePicture: {

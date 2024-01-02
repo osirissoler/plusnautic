@@ -170,8 +170,13 @@
 	"Year": "Year",
 	"Marine": "Marine",
 	"ChooseMarine": "Choose marine",
+	"ChooseDocks": "Choose Docks",
 	"MyBoats": "My boats",
 	"add": "Add",
-	"Docks": "Docks"
+	"Docks": "Docks",
+	"CreateInvitation": "Create invitation",
+	"Guest": "Guest"
+
+
 
 }

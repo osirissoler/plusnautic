@@ -14,7 +14,7 @@ import { fetchData } from "../httpRequests";
 import HeaderComponent from "../components/Header";
 import AdsScreen from "./AdsScreen";
 
-export default function MyBoats({ navigation }: any) {
+export default function MyBoats({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [boats, setBoats] = useState([]);
   const [showLoading, setShowLoading]: any = useState(false);
@@ -22,17 +22,17 @@ export default function MyBoats({ navigation }: any) {
   const [userId, setUserId] = useState(0);
 
   useEffect(() => {
-	  checkStorage("USER_LOGGED", async (id: any) => {
-	setUserId(id);
-		setShowLoading(true)
+    checkStorage("USER_LOGGED", async (id: any) => {
+      setUserId(id);
+      setShowLoading(true);
       const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
-	  hideLoadingModal(() => {
-		fetchData(url).then((res) => {
-			setBoats(res.boatsRecord);
-		});
-	  })
+      hideLoadingModal(() => {
+        fetchData(url).then((res) => {
+          setBoats(res.boatsRecord);
+        });
+      });
     });
-  }, []);
+  }, [route]);
 
   const getBoatRecordByUser = async () => {
     const url = `/boatsRecords/geatBoatRecordByUser/${userId}`;
@@ -42,8 +42,12 @@ export default function MyBoats({ navigation }: any) {
   };
 
   const redirectToRecordBoats = (id: any) => {
-    navigation.navigate("RecordBoats", {id: id, editMode: false, boats: [{}]});
-	console.log(id)
+    navigation.navigate("RecordBoats", {
+      id: id,
+      editMode: false,
+      boats: [{}],
+    });
+    console.log(id);
   };
 
   const hideLoadingModal = (callback: Function) => {
@@ -64,20 +68,24 @@ export default function MyBoats({ navigation }: any) {
           data={boats}
           onRefresh={getBoatRecordByUser}
           style={styles.body}
-		  ListHeaderComponent={
-			<View style={{justifyContent: "center", alignItems: "flex-end", width: "100%"}}>
-			<TouchableOpacity
+          ListHeaderComponent={
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "flex-end",
+                width: "100%",
+              }}
+            >
+              <TouchableOpacity
                 style={styles.redirectButton}
                 onPress={() => {
-					redirectToRecordBoats(userId);
+                  redirectToRecordBoats(userId);
                 }}
               >
-                <Text style={styles.buttonText}>
-                {translation.t('add')}
-                </Text>
+                <Text style={styles.buttonText}>{translation.t("add")}</Text>
               </TouchableOpacity>
-			  </View>
-		  }
+            </View>
+          }
           renderItem={({ item, index }: any) => (
             <TouchableOpacity
               style={{
@@ -86,7 +94,15 @@ export default function MyBoats({ navigation }: any) {
                 alignItems: "center",
                 width: "35%",
               }}
-              onPress={() => navigation.navigate("RecordBoats", {id: userId, editMode: true, boats: boats.map((value) => value).filter((e: any) => e.id === item.id)})}
+              onPress={() =>
+                navigation.navigate("RecordBoats", {
+                  id: userId,
+                  editMode: true,
+                  boats: boats
+                    .map((value) => value)
+                    .filter((e: any) => e.id === item.id),
+                })
+              }
               key={item.id}
             >
               <View style={{ height: 80, width: 80, marginBottom: 10 }}>

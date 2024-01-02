@@ -42,7 +42,10 @@ export type RootStackParamList = {
   Muelles:undefined;
   Solicitudes:undefined;
   MyBoats:undefined;
-  Gestor:undefined
+  Gestor:undefined;
+  CreateInvitations: undefined;
+  GuestDetailsScreen: undefined;
+  GuestScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -58,7 +61,8 @@ export type RootTabParamList = {
   Profile: undefined;
   Payments:undefined;
   Activities:undefined;
-  Muelles:undefined
+  Muelles:undefined;
+  GuestScreen: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
