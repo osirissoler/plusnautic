@@ -91,7 +91,7 @@ export default function RecordBoats({ navigation, route }: any) {
       if (route.params.editMode) {
         await searchDock(boat.Pharmacy_id)
         // const data = await boat.docks?.split(',').map((a: any) => (dockValues.find((b: any) => (b.value == a))));        console.log(dockValues.find((b: any) => (b.value == 88)))
-        setDockSelected(boat.docks?.split(',').map((item: any) => parseInt(item, 10)));      }
+        setDockSelected(boat.docks?.split(',').map((item: any) => parseInt(item)));      }
     });
 
     setBoatImage(boat.img);
