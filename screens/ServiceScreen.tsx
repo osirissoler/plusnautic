@@ -80,48 +80,14 @@ export default function ServiceScreen({ navigation }: any) {
 		}, 1500);
 	  };
 
-	// useEffect(() => {
-	// 	checkStorage('USER_LOGGED', (id: any) => {
-
-	// 		setUser_id(id)
-	// 		if (!!id) {
-
-	// 		} else {
-	// 			Alert.alert(
-	// 				translation.t('alertWarningTitle'), // Alert
-	// 				translation.t('alertUserAnonymousMessage'), // You need to be logged in to perfom this action.
-	// 				[
-	// 					{
-	// 						text: translation.t('alertGoToLogin'), // Go to Login
-	// 						onPress: () => {
-	// 							navigation.reset({
-	// 								index: 0,
-	// 								routes: [{ name: 'SignIn' }]
-	// 							});
-	// 						}
-	// 					}
-	// 				]
-	// 			);
-	// 		}
-	// 	});
-
-	// }, []);
+	
 
 	useEffect(() => {
 		getTypeServices()
 		// getProducts()
 	}, [])
 
-	// const getProducts = async () => {
-	// 	const url = '/rent/getRentByUser';
-	// 	checkStorage('USER_LOGGED', async (id: any) => {
-	// 		const data = { pharmacy_id: 536, user_id: id, initial: 0, limit: 10 };
-	// 		await sendData(url, data).then((response) => {
-	// 			setListProducts(response.pharmacyproduct)
-	// 		}
-	// 		)
-	// 	})
-	// }
+	
 	const getTypeServices = async () => {
 		setFetching(true)
 		let url = `/services/getTypeService`

@@ -2,13 +2,13 @@
   "expo": {
     "name": "Plusnautic",
     "slug": "plusnautic",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/plusnauticIcon.png",
     "scheme": "plusnautic",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/fulllogo.jpg",
+      "image": "./assets/images/fulllogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

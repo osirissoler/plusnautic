@@ -170,7 +170,7 @@ export default function SignInScreen({ navigation }: any) {
 					<Loading showLoading={showLoading} translation={translation} />
 					<View style={styles.body}>
 						<Text style={styles.title}>{translation.t('signInTitle') /*  Login */}</Text>
-						<Formik initialValues={{ email: '', password: '' }} onSubmit={(values) => onSignIn(values)}>
+						<Formik initialValues={{ email: 'test@test.com', password: 'Test123456' }} onSubmit={(values) => onSignIn(values)}>
 							{({ handleChange, handleBlur, handleSubmit, values }) => (
 								<>
 									<Text style={styles.labelInput}>

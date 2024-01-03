@@ -33,7 +33,35 @@ export default function HomeScreen({ navigation, route }: any) {
   const [visible, setVisible] = useState(true);
   const [firstTime, setFirstTime] = useState(false);
 
+<<<<<<< HEAD
   console.log(firstTime);
+=======
+	useEffect(() => {
+		checkLoggedUser(
+		  (id: string) => {
+			setShowLoading(true);
+			const url = `/user/getUserById/${id}`;
+			const data = { user_id: id };
+			sendData(url, data).then((response) => {
+			  if (response.ok) {
+				//  setShowLoading(false);
+				 console.log('es ok')
+				hideLoadingModal(() => {
+				});
+			  } else {
+				hideLoadingModal(() => {
+					logout()
+				});
+				
+			  }
+			});
+		  },
+		  navigation,
+		  translation
+		);
+		
+	  }, []);
+>>>>>>> staging
 
 //   useEffect(() => {
 //     if (!firstTime) {
@@ -67,12 +95,21 @@ export default function HomeScreen({ navigation, route }: any) {
     }
   };
 
+<<<<<<< HEAD
   const redirectToLogin = () => {
     navigation.reset({
       index: 0,
       routes: [{ name: "SignIn" }],
     });
   };
+=======
+	  const hideLoadingModal = (callback: Function) => {
+		setTimeout(() => {
+		  setShowLoading(false);
+		  callback();
+		}, 1000);
+	  };
+>>>>>>> staging
 
   const hideLoadingModal = (callback: Function) => {
     setTimeout(() => {
@@ -81,9 +118,20 @@ export default function HomeScreen({ navigation, route }: any) {
     }, 1500);
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     getPharmaciesByUSer();
   }, []);
+=======
+	const getPharmaciesByUSer = async () => {
+		checkStorage('USER_LOGGED', async (id: any) => {
+			setFetching(true)
+			let url = `/userPharmacy/getUserPharmacyByUserId/${id}`
+			await fetchData(url).then((response) => {
+				if (response.ok) {
+					setListPharmacy(response.userPharmacy)
+				} else {
+>>>>>>> staging
 
   const getPharmaciesByUSer = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
@@ -108,6 +156,7 @@ export default function HomeScreen({ navigation, route }: any) {
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
 
+<<<<<<< HEAD
       <View style={{ height: "100%" }}>
         <FlatList
           columnWrapperStyle={{ justifyContent: "space-around" }}
@@ -154,6 +203,60 @@ export default function HomeScreen({ navigation, route }: any) {
       </View>
     </Container>
   );
+=======
+	}
+	const goMuelles = (id:number) => {
+		navigation.navigate('Muelles', {id:id})
+	}
+
+	return (
+		<Container>
+			<HeaderComponent />
+			<Loading showLoading={showLoading} translation={translation} />
+
+			<View style={{ height: '100%' }}>
+				<FlatList
+					columnWrapperStyle={{ justifyContent: 'space-around' }}
+					refreshing={fetching}
+					data={listPharmacy}
+					onRefresh={getPharmaciesByUSer}
+					ListHeaderComponent={
+						<View>
+							{(visible)
+								? <AdsScreen code={"Home"} img={initialImg} />
+								: <Image style={styles.headerImage} source={{ uri: initialImg }} />
+							}
+						</View>
+					}
+					style={styles.body}
+					renderItem={({ item, index }: any) => (
+
+						<TouchableOpacity
+							style={{
+								padding: 10,
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '35%',
+							}}
+							onPress={() => { goMuelles(item.pharmacy_id)}}
+							key={item.id}
+						>
+							<View style={{ height: 80, width: 80, marginBottom: 10, }}>
+								<Image source={{ uri: item.pharmacy_img }} style={{ flex: 1, resizeMode: 'contain' }} />
+							</View>
+							<Text style={styles.categoryName}>
+								{item.pharmacy_name}
+							</Text>
+							
+						</TouchableOpacity>
+					)}
+					numColumns={2}
+				>
+				</FlatList>
+			</View>
+		</Container>
+	);
+>>>>>>> staging
 }
 
 const styles = StyleSheet.create({
