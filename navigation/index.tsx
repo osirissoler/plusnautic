@@ -327,7 +327,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				listeners={{
 					tabPress: e => {
 						console.log(e)
-						// goHome()
+						goHome()
 					}
 				}}
 			/>

@@ -32,7 +32,10 @@ export default function HomeScreen({ navigation, route }:any) {
 			const data = { user_id: id };
 			sendData(url, data).then((response) => {
 			  if (response.ok) {
-				setShowLoading(false);
+				//  setShowLoading(false);
+				 console.log('es ok')
+				hideLoadingModal(() => {
+				});
 			  } else {
 				hideLoadingModal(() => {
 					logout()
@@ -66,7 +69,7 @@ export default function HomeScreen({ navigation, route }:any) {
 		setTimeout(() => {
 		  setShowLoading(false);
 		  callback();
-		}, 1500);
+		}, 1000);
 	  };
 
 	useEffect(() => {
@@ -80,7 +83,6 @@ export default function HomeScreen({ navigation, route }:any) {
 			await fetchData(url).then((response) => {
 				if (response.ok) {
 					setListPharmacy(response.userPharmacy)
-					console.log(response.userPharmacy);
 				} else {
 
 				}
@@ -108,7 +110,7 @@ export default function HomeScreen({ navigation, route }:any) {
 					ListHeaderComponent={
 						<View>
 							{(visible)
-								? <AdsScreen code={"Services"} img={initialImg} />
+								? <AdsScreen code={"Home"} img={initialImg} />
 								: <Image style={styles.headerImage} source={{ uri: initialImg }} />
 							}
 						</View>
