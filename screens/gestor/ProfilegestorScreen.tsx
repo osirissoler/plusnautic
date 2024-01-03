@@ -79,13 +79,12 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
         });
       }
     });
-
-    
   };
 
   const hideLoadingModal = (callback: Function) => {
     setTimeout(() => {
       setShowLoading(false);
+      setFetching(false);
       callback();
     }, 500);
   };
