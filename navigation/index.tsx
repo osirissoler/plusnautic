@@ -52,6 +52,9 @@ import MuellesScreen from '../screens/MuellesScreen';
 import SendServicesScreen from '../screens/SendServicesScreen';
 import MyBoats from '../screens/MyBoatsScreen';
 import ProfilegestorScreen from '../screens/gestor/ProfilegestorScreen';
+import InvitationScreen from '../screens/InvitationScreen';
+import GuestScreen from '../screens/GuestScreen';
+import GuestDetailsScreen from '../screens/GuestDetailsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -87,6 +90,28 @@ function RootNavigator({ route }: any) {
 				component={ProfilegestorScreen}
 				initialParams={{ showBack } as any}
 				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='CreateInvitations'
+				component={InvitationScreen}
+				options={{
+					headerTitle: translation.t('CreateInvitation'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'fade',
+					headerShown: true,
+				}}
+			/>
+			<Stack.Screen
+				name='GuestScreen'
+				component={GuestScreen}
+				options={{
+					headerTitle: translation.t('Guest'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right',
+					headerShown: true,
+				}}
 			/>
 			<Stack.Screen
 				name='Marinas'
@@ -261,6 +286,16 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='Accept'
 				component={AcceptedScreen}
+				options={{
+					// headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			<Stack.Screen
+				name='GuestDetailsScreen'
+				component={GuestDetailsScreen}
 				options={{
 					// headerTitle: translation.t('listServices') /* Search Products */,
 					headerStyle: { backgroundColor: '#fff' },
