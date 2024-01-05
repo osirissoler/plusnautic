@@ -48,8 +48,6 @@ export default function SendServicesScreen({ navigation, route }: any) {
                     }
                     await sendData(url, data).then((response) => {
                         sendFile(response.services.id)
-                        // if (response.ok) { showErrorToast('The service has been sent successfully') }
-                        // navigation.goBack()
                     })
                 })
             })
@@ -169,7 +167,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                         <View style={{ height: '100%' }}>
                             <View style={{ maxHeight: '40%', backgroundColor: 'white' }}>
                                 <TouchableOpacity style={{
-                                    width: '30%',
+                                    width: '35%',
                                     height: 50,
                                     backgroundColor: '#5f7ceb',
                                     alignItems: 'center',
@@ -177,14 +175,13 @@ export default function SendServicesScreen({ navigation, route }: any) {
                                     borderRadius: 10,
                                 }} onPress={() => openImagePickerAsync()}>
                                     <FontAwesome name='file-image-o' size={20} color={'white'} />
-                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Select image</Text>
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{translation.t('SelectImage')}</Text>
                                 </TouchableOpacity>
 
                                 <View style={{ maxHeight: '70%' }}>
                                     {(Object.keys(images).length > 0 && (
                                         <FlatList
                                             refreshing={refre}
-                                            style={{ marginTop: 4 }}
                                             data={images}
                                             renderItem={({ item }: any) => (
                                                 <TouchableOpacity>
@@ -211,11 +208,11 @@ export default function SendServicesScreen({ navigation, route }: any) {
                                     }}
                                 >
                                     <View style={{ width: '100%' }}>
-                                        <Text style={styles.labelInput}></Text>
+                                        <Text style={styles.labelInput}>{translation.t('Description')}</Text>
                                         {touched.description && errors.description && (
                                             <Text style={{ color: 'red' }}>{errors.description}</Text>
                                         )}
-                                        <Text style={styles.labelInput}>Description</Text>
+                                        <Text style={styles.labelInput}></Text>
                                         <TextInput
                                             style={styles.textInput}
                                             multiline={true}
@@ -223,7 +220,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                                             onChangeText={handleChange('description')}
                                             onBlur={handleBlur('description')}
                                             value={values.description}
-                                            placeholder={'description of the problem'}
+                                            placeholder={translation.t('DescriptionProblem')}
                                         />
                                     </View>
 
@@ -241,8 +238,8 @@ export default function SendServicesScreen({ navigation, route }: any) {
                                         maxHeight={300}
                                         labelField="boat_name"
                                         valueField={''}
-                                        placeholder="Seleciona  Muelle"
-                                        searchPlaceholder="Search bote"
+                                        placeholder={translation.t('SelectBoat')}
+                                        searchPlaceholder={translation.t('SearchBoat')}
                                         value={values.boatsRecord_id}
                                         onChange={(items: any) => {
                                             setBoatsRecord_id(items.id)
@@ -265,7 +262,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                                     ]}
                                     onPress={() => handleSubmit()}
                                 >
-                                    <Text style={{ color: '#ffffff', fontSize: 18 }}>Send</Text>
+                                    <Text style={{ color: '#ffffff', fontSize: 18, fontWeight: "bold" }}>{translation.t('Save')}</Text>
                                 </TouchableOpacity>
                             </ScrollView>
                         </View>
@@ -326,7 +323,7 @@ const styles = StyleSheet.create({
     labelInput: {
         fontSize: 15,
         color: '#8B8B97',
-
+        marginVertical: 5,
     },
     textInput: {
         height: 150,

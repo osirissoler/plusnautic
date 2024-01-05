@@ -11,7 +11,7 @@ const fetchData = async (url: string) => {
 		};
 		const response = await axios(configuration);
 		return response.data;
-	} catch (error) {
+	} catch (error: any) {
 		return error.response.data;
 	}
 };
@@ -28,7 +28,7 @@ const sendData = async (url: string, data: {}) => {
 		
 		const response = await axios(configuration);
 		return response.data;
-	} catch (error) {
+	} catch (error: any) {
 		console.log(error.response.data);
 		return error.response.data;
 	}
@@ -44,10 +44,24 @@ const sendDataPut = async (url: string, data: {}) => {
 
 		const response = await axios(configuration);
 		return response.data;
-	} catch (error) {
+	} catch (error: any) {
 		console.log(error.response.data);
 		return error.response.data;
 	}
 };
 
-export { fetchData, sendData, sendDataPut };
+
+const deleteData = async (url: string) => {
+	try {
+		const configuration: any = {
+			method: 'delete',
+			url: `${baseUrl}` + url
+		};
+		const response = await axios(configuration);
+		return response.data;
+	} catch (error: any) {
+		return error.response.data;
+	}
+};
+
+export { fetchData, sendData, sendDataPut, deleteData };

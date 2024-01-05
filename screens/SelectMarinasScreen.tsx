@@ -5,11 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-  Modal,
   TextInput,
-  ScrollView,
-  Alert,
-  ImageBackground,
   FlatList,
   Image,
 } from "react-native";
@@ -22,21 +18,12 @@ import {
 } from "../components/Shared";
 import {
   FontAwesome,
-  MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
-import { Formik } from "formik";
-import * as yup from "yup";
 import { LanguageContext } from "../LanguageContext";
-import * as ImagePicker from "expo-image-picker";
 import { fetchData, sendData } from "../httpRequests";
-import Toast from "react-native-root-toast";
-import { AntDesign } from "@expo/vector-icons";
 import { CheckBox } from "react-native-elements";
 import filter from "lodash.filter";
 
-let list: any[] = [];
-let listByUser: any[] = [];
 export default function SelectMarinasScreen({ navigation, route }: any) {
   const { showBack } = route.params || {};
   const { translation } = React.useContext(LanguageContext);
@@ -47,6 +34,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
   const [fetching, setFetching]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [searchQuery, setSearchQuery]: any = useState("");
+  const [list, setList]: any = useState([])
+  const [listByUser, setListByUser]: any = useState([])
 
   useEffect(() => {
     getPharmacies();
@@ -74,19 +63,19 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
         if (response.ok) {
           setListPharmacy(response.pharmacy);
           setListPharmacyFull(response.pharmacy);
-          list = [];
-          response.pharmacy.forEach((element: any) => {
-            list.push({
-              name: element.name,
-              id: element.id,
-              img: element.img,
-              selected: listByUser.some((e) =>
-                e === element.id ? true : false
-              ),
+          const list: any = []
+            response.pharmacy.forEach((element: any) => {
+              list.push({
+                name: element.name,
+                id: element.id,
+                img: element.img,
+                selected: listByUser.some((e: any) =>
+                  e === element.id ? true : false
+                ),
+              });
             });
-          });
-        } else {
-        }
+            setList(list)
+        } 
         setFetching(false);
       });
     });
@@ -105,18 +94,18 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
       const newList = list.filter((element: any) => {
         return element.selected === true;
       })
-      .map((e) => {
+      .map((e: any) => {
         return {
           pharmacy_id: e.id,
           user_id: id,
         };
       });
-      if (list.some((e) => e.selected === false)) {
-        const listFalse = list.filter((e) => {
+      if (list.some((e: any) => e.selected === false)) {
+        const listFalse = list.filter((e: any) => {
           return e.selected === false;
         });
 
-        const newListDelete = listFalse.map((e) => {
+        const newListDelete = listFalse.map((e: any) => {
           return e.id;
         });
 
@@ -147,7 +136,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
     const filteredData = filter(listPharmacyFull, (data: any) => {
       return contains(data, formattedQuery);
     });
-    list = filteredData;
+    setList(filteredData);
   };
 
   const contains = ({ name }: any, query: any) => {
@@ -190,7 +179,6 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
       </View>
       <View style={{ height: "75%" }}>
         <FlatList
-          // columnWrapperStyle={{ justifyContent: 'space-around' }}
           refreshing={fetching}
           data={list}
           onRefresh={getPharmacies}
@@ -219,17 +207,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                   }}
                 >
                   <Pressable>
-                    {/* <AntDesign name='plus' size={18} style={styles.productAddIcon} /> */}
-                    {/* {(item.selected == true) ? <AntDesign name="checksquareo" size={24} color="green" style={styles.productAddIcon} />
-                                            : <AntDesign name="minussquareo" size={24} color="black" style={styles.productAddIcon} />} */}
-                    {/* <CheckBox
-                                            checked={true}
-                                            color={"red"}
-                                            // disabled={false}
-                                            onPress={() => {selectPharmacy(index) }}
-                                        /> */}
-                    {/* <InputController value={{ index: index, selected: item.selected }} ></InputController> */}
-                    <CheckBox
+                   <CheckBox
                       checked={item.selected}
                       checkedColor="green"
                       onPress={() => {
@@ -242,7 +220,6 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
               </View>
             </TouchableOpacity>
           )}
-          // numColumns={1}
         ></FlatList>
       </View>
       <View style={{ height: "10%", marginHorizontal: 15, marginTop: 10 }}>
@@ -252,7 +229,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             sendPharmacyUser();
           }}
         >
-          <Text style={{color: "#fff", fontWeight: "bold", fontSize: 20}}>Save</Text>
+          <Text style={{color: "#fff", fontWeight: "bold", fontSize: 20}}>{translation.t("Save")}</Text>
         </TouchableOpacity>
       </View>
     </Container>

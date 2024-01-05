@@ -765,6 +765,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
+    fontWeight: "bold"
   },
   loginText: {
     textAlign: "center",

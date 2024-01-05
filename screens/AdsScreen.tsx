@@ -2,12 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import {
     View,
-    Text,
-    Pressable,
     Image,
     StyleSheet,
     FlatList,
-    ScrollView,
     TouchableOpacity,
     Modal,
     Alert,

@@ -4,51 +4,84 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
-  ScrollView,
-  Modal,
   Alert,
-  ImageBackground,
   Image,
   FlatList,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Formik } from "formik";
-import * as yup from "yup";
-import HeaderComponent from "../components/Header";
 import { checkStorage, Container, Loading } from "../components/Shared";
-import { fetchData, sendData } from "../httpRequests";
+import { deleteData, fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
-import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { Button } from "react-native-elements";
-import moment from "moment";
 
-export default function GuestScreen({ navigation }: any) {
+export default function GuestScreen({ navigation, route }: any) {
+  const {refresh} = route.params
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [initialValues, setInitialValues] = useState({});
   const [fetching, setFetching]: any = useState(false);
-  const [date, setDate] = useState("");
-  const [name, setName] = useState("");
-  const [namesArray, setNamesArray]: any = useState([]);
-  const [boat, setBoats] = useState([]);
   const [guest, setGuests] = useState([]);
+  const [userId, setUserId] = useState(0);
+  const [boat, setBoats]: any = useState([]);
+  const [dockValues, setDockValues]: any = useState([{ label: "" }]);
 
   useEffect(() => {
-    checkStorage("USER_LOGGED", async (id: any) => {
-      getGuestByUser(id);
+    setShowLoading(true);
+    setFetching(true)
+    hideLoadingModal(() => {
+      checkStorage("USER_LOGGED", async (id: any) => {
+        setUserId(id);
+        getGuestByUser(id);
+        searchDock();
+        const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+        fetchData(url).then(async (res: any) => {
+          const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
+            label: boatsRecord.boat_name,
+            value: boatsRecord.id,
+            docks: boatsRecord.docks,
+          }));
+          setBoats(mappedValues);
+        });
+      });
     });
-  }, []);
+    setTimeout(() => {
+      setFetching(false)
+      route.params.refresh = null
+    }, 2000)
+  }, [refresh]);
+
+  const searchDock = async () => {
+    const url = `/products/getProducts`;
+    fetchData(url).then(async (res: any) => {
+      const mappedValues = await res.product.map((product: any) => ({
+        label: product.name,
+        value: product.id,
+      }));
+      console.log(mappedValues);
+      setDockValues(mappedValues);
+    });
+  };
+
+  const filterDock = (docks: any) => {
+    const data = docks
+      .split(",")
+      .map((a: any) => dockValues.find((b: any) => b.value == a));
+    return data;
+  };
 
   const getGuestByUser = async (id: any) => {
     const url = `/guest/getGuestByUser/${id}`;
     fetchData(url).then((response) => {
       if (response.ok) {
-        console.log(response.guest);
         setGuests(response.guest);
       }
     });
+  };
+
+  const geatBoatRecordByUser = (boat_id: any) => {
+    const foundDocksFromMapped = boat.find(
+      (a: any) => a.value === boat_id
+    ).docks;
+    return foundDocksFromMapped;
   };
 
   const showErrorToast = (message: string) => {
@@ -71,15 +104,47 @@ export default function GuestScreen({ navigation }: any) {
       callback();
     }, 1000);
   };
+
+  const deleteGuest = async (id: any) => {
+    try {
+      setShowLoading(true);
+      const url = `/guest/deleteGuest/${id}`;
+      await deleteData(url).then((response: any) => {
+        if (response.ok) {
+          showGoodToast(translation.t("GuestDeleted"));
+          getGuestByUser(userId);
+          console.log(response);
+        }
+      });
+      hideLoadingModal(() => {});
+    } catch (error: any) {
+      hideLoadingModal(() => {
+        console.log(error);
+        showErrorToast(`${error}`);
+      });
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
+      <Loading showLoading={showLoading} translation={translation} />
+      <View style={{ marginVertical: 10, alignItems: "flex-end" }}>
+        <Button
+          title={translation.t("add")}
+          buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 5 }}
+          onPress={() =>
+            navigation.navigate("CreateInvitations", { showBack: true })
+          }
+          style={{ width: "20%" }}
+        />
+      </View>
       <View style={{ height: "100%", marginBottom: 10 }}>
         {guest.length > 0 ? (
           <FlatList
             refreshing={fetching}
             data={guest}
             onRefresh={() => {
-              getGuestByUser;
+              getGuestByUser(userId);
             }}
             renderItem={({ item }: any) => (
               <TouchableOpacity
@@ -88,11 +153,65 @@ export default function GuestScreen({ navigation }: any) {
                   backgroundColor: "#F7F7F7",
                   marginBottom: 10,
                   borderRadius: 10,
+                  padding: 5,
                 }}
                 onPress={() => {
-                  navigation.navigate("GuestDetailsScreen", {
-                    guest_id: item.id,
-                  });
+                  Alert.alert(
+                    translation.t("Confirm"),
+                    translation.t("ActionToDo"),
+                    [
+                      {
+                        text: translation.t("SeeDetails"),
+                        onPress: async () => {
+                          navigation.navigate("GuestDetailsScreen", {
+                            guest_id: item.id,
+                          });
+                        },
+                      },
+                      {
+                        text: translation.t("Edit"),
+                        onPress: async () => {
+                          navigation.navigate("CreateInvitations", {
+                            editMode: true,
+                            dataToEdit: {
+                              idGuest: item.id,
+                              title: item.title,
+                              description: item.description,
+                              date: item.date,
+                              boat_id: item.boat_id,
+                              product_id: item.product_id,
+                              docksId: filterDock(
+                                geatBoatRecordByUser(item.boat_id)
+                              ),
+                            },
+                          });
+                        },
+                      },
+                      {
+                        text: translation.t("Delete"),
+                        onPress: () => {
+                          Alert.alert(
+                            translation.t("Warning"),
+                            translation.t("MakeSureOnDeleteInvitation"),
+                            [
+                              {
+                                text: translation.t("alertButtonYesText"),
+                                onPress: () => {
+                                  deleteGuest(item.id);
+                                },
+                              },
+                              {
+                                text: translation.t("alertButtonNoText"),
+                              },
+                            ]
+                          );
+                        },
+                      },
+                      {
+                        text: translation.t("alertButtonNoText"),
+                      },
+                    ]
+                  );
                 }}
               >
                 <View
@@ -113,7 +232,7 @@ export default function GuestScreen({ navigation }: any) {
                       style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        backgroundColor: "#f3ecec",
+                        backgroundColor: "#fff",
                         borderRadius: 60,
                         marginVertical: 10,
                         marginHorizontal: 10,
@@ -121,14 +240,13 @@ export default function GuestScreen({ navigation }: any) {
                         height: 70,
                       }}
                     >
-                      {/* <Image
-                      source={require("../../assets/images/logoFacilito.png")}
-                      style={{ height: 50, width: 50, resizeMode: "contain" }}
-                    /> */}
-                      <AntDesign name="bells" size={50} />
+                      <Image
+                        source={require("../assets/images/invitacion.png")}
+                        style={{ height: 50, width: 50, resizeMode: "contain" }}
+                      />
                     </View>
 
-                    <View style={{ width: "55%", overflow: "hidden" }}>
+                    <View style={{ width: "80%", overflow: "hidden" }}>
                       <Text
                         numberOfLines={1}
                         style={{ marginVertical: 5, fontWeight: "bold" }}
@@ -139,11 +257,21 @@ export default function GuestScreen({ navigation }: any) {
                         {item.description}
                       </Text>
                       <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
+                        <Text style={{ fontWeight: "bold" }}>{translation.t("Boat")}: </Text>
+                        {item.boat_name}
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
+                        <Text style={{ fontWeight: "bold" }}>{translation.t("Date")}: </Text>
                         {item.date}
                       </Text>
-                    </View>
-                    <View style={{ width: "20%", alignItems: "center" }}>
-                      <Text>${item.userServices_price}</Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
+                        <Text style={{ fontWeight: "bold" }}>{translation.t("Dock")}: </Text>
+                        {
+                          dockValues?.find(
+                            (a: any) => a.value == item.product_id
+                          )?.label
+                        }
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -152,7 +280,7 @@ export default function GuestScreen({ navigation }: any) {
           />
         ) : (
           <View>
-            <Text>No tienes invitados</Text>
+            <Text>{translation.t("NoGuest")}</Text>
           </View>
         )}
       </View>
