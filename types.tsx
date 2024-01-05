@@ -58,7 +58,8 @@ export type RootTabParamList = {
   Profile: undefined;
   Payments:undefined;
   Activities:undefined;
-  Muelles:undefined
+  Muelles:undefined;
+  Request:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

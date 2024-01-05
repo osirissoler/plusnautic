@@ -172,5 +172,14 @@
 	"ChooseMarine": "Elige la marina",
 	"MyBoats": "Mis botes",
 	"add": "Añadir",
-	"Docks": "Muelles"
+	"Docks": "Muelles",
+	"pagoAlertTitle":"Alerta",
+	"pagoAlertConten":"",
+	"AlertEvaluation":"Esta seguro de que quiere enviar esta valoracion ?",
+	"review":"Evaluar",
+	"messageEvalation":"Todos podran ver la tu foto, nombre, puntuación o valoracion para el portador de servicio",
+	"Marinas":"Marinas",
+	"country":"Selecionar país",
+	"Request":"Solicitar",
+	"Activities":"Actividades"
 }

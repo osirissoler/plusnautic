@@ -17,7 +17,7 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen({ navigation, route }:any) {
 	const defaultProductImg = 'http://openmart.online/frontend/imgs/no_image.png?'
-	const [initialImg, setinitialImage] = useState('https://file-coopharma.nyc3.digitaloceanspaces.com/16817528019excursiones-desde-san-sebastian.jpg');
+	const [initialImg, setinitialImage] = useState('https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg');
 	const { translation } = React.useContext(LanguageContext);
 	const [fetching, setFetching]: any = useState(false)
 	const [showLoading, setShowLoading]: any = useState(false)

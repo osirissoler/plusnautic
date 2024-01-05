@@ -18,6 +18,7 @@ import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Loading } from "../../components/Shared";
 import { Rating } from "react-native-elements";
 import Comment from "./Comment";
+import SendReview from "./Review";
 
 export default function ProfilegestorScreen({ navigation, route }: any) {
   const [items, setItems]: any = useState(route.params);
@@ -88,14 +89,16 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
       callback();
     }, 500);
   };
-
+  const reload = () => {
+    getReviewsByspecialist();
+  };
   return (
     <View style={{ marginHorizontal: 0 }}>
       <Loading showLoading={showLoading} translation={translation} />
       <View
         style={{
           backgroundColor: "white",
-          height: "20%",
+          height: "25%",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -120,8 +123,9 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
           <Rating imageSize={25} fractions={1} startingValue={punctuation} />
           <Text style={{ fontWeight: "bold" }}> {formatter2(punctuation)}</Text>
         </View>
+        <SendReview id={items.id} reload={reload} />
       </View>
-      <View style={{ backgroundColor: "white", height: "80%" }}>
+      <View style={{ backgroundColor: "white", height: "75%" }}>
         {comments.length != 0 ? (
           <FlatList
             refreshing={fetching}
@@ -133,8 +137,8 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
                 name={item.user_first_name}
                 lastName={item.user_last_name}
                 img={item.user_img}
-                raiting={item.raiting}
-                date={item.dateRating}
+                raiting={item.punctuation}
+                date={item.date_elapsed}
                 comments={item.review}
                 punctuation={punctuation}
               />
@@ -190,8 +194,9 @@ function Component({
                 {name} {lastName}
               </Text>
             </View>
-            <View>
+            <View style={{flexDirection: "row"}}>
               <Rating imageSize={15} fractions={1} startingValue={raiting} />
+              <Text style={{marginLeft:3, fontSize:10, color:'gray'}}>{raiting}</Text>
             </View>
           </View>
           <View style={{ width: "35%", alignItems: "flex-end" }}>
