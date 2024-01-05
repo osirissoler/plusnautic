@@ -289,13 +289,6 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
-            onPress={() => navigation.navigate("CreateInvitations", {showBack: true})}
-          >
-            <Text style={styles.optionText}>{translation.t('CreateInvitation')}</Text>
-            <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
-          <Pressable
-            style={styles.option}
             onPress={() => navigation.navigate("GuestScreen", {showBack: true})}
           >
             <Text style={styles.optionText}>{translation.t('Guest')}</Text>
