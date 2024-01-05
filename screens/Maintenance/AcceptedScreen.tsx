@@ -125,7 +125,6 @@ export default function AcceptedScreen({ navigation, route }: any) {
   async function getIpClient() {
     try {
       const response = await axios.get("https://api.ipify.org?format=json");
-
       return response.data.ip;
     } catch (error) {
       console.error(error);
@@ -329,6 +328,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
               </View>
             )}
 
+          <View style={{ height: "23%", alignItems: "center" }}>
           {items.Services.servicesStatus_id === 3 && (
             <View style={{ height: "23%", alignItems: "center" }}>
               <Image
@@ -345,6 +345,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
               </View>
             </View>
           )}
+          </View>
 
           {items.Services.isPaid == false && (
             <View style={{ height: "15%" }}>

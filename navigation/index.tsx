@@ -356,7 +356,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				options={{
 					headerShown: false,
 					title: translation.t('BottomTabHomeText'),
-					tabBarIcon: ({ color }) => <TabBarIcon name='home-outline' color={color} />
+					tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />
 				}}
 				initialParams={route.params}
 				listeners={{
@@ -366,16 +366,28 @@ function BottomTabNavigator({ navigation, route }: any) {
 					}
 				}}
 			/>
+			{/* ListScreen component={ServiceScreen} */}
 			<BottomTab.Screen
-				name='Service'
+				name='Request'
 				component={ServiceScreen}
 				options={{
 					headerShown: false,
 					title: translation.t('BottomTabServiceText'),
-					tabBarIcon: ({ color }) => <TabBarIcon name='receipt-outline' color={color} />
+					tabBarIcon: ({ color }) => <TabBarIcon name='receipt' color={color} />
+					
 				}}
 				initialParams={route.params}
 
+			/>
+			<BottomTab.Screen
+				name='Service'
+				component={ListScreen}
+				options={{
+					headerShown: false,
+					title: translation.t('Request'),
+					tabBarIcon: ({ color }) => <TabBarIcon name='file-tray' color={color} />
+				}}
+				initialParams={route.params}
 			/>
 			{/* <BottomTab.Screen
 				name='ShoppingCart'
@@ -435,7 +447,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				component={ActivityScreen}
 				options={{
 					headerShown: false,
-					title: 'Activities',
+					title: translation.t('Activities'),
 					tabBarIcon: ({ color }) => <TabBarIcon name='play-circle' color={color} />
 				}}
 				initialParams={route.params}
@@ -456,7 +468,7 @@ function BottomTabNavigator({ navigation, route }: any) {
 				options={{
 					headerShown: false,
 					title: translation.t('BottomTabProfileText'),
-					tabBarIcon: ({ color }) => <TabBarIcon name='person-outline' color={color} />
+					tabBarIcon: ({ color }) => <TabBarIcon name='person' color={color} />
 				}}
 				initialParams={route.params}
 			/>

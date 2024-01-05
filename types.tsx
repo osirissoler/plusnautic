@@ -63,6 +63,7 @@ export type RootTabParamList = {
   Activities:undefined;
   Muelles:undefined;
   GuestScreen: undefined;
+  Request:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

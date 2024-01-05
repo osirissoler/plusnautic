@@ -15,7 +15,7 @@ import { fetchData, sendData } from "../../httpRequests";
 import { Ionicons } from "@expo/vector-icons";
 import { formatter } from "../../utils";
 import { LanguageContext } from "../../LanguageContext";
-import { checkStorage, Loading } from "../../components/Shared";
+import { checkStorage, Container, Loading } from "../../components/Shared";
 
 export default function ListScreen({ navigation }: any) {
   const [fetching, setFetching]: any = useState(false);
@@ -33,7 +33,7 @@ export default function ListScreen({ navigation }: any) {
 
   const getTypeServices = async () => {
     setFetching(true);
-    let url = `/services/getTypeServiceById/${536}`;
+    let url = `/services/getTypeService`;
     await fetchData(url).then(async (res) => {
       if (res.ok) {
         setTypeServices(res.services);
@@ -66,7 +66,8 @@ export default function ListScreen({ navigation }: any) {
   };
 
   return (
-    <View style={styles.body}>
+    <Container>
+<View style={styles.body}>
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{ height: "20%" }}>
         <View
@@ -244,6 +245,8 @@ export default function ListScreen({ navigation }: any) {
         ></FlatList>
       </View>
     </View>
+    </Container>
+    
   );
 }
 
@@ -258,10 +261,10 @@ const styles = StyleSheet.create({
     // padding: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#dcecf2",
-    borderRadius: 20,
+    // backgroundColor: "#dcecf2",
+    // borderRadius: 20,
     marginVertical: 10,
-    width: 115,
+    width: 135,
     height: 115,
     marginLeft: 10,
   },
