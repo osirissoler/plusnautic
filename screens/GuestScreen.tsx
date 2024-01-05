@@ -27,6 +27,7 @@ export default function GuestScreen({ navigation, route }: any) {
   useEffect(() => {
     setShowLoading(true);
     setFetching(true)
+
     hideLoadingModal(() => {
       checkStorage("USER_LOGGED", async (id: any) => {
         setUserId(id);
@@ -45,6 +46,7 @@ export default function GuestScreen({ navigation, route }: any) {
     });
     setTimeout(() => {
       setFetching(false)
+      setShowLoading(false)
       route.params.refresh = null
     }, 2000)
   }, [refresh]);

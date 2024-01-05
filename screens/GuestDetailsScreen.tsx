@@ -64,39 +64,37 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
 
   const sendDataToBackend = async (data: any) => {
     try {
-      setShowLoading(true);
       if (!editMode) {
-        const url = `/guest/addGuest/`;
-        await sendData(url, data).then((response: any) => {
-          if (response.ok) {
-            showGoodToast(`Invitado modificado correctamente`);
-            getGuestDetails(guest_id);
-            console.log(response);
-            setModalVisible(!modalVisible);
-            setNamesArray([]);
-          }
-        });
+          const url = `/guest/addGuest/`;
+          await sendData(url, data).then((response: any) => {
+            if (response.ok) {
+              showGoodToast(`Invitado modificado correctamente`);
+              getGuestDetails(guest_id);
+              console.log(response);
+              setModalVisible(!modalVisible);
+              setNamesArray([]);
+            } else {
+              showErrorToast(response.mensaje);
+            }
+          });
       } else {
-        const url = `/guest/updateGuestDetails/`;
-        await sendDataPut(url, data).then((response: any) => {
-          if (response.ok) {
-            showGoodToast(`Invitado modificado correctamente`);
-            getGuestDetails(guest_id);
-            console.log(response)
-            setModalEditVisible(!modalEditVisible);
-            setInputValue("");
-            setIdValue(0);
-          }
-        });
+          const url = `/guest/updateGuestDetails/`;
+          await sendDataPut(url, data).then((response: any) => {
+            if (response.ok) {
+              showGoodToast(`Invitado modificado correctamente`);
+              getGuestDetails(guest_id);
+              console.log(response)
+              setModalEditVisible(!modalEditVisible);
+              setInputValue("");
+              setIdValue(0);
+            } else {
+              showErrorToast(response.mensaje);
+            }
+        })
       }
-      hideLoadingModal(() => {
-        
-      })
     } catch (error: any) {
-      hideLoadingModal(() => {
         console.log(error);
         showErrorToast(`Ha ocurrido un error: ${error}`);
-      });
     }
   };
 
@@ -435,7 +433,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     margin: 5,
-    maxWidth: 240
+    maxWidth: 180
   },
   optionButton: {
     alignItems: "center",
