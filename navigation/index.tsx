@@ -55,6 +55,7 @@ import ProfilegestorScreen from '../screens/gestor/ProfilegestorScreen';
 import InvitationScreen from '../screens/InvitationScreen';
 import GuestScreen from '../screens/GuestScreen';
 import GuestDetailsScreen from '../screens/GuestDetailsScreen';
+import Test from '../screens/test';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 	return (
@@ -84,6 +85,17 @@ function RootNavigator({ route }: any) {
 				name='Language'
 				component={LanguageScreen}
 				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='prueba'
+				component={Test}
+				options={{
+					headerTitle: translation.t('CreateInvitation'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'fade',
+					headerShown: true,
+				}}
 			/>
 			<Stack.Screen
 				name='Gestor'
@@ -117,7 +129,13 @@ function RootNavigator({ route }: any) {
 				name='Marinas'
 				component={SelectMarinasScreen}
 				initialParams={{ showBack } as any}
-				options={{ headerShown: true, animation: 'fade' }}
+				// options={{ headerShown: true, animation: 'fade' }}
+				options={{
+					headerTitle: translation.t('Marinas') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
 			/>
 			<Stack.Screen
 				name='RecordBoats'
@@ -138,7 +156,21 @@ function RootNavigator({ route }: any) {
 			<Stack.Screen
 				name='Solicitudes'
 				component={SendServicesScreen}
-				options={{ headerShown: true, animation: 'fade' }}
+				// options={{ 
+				// 	headerTitle: translation.t('Accept') /* Search Products */,
+				// 	headerStyle: { backgroundColor: '#fff' },
+				// 	headerShown: true, animation: 'fade' ,
+				// 	headerTitleStyle: { color: '#000', fontWeight: '400' },
+				// 	animation: 'slide_from_right'
+				// }}
+
+				options={{
+					headerTitle: translation.t('Request') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+				
 			/>
 
 
@@ -287,7 +319,7 @@ function RootNavigator({ route }: any) {
 				name='Accept'
 				component={AcceptedScreen}
 				options={{
-					// headerTitle: translation.t('listServices') /* Search Products */,
+					headerTitle: translation.t('Accept') /* Search Products */,
 					headerStyle: { backgroundColor: '#fff' },
 					headerTitleStyle: { color: '#000', fontWeight: '400' },
 					animation: 'slide_from_right'
