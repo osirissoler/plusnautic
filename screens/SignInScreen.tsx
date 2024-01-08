@@ -163,7 +163,7 @@ export default function SignInScreen({ navigation }: any) {
 	}
 
 	return (
-		<Container keyboard={true}>
+		<Container keyboard={false}>
 			{showLogin && (
 				<>
 					<HeaderComponent screen='signin' navigation={navigation} />

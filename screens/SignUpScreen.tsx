@@ -10,6 +10,10 @@ import {
   TextInput,
   ScrollView,
   Button,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -102,13 +106,13 @@ export default function SignUpScreen({ navigation }: any) {
   }, []);
 
   const getCountryActive = async () => {
-	let url =`/country/getCountryActive`
-	await fetchData(url).then((response:any) => {
-		if (response.ok) {
-			setCountries(response.country)
-			setCountry_id(response.country[0].id)
-		} 
-	})
+    let url = `/country/getCountryActive`;
+    await fetchData(url).then((response: any) => {
+      if (response.ok) {
+        setCountries(response.country);
+        setCountry_id(response.country[0].id);
+      }
+    });
   };
 
   const onSignUp = (values: any) => {
@@ -122,7 +126,7 @@ export default function SignUpScreen({ navigation }: any) {
       password: values.password,
       country_id,
     };
-	console.log(data)
+    console.log(data);
     sendData(url, data)
       .then((response) => {
         hideLoadingModal(() => {
@@ -215,7 +219,7 @@ export default function SignUpScreen({ navigation }: any) {
     };
 
     return (
-      <>
+      <View style={{ backgroundColor: "white" }}>
         <Text style={styles.labelInput}>{label}</Text>
         <View style={styles.formInputIcon}>
           <TextInput
@@ -233,7 +237,7 @@ export default function SignUpScreen({ navigation }: any) {
             onPress={() => toggleShowPassword()}
           />
         </View>
-      </>
+      </View>
     );
   }
   const [data, setData] = useState([
@@ -252,32 +256,37 @@ export default function SignUpScreen({ navigation }: any) {
 
   const unsupportedURL = "slack://open?team=123456";
 
-  const OpenURLButton = ({ url, children }: any) => {
-    const handlePress = useCallback(async () => {
-      // Checking if the link is supported for links with custom URL scheme.
-      const supported = await Linking.canOpenURL(url);
+  const OpenURLButton = async () => {
+    // const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(supportedURL);
 
-      if (supported) {
-        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-        // by some browser in the mobile
-        await Linking.openURL(url);
-      } else {
-        Alert.alert(`Don't know how to open this URL: ${url}`);
-      }
-    }, [url]);
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(supportedURL);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
+    }
+    // }, [url]);
 
-    return <Button title={children} onPress={handlePress} />;
+    // return <Button title={children} onPress={handlePress} />;
   };
   return (
-    <Container
-      style={{ backgroundColor: "#fff", flex: 1, height: "100%" }}
-      keyboard={true}
-    >
-      <HeaderComponent navigation={navigation} />
+    <Container keyboard={false}>
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+        > */}
+
       <Loading showLoading={showLoading} translation={translation} />
-      <Text style={styles.title}>{translation.t("signUpTitle")}</Text>
-      {/* <ScrollView style={styles.body}> */}
-      <ScrollView style={{ padding: 15 }}>
+
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View style={{ marginBottom: 30 }}>
+          <HeaderComponent navigation={navigation} />
+        </View>
+        <Text style={styles.title}>{translation.t("signUpTitle")}</Text>
         <Formik
           validationSchema={validationSchema}
           initialValues={{
@@ -388,9 +397,24 @@ export default function SignUpScreen({ navigation }: any) {
                   }}
                 />
 
-                <OpenURLButton url={supportedURL}>
+                {/* <OpenURLButton url={supportedURL}>
                   {translation.t("profileTermsText")}
-                </OpenURLButton>
+                </OpenURLButton> */}
+                <TouchableOpacity
+                  onPress={() => {
+                    OpenURLButton();
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#5f7ceb",
+                      fontSize: 18,
+                      marginHorizontal: 2,
+                    }}
+                  >
+                    {translation.t("profileTermsText")}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <TouchableOpacity
                 disabled={!termAndCoditionAccepted}
@@ -427,7 +451,6 @@ export default function SignUpScreen({ navigation }: any) {
             </View>
           )}
         </Formik>
-
         <View
           style={{
             flexDirection: "row",
@@ -437,11 +460,7 @@ export default function SignUpScreen({ navigation }: any) {
           }}
         >
           <Text style={styles.loginText}>
-            {
-              translation.t(
-                "signUpExistingAccount"
-              ) /*  Already have an account? */
-            }
+            {translation.t("signUpExistingAccount")}
           </Text>
           <Text
             style={styles.loginLink}
@@ -452,7 +471,8 @@ export default function SignUpScreen({ navigation }: any) {
         </View>
       </ScrollView>
 
-      {/* </ScrollView> */}
+      {/* </KeyboardAvoidingView>
+      </TouchableWithoutFeedback> */}
     </Container>
   );
 }
@@ -466,9 +486,10 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    // backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
     justifyContent: "center",
+    paddingHorizontal: 15,
   },
   row: {
     flexDirection: "row",
@@ -593,5 +614,10 @@ const styles = StyleSheet.create({
     // paddingLeft: 20,
     // paddingTop:25,
     borderRadius: 5,
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 15,
   },
 });

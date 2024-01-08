@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { formatter } from "../../utils";
 import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Container, Loading } from "../../components/Shared";
+import HeaderComponent from "../../components/Header";
 
 export default function ListScreen({ navigation }: any) {
   const [fetching, setFetching]: any = useState(false);
@@ -67,186 +68,187 @@ export default function ListScreen({ navigation }: any) {
 
   return (
     <Container>
-<View style={styles.body}>
-      <Loading showLoading={showLoading} translation={translation} />
-      <View style={{ height: "20%" }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 3,
-          }}
-        >
-          <Text style={styles.productTitle2}>
-            {translation.t("TypeServices")}
-          </Text>
-          <TouchableOpacity
+      <HeaderComponent />
+      <View style={styles.body}>
+        <Loading showLoading={showLoading} translation={translation} />
+        <View style={{ height: "20%" }}>
+          <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              alignItems: "center",
-            }}
-            onPress={() => {
-              navigation.navigate("Home");
+              marginTop: 3,
             }}
           >
-            <Text style={styles.seeAll}>{translation.t("home")}</Text>
-            <Ionicons name="md-exit-outline" size={20} color="#5f7ceb" />
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          horizontal
-          refreshing={fetching}
-          data={typeServices}
-          onRefresh={getTypeServices}
-          renderItem={({ item }: any) => (
-            <View>
-              <View style={{ alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.productCard}
-                  onPress={() => {
-                    filterServicesPrice(item.id);
-                    setText(
-                      (translation.locale.includes("en") && item.name) ||
-                        (translation.locale.includes("es") && item.nombre)
-                    );
-                  }}
-                >
-                  <View style={{ height: 40, width: 40, marginBottom: 10 }}>
-                    <Image
-                      source={{ uri: item.img }}
-                      style={{ height: "100%", width: 45 }}
-                    />
-                  </View>
-                  <Text style={styles.productTitle}>
-                    {(translation.locale.includes("en") && item.name) ||
-                      (translation.locale.includes("es") && item.nombre)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        ></FlatList>
-      </View>
-      <View style={{ height: "80%", marginBottom: 10 }}>
-        <Text style={styles.productTitle2}>
-          {/* My request Services */}
-          {/* maintenance */}
-          {translation.t("maintenance")}
-        </Text>
-        <Text style={styles.seeAll}>{text}</Text>
-        <FlatList
-          refreshing={fetching}
-          data={userServicesPrice}
-          onRefresh={getInfoPriceService}
-          renderItem={({ item }: any) => (
-            <View
+            <Text style={styles.productTitle2}>
+              {translation.t("TypeServices")}
+            </Text>
+            <TouchableOpacity
               style={{
-                height: 90,
-                borderColor: "#8B8B9720",
-                backgroundColor: "#F7F7F7",
-                marginBottom: 10,
-                borderRadius: 10,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              onPress={() => {
+                navigation.navigate("Home");
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.seeAll}>{translation.t("home")}</Text>
+              <Ionicons name="md-exit-outline" size={20} color="#5f7ceb" />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            horizontal
+            refreshing={fetching}
+            data={typeServices}
+            onRefresh={getTypeServices}
+            renderItem={({ item }: any) => (
+              <View>
+                <View style={{ alignItems: "center" }}>
                   <TouchableOpacity
-                    style={styles.productCard2}
+                    style={styles.productCard}
                     onPress={() => {
-                      navigation.navigate("Gestor", {
-                        img: item.driver_img,
-                        name: item.driver_first_name,
-                        lastName: item.driver_last_name,
-                        id:item.driver_id
-                      });
+                      filterServicesPrice(item.id);
+                      setText(
+                        (translation.locale.includes("en") && item.name) ||
+                          (translation.locale.includes("es") && item.nombre)
+                      );
                     }}
                   >
-                    <ImageBackground
-                      source={{
-                        uri:
-                          item.driver_img == null || item.driver_img == ""
-                            ? "https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png"
-                            : item.driver_img,
-                      }}
-                      resizeMode={"cover"}
-                      style={{ width: 30, height: 30 }}
-                      imageStyle={{ borderRadius: 8 }}
-                    />
-                  </TouchableOpacity>
-                  <View style={{}}>
-                    <Text style={{ fontWeight: "bold", marginVertical: 5 }}>
-                      {item.driver_first_name} {item.driver_last_name}
+                    <View style={{ height: 40, width: 40, marginBottom: 10 }}>
+                      <Image
+                        source={{ uri: item.img }}
+                        style={{ height: "100%", width: 45 }}
+                      />
+                    </View>
+                    <Text style={styles.productTitle}>
+                      {(translation.locale.includes("en") && item.name) ||
+                        (translation.locale.includes("es") && item.nombre)}
                     </Text>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}>
-                        {translation.t("price")}{""}
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          ></FlatList>
+        </View>
+        <View style={{ height: "80%", marginBottom: 10 }}>
+          <Text style={styles.productTitle2}>
+            {/* My request Services */}
+            {/* maintenance */}
+            {translation.t("maintenance")}
+          </Text>
+          <Text style={styles.seeAll}>{text}</Text>
+          <FlatList
+            refreshing={fetching}
+            data={userServicesPrice}
+            onRefresh={getInfoPriceService}
+            renderItem={({ item }: any) => (
+              <View
+                style={{
+                  height: 90,
+                  borderColor: "#8B8B9720",
+                  backgroundColor: "#F7F7F7",
+                  marginBottom: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity
+                      style={styles.productCard2}
+                      onPress={() => {
+                        navigation.navigate("Gestor", {
+                          img: item.driver_img,
+                          name: item.driver_first_name,
+                          lastName: item.driver_last_name,
+                          id: item.driver_id,
+                        });
+                      }}
+                    >
+                      <ImageBackground
+                        source={{
+                          uri:
+                            item.driver_img == null || item.driver_img == ""
+                              ? "https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png"
+                              : item.driver_img,
+                        }}
+                        resizeMode={"cover"}
+                        style={{ width: 30, height: 30 }}
+                        imageStyle={{ borderRadius: 8 }}
+                      />
+                    </TouchableOpacity>
+                    <View style={{}}>
+                      <Text style={{ fontWeight: "bold", marginVertical: 5 }}>
+                        {item.driver_first_name} {item.driver_last_name}
                       </Text>
-                      <Text>{formatter(item.price)}</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}>
-                        Services status
-                        {
-                          // translation.t('payout') Status
-                        }{" "}
-                      </Text>
-                      <Text>
-                        {(translation.locale.includes("en") &&
-                          item.ServicesStatus_name) ||
-                          (translation.locale.includes("es") &&
-                            item.ServicesStatus_nombre)}
-                      </Text>
-                    </View>
-                    {item.ServicesStatus_code == "PROCCESING" && (
                       <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          Prices status:
+                          {translation.t("price")}
+                          {""}
                         </Text>
-                        <Text>Pago completado</Text>
+                        <Text>{formatter(item.price)}</Text>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Services status
+                          {
+                            // translation.t('payout') Status
+                          }{" "}
+                        </Text>
+                        <Text>
+                          {(translation.locale.includes("en") &&
+                            item.ServicesStatus_name) ||
+                            (translation.locale.includes("es") &&
+                              item.ServicesStatus_nombre)}
+                        </Text>
+                      </View>
+                      {item.ServicesStatus_code == "PROCCESING" && (
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            Prices status:
+                          </Text>
+                          <Text>Pago completado</Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                  <View style={{ paddingRight: 10 }}>
+                    <TouchableOpacity
+                      style={{ marginHorizontal: 10 }}
+                      onPress={() => {
+                        navigation.navigate("Accept", { item: item });
+                      }}
+                    >
+                      <Ionicons
+                        name="md-exit-outline"
+                        size={25}
+                        color="#5f7ceb"
+                      />
+                    </TouchableOpacity>
+                    {item.ServicesStatus_code == "ACEPTADO" && (
+                      <View>
+                        <Text>{translation.t("checkoutPayNowText")}</Text>
+                      </View>
+                    )}
+
+                    {item.ServicesStatus_code == "PENDING" && (
+                      <View>
+                        <Text>{translation.t("Accept")}</Text>
                       </View>
                     )}
                   </View>
                 </View>
-                <View style={{ paddingRight: 10 }}>
-                  <TouchableOpacity
-                    style={{ marginHorizontal: 10 }}
-                    onPress={() => {
-                      navigation.navigate("Accept", { item: item });
-                    }}
-                  >
-                    <Ionicons
-                      name="md-exit-outline"
-                      size={25}
-                      color="#5f7ceb"
-                    />
-                  </TouchableOpacity>
-                  {item.ServicesStatus_code == "ACEPTADO" && (
-                    <View>
-                      <Text>{translation.t("checkoutPayNowText")}</Text>
-                    </View>
-                  )}
-
-                  {item.ServicesStatus_code == "PENDING" && (
-                    <View>
-                      <Text>{translation.t("Accept")}</Text>
-                    </View>
-                  )}
-                </View>
               </View>
-            </View>
-          )}
-        ></FlatList>
+            )}
+          ></FlatList>
+        </View>
       </View>
-    </View>
     </Container>
-    
   );
 }
 

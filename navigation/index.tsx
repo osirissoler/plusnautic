@@ -48,16 +48,16 @@ import ActivityScreen from "../screens/ActivitisScreen";
 import AcceptedScreen from "../screens/Maintenance/AcceptedScreen";
 import ListScreen from "../screens/Maintenance/ListScreen";
 
-import { RootStackParamList, RootTabParamList } from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
-import SelectMarinasScreen from "../screens/SelectMarinasScreen";
-import MuellesScreen from "../screens/MuellesScreen";
-import SendServicesScreen from "../screens/SendServicesScreen";
-import MyBoats from "../screens/MyBoatsScreen";
-import ProfilegestorScreen from "../screens/gestor/ProfilegestorScreen";
-import InvitationScreen from "../screens/InvitationScreen";
-import GuestScreen from "../screens/GuestScreen";
-import GuestDetailsScreen from "../screens/GuestDetailsScreen";
+import { RootStackParamList, RootTabParamList } from '../types';
+import LinkingConfiguration from './LinkingConfiguration';
+import SelectMarinasScreen from '../screens/SelectMarinasScreen';
+import MuellesScreen from '../screens/MuellesScreen';
+import SendServicesScreen from '../screens/SendServicesScreen';
+import MyBoats from '../screens/MyBoatsScreen';
+import ProfilegestorScreen from '../screens/gestor/ProfilegestorScreen';
+import InvitationScreen from '../screens/InvitationScreen';
+import GuestScreen from '../screens/GuestScreen';
+import GuestDetailsScreen from '../screens/GuestDetailsScreen';
 
 export default function Navigation({
   colorScheme,
@@ -81,72 +81,75 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({ route }: any) {
-  const { translation } = React.useContext(LanguageContext);
-  let showBack;
-
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerBackTitle: translation.t("headerButtonBackText"), // Back
-      }}
-    >
-      <Stack.Screen
-        name="Language"
-        component={LanguageScreen}
-        options={{ headerShown: false, animation: "fade" }}
-      />
-      <Stack.Screen
-        name="Gestor"
-        component={ProfilegestorScreen}
-        initialParams={{ showBack } as any}
-        options={{ headerShown: true, animation: "fade" }}
-      />
-      <Stack.Screen
-        name="GuestScreen"
-        component={GuestScreen}
-        options={{
-          headerTitle: translation.t("Guest"),
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "slide_from_right",
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen
-        name="Marinas"
-        component={SelectMarinasScreen}
-        initialParams={{ showBack } as any}
-        options={{ headerShown: true, animation: "fade" }}
-      />
-      <Stack.Screen
-        name="RecordBoats"
-        component={RecordBoats}
-        options={{
-          headerTitle: translation.t("RegisterBoat"),
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "slide_from_right",
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen
-        name="Muelles"
-        component={MuellesScreen}
-        options={{
-          headerShown: true,
-          animation: "fade",
-          headerTitle: translation.t("RegisterBoat"),
-        }}
-      />
-      <Stack.Screen
-        name="Solicitudes"
-        component={SendServicesScreen}
-        options={{
-          headerShown: true,
-          animation: "fade",
-          headerTitle: translation.t("Request"),
-        }}
-      />
+	const { translation } = React.useContext(LanguageContext);
+	let showBack;
+	
+	return (
+		<Stack.Navigator
+			screenOptions={{
+				headerBackTitle: translation.t('headerButtonBackText') // Back
+			}}
+		>
+			<Stack.Screen
+				name='Language'
+				component={LanguageScreen}
+				options={{ headerShown: false, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Gestor'
+				component={ProfilegestorScreen}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='CreateInvitations'
+				component={InvitationScreen}
+				options={{
+					headerTitle: translation.t('CreateInvitation'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'fade',
+					headerShown: true,
+				}}
+			/>
+			<Stack.Screen
+				name='GuestScreen'
+				component={GuestScreen}
+				options={{
+					headerTitle: translation.t('Guest'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right',
+					headerShown: true,
+				}}
+			/>
+			<Stack.Screen
+				name='Marinas'
+				component={SelectMarinasScreen}
+				initialParams={{ showBack } as any}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='RecordBoats'
+				component={RecordBoats}
+				options={{
+					headerTitle: translation.t('RegisterBoat'),
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right',
+					headerShown: true,
+				}}
+			/>
+			<Stack.Screen
+				name='Muelles'
+				component={MuellesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
+			<Stack.Screen
+				name='Solicitudes'
+				component={SendServicesScreen}
+				options={{ headerShown: true, animation: 'fade' }}
+			/>
 
       <Stack.Screen
         name="Step1"
@@ -252,100 +255,77 @@ function RootNavigator({ route }: any) {
 					gestureEnabled: false
 				}}
 			/> */}
-      <Stack.Screen
-        name="ListProducts"
-        component={ListProductsScreen}
-        options={{
-          headerTitle: translation.t(
-            "headerTitleSearchProduct"
-          ) /* Search Products */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-        }}
-      />
-      <Stack.Screen
-        name="ProductDetails"
-        component={ProductDetailsScreen}
-        options={{
-          headerTitle: translation.t(
-            "headerTitleProductDetails"
-          ) /* Product Details */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-        }}
-      />
-      <Stack.Screen
-        name="Checkout"
-        component={CheckoutScreen}
-        options={{
-          headerTitle: translation.t("headerTitleCheckout") /* Checkout */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-        }}
-      />
-      <Stack.Screen
-        name="Forms"
-        component={FormsScreen}
-        options={{
-          headerTitle: translation.t("AplicationForOccunpacy") /* Checkout */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-        }}
-      />
-      <Stack.Screen
-        name="ListScreen"
-        component={ListScreen}
-        options={{
-          headerTitle: translation.t("listServices") /* Search Products */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "slide_from_right",
-        }}
-      />
-      {/* AcceptedScreen */}
-      <Stack.Screen
-        name="Accept"
-        component={AcceptedScreen}
-        options={{
-          // headerTitle: translation.t('listServices') /* Search Products */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "slide_from_right",
-        }}
-      />
-      <Stack.Screen
-        name="GuestDetailsScreen"
-        component={GuestDetailsScreen}
-        options={{
-          headerTitle: translation.t('GuestDetails') /* Search Products */,
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "slide_from_right",
-        }}
-      />
-       <Stack.Screen
-        name="CreateInvitations"
-        component={InvitationScreen}
-        options={{
-          headerTitle: translation.t("CreateInvitation"),
-          headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
-          animation: "fade",
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-    </Stack.Navigator>
-  );
+			<Stack.Screen
+				name='ListProducts'
+				component={ListProductsScreen}
+				options={{
+					headerTitle: translation.t('headerTitleSearchProduct') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' }
+				}}
+			/>
+			<Stack.Screen
+				name='ProductDetails'
+				component={ProductDetailsScreen}
+				options={{
+					headerTitle: translation.t('headerTitleProductDetails') /* Product Details */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' }
+				}}
+			/>
+			<Stack.Screen
+				name='Checkout'
+				component={CheckoutScreen}
+				options={{
+					headerTitle: translation.t('headerTitleCheckout') /* Checkout */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' }
+				}}
+			/>
+			<Stack.Screen
+				name='Forms'
+				component={FormsScreen}
+				options={{
+					headerTitle: translation.t('AplicationForOccunpacy') /* Checkout */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' }
+				}}
+			/>
+			<Stack.Screen
+				name='ListScreen'
+				component={ListScreen}
+				options={{
+					headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			{/* AcceptedScreen */}
+			<Stack.Screen
+				name='Accept'
+				component={AcceptedScreen}
+				options={{
+					// headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			<Stack.Screen
+				name='GuestDetailsScreen'
+				component={GuestDetailsScreen}
+				options={{
+					// headerTitle: translation.t('listServices') /* Search Products */,
+					headerStyle: { backgroundColor: '#fff' },
+					headerTitleStyle: { color: '#000', fontWeight: '400' },
+					animation: 'slide_from_right'
+				}}
+			/>
+			<Stack.Screen name='Root' component={BottomTabNavigator} options={{ headerShown: false }} />
+			<Stack.Screen name='NotFound' component={NotFoundScreen} options={{ title: 'Oops!' }} />
+		</Stack.Navigator>
+	);
 }
 
 /**
