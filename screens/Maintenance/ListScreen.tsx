@@ -17,8 +17,10 @@ import { formatter } from "../../utils";
 import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Container, Loading } from "../../components/Shared";
 import HeaderComponent from "../../components/Header";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ListScreen({ navigation }: any) {
+  const navigationn = useNavigation();
   const [fetching, setFetching]: any = useState(false);
   const [typeServices, setTypeServices] = useState([]);
   const [userServicesPrice, setUserServicesPrice] = useState([]);
@@ -31,6 +33,17 @@ export default function ListScreen({ navigation }: any) {
     getInfoPriceService();
     getTypeServices();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getInfoPriceService();
+      getTypeServices();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
 
   const getTypeServices = async () => {
     setFetching(true);

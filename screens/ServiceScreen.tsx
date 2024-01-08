@@ -128,7 +128,7 @@ export default function ServiceScreen({ navigation }: any) {
 					>
 					</FlatList>
 				)) || (
-						<Text style={{ fontSize: 16, marginTop: 20 }}>
+						<Text style={{ fontSize: 16, marginTop: 20, alignItems:'center' }}>
 							{translation.t('homeNoCategoriestext') /* There are no active categories... */}
 						</Text>
 					)}

@@ -41,7 +41,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [items, setItems]: any = useState(route.params.item);
   const [priceP, setPriceP]: any = useState(route.params.item.price);
   const [currentPosition, setcurrentPosition]: any = useState(0);
-  const URLToRiderect = "https://coopharma-83beb.web.app/";
+  const URLToRiderect = "https://panel-plusnautic.netlify.app/success";
   const [placeToPayOperationFineshed, setplaceToPayOperationFineshed]: any =
     useState(false);
   const [showPlaceToPayview, setshowPlaceToPayview]: any = useState(false);
@@ -95,7 +95,13 @@ export default function AcceptedScreen({ navigation, route }: any) {
     sendDataPut(url, data).then((response) => {
       if (response.ok) {
         showErrorToastGood("Request made correctly");
-        navigation.navigate("Profile");
+        // navigation.navigate("Profile");
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: 'Service' }]
+        // });
+        navigation.goBack()
+        
       }
     });
   };
@@ -161,22 +167,23 @@ export default function AcceptedScreen({ navigation, route }: any) {
   };
 
   const reset = () => {
-    checkStorage("USER_PHARMACY", (response: any) => {
-      const pharmacy = JSON.parse(response);
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: "Root",
-            params: {
-              phId: 566,
-              phName: pharmacy.name,
-            },
-            screen: "Home",
-          },
-        ],
-      });
-    });
+    // checkStorage("USER_PHARMACY", (response: any) => {
+    //   const pharmacy = JSON.parse(response);
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [
+    //       {
+    //         name: "Root",
+    //         params: {
+    //           phId: 566,
+    //           phName: pharmacy.name,
+    //         },
+    //         screen: "Home",
+    //       },
+    //     ],
+    //   });
+    // });
+    navigation.goBack()
   };
 
   const alerta = () => {
@@ -187,7 +194,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
         {
           text: "OK",
           onPress: () => {
-            navigation.goBack();
+            // navigation.goBack();
           },
         },
       ]
@@ -220,7 +227,8 @@ export default function AcceptedScreen({ navigation, route }: any) {
               data
             ).then((res2) => {
               if (res2.ok) {
-                navigation.navigate("Profile");
+                // navigation.navigate("Profile");
+                navigation.goBack()
               }
             });
           }

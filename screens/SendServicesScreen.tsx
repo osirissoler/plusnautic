@@ -65,6 +65,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             user_id: id,
             boatsRecord_id: boatsRecord_id,
             token: token,
+            product_id:87
           };
           await sendData(url, data).then((response) => {
             sendFile(response.services.id);

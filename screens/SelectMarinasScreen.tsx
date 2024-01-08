@@ -16,9 +16,7 @@ import {
   Container,
   Loading,
 } from "../components/Shared";
-import {
-  FontAwesome,
-} from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData, sendData } from "../httpRequests";
 import { CheckBox } from "react-native-elements";
@@ -34,8 +32,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
   const [fetching, setFetching]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [searchQuery, setSearchQuery]: any = useState("");
-  const [list, setList]: any = useState([])
-  const [listByUser, setListByUser]: any = useState([])
+  const [list, setList]: any = useState([]);
+  const [listByUser, setListByUser]: any = useState([]);
 
   useEffect(() => {
     getPharmacies();
@@ -63,19 +61,19 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
         if (response.ok) {
           setListPharmacy(response.pharmacy);
           setListPharmacyFull(response.pharmacy);
-          const list: any = []
-            response.pharmacy.forEach((element: any) => {
-              list.push({
-                name: element.name,
-                id: element.id,
-                img: element.img,
-                selected: listByUser.some((e: any) =>
-                  e === element.id ? true : false
-                ),
-              });
+          const list: any = [];
+          response.pharmacy.forEach((element: any) => {
+            list.push({
+              name: element.name,
+              id: element.id,
+              img: element.img,
+              selected: listByUser.some((e: any) =>
+                e === element.id ? true : false
+              ),
             });
-            setList(list)
-        } 
+          });
+          setList(list);
+        }
         setFetching(false);
       });
     });
@@ -91,15 +89,16 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
   const sendPharmacyUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
       const url = "/userPharmacy/createUserPharmacy";
-      const newList = list.filter((element: any) => {
-        return element.selected === true;
-      })
-      .map((e: any) => {
-        return {
-          pharmacy_id: e.id,
-          user_id: id,
-        };
-      });
+      const newList = list
+        .filter((element: any) => {
+          return element.selected === true;
+        })
+        .map((e: any) => {
+          return {
+            pharmacy_id: e.id,
+            user_id: id,
+          };
+        });
       if (list.some((e: any) => e.selected === false)) {
         const listFalse = list.filter((e: any) => {
           return e.selected === false;
@@ -110,7 +109,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
         });
 
         const urlDelete = `/userPharmacy/deleteUserPharmacyById`;
-        sendData(urlDelete, { data: newListDelete })
+        sendData(urlDelete, { data: newListDelete });
       }
 
       await sendData(url, { data: newList }).then((response) => {
@@ -149,6 +148,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
 
   return (
     <Container>
+      <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
       {!showBack && <HeaderComponent />}
       <View style={{ height: "10%", padding: 10, gap: 10 }}>
@@ -158,8 +158,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             padding: 10,
             borderRadius: 8,
             borderColor: "#ccc",
-            marginTop: 10,
-            height: 50
+            // marginTop: 10,
+            height: 50,
           }}
           placeholder="Search"
           clearButtonMode="always"
@@ -171,13 +171,13 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
           }}
         />
         <FontAwesome
-						style={styles.inputIcon}
-						name={"search"}
-						size={20}
-            color={"#5f7ceb"}
-					/>
+          style={styles.inputIcon}
+          name={"search"}
+          size={20}
+          color={"#5f7ceb"}
+        />
       </View>
-      <View style={{ height: "75%" }}>
+      <View style={{ height: "70%" }}>
         <FlatList
           refreshing={fetching}
           data={list}
@@ -193,29 +193,33 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
               <View style={styles.productImage}>
                 <Image
                   source={{ uri: item.img ? item.img : defaultProductImg }}
-                  style={{ flex: 1, resizeMode: "contain" }}
+                  style={{ flex: 1, resizeMode: "contain"}}
                 />
               </View>
-              <View style={{ justifyContent: "space-between", width: 160 }}>
+              <View style={{width:'60%', alignItems:'center'}}>
                 <Text style={styles.productTitle}>{item.name}</Text>
-
+              </View>
+              <View style={{width:'15%' }}>
                 <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    marginTop: 20,
-                  }}
+                  style={
+                    {
+                      // flexDirection: "row",
+                      // justifyContent: "space-between",
+                    }
+                  }
                 >
-                  <Pressable>
-                   <CheckBox
-                      checked={item.selected}
-                      checkedColor="green"
-                      onPress={() => {
-                        selectPharmacy(index);
-                        setFetching(true);
-                      }}
-                    />
-                  </Pressable>
+                 
+                    <Pressable>
+                      <CheckBox
+                        checked={item.selected}
+                        checkedColor="green"
+                        onPress={() => {
+                          selectPharmacy(index);
+                          setFetching(true);
+                        }}
+                      />
+                    </Pressable>
+                  
                 </View>
               </View>
             </TouchableOpacity>
@@ -229,7 +233,9 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             sendPharmacyUser();
           }}
         >
-          <Text style={{color: "#fff", fontWeight: "bold", fontSize: 20}}>{translation.t("Save")}</Text>
+          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
+            {translation.t("Save")}
+          </Text>
         </TouchableOpacity>
       </View>
     </Container>
@@ -244,12 +250,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
     flexDirection: "row",
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
     alignItems: "center",
   },
   productImage: {
     height: 80,
-    width: 80,
+    width: '25%',
   },
   productTitle: {
     fontSize: 16,
@@ -275,10 +281,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputIcon: {
-		position: 'absolute',
-		right: 15,
-		top: 25,
-		zIndex: 2,
-		padding: 10,
-	},
+    position: "absolute",
+    right: 15,
+    top: 12.5,
+    zIndex: 2,
+    padding: 10,
+  },
 });

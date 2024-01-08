@@ -185,21 +185,13 @@ export default function ProfileScreen({ navigation }: any) {
   const supportedURL = "https://coopharma-83beb.web.app/termsandconditions";
   const unsupportedURL = "slack://open?team=123456";
 
-  const OpenURLButton = ({ url, children }: any) => {
-    const handlePress = useCallback(async () => {
-      // Checking if the link is supported for links with custom URL scheme.
-      const supported = await Linking.canOpenURL(url);
-
-      if (supported) {
-        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-        // by some browser in the mobile
-        await Linking.openURL(url);
-      } else {
-        Alert.alert(`Don't know how to open this URL: ${url}`);
-      }
-    }, [url]);
-
-    return <Button title={children} onPress={handlePress} />;
+  const OpenURLButton = async () => {
+    const supported = await Linking.canOpenURL(supportedURL);
+    if (supported) {
+      await Linking.openURL(supportedURL);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
+    }
   };
 
   const deleteUser = async () => {
@@ -240,7 +232,7 @@ export default function ProfileScreen({ navigation }: any) {
           {Object.keys(user).length > 0 && (
             <>
               <Text style={styles.profileText}>{user.first_name}</Text>
-							<Text style={styles.profileText}>{user.email}</Text>
+              <Text style={styles.profileText}>{user.email}</Text>
             </>
           )}
         </View>
@@ -282,16 +274,18 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
-            onPress={() => navigation.navigate("Marinas", {showBack: true})}
+            onPress={() => navigation.navigate("Marinas", { showBack: true })}
           >
             <Text style={styles.optionText}>{translation.t("Marinas")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           <Pressable
             style={styles.option}
-            onPress={() => navigation.navigate("GuestScreen", {showBack: true})}
+            onPress={() =>
+              navigation.navigate("GuestScreen", { showBack: true })
+            }
           >
-            <Text style={styles.optionText}>{translation.t('Guest')}</Text>
+            <Text style={styles.optionText}>{translation.t("Guest")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           <Pressable
@@ -345,13 +339,14 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable> */}
         </View>
         <View style={styles.footer}>
-          {/* <Text style={styles.footerText}>{translation.t('profileTermsText') /* Terms & Conditions }</Text> */}
-          <OpenURLButton url={supportedURL}>
-            {translation.t("profileTermsText")}
-          </OpenURLButton>
-          {/* <Text style={styles.footerText}>
-						{translation.t('profilePrivacyPolicyText') /* Privacy Policy }
-					</Text> */}
+          
+          <TouchableOpacity
+            onPress={() => {
+              OpenURLButton();
+            }}
+          >
+            <Text style={{color:'#5f7ceb', fontSize:18}}>{translation.t("profileTermsText")}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </Container>

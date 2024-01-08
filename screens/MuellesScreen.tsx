@@ -16,7 +16,6 @@ import AdsScreen from './AdsScreen';
 let list: any[] = [];
 
 export default function MuellesScreen({ navigation, route }:any) {
-    console.log(route.params)
     const { translation } = React.useContext(LanguageContext);
     const defaultProductImg = 'https://img.freepik.com/vector-premium/muelle-pesca-oceano-ilustracion_155504-1.jpg'
     const [initialImg, setinitialImage] = useState('https://file-coopharma.nyc3.digitaloceanspaces.com/16817528019excursiones-desde-san-sebastian.jpg');

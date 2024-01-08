@@ -60,32 +60,37 @@ export default function MyBoats({ navigation, route }: any) {
   return (
     <Container>
       <Loading showLoading={showLoading} translation={translation} />
-
-      <View style={{ height: "100%" }}>
+      <HeaderComponent />
+      <View style={{alignItems:'center', marginBottom:3 }}>
+        <Text style={{alignItems:'center'}}>Poner mensaje que diga el proceso de este modulo</Text>
+      </View>
+      <View
+        style={{
+          marginVertical: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <TouchableOpacity
+          style={styles.redirectButton}
+          onPress={() => {
+            redirectToRecordBoats(userId);
+          }}
+        >
+          <Text style={styles.buttonText}>{translation.t("add")}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: "85%", marginTop: 5 }}>
         <FlatList
           columnWrapperStyle={{ justifyContent: "space-around" }}
           refreshing={fetching}
           data={boats}
           onRefresh={getBoatRecordByUser}
           style={styles.body}
-          ListHeaderComponent={
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-end",
-                width: "100%",
-              }}
-            >
-              <TouchableOpacity
-                style={styles.redirectButton}
-                onPress={() => {
-                  redirectToRecordBoats(userId);
-                }}
-              >
-                <Text style={styles.buttonText}>{translation.t("add")}</Text>
-              </TouchableOpacity>
-            </View>
-          }
+          // ListHeaderComponent={
+
+          // }
           renderItem={({ item, index }: any) => (
             <TouchableOpacity
               style={{
@@ -150,10 +155,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
+    // marginTop: 20,
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 18,
+    fontWeight: "bold",
   },
 });

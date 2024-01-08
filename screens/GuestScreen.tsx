@@ -13,9 +13,10 @@ import { deleteData, fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import { Button } from "react-native-elements";
+import HeaderComponent from "../components/Header";
 
 export default function GuestScreen({ navigation, route }: any) {
-  const {refresh} = route.params
+  const { refresh } = route.params;
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [fetching, setFetching]: any = useState(false);
@@ -26,7 +27,7 @@ export default function GuestScreen({ navigation, route }: any) {
 
   useEffect(() => {
     setShowLoading(true);
-    setFetching(true)
+    setFetching(true);
 
     hideLoadingModal(() => {
       checkStorage("USER_LOGGED", async (id: any) => {
@@ -45,10 +46,10 @@ export default function GuestScreen({ navigation, route }: any) {
       });
     });
     setTimeout(() => {
-      setFetching(false)
-      setShowLoading(false)
-      route.params.refresh = null
-    }, 2000)
+      setFetching(false);
+      setShowLoading(false);
+      route.params.refresh = null;
+    }, 2000);
   }, [refresh]);
 
   const searchDock = async () => {
@@ -129,18 +130,33 @@ export default function GuestScreen({ navigation, route }: any) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
+      <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-      <View style={{ marginVertical: 10, alignItems: "flex-end" }}>
-        <Button
-          title={translation.t("add")}
-          buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 5 }}
+      <View style={{alignItems:'center', marginBottom:3 }}>
+        <Text style={{alignItems:'center'}}>Poner mensaje que diga el proceso de este modulo</Text>
+      </View>
+      <View
+        style={{
+          marginVertical: 10,
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <TouchableOpacity
+          style={{width: "20%",
+          height: 50,
+          backgroundColor: "#5f7ceb",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 10, }}
           onPress={() =>
             navigation.navigate("CreateInvitations", { showBack: true })
           }
-          style={{ width: "20%" }}
-        />
+        >
+          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("add")}</Text>
+        </TouchableOpacity>
       </View>
-      <View style={{ height: "100%", marginBottom: 10 }}>
+      <View style={{ height: "83%", marginBottom: 0 }}>
         {guest.length > 0 ? (
           <FlatList
             refreshing={fetching}
@@ -234,7 +250,7 @@ export default function GuestScreen({ navigation, route }: any) {
                       style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        backgroundColor: "#fff",
+                        // backgroundColor: "#fff",
                         borderRadius: 60,
                         marginVertical: 10,
                         marginHorizontal: 10,
@@ -251,23 +267,29 @@ export default function GuestScreen({ navigation, route }: any) {
                     <View style={{ width: "80%", overflow: "hidden" }}>
                       <Text
                         numberOfLines={1}
-                        style={{ marginVertical: 5, fontWeight: "bold" }}
+                        style={{ marginVertical: 3, fontWeight: "bold" }}
                       >
                         {item.title}
                       </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
                         {item.description}
                       </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
-                        <Text style={{ fontWeight: "bold" }}>{translation.t("Boat")}: </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Boat")}:{" "}
+                        </Text>
                         {item.boat_name}
                       </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
-                        <Text style={{ fontWeight: "bold" }}>{translation.t("Date")}: </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Date")}:{" "}
+                        </Text>
                         {item.date}
                       </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 5 }}>
-                        <Text style={{ fontWeight: "bold" }}>{translation.t("Dock")}: </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Dock")}:{" "}
+                        </Text>
                         {
                           dockValues?.find(
                             (a: any) => a.value == item.product_id
@@ -281,7 +303,7 @@ export default function GuestScreen({ navigation, route }: any) {
             )}
           />
         ) : (
-          <View>
+          <View style={{alignItems:'center'}}>
             <Text>{translation.t("NoGuest")}</Text>
           </View>
         )}

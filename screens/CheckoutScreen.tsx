@@ -30,18 +30,10 @@ export default function CheckoutScreen({ navigation, route }: any) {
 
 	const openPlaceToPayView = async () => {
 		if ((address.id || pickupStatus) /*&& card*/) {
-			console.log("adress", address)
-			//console.log("evaluate condition")
-			//setloading(true)
 			await setShowLoading(true)
 			let pharmacy_id;
 			let userId;
-			// checkStorage('USER_PHARMACY',(response: any) => {response? console.log("pid",JSON.parse(response).id):false; pharmacy_id = response.id});
-
-			//esta misma linea aparece en 4 sitios mas en esta vista, crear una variable y volver reutilizable
-
 			const TotalOrder = pickupStatus ? route.params.orderTotal - 6 - (6 * 0.115) : route.params.orderTotal;
-			//console.log("pTp",route.params.products,route.params.products.map((x:any)=>x.Product_Name).join(', '))
 			async function getIpClient() {
 				try {
 					const response = await axios.get('https://api.ipify.org?format=json');
