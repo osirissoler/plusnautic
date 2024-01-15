@@ -15,6 +15,7 @@
 	"userPhoneNumberLabel": "No. Teléfono",
 	"signUpButtonText": "Registrarse",
 	"signUpExistingAccount": "¿Ya tienes una cuenta?",
+	"forgetPassword":"Olvidaste tu contraseña ?",
 	"signInForgotPassword": "¿Olvidaste tu contraseña?",
 	"signInNewAccount": "¿No tienes una cuenta?",
 	"signInCredentialsError": "Credenciales Incorrectas",
@@ -228,8 +229,8 @@
 	"EnterName":"Ingresa un nombre",
 	"Cancel":"Cancelar",
 	"Send":"Enviar",
-	"TotalOfGuest":"Total de invitados"
-	
+	"TotalOfGuest":"Total de invitados",
+	"openSite":"¿ Estas seguro de que quieres abrir este sitio ?"
 
 	
 }

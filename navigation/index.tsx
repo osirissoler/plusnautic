@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, View } from "react-native";
+import { ColorSchemeName, View, Linking, Alert } from "react-native";
 import { checkStorage } from "../components/Shared";
 
 import useColorScheme from "../hooks/useColorScheme";
@@ -58,6 +58,8 @@ import ProfilegestorScreen from "../screens/gestor/ProfilegestorScreen";
 import InvitationScreen from "../screens/InvitationScreen";
 import GuestScreen from "../screens/GuestScreen";
 import GuestDetailsScreen from "../screens/GuestDetailsScreen";
+import MarinasScreen from "../screens/MarinasScreen";
+import { Image } from "react-native-elements";
 
 export default function Navigation({
   colorScheme,
@@ -333,6 +335,36 @@ function RootNavigator({ route }: any) {
         }}
       />
       <Stack.Screen
+        name="MarinasScreen"
+        component={MarinasScreen}
+        options={{
+          headerTitle: translation.t('Marinas') /* Search Products */,
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen
+        name="Request"
+        component={ServiceScreen}
+        options={{
+          headerTitle: translation.t('Request') /* Search Products */,
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen
+        name="Activities"
+        component={ActivityScreen}
+        options={{
+          headerTitle: translation.t('Activities') /* Search Products */,
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
@@ -375,6 +407,16 @@ function BottomTabNavigator({ navigation, route }: any) {
     });
   };
 
+  const supportedURL = "https://tierrabuenaapp.page.link/tierra";
+  const goAbordo = async() => {
+    const supported = await Linking.canOpenURL(supportedURL);
+    if (supported) {
+      await Linking.openURL(supportedURL);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
+    }
+  };
+
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -392,7 +434,9 @@ function BottomTabNavigator({ navigation, route }: any) {
         options={{
           headerShown: false,
           title: translation.t("BottomTabHomeText"),
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home" color={color} img={false} />
+          ),
         }}
         initialParams={route.params}
         listeners={{
@@ -403,7 +447,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
       />
       {/* ListScreen component={ServiceScreen} */}
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Request"
         component={ServiceScreen}
         options={{
@@ -414,8 +458,8 @@ function BottomTabNavigator({ navigation, route }: any) {
           ),
         }}
         initialParams={route.params}
-      />
-      <BottomTab.Screen
+      /> */}
+      {/* <BottomTab.Screen
         name="Service"
         component={ListScreen}
         options={{
@@ -426,7 +470,7 @@ function BottomTabNavigator({ navigation, route }: any) {
           ),
         }}
         initialParams={route.params}
-      />
+      /> */}
       {/* <BottomTab.Screen
 				name='ShoppingCart'
 				component={ShoppingCartScreen}
@@ -480,7 +524,8 @@ function BottomTabNavigator({ navigation, route }: any) {
 				initialParams={route.params}
 			/> */}
 
-      <BottomTab.Screen
+      {/* activities */}
+      {/* <BottomTab.Screen
         name="Activities"
         component={ActivityScreen}
         options={{
@@ -491,6 +536,35 @@ function BottomTabNavigator({ navigation, route }: any) {
           ),
         }}
         initialParams={route.params}
+      /> */}
+      <BottomTab.Screen
+        name="App"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <View
+              style={{
+                height: 70,
+                width: 70,
+                borderRadius: 100,
+                backgroundColor: "#5f7ceb",
+                marginBottom: 8,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TabBarIcon name="apps-sharp" color={color} img={true} />
+            </View>
+          ),
+        }}
+        initialParams={route.params}
+        listeners={{
+          tabPress: (e:any) => {
+            goAbordo();
+          },
+        }}
       />
       {/* <BottomTab.Screen
 				name='Request'
@@ -508,7 +582,9 @@ function BottomTabNavigator({ navigation, route }: any) {
         options={{
           headerShown: false,
           title: translation.t("BottomTabProfileText"),
-          tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="person" color={color} img={false} />
+          ),
         }}
         initialParams={route.params}
       />
@@ -522,6 +598,16 @@ function BottomTabNavigator({ navigation, route }: any) {
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
+  img: boolean;
 }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+  if (props.img) {
+    return (
+      <Image
+        style={{ height: 80, width: 80 }}
+        source={require("../assets/images/abordo.png")}
+      />
+    );
+  } else {
+    return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+  }
 }

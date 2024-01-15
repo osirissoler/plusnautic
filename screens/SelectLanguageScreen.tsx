@@ -53,7 +53,7 @@ export default function SelectLanguageScreen({ navigation }: any) {
 							justifyContent: 'center',
 							alignItems: 'center'
 						},
-						buttonLocale.includes(locale) && { backgroundColor: '#128780', borderWidth: 0 }
+						buttonLocale.includes(locale) && { backgroundColor: '#5f7ceb', borderWidth: 0 }
 					]}
 				>
 					{buttonLocale.includes(locale) && <FontAwesome name='check' size={10} color={'#fff'} />}
@@ -106,7 +106,9 @@ const styles = StyleSheet.create({
 		color: '#000'
 	},
 	buttonActive: {
-		backgroundColor: '#12878020',
-		borderColor: '#128780'
+		backgroundColor: '#8060C620',
+		borderColor: '#8060C6'
 	}
+
+	
 });

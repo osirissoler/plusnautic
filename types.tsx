@@ -47,6 +47,10 @@ export type RootStackParamList = {
   GuestDetailsScreen: undefined;
   GuestScreen: undefined;
   prueba:undefined;
+  App:undefined;
+  MarinasScreen:undefined;
+  Request:undefined;
+  Activities:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -65,6 +69,7 @@ export type RootTabParamList = {
   Muelles:undefined;
   GuestScreen: undefined;
   Request:undefined;
+  App:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
