@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = //'http://localhost:3006/api'
- 'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
+const baseUrl = 'http://localhost:3006/api'
+//  'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
 
 const fetchData = async (url: string) => {
 	try {
@@ -12,7 +12,7 @@ const fetchData = async (url: string) => {
 		const response = await axios(configuration);
 		return response.data;
 	} catch (error: any) {
-		return error.response.data;
+		return error.response.datma;
 	}
 };
 

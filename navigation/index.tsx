@@ -58,6 +58,8 @@ import ProfilegestorScreen from "../screens/gestor/ProfilegestorScreen";
 import InvitationScreen from "../screens/InvitationScreen";
 import GuestScreen from "../screens/GuestScreen";
 import GuestDetailsScreen from "../screens/GuestDetailsScreen";
+import UpdateUserDataScreen from "../screens/UpdateUserDataScreen";
+import MyGuestScreen from "../screens/MyGuestScreen";
 
 export default function Navigation({
   colorScheme,
@@ -113,10 +115,32 @@ function RootNavigator({ route }: any) {
         }}
       />
       <Stack.Screen
+        name="UpdateUser"
+        component={UpdateUserDataScreen}
+        options={{
+          headerTitle: translation.t("CreateInvitation"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
         name="GuestScreen"
         component={GuestScreen}
         options={{
           headerTitle: translation.t("Guest"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+          headerShown: true,
+        }}
+      />
+       <Stack.Screen
+        name="MyGuestScreen"
+        component={MyGuestScreen}
+        options={{
+          headerTitle: translation.t("recivedInvitation"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
