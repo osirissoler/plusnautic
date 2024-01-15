@@ -13,7 +13,8 @@ import {
 import { fetchData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
 
-export default function AdsScreen({ code, img }: any) {
+
+export default function ForgotPasswordScreen({ code, img }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [ads, setAds]: any = useState(true);
   const [arrayAllImage, setArrayAllImage]: any = useState([]);

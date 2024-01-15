@@ -148,7 +148,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
 
   return (
     <Container>
-      <HeaderComponent />
+      {/* <HeaderComponent /> */}
       <Loading showLoading={showLoading} translation={translation} />
       {!showBack && <HeaderComponent />}
       <View style={{ height: "10%", padding: 10, gap: 10 }}>

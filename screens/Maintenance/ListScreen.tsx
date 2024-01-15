@@ -35,15 +35,13 @@ export default function ListScreen({ navigation }: any) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       getInfoPriceService();
       getTypeServices();
     });
 
     return unsubscribe;
   }, [navigation]);
-
-
 
   const getTypeServices = async () => {
     setFetching(true);
@@ -145,8 +143,6 @@ export default function ListScreen({ navigation }: any) {
         </View>
         <View style={{ height: "80%", marginBottom: 10 }}>
           <Text style={styles.productTitle2}>
-            {/* My request Services */}
-            {/* maintenance */}
             {translation.t("maintenance")}
           </Text>
           <Text style={styles.seeAll}>{text}</Text>
