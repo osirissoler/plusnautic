@@ -80,12 +80,12 @@ export default function SendServicesScreen({ navigation, route }: any) {
     // setShowLoading(false)
   };
   useEffect(() => {
-    geatBoatRecordByUser();
+    getBoatRecordByUser();
   }, []);
 
-  const geatBoatRecordByUser = async () => {
+  const getBoatRecordByUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
-      let url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+      let url = `/boatsRecords/getBoatRecordByUser/${id}`;
       await fetchData(url).then((response) => {
         if (response.ok) {
           setBoatsRecord(response.boatsRecord);

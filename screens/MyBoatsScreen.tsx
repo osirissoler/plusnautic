@@ -12,7 +12,6 @@ import { Cards, Container, Loading, checkStorage } from "../components/Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
 import HeaderComponent from "../components/Header";
-import AdsScreen from "./AdsScreen";
 
 export default function MyBoats({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -25,7 +24,7 @@ export default function MyBoats({ navigation, route }: any) {
     checkStorage("USER_LOGGED", async (id: any) => {
       setUserId(id);
       setShowLoading(true);
-      const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+      const url = `/boatsRecords/getBoatRecordByUser/${id}`;
       hideLoadingModal(() => {
         fetchData(url).then((res) => {
           setBoats(res.boatsRecord);
@@ -35,7 +34,7 @@ export default function MyBoats({ navigation, route }: any) {
   }, [route]);
 
   const getBoatRecordByUser = async () => {
-    const url = `/boatsRecords/geatBoatRecordByUser/${userId}`;
+    const url = `/boatsRecords/getBoatRecordByUser/${userId}`;
     fetchData(url).then((res) => {
       setBoats(res.boatsRecord);
     });
@@ -62,7 +61,7 @@ export default function MyBoats({ navigation, route }: any) {
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
       <View style={{alignItems:'center', marginBottom:3 }}>
-        <Text style={{alignItems:'center'}}>Poner mensaje que diga el proceso de este modulo</Text>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("AddBoatsMsg")}</Text>
       </View>
       <View
         style={{
@@ -88,9 +87,6 @@ export default function MyBoats({ navigation, route }: any) {
           data={boats}
           onRefresh={getBoatRecordByUser}
           style={styles.body}
-          // ListHeaderComponent={
-
-          // }
           renderItem={({ item, index }: any) => (
             <TouchableOpacity
               style={{

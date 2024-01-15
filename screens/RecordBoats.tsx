@@ -29,7 +29,7 @@ export default function RecordBoats({ navigation, route }: any) {
   const [engineInputsCounter, setEngineInputsCounter] = useState(1);
   const [pharmacyValues, setPharmacyValues] = useState([]);
   const [dockValues, setDockValues] = useState([]);
-  const [dockSelected, setDockSelected] = useState([]);
+  const [dockSelected, setDockSelected] = useState("");
   const [boat, setBoat] = useState(route.params.boats[0]);
   const [boatImage, setBoatImage]: any = useState("");
   const [initialValues, setInitialValues] = useState({
@@ -51,7 +51,7 @@ export default function RecordBoats({ navigation, route }: any) {
     electric_plant: boat.electric_plant,
     air_conditioner: boat.air_conditioner,
     pharmacy_id: boat.Pharmacy_id,
-    docks: boat.docks,
+    dock: boat.dock,
     img: boat.img,
   });
 
@@ -89,24 +89,37 @@ export default function RecordBoats({ navigation, route }: any) {
       }
 
       if (route.params.editMode) {
-        await searchDock(boat.Pharmacy_id)
+        await searchDock(boat.Pharmacy_id);
         // const data = await boat.docks?.split(',').map((a: any) => (dockValues.find((b: any) => (b.value == a))));        console.log(dockValues.find((b: any) => (b.value == 88)))
-        setDockSelected(boat.docks?.split(',').map((item: any) => parseInt(item)));      }
+        setDockSelected(boat.dock);
+      }
     });
 
     setBoatImage(boat.img);
   }, []);
 
   const searchDock = async (id: any) => {
-    const url = `/products/getProductsByPharmacy/${id}`;
-    fetchData(url).then((res: any) => {
-      const mappedValues = res.pharmacyproduct.map((product: any) => ({
-        label: product.product_name,
-        value: product.product_id,
-      }));
-      console.log(mappedValues)
-      setDockValues(mappedValues);
-    });
+    if (route.params.editMode) {
+      const url = `/products/getProductsByPharmacy/${id}`;
+      fetchData(url).then((res: any) => {
+        const mappedValues = res.pharmacyproduct.map((product: any) => ({
+          label: product.product_name,
+          value: product.product_id,
+        }));
+        console.log(mappedValues);
+        setDockValues(mappedValues);
+      });
+    } else {
+      const url = `/products/getNonSelectedProductsByPharmacy/${id}`;
+      fetchData(url).then((res: any) => {
+        const mappedValues = res.pharmacyproduct.map((product: any) => ({
+          label: product.product_name,
+          value: product.product_id,
+        }));
+        console.log(mappedValues);
+        setDockValues(mappedValues);
+      });
+    }
   };
 
   const validationSchema = yup.object().shape({
@@ -117,6 +130,7 @@ export default function RecordBoats({ navigation, route }: any) {
     electric_plant: yup.string().required(),
     air_conditioner: yup.string().required(),
     pharmacy_id: yup.string().required(),
+    dock: yup.string().required(),
   });
 
   const recordBoat = (values: any) => {
@@ -125,9 +139,9 @@ export default function RecordBoats({ navigation, route }: any) {
       return;
     }
 
-    if(dockSelected.length < 1) {
-      showErrorToast("Debe seleccionar uno o varios muelles");
-      return
+    if (!dockSelected) {
+      showErrorToast("Debe seleccionar un muelle");
+      return;
     }
 
     setShowLoading(true);
@@ -152,7 +166,8 @@ export default function RecordBoats({ navigation, route }: any) {
       air_conditioner: values.air_conditioner,
       pharmacy_id: values.pharmacy_id,
       user_id: route.params.id,
-      docks: dockSelected.toString(),
+      dock: boat.dock === dockSelected ? boat.dock : dockSelected,
+      prevProduct: boat.dock != dockSelected && boat.dock,
       img: boatImage,
     };
 
@@ -164,7 +179,7 @@ export default function RecordBoats({ navigation, route }: any) {
             redirectToMyBoats("Mal");
           } else {
             showErrorToast(response.message);
-          } 
+          }
         });
       });
     } else {
@@ -203,7 +218,7 @@ export default function RecordBoats({ navigation, route }: any) {
   };
 
   const redirectToMyBoats = (data: any) => {
-    navigation.navigate("MyBoats", {refresh: data});
+    navigation.navigate("MyBoats", { refresh: data });
   };
 
   const incrementCounter = () => {
@@ -323,7 +338,7 @@ export default function RecordBoats({ navigation, route }: any) {
           <View>
             <ScrollView style={{ padding: 10, height: "80%" }}>
               <View style={{}}>
-                <Text style={styles.labelInput}>Boat name</Text>
+                <Text style={styles.labelInput}>{translation.t("BoatName")}</Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("boat_name")}
@@ -331,21 +346,21 @@ export default function RecordBoats({ navigation, route }: any) {
                   value={values.boat_name}
                 />
 
-                <Text style={styles.labelInput}>Boat hull</Text>
+                <Text style={styles.labelInput}>{translation.t("boatHull")}</Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("boat_hull")}
                   onBlur={handleBlur("boat_hull")}
                   value={values.boat_hull}
                 />
-                <Text style={styles.labelInput}>Electric plant</Text>
+                <Text style={styles.labelInput}>{translation.t("BoatImage")}</Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("electric_plant")}
                   onBlur={handleBlur("electric_plant")}
                   value={values.electric_plant}
                 />
-                <Text style={styles.labelInput}>Air conditioner</Text>
+                <Text style={styles.labelInput}>{translation.t("AirConditioner")}</Text>
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
@@ -354,7 +369,7 @@ export default function RecordBoats({ navigation, route }: any) {
                   onBlur={handleBlur("air_conditioner")}
                   value={values.air_conditioner}
                 />
-                <Text style={styles.labelInput}>Boat Image</Text>
+                <Text style={styles.labelInput}>{translation.t("BoatImage")}</Text>
 
                 <TouchableOpacity
                   style={{
@@ -412,7 +427,7 @@ export default function RecordBoats({ navigation, route }: any) {
                   <Text style={styles.labelInput}>
                     {translation.t("Docks")}
                   </Text>
-                  <MultiSelect
+                  <Dropdown
                     style={styles.dropdown}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
@@ -425,10 +440,10 @@ export default function RecordBoats({ navigation, route }: any) {
                     valueField="value"
                     placeholder={translation.t("ChooseDocks")}
                     searchPlaceholder="Search..."
-                    value={dockSelected}
+                    value={dockValues.find((a: any) => (a.value == boat.dock))}
                     onChange={(items: any) => {
-                      setDockSelected(items)
-                      console.log(items)
+                      setFieldValue("dock", items.value);
+                      setDockSelected(items.value);
                     }}
                     renderLeftIcon={() => (
                       <AntDesign
@@ -437,31 +452,6 @@ export default function RecordBoats({ navigation, route }: any) {
                         name="Safety"
                         size={20}
                       />
-                    )}
-                    renderItem={(item: any) => (
-                      <View style={styles.item}>
-                        <Text style={styles.selectedTextStyle}>
-                          {item.label}
-                        </Text>
-                        <AntDesign
-                          style={styles.icon}
-                          color="black"
-                          name="Safety"
-                          size={20}
-                        />
-                      </View>
-                    )}
-                    renderSelectedItem={(item, unSelect) => (
-                      <TouchableOpacity
-                        onPress={() => unSelect && unSelect(item)}
-                      >
-                        <View style={styles.selectedStyle}>
-                          <Text style={styles.textSelectedStyle}>
-                            {item.label}
-                          </Text>
-                          <AntDesign color="black" name="delete" size={17} />
-                        </View>
-                      </TouchableOpacity>
                     )}
                   />
                 </View>
@@ -765,7 +755,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   loginText: {
     textAlign: "center",
@@ -800,17 +790,17 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 17,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   selectedStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 14,
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    backgroundColor: "white",
+    shadowColor: "#000",
     marginTop: 8,
     marginRight: 12,
     paddingHorizontal: 12,

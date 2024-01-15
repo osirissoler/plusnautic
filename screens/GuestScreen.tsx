@@ -7,16 +7,17 @@ import {
   Alert,
   Image,
   FlatList,
+  Modal,
+  TextInput,
 } from "react-native";
 import { checkStorage, Container, Loading } from "../components/Shared";
-import { deleteData, fetchData, sendData } from "../httpRequests";
+import { deleteData, fetchData, sendData, sendDataPut } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import { Button } from "react-native-elements";
 import HeaderComponent from "../components/Header";
 
 export default function GuestScreen({ navigation, route }: any) {
-  const { refresh } = route.params;
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [fetching, setFetching]: any = useState(false);
@@ -24,8 +25,11 @@ export default function GuestScreen({ navigation, route }: any) {
   const [userId, setUserId] = useState(0);
   const [boat, setBoats]: any = useState([]);
   const [dockValues, setDockValues]: any = useState([{ label: "" }]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [codeValue, setCodeValue] = useState("");
 
   useEffect(() => {
+    navigation.addListener('focus', () => {
     setShowLoading(true);
     setFetching(true);
 
@@ -34,12 +38,12 @@ export default function GuestScreen({ navigation, route }: any) {
         setUserId(id);
         getGuestByUser(id);
         searchDock();
-        const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+        const url = `/boatsRecords/getBoatRecordByUser/${id}`;
         fetchData(url).then(async (res: any) => {
           const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
             label: boatsRecord.boat_name,
             value: boatsRecord.id,
-            docks: boatsRecord.docks,
+            dock: boatsRecord.dock,
           }));
           setBoats(mappedValues);
         });
@@ -48,9 +52,9 @@ export default function GuestScreen({ navigation, route }: any) {
     setTimeout(() => {
       setFetching(false);
       setShowLoading(false);
-      route.params.refresh = null;
     }, 2000);
-  }, [refresh]);
+  });
+  }, []);
 
   const searchDock = async () => {
     const url = `/products/getProducts`;
@@ -64,11 +68,9 @@ export default function GuestScreen({ navigation, route }: any) {
     });
   };
 
-  const filterDock = (docks: any) => {
-    const data = docks
-      .split(",")
-      .map((a: any) => dockValues.find((b: any) => b.value == a));
-    return data;
+  const filterDock = (dockId: any) => {
+    const data = dockValues.find((b: any) => b.value == dockId);
+    return [data];
   };
 
   const getGuestByUser = async (id: any) => {
@@ -80,10 +82,11 @@ export default function GuestScreen({ navigation, route }: any) {
     });
   };
 
-  const geatBoatRecordByUser = (boat_id: any) => {
+  const getBoatRecordByUser = (boat_id: any) => {
     const foundDocksFromMapped = boat.find(
       (a: any) => a.value === boat_id
-    ).docks;
+    ).dock;
+    console.log(foundDocksFromMapped)
     return foundDocksFromMapped;
   };
 
@@ -128,20 +131,58 @@ export default function GuestScreen({ navigation, route }: any) {
     }
   };
 
+  const sendCodeToGuest = async () => {
+    try {
+      if(!codeValue){
+        showErrorToast(translation.t("EnterCodeMsg"))
+        return
+      }
+
+      const url = '/guest/updateUserDetailByCode'
+      const data = {code: codeValue, user_id: userId}
+      sendDataPut(url, data).then((response: any) => {
+        if (response.ok) {
+          showGoodToast(translation.t("CodeSent"));
+          setCodeValue("")
+          setModalVisible(false)
+        } else {
+          showErrorToast(response.message);
+        }
+      });
+    } catch (error) {
+      showErrorToast(translation.t("CodeSentError"));
+    }
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{alignItems:'center', marginBottom:3 }}>
-        <Text style={{alignItems:'center'}}>Poner mensaje que diga el proceso de este modulo</Text>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestScreenMsg")}</Text>
       </View>
       <View
         style={{
           marginVertical: 10,
           alignItems: "center",
           width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between"
         }}
       >
+        <TouchableOpacity
+          style={{width: "20%",
+          height: 50,
+          backgroundColor: "#5f7ceb",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 10, }}
+          onPress={() =>
+            setModalVisible(true)
+          }
+        >
+          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("Code")}</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={{width: "20%",
           height: 50,
@@ -198,9 +239,7 @@ export default function GuestScreen({ navigation, route }: any) {
                               date: item.date,
                               boat_id: item.boat_id,
                               product_id: item.product_id,
-                              docksId: filterDock(
-                                geatBoatRecordByUser(item.boat_id)
-                              ),
+                              docksId: filterDock(getBoatRecordByUser(item.boat_id))
                             },
                           });
                         },
@@ -250,7 +289,6 @@ export default function GuestScreen({ navigation, route }: any) {
                       style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        // backgroundColor: "#fff",
                         borderRadius: 60,
                         marginVertical: 10,
                         marginHorizontal: 10,
@@ -308,6 +346,43 @@ export default function GuestScreen({ navigation, route }: any) {
           </View>
         )}
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.optionText}>{translation.t("EnterCode")}</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={"######"}
+              onChangeText={(text) => setCodeValue(text)}
+              value={codeValue}
+            />
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              <Button
+                title={translation.t("Cancel")}
+                buttonStyle={{ backgroundColor: "red" }}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setCodeValue("");
+                }}
+              />
+              <Button
+                title={translation.t("Send")}
+                onPress={() => {
+                  sendCodeToGuest()
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -473,5 +548,38 @@ const styles = StyleSheet.create({
     height: 100,
     width: "100%",
     resizeMode: "cover",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    gap: 15,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    width: 200,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });

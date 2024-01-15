@@ -32,37 +32,39 @@ export default function ProfileScreen({ navigation }: any) {
   const [user, setUser]: any = useState({});
 
   useEffect(() => {
-    checkLoggedUser(
-      (id: string) => {
-        console.log(id);
-        setShowLoading(true);
-        const url = `/user/getUserById/${id}`;
-        const data = { user_id: id };
-        sendData(url, data).then((response) => {
-          if (response.ok) {
-            hideLoadingModal(() => {
-              const user = response["user"];
-              setUser(user);
-              if (user.img) {
-                let img = user.img;
-                if (!img.includes("https://")) {
-                  img = "https://" + user.img;
-                }
-                setProfileImage({ uri: img });
-              } else
-                setProfileImage(require("../assets/images/profile_avatar.png"));
-            });
-          } else {
-            hideLoadingModal(() => {
-              logout();
-            });
-          }
-        });
-        // setShowLoading(false)
-      },
-      navigation,
-      translation
-    );
+    navigation.addListener('focus', () => {
+      checkLoggedUser(
+        (id: string) => {
+          console.log(id);
+          setShowLoading(true);
+          const url = `/user/getUserById/${id}`;
+          const data = { user_id: id };
+          sendData(url, data).then((response) => {
+            if (response.ok) {
+              hideLoadingModal(() => {
+                const user = response["user"];
+                setUser(user);
+                if (user.img) {
+                  let img = user.img;
+                  if (!img.includes("https://")) {
+                    img = "https://" + user.img;
+                  }
+                  setProfileImage({ uri: img });
+                } else
+                  setProfileImage(require("../assets/images/profile_avatar.png"));
+              });
+            } else {
+              hideLoadingModal(() => {
+                logout();
+              });
+            }
+          });
+          // setShowLoading(false)
+        },
+        navigation,
+        translation
+      );
+    })
     return () => {
       setUser({});
       setProfileImage("");
@@ -204,6 +206,8 @@ export default function ProfileScreen({ navigation }: any) {
       });
     });
   };
+
+
   return (
     <Container>
       <HeaderComponent />
@@ -267,6 +271,15 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
+            onPress={() => navigation.navigate("UpdateUser", {userData: user})}
+          >
+            <Text style={styles.optionText}>
+              Actualizar datos
+            </Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
             onPress={() => navigation.navigate("MyBoats")}
           >
             <Text style={styles.optionText}>{translation.t("MyBoats")}</Text>
@@ -286,6 +299,15 @@ export default function ProfileScreen({ navigation }: any) {
             }
           >
             <Text style={styles.optionText}>{translation.t("Guest")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("MyGuestScreen", { showBack: true })
+            }
+          >
+            <Text style={styles.optionText}>{translation.t("recivedInvitation")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           <Pressable
