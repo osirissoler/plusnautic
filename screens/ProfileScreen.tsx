@@ -32,6 +32,7 @@ export default function ProfileScreen({ navigation }: any) {
   const [user, setUser]: any = useState({});
 
   useEffect(() => {
+    navigation.addListener('focus', () => {
     checkLoggedUser(
       (id: string) => {
         console.log(id);
@@ -63,6 +64,7 @@ export default function ProfileScreen({ navigation }: any) {
       navigation,
       translation
     );
+  })
     return () => {
       setUser({});
       setProfileImage("");
@@ -258,6 +260,15 @@ export default function ProfileScreen({ navigation }: any) {
 					</Pressable> */}
           <Pressable
             style={styles.option}
+            onPress={() => navigation.navigate("UpdateUser", {userData: user})}
+          >
+            <Text style={styles.optionText}>
+              {translation.t("UpdateData")}
+            </Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
             onPress={() => navigation.navigate("SelectLanguage")}
           >
             <Text style={styles.optionText}>
@@ -286,6 +297,15 @@ export default function ProfileScreen({ navigation }: any) {
             }
           >
             <Text style={styles.optionText}>{translation.t("Guest")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("MyGuestScreen", { showBack: true })
+            }
+          >
+            <Text style={styles.optionText}>{translation.t("recivedInvitation")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           <Pressable

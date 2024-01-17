@@ -16,6 +16,7 @@ import { Container, Loading } from "../components/Shared";
 import { LanguageContext } from "../LanguageContext";
 import Toast from "react-native-root-toast";
 import { Button, Image } from "react-native-elements";
+import HeaderComponent from "../components/Header";
 
 export default function GuestDetailsScreen({ navigation, route }: any) {
   const { guest_id } = route.params;
@@ -25,11 +26,15 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   const [showLoading, setShowLoading]: any = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEditVisible, setModalEditVisible] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputNameValue, setInputNameValue] = useState("");
+  const [inputEmailValue, setInputEmailValue] = useState("");
+  const [inputPhoneValue, setInputPhoneValue] = useState("");
   const [idValue, setIdValue] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [namesArray, setNamesArray]: any = useState([]);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   useEffect(() => {
     if (guest_id) {
@@ -65,36 +70,38 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   const sendDataToBackend = async (data: any) => {
     try {
       if (!editMode) {
-          const url = `/guest/addGuest/`;
-          await sendData(url, data).then((response: any) => {
-            if (response.ok) {
-              showGoodToast(`Invitado modificado correctamente`);
-              getGuestDetails(guest_id);
-              console.log(response);
-              setModalVisible(!modalVisible);
-              setNamesArray([]);
-            } else {
-              showErrorToast(response.mensaje);
-            }
-          });
+        const url = `/guest/addGuest/`;
+        await sendData(url, data).then((response: any) => {
+          if (response.ok) {
+            showGoodToast(`Invitado modificado correctamente`);
+            getGuestDetails(guest_id);
+            console.log(response);
+            setModalVisible(!modalVisible);
+            setNamesArray([]);
+          } else {
+            showErrorToast(response.mensaje);
+          }
+        });
       } else {
-          const url = `/guest/updateGuestDetails/`;
-          await sendDataPut(url, data).then((response: any) => {
-            if (response.ok) {
-              showGoodToast(`Invitado modificado correctamente`);
-              getGuestDetails(guest_id);
-              console.log(response)
-              setModalEditVisible(!modalEditVisible);
-              setInputValue("");
-              setIdValue(0);
-            } else {
-              showErrorToast(response.mensaje);
-            }
-        })
+        const url = `/guest/updateGuestDetails/`;
+        await sendDataPut(url, data).then((response: any) => {
+          if (response.ok) {
+            showGoodToast(`Invitado modificado correctamente`);
+            getGuestDetails(guest_id);
+            console.log(response);
+            setModalEditVisible(!modalEditVisible);
+            setInputNameValue("");
+            setInputEmailValue("");
+            setInputEmailValue("");
+            setIdValue(0);
+          } else {
+            showErrorToast(response.mensaje);
+          }
+        });
       }
     } catch (error: any) {
-        console.log(error);
-        showErrorToast(`Ha ocurrido un error: ${error}`);
+      console.log(error);
+      showErrorToast(`Ha ocurrido un error: ${error}`);
     }
   };
 
@@ -104,7 +111,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
       const url = `/guest/deleteGuestDetails/${id}`;
       await deleteData(url).then((response: any) => {
         if (guestDetail.length === 1) {
-          navigation.navigate("GuestScreen", {refresh: response});
+          navigation.navigate("GuestScreen", { refresh: response });
         }
         if (response.ok) {
           showGoodToast(`Invitado eliminado correctamente`);
@@ -137,8 +144,14 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
 
   const handleAddName = () => {
     if (name) {
-      setNamesArray([...namesArray, name]);
-      setName("");
+      if (email || phone) {
+        setNamesArray([...namesArray, { name, email, phone }]);
+        setName("");
+        setEmail("");
+        setPhone("");
+      } else {
+        showErrorToast("Para agregar debe tener email o telefono");
+      }
     }
   };
 
@@ -149,34 +162,25 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   return (
     <View style={{ backgroundColor: "#F2F2F2", height: "100%" }}>
       <Loading showLoading={showLoading} translation={translation} />
+      <HeaderComponent />
       <View
         style={{
-          width: "100%",
-          alignItems: "flex-end",
+          marginVertical: 10,
           justifyContent: "center",
-          marginTop: 20,
+          alignItems: "center",
+          width: "100%",
         }}
       >
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 10,
-            marginRight: 10,
+        <TouchableOpacity
+          style={styles.redirectButton}
+          onPress={() => {
+            setModalVisible(true);
+              setEditMode(false);
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>{translation.t("addGuest")}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(true);
-              setEditMode(false);
-            }}
-          >
-            <AntDesign name="adduser" size={35} style={{ color: "#000" }} />
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.buttonText}>{translation.t("add")}</Text>
+        </TouchableOpacity>
       </View>
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -187,27 +191,52 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.optionText}>{translation.t("updateName")}</Text>
+            <Text style={[styles.optionText, { fontWeight: "bold" }]}>
+              {translation.t("UpdateData")}
+            </Text>
+            <Text style={styles.labelInput}>{translation.t("FullName")}</Text>
             <TextInput
               style={styles.input}
               placeholder={translation.t("EnterName")}
-              onChangeText={(text) => setInputValue(text)}
-              value={inputValue}
+              onChangeText={(text) => setInputNameValue(text)}
+              value={inputNameValue}
             />
-            <View style={{ flexDirection: "row", gap: 10 }}>
+            <Text style={styles.labelInput}>Email</Text>
+            <TextInput
+              style={styles.input}
+              value={inputEmailValue}
+              onChangeText={(text) => {
+                setInputEmailValue(text);
+              }}
+              placeholder={translation.t("TypeEmail")}
+            />
+            <Text style={styles.labelInput}>{translation.t("Phone")}</Text>
+            <TextInput
+              style={styles.input}
+              value={inputPhoneValue}
+              onChangeText={(text) => {
+                setInputPhoneValue(text);
+              }}
+              placeholder={translation.t("TypePhone")}
+              keyboardType="numeric"
+              maxLength={10}
+            />
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
               <Button
                 title={translation.t("Cancel")}
                 buttonStyle={{ backgroundColor: "red" }}
                 onPress={() => {
                   setModalEditVisible(!modalEditVisible);
-                  setInputValue("");
+                  setInputNameValue("");
+                  setInputEmailValue("");
+                  setInputPhoneValue("");
                   setIdValue(0);
                 }}
               />
               <Button
                 title={translation.t("Send")}
                 onPress={() => {
-                  sendDataToBackend({ id: idValue, name: inputValue });
+                  sendDataToBackend({ id: idValue, name: inputNameValue, email: inputEmailValue, phone: inputPhoneValue });
                 }}
               />
             </View>
@@ -253,14 +282,36 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               X
             </Text>
           </TouchableOpacity>
-          <Text style={{fontWeight: "bold", fontSize: 20}}>{translation.t("addGuests")}</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+            {translation.t("addGuests")}
+          </Text>
           <View>
-            <Text style={styles.labelInput}>{translation.t("Name")}</Text>
+            <Text style={styles.labelInput}>{translation.t("FullName")}</Text>
             <TextInput
               style={styles.textInput}
               value={name}
               onChangeText={(text) => setName(text)}
               placeholder={translation.t("TypeName")}
+            />
+            <Text style={styles.labelInput}>Email</Text>
+            <TextInput
+              style={styles.textInput}
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+              }}
+              placeholder={translation.t("TypeEmail")}
+            />
+            <Text style={styles.labelInput}>{translation.t("Phone")}</Text>
+            <TextInput
+              style={styles.textInput}
+              value={phone}
+              onChangeText={(text) => {
+                setPhone(text);
+              }}
+              placeholder={translation.t("TypePhone")}
+              keyboardType="numeric"
+              maxLength={10}
             />
             <View
               style={{
@@ -273,7 +324,23 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                 data={namesArray}
                 renderItem={({ item }) => (
                   <View style={styles.item}>
-                    <Text style={{ fontSize: 15 }}> ➤ {item}</Text>
+                    <Text style={{ fontSize: 15 }}>
+                      ➤<Text style={{ fontWeight: "500" }}>Nombre: </Text>
+                      {item.name}
+                    </Text>
+                    {item.email && (
+                      <Text style={{ fontSize: 15, paddingLeft: 15 }}>
+                        <Text style={{ fontWeight: "500" }}>Email: </Text>
+                        {item.email}
+                      </Text>
+                    )}
+                    {item.phone && (
+                      <Text style={{ fontSize: 15, paddingLeft: 15 }}>
+                        <Text style={{ fontWeight: "500" }}>Telefono:</Text>
+
+                        {item.phone}
+                      </Text>
+                    )}
                   </View>
                 )}
                 keyExtractor={(item, index) => index.toString()}
@@ -288,7 +355,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             >
               <Button
                 title={translation.t("Delete")}
-                buttonStyle={{ backgroundColor: "red", borderRadius: 5  }}
+                buttonStyle={{ backgroundColor: "red", borderRadius: 5 }}
                 onPress={handleDeleteName}
                 style={{ marginTop: 15, width: "100%" }}
               />
@@ -304,20 +371,23 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             </View>
 
             <Button
-            style={{marginTop: 15}}
-                title={translation.t("Send")}
-                onPress={() => {
-                  sendDataToBackend({ guest_id: guest_id, name: namesArray });
-                }}
-              />
+              style={{ marginTop: 15 }}
+              title={translation.t("Send")}
+              onPress={() => {
+                sendDataToBackend({ guest_id: guest_id, name: namesArray });
+              }}
+            />
           </View>
         </View>
       </Modal>
 
+      <Text style={{ fontWeight: "bold", fontSize: 20, paddingHorizontal: 20 }}>
+            {translation.t("MyGuest")}
+          </Text>
       <View style={styles.childBody}>
         <FlatList
           data={guestDetail}
-          numColumns={2}
+          numColumns={1}
           refreshing={fetching}
           onRefresh={() => getGuestDetails(guest_id)}
           ListFooterComponent={
@@ -334,33 +404,24 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             </View>
           }
           renderItem={({ item }) => (
-            <View style={styles.option}>
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <Image
-                      source={require("../assets/images/invitados.png")}
-                      style={{ height: 50, width: 50, resizeMode: "contain" }}
-                    />
-              </View>
-              <Text style={styles.optionText}>{item.name}</Text>
-
-              <View
-                style={{ flexDirection: "row", gap: 30, paddingHorizontal: 20 }}
-              >
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={() => {
+            <TouchableOpacity style={styles.option} onPress={() => Alert.alert(
+              translation.t('alertWarningTitle'), // Alert
+              translation.t('alertUserAnonymousMessage'), // You need to be logged in to perfom this action.
+              [
+                {
+                  text: "Editar", 
+                  onPress: () => {
                     setModalEditVisible(true);
-                    setInputValue(item.name);
+                    setInputNameValue(item.name);
+                    setInputEmailValue(item.email);
+                    setInputPhoneValue(item.phone);
                     setIdValue(item.id);
                     setEditMode(true);
-                  }}
-                >
-                  <AntDesign name="edit" size={25} style={{ color: "#000" }} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={() => {
+                  }
+                },
+                {
+                  text: "Eliminar", 
+                  onPress: () => {
                     Alert.alert(
                       translation.t("Warning"),
                       `${
@@ -380,12 +441,45 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                         },
                       ]
                     );
-                  }}
-                >
-                  <AntDesign name="delete" size={25} style={{ color: "red" }} />
-                </TouchableOpacity>
+                  }
+                },
+                {
+                  text: "No"
+                }
+              ]
+            )}>
+              <View style={{ justifyContent: "center", alignItems: "center", width: "20%"}}>
+                <Image
+                  source={require("../assets/images/invitados.png")}
+                  style={{ height: 60, width: 60, resizeMode: "contain" }}
+                />
               </View>
-            </View>
+              <View style={{gap: 10, width: "70%", paddingLeft: 15, borderLeftColor: "gray", borderLeftWidth: 1}}>
+              <Text style={[styles.optionText, { fontWeight: "bold" }]}>
+                {item.name}
+              </Text>
+              {item.email && <Text
+                style={[
+                  styles.optionText,
+                  { color: "gray", fontWeight: "500" },
+                ]}
+              >
+                {item.email}
+              </Text>}
+              {item.phone && <Text style={[styles.optionText, { fontWeight: "400" }]}>
+                {item.phone}
+              </Text>}
+              <View style={[styles.statusButton, {backgroundColor: item.isAccepted ? "#29A744" :  "red"}]}>
+                <AntDesign name={`${item?.isAccepted ? "check" :  "close"}`} size={20} style={{ color: "#FFF" }} />
+
+                <Text
+                  style={{ color: "#FFF", fontWeight: "bold", fontSize: 15 }}
+                >
+                  {item?.isAccepted ? "Aceptado" :  "No aceptado"}
+                </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           )}
         />
       </View>
@@ -411,37 +505,35 @@ const styles = StyleSheet.create({
     borderColor: "#F7F7F7",
     borderWidth: 2,
     backgroundColor: "#F7F7F7",
-    paddingRight: 45,
-    paddingLeft: 20,
     borderRadius: 5,
+    padding: 10
   },
   item: {
     padding: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
   },
   option: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#F7F7F7",
     gap: 15,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    borderColor: "rgba(0, 0, 0,  0.1)",
+    borderColor: "#D4D5D5",
     borderWidth: 1,
     borderRadius: 10,
     margin: 5,
-    maxWidth: 180
+    minWidth: 300,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
   },
   optionButton: {
     alignItems: "center",
   },
   optionText: {
     fontSize: 16,
-    textAlign: "center",
-    fontWeight: "bold",
   },
   optionIcon: {
     color: "rgba(0, 0, 0, 0.3)",
@@ -459,7 +551,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -471,10 +562,36 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   input: {
-    height: 40,
-    borderColor: "gray",
-    width: 200,
-    borderWidth: 1,
-    paddingHorizontal: 10,
+    height: 50,
+    minWidth: 200,
+    maxWidth: 250,
+    borderColor: "#F7F7F7",
+    borderWidth: 2,
+    backgroundColor: "#F7F7F7",
+    borderRadius: 5,
+    padding: 10
+  },
+  statusButton: {
+    padding: 10,
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    width: "80%"
+  },
+  redirectButton: {
+    width: "20%",
+    height: 50,
+    backgroundColor: "#5f7ceb",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    // marginTop: 20,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

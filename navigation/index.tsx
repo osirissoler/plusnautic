@@ -60,6 +60,8 @@ import GuestScreen from "../screens/GuestScreen";
 import GuestDetailsScreen from "../screens/GuestDetailsScreen";
 import MarinasScreen from "../screens/MarinasScreen";
 import { Image } from "react-native-elements";
+import MyGuestScreen from "../screens/MyGuestScreen";
+import UpdateUserDataScreen from "../screens/UpdateUserDataScreen";
 
 export default function Navigation({
   colorScheme,
@@ -362,6 +364,28 @@ function RootNavigator({ route }: any) {
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
+        }}
+      />
+       <Stack.Screen
+        name="MyGuestScreen"
+        component={MyGuestScreen}
+        options={{
+          headerTitle: translation.t("recivedInvitation"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="UpdateUser"
+        component={UpdateUserDataScreen}
+        options={{
+          headerTitle: translation.t("UpdateUser"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
         }}
       />
       <Stack.Screen
