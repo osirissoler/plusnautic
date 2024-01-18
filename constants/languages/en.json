@@ -228,5 +228,6 @@
   "Cancel": "Cancel",
   "Send": "Send",
   "TotalOfGuest": "Total guests",
-  "openSite":"Are you sure you want to open this site?"
+  "openSite":"Are you sure you want to open this site?",
+  "myinformation":"My information"
 }

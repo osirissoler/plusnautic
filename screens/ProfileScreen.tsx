@@ -267,6 +267,13 @@ export default function ProfileScreen({ navigation }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
+            onPress={() => navigation.navigate("Marinas", { showBack: true })}
+          >
+            <Text style={styles.optionText}>{translation.t("myinformation")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
             onPress={() => navigation.navigate("MyBoats")}
           >
             <Text style={styles.optionText}>{translation.t("MyBoats")}</Text>
@@ -299,6 +306,7 @@ export default function ProfileScreen({ navigation }: any) {
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+          
           <Pressable
             style={styles.option}
             onPress={() => {
