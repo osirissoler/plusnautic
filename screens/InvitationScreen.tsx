@@ -430,15 +430,16 @@ export default function InvitationScreen({ navigation, route }: any) {
                           <Button
                             title={translation.t("Delete")}
                             buttonStyle={{
-                              backgroundColor: "red",
-                              borderRadius: 5,
+                              backgroundColor: "#DF4D49",
+                              borderRadius: 10,
+                              padding: 10
                             }}
                             onPress={handleDeleteName}
                             style={{ marginTop: 15, width: "100%" }}
                           />
                           <Button
                             title={translation.t("add")}
-                            buttonStyle={{ borderRadius: 5 }}
+                            buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
                             onPress={handleAddName}
                             style={{
                               marginTop: 15,

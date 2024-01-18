@@ -175,7 +175,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
           style={styles.redirectButton}
           onPress={() => {
             setModalVisible(true);
-              setEditMode(false);
+            setEditMode(false);
           }}
         >
           <Text style={styles.buttonText}>{translation.t("add")}</Text>
@@ -221,10 +221,16 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               keyboardType="numeric"
               maxLength={10}
             />
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+              }}
+            >
               <Button
                 title={translation.t("Cancel")}
-                buttonStyle={{ backgroundColor: "red" }}
+                buttonStyle={{ borderRadius: 10, backgroundColor: "#DF4D49", padding: 10 }}
                 onPress={() => {
                   setModalEditVisible(!modalEditVisible);
                   setInputNameValue("");
@@ -234,9 +240,15 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                 }}
               />
               <Button
+                buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
                 title={translation.t("Send")}
                 onPress={() => {
-                  sendDataToBackend({ id: idValue, name: inputNameValue, email: inputEmailValue, phone: inputPhoneValue });
+                  sendDataToBackend({
+                    id: idValue,
+                    name: inputNameValue,
+                    email: inputEmailValue,
+                    phone: inputPhoneValue,
+                  });
                 }}
               />
             </View>
@@ -355,13 +367,17 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             >
               <Button
                 title={translation.t("Delete")}
-                buttonStyle={{ backgroundColor: "red", borderRadius: 5 }}
+                buttonStyle={{
+                  backgroundColor: "#DF4D49",
+                  borderRadius: 10,
+                  padding: 10,
+                }}
                 onPress={handleDeleteName}
                 style={{ marginTop: 15, width: "100%" }}
               />
               <Button
                 title={translation.t("add")}
-                buttonStyle={{ borderRadius: 5 }}
+                buttonStyle={{  borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
                 onPress={handleAddName}
                 style={{
                   marginTop: 15,
@@ -371,6 +387,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             </View>
 
             <Button
+            buttonStyle={{borderRadius: 10, backgroundColor: "#5f7ceb"}}
               style={{ marginTop: 15 }}
               title={translation.t("Send")}
               onPress={() => {
@@ -382,8 +399,8 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
       </Modal>
 
       <Text style={{ fontWeight: "bold", fontSize: 20, paddingHorizontal: 20 }}>
-            {translation.t("MyGuest")}
-          </Text>
+        {translation.t("MyGuest")}
+      </Text>
       <View style={styles.childBody}>
         <FlatList
           data={guestDetail}
@@ -404,79 +421,111 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             </View>
           }
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.option} onPress={() => Alert.alert(
-              translation.t('alertWarningTitle'), // Alert
-              translation.t('alertUserAnonymousMessage'), // You need to be logged in to perfom this action.
-              [
-                {
-                  text: "Editar", 
-                  onPress: () => {
-                    setModalEditVisible(true);
-                    setInputNameValue(item.name);
-                    setInputEmailValue(item.email);
-                    setInputPhoneValue(item.phone);
-                    setIdValue(item.id);
-                    setEditMode(true);
-                  }
-                },
-                {
-                  text: "Eliminar", 
-                  onPress: () => {
-                    Alert.alert(
-                      translation.t("Warning"),
-                      `${
-                        guestDetail.length !== 1
-                          ? translation.t("MakeSureOnDeleteGuest")
-                          : translation.t("LastGuestMsg")
-                      }`,
-                      [
-                        {
-                          text: translation.t("alertButtonYesText"),
-                          onPress: () => {
-                            deleteGuestDetail(item.id);
-                          },
-                        },
-                        {
-                          text: translation.t("alertButtonNoText"),
-                        },
-                      ]
-                    );
-                  }
-                },
-                {
-                  text: "No"
-                }
-              ]
-            )}>
-              <View style={{ justifyContent: "center", alignItems: "center", width: "20%"}}>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() =>
+                Alert.alert(
+                  translation.t("alertWarningTitle"), // Alert
+                  translation.t("alertUserAnonymousMessage"), // You need to be logged in to perfom this action.
+                  [
+                    {
+                      text: "Editar",
+                      onPress: () => {
+                        setModalEditVisible(true);
+                        setInputNameValue(item.name);
+                        setInputEmailValue(item.email);
+                        setInputPhoneValue(item.phone);
+                        setIdValue(item.id);
+                        setEditMode(true);
+                      },
+                    },
+                    {
+                      text: "Eliminar",
+                      onPress: () => {
+                        Alert.alert(
+                          translation.t("Warning"),
+                          `${
+                            guestDetail.length !== 1
+                              ? translation.t("MakeSureOnDeleteGuest")
+                              : translation.t("LastGuestMsg")
+                          }`,
+                          [
+                            {
+                              text: translation.t("alertButtonYesText"),
+                              onPress: () => {
+                                deleteGuestDetail(item.id);
+                              },
+                            },
+                            {
+                              text: translation.t("alertButtonNoText"),
+                            },
+                          ]
+                        );
+                      },
+                    },
+                    {
+                      text: "No",
+                    },
+                  ]
+                )
+              }
+            >
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "20%",
+                }}
+              >
                 <Image
                   source={require("../assets/images/invitados.png")}
                   style={{ height: 60, width: 60, resizeMode: "contain" }}
                 />
               </View>
-              <View style={{gap: 10, width: "70%", paddingLeft: 15, borderLeftColor: "gray", borderLeftWidth: 1}}>
-              <Text style={[styles.optionText, { fontWeight: "bold" }]}>
-                {item.name}
-              </Text>
-              {item.email && <Text
-                style={[
-                  styles.optionText,
-                  { color: "gray", fontWeight: "500" },
-                ]}
+              <View
+                style={{
+                  gap: 10,
+                  width: "70%",
+                  paddingLeft: 15,
+                  borderLeftColor: "gray",
+                  borderLeftWidth: 1,
+                }}
               >
-                {item.email}
-              </Text>}
-              {item.phone && <Text style={[styles.optionText, { fontWeight: "400" }]}>
-                {item.phone}
-              </Text>}
-              <View style={[styles.statusButton, {backgroundColor: item.isAccepted ? "#29A744" :  "red"}]}>
-                <AntDesign name={`${item?.isAccepted ? "check" :  "close"}`} size={20} style={{ color: "#FFF" }} />
-
-                <Text
-                  style={{ color: "#FFF", fontWeight: "bold", fontSize: 15 }}
-                >
-                  {item?.isAccepted ? "Aceptado" :  "No aceptado"}
+                <Text style={[styles.optionText, { fontWeight: "bold" }]}>
+                  {item.name}
                 </Text>
+                {item.email && (
+                  <Text
+                    style={[
+                      styles.optionText,
+                      { color: "gray", fontWeight: "500" },
+                    ]}
+                  >
+                    {item.email}
+                  </Text>
+                )}
+                {item.phone && (
+                  <Text style={[styles.optionText, { fontWeight: "400" }]}>
+                    {item.phone}
+                  </Text>
+                )}
+                <View
+                  style={[
+                    styles.statusButton,
+                    { backgroundColor: item.isAccepted ? "#29A744" : "#C63637" },
+                  ]}
+                >m
+                  <AntDesign
+                    name={`${item?.isAccepted ? "check" : "close"}`}
+                    size={20}
+                    style={{ color: "#FFF" }}
+                  />
+
+                  <Text
+                    style={{ color: "#FFF", fontWeight: "bold", fontSize: 15 }}
+                  >
+                    {item?.isAccepted ? "Aceptado" : "No aceptado"}
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -506,7 +555,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: "#F7F7F7",
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   item: {
     padding: 10,
@@ -569,7 +618,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: "#F7F7F7",
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   statusButton: {
     padding: 10,
@@ -578,7 +627,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    width: "80%"
+    width: "80%",
   },
   redirectButton: {
     width: "20%",

@@ -62,6 +62,7 @@ import MarinasScreen from "../screens/MarinasScreen";
 import { Image } from "react-native-elements";
 import MyGuestScreen from "../screens/MyGuestScreen";
 import UpdateUserDataScreen from "../screens/UpdateUserDataScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 
 export default function Navigation({
   colorScheme,
@@ -382,6 +383,17 @@ function RootNavigator({ route }: any) {
         component={UpdateUserDataScreen}
         options={{
           headerTitle: translation.t("UpdateUser"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={NotificationScreen}
+        options={{
+          headerTitle: "Notification",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
