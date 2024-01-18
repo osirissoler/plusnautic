@@ -258,5 +258,6 @@
   "SelectCountry": "Select Country",
   "SearchCountry": "Search Country",
   "UserUpdated": "User updated",
-  "PasswordNoMatch": "Passwords do not match"
+  "PasswordNoMatch": "Passwords do not match",
+  "myinformation":"My information"
 }
