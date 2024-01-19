@@ -51,6 +51,9 @@ export type RootStackParamList = {
   MarinasScreen:undefined;
   Request:undefined;
   Activities:undefined;
+  MyGuestScreen:undefined;
+  UpdateUser:undefined;
+  Notification:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

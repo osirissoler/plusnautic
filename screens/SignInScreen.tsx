@@ -36,6 +36,8 @@ export default function SignInScreen({ navigation }: any) {
   const [showLogin, setShowLogin]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [expoPushToken, setExpoPushToken]: any = useState("");
+  const [errorMesage, setErrorMesage]: any = useState("");
+  const [error, setError]: any = useState(false);
 
   const [notification, setNotification] = useState(null);
 
@@ -97,10 +99,16 @@ export default function SignInScreen({ navigation }: any) {
     sendData(url, values).then((response: any) => {
       console.log(response.id);
       hideLoadingModal(() => {
-        if (response.ok == false) {
-          showErrorToast(response.message);
-        } else {
+        if(response.ok){
           setAuthUser(response.id);
+        }else{
+          // showErrorToast(response.message);
+          setError(true);
+          if(translation.locale.includes("en")){
+            setErrorMesage(response.message);
+          }else{
+            setErrorMesage(response.mensaje);
+          }
         }
       });
     });
@@ -205,6 +213,31 @@ export default function SignInScreen({ navigation }: any) {
                     handleBlur={handleBlur}
                     value={values.password}
                   />
+
+                  {error && (
+                    <View
+                      style={{
+                        alignItems: "center",
+                        backgroundColor: "#FDC0C6",
+                        paddingVertical: 20,
+                        borderRadius: 5,
+                        borderLeftWidth: 8,
+                        borderColor: "#FC808E",
+                        borderRightWidth: 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#C10516",
+                          fontWeight: "bold",
+                          fontSize: 17,
+                        }}
+                      >
+                        {errorMesage}
+                      </Text>
+                    </View>
+                  )}
+
                   <TouchableOpacity
                     style={styles.loginButton}
                     onPress={() => handleSubmit()}

@@ -17,13 +17,12 @@ import { LanguageContext } from "../LanguageContext";
 import { Button } from "react-native-elements";
 import HeaderComponent from "../components/Header";
 
-export default function GuestScreen({ navigation, route }: any) {
+export default function MyGuestScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [fetching, setFetching]: any = useState(false);
   const [guest, setGuests] = useState([]);
   const [userId, setUserId] = useState(0);
-  const [boat, setBoats]: any = useState([]);
   const [dockValues, setDockValues]: any = useState([{ label: "" }]);
   const [modalVisible, setModalVisible] = useState(false);
   const [codeValue, setCodeValue] = useState("");
@@ -36,17 +35,8 @@ export default function GuestScreen({ navigation, route }: any) {
     hideLoadingModal(() => {
       checkStorage("USER_LOGGED", async (id: any) => {
         setUserId(id);
-        getGuestByUser(id);
-        searchDock();
-        const url = `/boatsRecords/getBoatRecordByUser/${id}`;
-        fetchData(url).then(async (res: any) => {
-          const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
-            label: boatsRecord.boat_name,
-            value: boatsRecord.id,
-            dock: boatsRecord.dock,
-          }));
-          setBoats(mappedValues);
-        });
+        getGuestDetailsByUserId(id);
+        searchDock()
       });
     });
     setTimeout(() => {
@@ -55,6 +45,16 @@ export default function GuestScreen({ navigation, route }: any) {
     }, 2000);
   });
   }, []);
+
+  const getGuestDetailsByUserId = async (id: any) => {
+    const url = `/guest/getGuestDetailsByUserId/${id}`;
+    fetchData(url).then((response) => {
+      if (response.ok) {
+        setGuests(response.guestDetails);
+        console.log(response.guestDetails)
+      }
+    });
+  };
 
   const searchDock = async () => {
     const url = `/products/getProducts`;
@@ -66,28 +66,6 @@ export default function GuestScreen({ navigation, route }: any) {
       console.log(mappedValues);
       setDockValues(mappedValues);
     });
-  };
-
-  const filterDock = (dockId: any) => {
-    const data = dockValues.find((b: any) => b.value == dockId);
-    return [data];
-  };
-
-  const getGuestByUser = async (id: any) => {
-    const url = `/guest/getGuestByUser/${id}`;
-    fetchData(url).then((response) => {
-      if (response.ok) {
-        setGuests(response.guest);
-      }
-    });
-  };
-
-  const getBoatRecordByUser = (boat_id: any) => {
-    const foundDocksFromMapped = boat.find(
-      (a: any) => a.value === boat_id
-    ).dock;
-    console.log(foundDocksFromMapped)
-    return foundDocksFromMapped;
   };
 
   const showErrorToast = (message: string) => {
@@ -111,30 +89,10 @@ export default function GuestScreen({ navigation, route }: any) {
     }, 1000);
   };
 
-  const deleteGuest = async (id: any) => {
-    try {
-      setShowLoading(true);
-      const url = `/guest/deleteGuest/${id}`;
-      await deleteData(url).then((response: any) => {
-        if (response.ok) {
-          showGoodToast(translation.t("GuestDeleted"));
-          getGuestByUser(userId);
-          console.log(response);
-        }
-      });
-      hideLoadingModal(() => {});
-    } catch (error: any) {
-      hideLoadingModal(() => {
-        console.log(error);
-        showErrorToast(`${error}`);
-      });
-    }
-  };
-
   const sendCodeToGuest = async () => {
     try {
       if(!codeValue){
-        showErrorToast(translation.t("EnterCodeMsg"))
+        showErrorToast("Debes ingresar el código")
         return
       }
 
@@ -142,7 +100,7 @@ export default function GuestScreen({ navigation, route }: any) {
       const data = {code: codeValue, user_id: userId}
       sendDataPut(url, data).then((response: any) => {
         if (response.ok) {
-          showGoodToast(translation.t("CodeSent"));
+          showGoodToast("Código enviado correctamente");
           setCodeValue("")
           setModalVisible(false)
         } else {
@@ -150,7 +108,7 @@ export default function GuestScreen({ navigation, route }: any) {
         }
       });
     } catch (error) {
-      showErrorToast(translation.t("CodeSentError"));
+      showErrorToast("Ha occurido un error al enviar codigo");
     }
   }
 
@@ -158,52 +116,16 @@ export default function GuestScreen({ navigation, route }: any) {
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-      <View style={{alignItems:'center', marginBottom:3 }}>
-        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestScreenMsg")}</Text>
-      </View>
-      <View
-        style={{
-          marginVertical: 10,
-          alignItems: "center",
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-between"
-        }}
-      >
-        <TouchableOpacity
-          style={{width: "20%",
-          height: 50,
-          backgroundColor: "#5f7ceb",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10, }}
-          onPress={() =>
-            setModalVisible(true)
-          }
-        >
-          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("Code")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{width: "20%",
-          height: 50,
-          backgroundColor: "#5f7ceb",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10, }}
-          onPress={() =>
-            navigation.navigate("CreateInvitations", { showBack: true })
-          }
-        >
-          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("add")}</Text>
-        </TouchableOpacity>
+      <View style={{alignItems:'center', marginBottom: 30 }}>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestInvitedMsg")}</Text>
       </View>
       <View style={{ height: "83%", marginBottom: 0 }}>
-        {guest.length > 0 ? (
+        {guest?.length > 0 ? (
           <FlatList
             refreshing={fetching}
             data={guest}
             onRefresh={() => {
-              getGuestByUser(userId);
+                getGuestDetailsByUserId(userId);
             }}
             renderItem={({ item }: any) => (
               <TouchableOpacity
@@ -213,62 +135,6 @@ export default function GuestScreen({ navigation, route }: any) {
                   marginBottom: 10,
                   borderRadius: 10,
                   padding: 5,
-                }}
-                onPress={() => {
-                  Alert.alert(
-                    translation.t("Confirm"),
-                    translation.t("ActionToDo"),
-                    [
-                      {
-                        text: translation.t("SeeDetails"),
-                        onPress: async () => {
-                          navigation.navigate("GuestDetailsScreen", {
-                            guest_id: item.id,
-                          });
-                        },
-                      },
-                      {
-                        text: translation.t("Edit"),
-                        onPress: async () => {
-                          navigation.navigate("CreateInvitations", {
-                            editMode: true,
-                            dataToEdit: {
-                              idGuest: item.id,
-                              title: item.title,
-                              description: item.description,
-                              date: item.date,
-                              boat_id: item.boat_id,
-                              product_id: item.product_id,
-                              docksId: filterDock(getBoatRecordByUser(item.boat_id))
-                            },
-                          });
-                        },
-                      },
-                      {
-                        text: translation.t("Delete"),
-                        onPress: () => {
-                          Alert.alert(
-                            translation.t("Warning"),
-                            translation.t("MakeSureOnDeleteInvitation"),
-                            [
-                              {
-                                text: translation.t("alertButtonYesText"),
-                                onPress: () => {
-                                  deleteGuest(item.id);
-                                },
-                              },
-                              {
-                                text: translation.t("alertButtonNoText"),
-                              },
-                            ]
-                          );
-                        },
-                      },
-                      {
-                        text: translation.t("alertButtonNoText"),
-                      },
-                    ]
-                  );
                 }}
               >
                 <View
@@ -330,7 +196,7 @@ export default function GuestScreen({ navigation, route }: any) {
                         </Text>
                         {
                           dockValues?.find(
-                            (a: any) => a.value == item.product_id
+                            (a: any) => a.value == item.dock
                           )?.label
                         }
                       </Text>
@@ -357,24 +223,23 @@ export default function GuestScreen({ navigation, route }: any) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.optionText}>{translation.t("EnterCode")}</Text>
+            <Text style={styles.optionText}>{"Ingresar código"}</Text>
             <TextInput
               style={styles.input}
-              placeholder={"######"}
+              placeholder={"Ingresar código"}
               onChangeText={(text) => setCodeValue(text)}
               value={codeValue}
             />
             <View style={{ flexDirection: "row", gap: 10 }}>
               <Button
                 title={translation.t("Cancel")}
-                buttonStyle={{ backgroundColor: "#DF4D49", borderRadius: 10, }}
+                buttonStyle={{ backgroundColor: "red" }}
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   setCodeValue("");
                 }}
               />
               <Button
-              buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 10, }}
                 title={translation.t("Send")}
                 onPress={() => {
                   sendCodeToGuest()

@@ -6,6 +6,8 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
+  Modal,
+  ScrollView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -31,25 +33,35 @@ export default function InvitationScreen({ navigation, route }: any) {
   });
   const [date, setDate] = useState(dataToEdit?.date || "");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [namesArray, setNamesArray]: any = useState([]);
   const [boat, setBoats] = useState([]);
   const [dockValues, setDockValues] = useState([]);
-  const [filteredDocks, setFilteredDocks] = useState(editMode ? dataToEdit.docksId : []);
+  const [filteredDocks, setFilteredDocks] = useState(
+    editMode ? dataToEdit.docksId : []
+  );
+  const [historialGuest, setHistorialGuest] = useState([])
 
   useEffect(() => {
     searchDock();
     checkStorage("USER_LOGGED", async (id: any) => {
-      const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
-      fetchData(url).then(async (res: any) => {
-        const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
-          label: boatsRecord.boat_name,
-          value: boatsRecord.id,
-          docks: boatsRecord.docks,
-        }));
-        setBoats(mappedValues);
-      });
+      getHistorialGuest(id)
+      getBoatRecord(id)
     });
   }, []);
+
+  const getBoatRecord = (id: any) => {
+    const url = `/boatsRecords/getBoatRecordByUser/${id}`;
+    fetchData(url).then(async (res: any) => {
+      const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
+        label: boatsRecord.boat_name,
+        value: boatsRecord.id,
+        dock: boatsRecord.dock,
+      }));
+      setBoats(mappedValues);
+    });
+  }
 
   const searchDock = async () => {
     const url = `/products/getProducts`;
@@ -62,10 +74,11 @@ export default function InvitationScreen({ navigation, route }: any) {
     });
   };
 
-  const filterDock = (docks: any) => {
-        const data = docks.split(",").map((a: any) => dockValues.find((b: any) => b.value == a));
-        setFilteredDocks(data);
-        return data
+  const filterDock = (dockId: any) => {
+    const data = dockValues.find((a: any) => a.value === dockId);
+    console.log([data]);
+    setFilteredDocks([data]);
+    return data;
   };
 
   const showErrorToast = (message: string) => {
@@ -80,6 +93,13 @@ export default function InvitationScreen({ navigation, route }: any) {
       duration: Toast.durations.LONG,
       containerStyle: { backgroundColor: "green", width: "80%" },
     });
+  };
+
+  const hideLoadingModal = (callback: Function) => {
+    setTimeout(() => {
+      setShowLoading(false);
+      callback();
+    }, 1000);
   };
 
   const createInvitation = (values: any) => {
@@ -98,7 +118,7 @@ export default function InvitationScreen({ navigation, route }: any) {
         title: values.title,
         description: values.description,
         date: date,
-        name: namesArray,
+        guestDetails: namesArray,
         boat_id: values.boat_id,
         product_id: values.product_id,
       };
@@ -110,47 +130,46 @@ export default function InvitationScreen({ navigation, route }: any) {
         date: date,
         boat_id: values.boat_id,
         product_id: values.product_id,
-      }
+      };
 
       if (editMode) {
+        setShowLoading(true);
         const url = `/guest/updateGuest`;
         sendDataPut(url, dataPut).then((res) => {
           if (res.ok) {
-            setShowLoading(true);
             hideLoadingModal(() => {
               showGoodToast(translation.t("sendRequestSuccess"));
-              navigation.navigate("GuestScreen", {refresh: res});
+              navigation.navigate("GuestScreen", { refresh: res });
             });
           }
         });
       } else {
+        setShowLoading(true);
         const url = `/guest/createGuest`;
         sendData(url, data).then((res) => {
           if (res.ok) {
-            setShowLoading(true);
             hideLoadingModal(() => {
               showGoodToast(translation.t("sendRequestSuccess"));
-              navigation.navigate("GuestScreen", {refresh: res});
+              navigation.navigate("GuestScreen", { refresh: res });
             });
           }
         });
       }
     } catch (error) {
-      showErrorToast(`${translation.t("sendRequestError"), error}`);
+      showErrorToast(`${(translation.t("sendRequestError"), error)}`);
     }
-  };
-
-  const hideLoadingModal = (callback: Function) => {
-    setTimeout(() => {
-      setShowLoading(false);
-      callback();
-    }, 1000);
   };
 
   const handleAddName = () => {
     if (name) {
-      setNamesArray([...namesArray, name]);
-      setName("");
+      if (email || phone) {
+        setNamesArray([...namesArray, { name, email, phone }]);
+        setName("");
+        setEmail("");
+        setPhone("");
+      } else {
+        showErrorToast("Para agregar debe tener email o telefono");
+      }
     }
   };
 
@@ -186,6 +205,16 @@ export default function InvitationScreen({ navigation, route }: any) {
     setDate(formattedDate);
   };
 
+  const getHistorialGuest = async (id: any) => {
+    const url = `/guest/getHistorialGuest/${id}`
+    fetchData(url).then((res) => {
+      if (res.ok) {
+        setHistorialGuest(res.historialGuest)
+        console.log(res.historialGuest)
+      }
+    });
+  }
+  
   return (
     <Container
       style={{ backgroundColor: "#fff", height: "100%" }}
@@ -212,145 +241,245 @@ export default function InvitationScreen({ navigation, route }: any) {
             <View
               style={{ padding: 15, height: `${!editMode ? "80%" : "67%"}` }}
             >
-              <Text style={styles.labelInput}>{translation.t("Title")}</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={handleChange("title")}
-                onBlur={handleBlur("title")}
-                value={values.title}
-              />
-
-              <Text style={styles.labelInput}>
-                {translation.t("Description")}
-              </Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={handleChange("description")}
-                onBlur={handleBlur("description")}
-                value={values.description}
-              />
-
-              <View>
-                <Text style={styles.labelInput}>{translation.t("Boats")}</Text>
-                <Dropdown
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={boat}
-                  value={editMode && boat.find((a: any) => a.value === dataToEdit?.boat_id)}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={translation.t("ChooseBoats")}
-                  searchPlaceholder={translation.t("Search")}
-                  onChange={(items: any) => {
-                    setFieldValue("boat_id", items.value);
-                    filterDock(items.docks);
-                  }}
-                  renderLeftIcon={() => (
-                    <AntDesign
-                      style={styles.icon}
-                      color="#8B8B97"
-                      name="Safety"
-                      size={20}
-                    />
-                  )}
+              <ScrollView>
+                <Text style={styles.labelInput}>{translation.t("Title")}</Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={handleChange("title")}
+                  onBlur={handleBlur("title")}
+                  value={values.title}
                 />
-              </View>
 
-              <View>
-                <Text style={styles.labelInput}>{translation.t("Docks")}</Text>
-                <Dropdown
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={filteredDocks}
-                  value={editMode && dockValues.find((a: any) => a.value === dataToEdit?.product_id)}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={translation.t("ChooseDocks")}
-                  searchPlaceholder={translation.t("Search")}
-                  onChange={(items: any) => {
-                    setFieldValue("product_id", items.value);
-                  }}
-                  renderLeftIcon={() => (
-                    <AntDesign
-                      style={styles.icon}
-                      color="#8B8B97"
-                      name="tool"
-                      size={20}
-                    />
-                  )}
+                <Text style={styles.labelInput}>
+                  {translation.t("Description")}
+                </Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={handleChange("description")}
+                  onBlur={handleBlur("description")}
+                  value={values.description}
                 />
-              </View>
 
-              <Text style={styles.labelInput}>
-                {translation.t("Date")} (DD/MM/YYYY)
-              </Text>
-              <TextInput
-                placeholder="MM/DD/YYYY"
-                style={styles.textInput}
-                value={date}
-                onChangeText={handleDateChange}
-                keyboardType="numeric"
-                maxLength={10}
-              />
-
-                {!editMode && <View>
-                  <Text style={styles.labelInput}>{translation.t("Name")}</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={values.name}
-                    onChangeText={(text) => setName(text)}
-                    placeholder={translation.t("TypeName")}
+                <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Boats")}
+                  </Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={boat}
+                    value={
+                      editMode &&
+                      boat.find((a: any) => a.value === dataToEdit?.boat_id)
+                    }
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={translation.t("ChooseBoats")}
+                    searchPlaceholder={translation.t("Search")}
+                    onChange={(items: any) => {
+                      setFieldValue("boat_id", items.value);
+                      filterDock(items.value);
+                    }}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color="#8B8B97"
+                        name="Safety"
+                        size={20}
+                      />
+                    )}
                   />
-                  <View
-                    style={{
-                      justifyContent: "space-between",
-                      marginTop: 5,
-                      height: "34%",
+                </View>
+
+                <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Docks")}
+                  </Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={filteredDocks}
+                    value={
+                      editMode &&
+                      dockValues.find(
+                        (a: any) => a.value === dataToEdit?.product_id
+                      )
+                    }
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={translation.t("ChooseDocks")}
+                    searchPlaceholder={translation.t("Search")}
+                    onChange={(items: any) => {
+                      setFieldValue("product_id", items.value);
                     }}
-                  >
-                    <FlatList
-                      data={namesArray}
-                      renderItem={({ item }) => (
-                        <View style={styles.item}>
-                          <Text style={{ fontSize: 15 }}> ➤ {item}</Text>
-                        </View>
-                      )}
-                      keyExtractor={(item, index) => index.toString()}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Button
-                      title={translation.t("Delete")}
-                      buttonStyle={{ backgroundColor: "red", borderRadius: 8 }}
-                      onPress={handleDeleteName}
-                      style={{ marginTop: 15, width: "100%" }}
-                    />
-                    <Button
-                      title={translation.t("add")}
-                      buttonStyle={{ borderRadius: 8 }}
-                      onPress={handleAddName}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color="#8B8B97"
+                        name="tool"
+                        size={20}
+                      />
+                    )}
+                  />
+                </View>
+
+                <Text style={styles.labelInput}>
+                  {translation.t("Date")} (DD/MM/YYYY)
+                </Text>
+                <TextInput
+                  placeholder="MM/DD/YYYY"
+                  style={styles.textInput}
+                  value={date}
+                  onChangeText={handleDateChange}
+                  keyboardType="numeric"
+                  maxLength={10}
+                />
+                {!editMode && (
+                  <View>
+                    <View
                       style={{
-                        marginTop: 15,
                         width: "100%",
+                        paddingTop: 30,
+                        height: "100%",
                       }}
-                    />
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                        {translation.t("addGuests")}
+                      </Text>
+                      <View>
+                        <Text style={styles.labelInput}>
+                          {translation.t("FullName")}
+                        </Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={name}
+                          onChangeText={(text) => setName(text)}
+                          placeholder={translation.t("TypeName")}
+                        />
+                        <Text style={styles.labelInput}>Email</Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={email}
+                          onChangeText={(text) => {
+                            setEmail(text);
+                          }}
+                          placeholder={translation.t("TypeEmail")}
+                        />
+                        <Text style={styles.labelInput}>
+                          {translation.t("Phone")}
+                        </Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={phone}
+                          onChangeText={(text) => {
+                            setPhone(text);
+                          }}
+                          placeholder={translation.t("TypePhone")}
+                          keyboardType="numeric"
+                        />
+
+                        <Text style={styles.labelInput}>
+                          {translation.t("guestHistory")}
+                        </Text>
+                        <Dropdown
+                          style={styles.dropdown}
+                          placeholderStyle={styles.placeholderStyle}
+                          selectedTextStyle={styles.selectedTextStyle}
+                          inputSearchStyle={styles.inputSearchStyle}
+                          iconStyle={styles.iconStyle}
+                          data={historialGuest}
+                          search
+                          maxHeight={300}
+                          labelField="fullName"
+                          valueField="value"
+                          placeholder={translation.t("addGuest")}
+                          searchPlaceholder={translation.t("Search")}
+                          onChange={(items: any) => {
+                            const foundArr = namesArray.find((a: any) => a.name == items.fullName && a.email == items.email && a.phone == items.phone)
+                            if(foundArr){
+                              return
+                            }
+                            setNamesArray([...namesArray, { name: items.fullName, email: items.email, phone: items.phone }]);
+                          }}
+                          renderLeftIcon={() => (
+                            <AntDesign
+                              style={styles.icon}
+                              color="#8B8B97"
+                              name="Safety"
+                              size={20}
+                            />
+                          )}
+                        />
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginBottom: 10,
+                          }}
+                        >
+                          <Button
+                            title={translation.t("Delete")}
+                            buttonStyle={{
+                              backgroundColor: "#DF4D49",
+                              borderRadius: 10,
+                              padding: 10
+                            }}
+                            onPress={handleDeleteName}
+                            style={{ marginTop: 15, width: "100%" }}
+                          />
+                          <Button
+                            title={translation.t("add")}
+                            buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
+                            onPress={handleAddName}
+                            style={{
+                              marginTop: 15,
+                              width: "100%",
+                            }}
+                          />
+                        </View>
+                        {namesArray.map((item: any, key: any) => (
+                          <View key={key} style={styles.item}>
+                            <Text style={{ fontSize: 15 }}>
+                              ➤
+                              <Text style={{ fontWeight: "500" }}>
+                                Nombre:{" "}
+                              </Text>
+                              {item.name}
+                            </Text>
+                            {item.email && (
+                              <Text style={{ fontSize: 15, paddingLeft: 15 }}>
+                                <Text style={{ fontWeight: "500" }}>
+                                  Email:{" "}
+                                </Text>
+                                {item.email}
+                              </Text>
+                            )}
+                            {item.phone && (
+                              <Text style={{ fontSize: 15, paddingLeft: 15 }}>
+                                <Text style={{ fontWeight: "500" }}>
+                                  Telefono:
+                                </Text>
+
+                                {item.phone}
+                              </Text>
+                            )}
+                          </View>
+                        ))}
+                      </View>
+                    </View>
                   </View>
-                </View>}
+                )}
+              </ScrollView>
             </View>
 
             <View style={{ height: "20%", padding: 10, paddingHorizontal: 15 }}>
@@ -458,7 +587,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginTop: 20,
-
   },
   registerButtonDisabled: {
     width: "100%",
@@ -486,7 +614,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomColor: "gray",
     marginBottom: 15,
-    backgroundColor: "#F7F7F7"
+    backgroundColor: "#F7F7F7",
   },
   icon: {
     marginRight: 5,
@@ -497,7 +625,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
-    backgroundColor: "#F7F7F7"
+    backgroundColor: "#F7F7F7",
   },
   iconStyle: {
     width: 20,
@@ -509,10 +637,6 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    
   },
   selectedStyle: {
     flexDirection: "row",
