@@ -25,10 +25,17 @@ export default function MyGuestScreen({ navigation }: any) {
   const [userId, setUserId] = useState(0);
   const [dockValues, setDockValues]: any = useState([{ label: "" }]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [guestModalVisible, setGuestModalVisible] = useState(false);
+  const [guestDetailsData, setGuestDetailsData]: any = useState([])
   const [codeValue, setCodeValue] = useState("");
 
   useEffect(() => {
     navigation.addListener('focus', () => {
+      fetchingData()
+  });
+  }, []);
+
+  const fetchingData = () => {
     setShowLoading(true);
     setFetching(true);
 
@@ -43,8 +50,7 @@ export default function MyGuestScreen({ navigation }: any) {
       setFetching(false);
       setShowLoading(false);
     }, 2000);
-  });
-  }, []);
+  }
 
   const getGuestDetailsByUserId = async (id: any) => {
     const url = `/guest/getGuestDetailsByUserId/${id}`;
@@ -89,28 +95,55 @@ export default function MyGuestScreen({ navigation }: any) {
     }, 1000);
   };
 
-  const sendCodeToGuest = async () => {
+  const getGuestDetailsByCode = async () => {
     try {
-      if(!codeValue){
-        showErrorToast("Debes ingresar el código")
-        return
+      if (!codeValue) {
+        showErrorToast(translation.t("EnterCodeMsg"));
+        return;
       }
 
-      const url = '/guest/updateUserDetailByCode'
-      const data = {code: codeValue, user_id: userId}
-      sendDataPut(url, data).then((response: any) => {
-        if (response.ok) {
-          showGoodToast("Código enviado correctamente");
-          setCodeValue("")
-          setModalVisible(false)
+      const urlGet = `/guest/getGuestDetailsByCode/${codeValue}`;
+      fetchData(urlGet).then((res: any) => {
+        if (res.ok) {
+          if(res.guestDetails.ServiceStatus_code != "PENDING") {
+            showErrorToast("Este código ya ha sido utilizado");
+            console.log(res)
+            return
+          }
+          setGuestDetailsData(res.guestDetails)
+          setModalVisible(false);
+          setGuestModalVisible(true);
         } else {
-          showErrorToast(response.message);
+          showErrorToast("Código incorrecto");
         }
       });
     } catch (error) {
-      showErrorToast("Ha occurido un error al enviar codigo");
+      showErrorToast(translation.t("CodeSentError"));
     }
   }
+
+  const updateStatusToGuest = async (servicesStatusCode: any) => {
+    try {
+          const url = "/guest/updateUserDetailByCode";
+          const data = {
+            code: codeValue,
+            user_id: userId,
+            servicesStatusCode: servicesStatusCode,
+          };
+          sendDataPut(url, data).then((response: any) => {
+            if (response.ok) {
+              showGoodToast(translation.t("CodeSent"));
+              setCodeValue("");
+              setGuestModalVisible(false)
+              fetchingData()
+            } else {
+              showErrorToast(response.message);
+            }
+          });
+    } catch (error) {
+      showErrorToast(translation.t("CodeSentError"));
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
@@ -118,7 +151,24 @@ export default function MyGuestScreen({ navigation }: any) {
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{alignItems:'center', marginBottom: 30 }}>
         <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestInvitedMsg")}</Text>
+        <TouchableOpacity
+          style={{
+            width: "20%",
+            height: 50,
+            backgroundColor: "#5f7ceb",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+            marginVertical: 10
+          }}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
+            {translation.t("Code")}
+          </Text>
+        </TouchableOpacity>
       </View>
+
       <View style={{ height: "83%", marginBottom: 0 }}>
         {guest?.length > 0 ? (
           <FlatList
@@ -223,26 +273,118 @@ export default function MyGuestScreen({ navigation }: any) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.optionText}>{"Ingresar código"}</Text>
+            <Text style={styles.optionText}>{translation.t("EnterCode")}</Text>
             <TextInput
               style={styles.input}
-              placeholder={"Ingresar código"}
+              placeholder={"######"}
               onChangeText={(text) => setCodeValue(text)}
               value={codeValue}
             />
             <View style={{ flexDirection: "row", gap: 10 }}>
               <Button
                 title={translation.t("Cancel")}
-                buttonStyle={{ backgroundColor: "red" }}
+                buttonStyle={{ backgroundColor: "#DF4D49", borderRadius: 10 }}
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   setCodeValue("");
                 }}
               />
               <Button
+                buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 10 }}
                 title={translation.t("Send")}
                 onPress={() => {
-                  sendCodeToGuest()
+                  getGuestDetailsByCode();
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={guestModalVisible}
+        onRequestClose={() => {
+          setGuestModalVisible(!guestModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {guestDetailsData && <>
+              <View
+                    style={{
+
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 60,
+                        marginVertical: 10,
+                        marginHorizontal: 10,
+                        width: 70,
+                        height: 70,
+                      }}
+                    >
+                      <Image
+                        source={require("../assets/images/invitacion.png")}
+                        style={{ height: 50, width: 50, resizeMode: "contain" }}
+                      />
+                    </View>
+
+                    <View style={{ overflow: "hidden", justifyContent:"center", alignItems: "center"}}>
+                      <Text
+                        numberOfLines={1}
+                        style={{ marginVertical: 3, fontWeight: "bold" }}
+                      >
+                        {guestDetailsData.title}
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        {guestDetailsData.description}
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Boat")}:{" "}
+                        </Text>
+                        {guestDetailsData.boat_name}
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Date")}:{" "}
+                        </Text>
+                        {guestDetailsData.date}
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {translation.t("Dock")}:{" "}
+                        </Text>
+                        {
+                          dockValues?.find(
+                            (a: any) => a.value == guestDetailsData.dock
+                          )?.label
+                        }
+                      </Text>
+                    </View>
+              </View>
+            </>}
+            <View style={{ flexDirection: "row", gap: 10, marginTop: 10  }}>
+              <Button
+                title={"No aceptar"}
+                buttonStyle={{ backgroundColor: "#DF4D49", borderRadius: 10 }}
+                onPress={() => {
+                  updateStatusToGuest("RECHAZADO")
+                }}
+              />
+              <Button
+                buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 10 }}
+                title={"Aceptar"}
+                onPress={() => {
+                  updateStatusToGuest("ACEPTADO")
                 }}
               />
             </View>

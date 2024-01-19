@@ -70,6 +70,10 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   const sendDataToBackend = async (data: any) => {
     try {
       if (!editMode) {
+        if(namesArray){
+          return
+        }
+
         const url = `/guest/addGuest/`;
         await sendData(url, data).then((response: any) => {
           if (response.ok) {
@@ -425,11 +429,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               style={styles.option}
               onPress={() =>
                 Alert.alert(
-                  translation.t("alertWarningTitle"), // Alert
-                  translation.t("alertUserAnonymousMessage"), // You need to be logged in to perfom this action.
+                  translation.t("Confirm"),
+                  translation.t("ActionToDo"), 
                   [
                     {
-                      text: "Editar",
+                      text: translation.t("Edit"),
                       onPress: () => {
                         setModalEditVisible(true);
                         setInputNameValue(item.name);
@@ -440,7 +444,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                       },
                     },
                     {
-                      text: "Eliminar",
+                      text: translation.t("Delete"),
                       onPress: () => {
                         Alert.alert(
                           translation.t("Warning"),
@@ -464,7 +468,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                       },
                     },
                     {
-                      text: "No",
+                      text: translation.t("Cancel"),
                     },
                   ]
                 )
@@ -512,11 +516,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                 <View
                   style={[
                     styles.statusButton,
-                    { backgroundColor: item.isAccepted ? "#29A744" : "#C63637" },
+                    { backgroundColor: item.serviceStatus === "PENDING" ? "#F2963F" : item.serviceStatus === "ACEPTADO" ? "#29A744" : "#C63637" },
                   ]}
-                >m
+                >
                   <AntDesign
-                    name={`${item?.isAccepted ? "check" : "close"}`}
+                    name={`${item?.serviceStatus === "PENDING" ? "clockcircleo" : item.serviceStatus === "ACEPTADO" ? "check" : "close"}`}
                     size={20}
                     style={{ color: "#FFF" }}
                   />
@@ -524,7 +528,8 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                   <Text
                     style={{ color: "#FFF", fontWeight: "bold", fontSize: 15 }}
                   >
-                    {item?.isAccepted ? "Aceptado" : "No aceptado"}
+                    {/* {item?.isAccepted ? "Aceptado" : "No aceptado"} */}
+                    {item.serviceStatus === "PENDING" ? "PENDING" : item.serviceStatus === "ACEPTADO" ? "ACEPTADO" : "RECHAZADO"}
                   </Text>
                 </View>
               </View>
