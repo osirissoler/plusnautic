@@ -8,6 +8,7 @@ import {
   Alert,
   Modal,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import { AntDesign, Foundation, Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -70,8 +71,8 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   const sendDataToBackend = async (data: any) => {
     try {
       if (!editMode) {
-        if(namesArray){
-          return
+        if (namesArray) {
+          return;
         }
 
         const url = `/guest/addGuest/`;
@@ -234,7 +235,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             >
               <Button
                 title={translation.t("Cancel")}
-                buttonStyle={{ borderRadius: 10, backgroundColor: "#DF4D49", padding: 10 }}
+                buttonStyle={{
+                  borderRadius: 10,
+                  backgroundColor: "#DF4D49",
+                  padding: 10,
+                }}
                 onPress={() => {
                   setModalEditVisible(!modalEditVisible);
                   setInputNameValue("");
@@ -244,7 +249,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                 }}
               />
               <Button
-                buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
+                buttonStyle={{
+                  borderRadius: 10,
+                  backgroundColor: "#5f7ceb",
+                  padding: 10,
+                }}
                 title={translation.t("Send")}
                 onPress={() => {
                   sendDataToBackend({
@@ -381,7 +390,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               />
               <Button
                 title={translation.t("add")}
-                buttonStyle={{  borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
+                buttonStyle={{
+                  borderRadius: 10,
+                  backgroundColor: "#5f7ceb",
+                  padding: 10,
+                }}
                 onPress={handleAddName}
                 style={{
                   marginTop: 15,
@@ -391,7 +404,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             </View>
 
             <Button
-            buttonStyle={{borderRadius: 10, backgroundColor: "#5f7ceb"}}
+              buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb" }}
               style={{ marginTop: 15 }}
               title={translation.t("Send")}
               onPress={() => {
@@ -430,7 +443,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               onPress={() =>
                 Alert.alert(
                   translation.t("Confirm"),
-                  translation.t("ActionToDo"), 
+                  translation.t("ActionToDo"),
                   [
                     {
                       text: translation.t("Edit"),
@@ -481,10 +494,27 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                   width: "20%",
                 }}
               >
-                <Image
-                  source={require("../assets/images/invitados.png")}
-                  style={{ height: 60, width: 60, resizeMode: "contain" }}
-                />
+                {item.user_img ? (
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "rgba(0, 0, 0, 0.2)",
+                      borderRadius: 100,
+                    }}
+                  >
+                    <ImageBackground
+                      source={{uri: item.user_img}}
+                      style={styles.profilePicture}
+                      resizeMode={"cover"}
+                      imageStyle={{ borderRadius: 100 }}
+                    ></ImageBackground>
+                  </View>
+                ) : (
+                  <Image
+                    source={require("../assets/images/invitados.png")}
+                    style={{ height: 60, width: 60, resizeMode: "contain" }}
+                  />
+                )}
               </View>
               <View
                 style={{
@@ -516,11 +546,24 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                 <View
                   style={[
                     styles.statusButton,
-                    { backgroundColor: item.serviceStatus === "PENDING" ? "#F2963F" : item.serviceStatus === "ACEPTADO" ? "#29A744" : "#C63637" },
+                    {
+                      backgroundColor:
+                        item.serviceStatus === "PENDING"
+                          ? "#F2963F"
+                          : item.serviceStatus === "ACEPTADO"
+                          ? "#29A744"
+                          : "#C63637",
+                    },
                   ]}
                 >
                   <AntDesign
-                    name={`${item?.serviceStatus === "PENDING" ? "clockcircleo" : item.serviceStatus === "ACEPTADO" ? "check" : "close"}`}
+                    name={`${
+                      item?.serviceStatus === "PENDING"
+                        ? "clockcircleo"
+                        : item.serviceStatus === "ACEPTADO"
+                        ? "check"
+                        : "close"
+                    }`}
                     size={20}
                     style={{ color: "#FFF" }}
                   />
@@ -529,7 +572,11 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                     style={{ color: "#FFF", fontWeight: "bold", fontSize: 15 }}
                   >
                     {/* {item?.isAccepted ? "Aceptado" : "No aceptado"} */}
-                    {item.serviceStatus === "PENDING" ? "PENDING" : item.serviceStatus === "ACEPTADO" ? "ACEPTADO" : "RECHAZADO"}
+                    {item.serviceStatus === "PENDING"
+                      ? "PENDING"
+                      : item.serviceStatus === "ACEPTADO"
+                      ? "ACEPTADO"
+                      : "RECHAZADO"}
                   </Text>
                 </View>
               </View>
@@ -647,5 +694,10 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  profilePicture: {
+    height: 70,
+    width: 70,
+    borderRadius: 100,
   },
 });
