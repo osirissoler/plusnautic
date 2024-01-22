@@ -233,7 +233,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             sendPharmacyUser();
           }}
         >
-          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
+          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
             {translation.t("Save")}
           </Text>
         </TouchableOpacity>

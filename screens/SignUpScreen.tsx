@@ -28,6 +28,7 @@ import { LanguageContext } from "../LanguageContext";
 import { CheckBox, Separator } from "react-native-btr";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Dropdown } from "react-native-element-dropdown";
+import { translate } from "i18n-js";
 export default function SignUpScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
@@ -338,15 +339,14 @@ export default function SignUpScreen({ navigation }: any) {
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
-                  // iconStyle={styles.iconStyle}
-                  iconColor={"#5f7ceb"}
+                  iconStyle={styles.iconStyle}
                   data={countries}
                   search
                   maxHeight={300}
                   labelField="name"
                   valueField={""}
-                  placeholder="Selecionar Pais"
-                  searchPlaceholder="Buscar pais"
+                  placeholder={translation.t("SelectCountry")}
+                  searchPlaceholder={`${translation.t("SearchCountry")}...`}
                   value={values.boatsRecord_id}
                   onChange={(items: any) => {
                     setCountry_id(items.id);
@@ -577,20 +577,16 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
+    borderBottomColor: "gray",
+    backgroundColor: "#F7F7F7",
+    paddingHorizontal: 10,
     borderRadius: 5,
   },
   placeholderStyle: {
-    fontSize: 16,
-    height: 50,
-    width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#F7F7F7",
-    paddingRight: 10,
+    fontSize: 14,
+    color: "#CCCCCD",
     paddingLeft: 10,
-    paddingTop: 13,
-    borderRadius: 5,
-    marginBottom: 3,
+    fontWeight: "500"
   },
   selectedTextStyle: {
     height: 50,
@@ -604,15 +600,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 3,
   },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
   inputSearchStyle: {
     height: 50,
-    // width: "100%",
     borderColor: "#F7F7F7",
-    // borderWidth: 2,
     backgroundColor: "#F7F7F7",
-    // paddingRight: 45,
-    // paddingLeft: 20,
-    // paddingTop:25,
     borderRadius: 5,
   },
   scrollViewContainer: {

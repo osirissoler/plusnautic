@@ -20,6 +20,7 @@ import { LanguageContext } from "../LanguageContext";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { Button } from "react-native-elements";
 import moment from "moment";
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 export default function InvitationScreen({ navigation, route }: any) {
   const { editMode, dataToEdit } = route.params;
@@ -76,7 +77,6 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   const filterDock = (dockId: any) => {
     const data = dockValues.find((a: any) => a.value === dockId);
-    console.log([data]);
     setFilteredDocks([data]);
     return data;
   };
@@ -210,7 +210,6 @@ export default function InvitationScreen({ navigation, route }: any) {
     fetchData(url).then((res) => {
       if (res.ok) {
         setHistorialGuest(res.historialGuest)
-        console.log(res.historialGuest)
       }
     });
   }
@@ -285,14 +284,6 @@ export default function InvitationScreen({ navigation, route }: any) {
                       setFieldValue("boat_id", items.value);
                       filterDock(items.value);
                     }}
-                    renderLeftIcon={() => (
-                      <AntDesign
-                        style={styles.icon}
-                        color="#8B8B97"
-                        name="Safety"
-                        size={20}
-                      />
-                    )}
                   />
                 </View>
 
@@ -308,10 +299,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                     iconStyle={styles.iconStyle}
                     data={filteredDocks}
                     value={
-                      editMode &&
-                      dockValues.find(
-                        (a: any) => a.value === dataToEdit?.product_id
-                      )
+                      filteredDocks[0]
                     }
                     search
                     maxHeight={300}
@@ -322,14 +310,6 @@ export default function InvitationScreen({ navigation, route }: any) {
                     onChange={(items: any) => {
                       setFieldValue("product_id", items.value);
                     }}
-                    renderLeftIcon={() => (
-                      <AntDesign
-                        style={styles.icon}
-                        color="#8B8B97"
-                        name="tool"
-                        size={20}
-                      />
-                    )}
                   />
                 </View>
 
@@ -344,6 +324,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                   keyboardType="numeric"
                   maxLength={10}
                 />
+                <RNDateTimePicker value={new Date()} display="calendar"/>
                 {!editMode && (
                   <View>
                     <View
@@ -411,14 +392,6 @@ export default function InvitationScreen({ navigation, route }: any) {
                             }
                             setNamesArray([...namesArray, { name: items.fullName, email: items.email, phone: items.phone }]);
                           }}
-                          renderLeftIcon={() => (
-                            <AntDesign
-                              style={styles.icon}
-                              color="#8B8B97"
-                              name="Safety"
-                              size={20}
-                            />
-                          )}
                         />
                         <View
                           style={{
@@ -452,7 +425,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                             <Text style={{ fontSize: 15 }}>
                               ➤
                               <Text style={{ fontWeight: "500" }}>
-                                Nombre:{" "}
+                              {translation.t("FullName")}:{" "}
                               </Text>
                               {item.name}
                             </Text>
@@ -467,7 +440,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                             {item.phone && (
                               <Text style={{ fontSize: 15, paddingLeft: 15 }}>
                                 <Text style={{ fontWeight: "500" }}>
-                                  Telefono:
+                                {translation.t("Phone")}:
                                 </Text>
 
                                 {item.phone}
@@ -553,6 +526,7 @@ const styles = StyleSheet.create({
     paddingRight: 45,
     paddingLeft: 20,
     borderRadius: 5,
+    
   },
   textArea: {
     borderColor: "#F7F7F7",
@@ -615,56 +589,44 @@ const styles = StyleSheet.create({
     borderBottomColor: "gray",
     marginBottom: 15,
     backgroundColor: "#F7F7F7",
-  },
-  icon: {
-    marginRight: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   placeholderStyle: {
-    fontSize: 16,
-    color: "#8B8B97",
+    fontSize: 14,
+    color: "#CCCCCD",
+    paddingLeft: 10,
+    fontWeight: "500"
   },
   selectedTextStyle: {
-    fontSize: 16,
+    height: 50,
+    width: "100%",
+    borderColor: "#F7F7F7",
+    borderWidth: 0.5,
     backgroundColor: "#F7F7F7",
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingTop: 13,
+    borderRadius: 5,
+    marginBottom: 3,
   },
   iconStyle: {
     width: 20,
     height: 20,
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    height: 50,
+    borderColor: "#F7F7F7",
+    backgroundColor: "#F7F7F7",
+    borderRadius: 5,
   },
-  item: {
-    padding: 5,
-  },
-  selectedStyle: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 14,
-    backgroundColor: "white",
-    shadowColor: "#000",
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-  },
-  textSelectedStyle: {
-    marginRight: 5,
-    fontSize: 16,
-  },
+  
   profilePicture: {
     height: 100,
     width: "100%",
     resizeMode: "cover",
+  },
+  item: {
+    padding: 5,
   },
 });

@@ -382,7 +382,7 @@ function RootNavigator({ route }: any) {
         name="UpdateUser"
         component={UpdateUserDataScreen}
         options={{
-          headerTitle: translation.t("UpdateUser"),
+          headerTitle: translation.t("MyInformation"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",

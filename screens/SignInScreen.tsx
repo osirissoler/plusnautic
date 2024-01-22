@@ -250,7 +250,7 @@ export default function SignInScreen({ navigation }: any) {
                     style={{ alignItems: "center" }}
                     onPress={() => navigation.navigate("ForgotPassword")}
                   >
-                    <Text>{translation.t("forgetPassword")}</Text>
+                    <Text>{translation.t("signInForgotPassword")}</Text>
                   </TouchableOpacity>
 
                   <View

@@ -80,8 +80,6 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
     });
   };
 
-  console.log(country_id);
-
   const showErrorToast = (message: string) => {
     Toast.show(message, {
       duration: Toast.durations.LONG,
@@ -122,7 +120,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
             navigation.navigate("Profile");
             showGoodToast(translation.t("UserUpdated"));
           } else {
-            showErrorToast(response.message);
+            showErrorToast(translation.t("ErrorUserUpdated"));
           }
         });
       })
@@ -146,9 +144,9 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
         hideLoadingModal(() => {
           if (response.ok) {
             navigation.navigate("Profile");
-            showGoodToast("User updated");
+            showGoodToast(translation.t("UserUpdated"));
           } else {
-            showErrorToast(response.message);
+            showErrorToast(translation.t("ErrorUserUpdated"));
           }
         });
       })
@@ -227,7 +225,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <Text style={styles.title}>{translation.t("UpdateData")}</Text>
+        <Text style={styles.title}>{translation.t("MyInformation")}</Text>
         <Formik
           validationSchema={validationSchema}
           initialValues={initialValues}
@@ -272,8 +270,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
-                  // iconStyle={styles.iconStyle}
-                  iconColor={"#5f7ceb"}
+                  iconStyle={styles.iconStyle}
                   data={countries}
                   value={countries.find((a: any) => a.value === country_id)}
                   search
@@ -433,6 +430,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
+    fontWeight: "bold"
   },
   loginText: {
     textAlign: "center",
@@ -444,20 +442,16 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
+    borderBottomColor: "gray",
+    backgroundColor: "#F7F7F7",
+    paddingHorizontal: 10,
     borderRadius: 5,
   },
   placeholderStyle: {
-    fontSize: 16,
-    height: 50,
-    width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#F7F7F7",
-    paddingRight: 10,
+    fontSize: 14,
+    color: "#CCCCCD",
     paddingLeft: 10,
-    paddingTop: 13,
-    borderRadius: 5,
-    marginBottom: 3,
+    fontWeight: "500"
   },
   selectedTextStyle: {
     height: 50,
@@ -471,17 +465,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 3,
   },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
   inputSearchStyle: {
     height: 50,
-    // width: "100%",
     borderColor: "#F7F7F7",
-    // borderWidth: 2,
     backgroundColor: "#F7F7F7",
-    // paddingRight: 45,
-    // paddingLeft: 20,
-    // paddingTop:25,
     borderRadius: 5,
   },
+  
   scrollViewContainer: {
     justifyContent: "center",
     paddingHorizontal: 15,

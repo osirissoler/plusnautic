@@ -24,11 +24,7 @@ export default function GuestScreen({ navigation, route }: any) {
   const [guest, setGuests] = useState([]);
   const [userId, setUserId] = useState(0);
   const [boat, setBoats]: any = useState([]);
-  const [dockValues, setDockValues]: any = useState([{ label: "" }]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [guestModalVisible, setGuestModalVisible] = useState(false);
-  const [guestDetailsData, setGuestDetailsData]: any = useState([])
-  const [codeValue, setCodeValue] = useState("");
+  const [dockValues, setDockValues]: any = useState([{ label: "" }])
 
   useEffect(() => {
     navigation.addListener("focus", () => {
@@ -313,8 +309,9 @@ export default function GuestScreen({ navigation, route }: any) {
             )}
           />
         ) : (
-          <View style={{ alignItems: "center" }}>
-            <Text>{translation.t("NoGuest")}</Text>
+          <View style={{ justifyContent: "center", alignItems: "center", flex: 1, paddingHorizontal: 10, gap: 20 }}>
+            <Text style={{fontWeight: "bold", fontSize: 16, textAlign: "center"}}>{translation.t("NoGuest")}</Text>
+            <Image source={require("../assets/images/prohibido.png")} style={{height: 80, width: 80}}/>
           </View>
         )}
       </View>

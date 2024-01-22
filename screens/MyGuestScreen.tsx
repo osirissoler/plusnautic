@@ -57,7 +57,6 @@ export default function MyGuestScreen({ navigation }: any) {
     fetchData(url).then((response) => {
       if (response.ok) {
         setGuests(response.guestDetails);
-        console.log(response.guestDetails)
       }
     });
   };
@@ -69,7 +68,6 @@ export default function MyGuestScreen({ navigation }: any) {
         label: product.name,
         value: product.id,
       }));
-      console.log(mappedValues);
       setDockValues(mappedValues);
     });
   };
@@ -106,15 +104,14 @@ export default function MyGuestScreen({ navigation }: any) {
       fetchData(urlGet).then((res: any) => {
         if (res.ok) {
           if(res.guestDetails.ServiceStatus_code != "PENDING") {
-            showErrorToast("Este código ya ha sido utilizado");
-            console.log(res)
+            showErrorToast(translation.t("CodeIsUsedMsg"));
             return
           }
           setGuestDetailsData(res.guestDetails)
           setModalVisible(false);
           setGuestModalVisible(true);
         } else {
-          showErrorToast("Código incorrecto");
+          showErrorToast(translation.t("WrongCode"));
         }
       });
     } catch (error) {
@@ -257,9 +254,10 @@ export default function MyGuestScreen({ navigation }: any) {
             )}
           />
         ) : (
-          <View style={{alignItems:'center'}}>
-            <Text>{translation.t("NoGuest")}</Text>
-          </View>
+          <View style={{ justifyContent: "center", alignItems: "center", flex: 1, paddingHorizontal: 10, gap: 20 }}>
+          <Text style={{fontWeight: "bold", fontSize: 16, textAlign: "center"}}>{translation.t("NoGuest")}</Text>
+          <Image source={require("../assets/images/prohibido.png")} style={{height: 80, width: 80}}/>
+        </View>
         )}
       </View>
 
@@ -374,7 +372,7 @@ export default function MyGuestScreen({ navigation }: any) {
             </>}
             <View style={{ flexDirection: "row", gap: 10, marginTop: 10  }}>
               <Button
-                title={"No aceptar"}
+                title={translation.t("Reject")}
                 buttonStyle={{ backgroundColor: "#DF4D49", borderRadius: 10 }}
                 onPress={() => {
                   updateStatusToGuest("RECHAZADO")
@@ -382,7 +380,7 @@ export default function MyGuestScreen({ navigation }: any) {
               />
               <Button
                 buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 10 }}
-                title={"Aceptar"}
+                title={translation.t("Accept")}
                 onPress={() => {
                   updateStatusToGuest("ACEPTADO")
                 }}

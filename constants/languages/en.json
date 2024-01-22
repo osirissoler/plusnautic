@@ -258,5 +258,16 @@
   "SelectCountry": "Select Country",
   "SearchCountry": "Search Country",
   "UserUpdated": "User updated",
-  "PasswordNoMatch": "Passwords do not match"
+  "ErrorUserUpdated": "Error updating data",
+  "PasswordNoMatch": "Passwords do not match",
+  "MyInformation":"My information",
+  "BoatImageMsg": "You must upload an image of the boat",
+  "ChooseDockMsg": "You must select the dock",
+  "CreateBoatMsg": "Boat record created successfully",
+  "ErrorCreateBoatMsg": "Error creating boat record",
+  "UpdateBoatMsg": "Boat updated successfully",
+  "ErrorUpdateBoatMsg": "Error updating boat data",
+  "Reject":"Reject",
+  "WrongCode": "Incorrect code",
+"CodeIsUsedMsg": "This code has already been used"
 }
