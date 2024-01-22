@@ -269,5 +269,7 @@
   "ErrorUpdateBoatMsg": "Error updating boat data",
   "Reject":"Reject",
   "WrongCode": "Incorrect code",
-"CodeIsUsedMsg": "This code has already been used"
+"CodeIsUsedMsg": "This code has already been used",
+"DateAfterTodayMsg": "The date must be greater than today",
+"ShowDatePicker":"Select date"
 }

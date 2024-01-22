@@ -272,5 +272,7 @@
   "ErrorUpdateBoatMsg":"Error al actualizar datos del Bote",
   "Reject":"Rechazar",
   "WrongCode":"Código incorrecto",
-  "CodeIsUsedMsg":"Este código ya ha sido utilizado"
+  "CodeIsUsedMsg":"Este código ya ha sido utilizado",
+  "DateAfterTodayMsg":"La fecha debe ser mayor al día de hoy",
+  "ShowDatePicker":"Seleccionar fecha"
 }

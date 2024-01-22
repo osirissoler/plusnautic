@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   ScrollView,
+  Platform,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -20,7 +21,7 @@ import { LanguageContext } from "../LanguageContext";
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import { Button } from "react-native-elements";
 import moment from "moment";
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function InvitationScreen({ navigation, route }: any) {
   const { editMode, dataToEdit } = route.params;
@@ -32,7 +33,7 @@ export default function InvitationScreen({ navigation, route }: any) {
     boat_id: dataToEdit?.boat_id || "",
     product_id: dataToEdit?.product_id || "",
   });
-  const [date, setDate] = useState(dataToEdit?.date || "");
+  // const [date, setDate] = useState(dataToEdit?.date || "");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -42,13 +43,34 @@ export default function InvitationScreen({ navigation, route }: any) {
   const [filteredDocks, setFilteredDocks] = useState(
     editMode ? dataToEdit.docksId : []
   );
-  const [historialGuest, setHistorialGuest] = useState([])
+  const [historialGuest, setHistorialGuest] = useState([]);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(Platform.OS === "ios"); // Para iOS, siempre muestra el selector de fecha
+    setDate(currentDate);
+  };
+
+  useEffect(() => {
+    if(dataToEdit){
+      const [month, day, year] = dataToEdit?.date.split('/');
+      const fechaObj = new Date(`${year}-${month}-${day}T10:00:00.00Z`);
+            console.log(fechaObj)
+      setDate(fechaObj);
+    }
+  }, []);
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
 
   useEffect(() => {
     searchDock();
     checkStorage("USER_LOGGED", async (id: any) => {
-      getHistorialGuest(id)
-      getBoatRecord(id)
+      getHistorialGuest(id);
+      getBoatRecord(id);
     });
   }, []);
 
@@ -62,7 +84,7 @@ export default function InvitationScreen({ navigation, route }: any) {
       }));
       setBoats(mappedValues);
     });
-  }
+  };
 
   const searchDock = async () => {
     const url = `/products/getProducts`;
@@ -104,32 +126,40 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   const createInvitation = (values: any) => {
     try {
+
+      const currentDate = new Date();
+
       if (!date) {
         showErrorToast(translation.t("EnterDate"));
         return;
       }
 
-      if (!moment(date, "DD/MM/YYYY", true).isValid()) {
-        showErrorToast(translation.t("EnterValidDateFormat"));
-        return;
+      // if (!moment(date, "DD/MM/YYYY", true).isValid()) {
+      //   showErrorToast(translation.t("EnterValidDateFormat"));
+      //   return;
+      // }
+
+      if(currentDate.getTime() > date.getTime()){
+        showErrorToast(translation.t("DateAfterTodayMsg"));
+        return
       }
 
       const data = {
         title: values.title,
         description: values.description,
-        date: date,
+        date: moment(date).format('MM/DD/YYYY'),
         guestDetails: namesArray,
         boat_id: values.boat_id,
-        product_id: values.product_id,
+        product_id: filteredDocks[0].value,
       };
 
       const dataPut = {
         id: dataToEdit?.idGuest,
         title: values.title,
         description: values.description,
-        date: date,
+        date: moment(date).format('MM/DD/YYYY'),
         boat_id: values.boat_id,
-        product_id: values.product_id,
+        product_id: filteredDocks[0].value,
       };
 
       if (editMode) {
@@ -181,7 +211,7 @@ export default function InvitationScreen({ navigation, route }: any) {
     title: yup.string().required(translation.t("TitleIsRequired")),
     description: yup.string().required(translation.t("DescriptionIsRequired")),
     boat_id: yup.string().required(translation.t("BoatIsRequired")),
-    product_id: yup.string().required(translation.t("DockIsRequired")),
+    // product_id: yup.string().required(translation.t("DockIsRequired")),
   });
 
   const formatDate = (input: any) => {
@@ -202,18 +232,18 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   const handleDateChange = (input: any) => {
     const formattedDate = formatDate(input);
-    setDate(formattedDate);
+    // setDate(formattedDate);
   };
 
   const getHistorialGuest = async (id: any) => {
-    const url = `/guest/getHistorialGuest/${id}`
+    const url = `/guest/getHistorialGuest/${id}`;
     fetchData(url).then((res) => {
       if (res.ok) {
-        setHistorialGuest(res.historialGuest)
+        setHistorialGuest(res.historialGuest);
       }
     });
-  }
-  
+  };
+
   return (
     <Container
       style={{ backgroundColor: "#fff", height: "100%" }}
@@ -238,7 +268,7 @@ export default function InvitationScreen({ navigation, route }: any) {
         }: any) => (
           <View>
             <View
-              style={{ padding: 15, height: `${!editMode ? "80%" : "67%"}` }}
+              style={{ padding: 15, height: `${!editMode ? "80%" : "70%"}` }}
             >
               <ScrollView>
                 <Text style={styles.labelInput}>{translation.t("Title")}</Text>
@@ -298,9 +328,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
                     data={filteredDocks}
-                    value={
-                      filteredDocks[0]
-                    }
+                    value={filteredDocks[0]}
                     search
                     maxHeight={300}
                     labelField="label"
@@ -308,23 +336,55 @@ export default function InvitationScreen({ navigation, route }: any) {
                     placeholder={translation.t("ChooseDocks")}
                     searchPlaceholder={translation.t("Search")}
                     onChange={(items: any) => {
-                      setFieldValue("product_id", items.value);
+                      // setFieldValue("product_id", items.value);
                     }}
                   />
                 </View>
 
                 <Text style={styles.labelInput}>
-                  {translation.t("Date")} (DD/MM/YYYY)
+                  {translation.t("Date")}
                 </Text>
-                <TextInput
+                {/* <TextInput
                   placeholder="MM/DD/YYYY"
                   style={styles.textInput}
-                  value={date}
+                  // value={date}
                   onChangeText={handleDateChange}
                   keyboardType="numeric"
                   maxLength={10}
-                />
-                <RNDateTimePicker value={new Date()} display="calendar"/>
+                /> */}
+                <Text style={{fontSize: 15, marginVertical: 10, fontWeight: "600"}}>{moment(date).format('MM/DD/YYYY')}</Text>
+                <View>
+                  {Platform.OS === "android" && (
+                    <View>
+                      <TouchableOpacity
+                      style={{height: 40, backgroundColor: "#5f7ceb", borderRadius: 10, padding: 10, justifyContent: "center", alignItems: "center"}}
+                        onPress={showDatepicker}
+                      >
+                        <Text style={[styles.registerButtonText, {fontWeight: "500"}]}>
+                          {translation.t("ShowDatePicker")}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  {Platform.OS === "android" ? (
+                    showDatePicker && (
+                      <RNDateTimePicker
+                        value={date}
+                        mode="date"
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )
+                  ) : (
+                    <RNDateTimePicker
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
                 {!editMode && (
                   <View>
                     <View
@@ -386,11 +446,23 @@ export default function InvitationScreen({ navigation, route }: any) {
                           placeholder={translation.t("addGuest")}
                           searchPlaceholder={translation.t("Search")}
                           onChange={(items: any) => {
-                            const foundArr = namesArray.find((a: any) => a.name == items.fullName && a.email == items.email && a.phone == items.phone)
-                            if(foundArr){
-                              return
+                            const foundArr = namesArray.find(
+                              (a: any) =>
+                                a.name == items.fullName &&
+                                a.email == items.email &&
+                                a.phone == items.phone
+                            );
+                            if (foundArr) {
+                              return;
                             }
-                            setNamesArray([...namesArray, { name: items.fullName, email: items.email, phone: items.phone }]);
+                            setNamesArray([
+                              ...namesArray,
+                              {
+                                name: items.fullName,
+                                email: items.email,
+                                phone: items.phone,
+                              },
+                            ]);
                           }}
                         />
                         <View
@@ -405,14 +477,18 @@ export default function InvitationScreen({ navigation, route }: any) {
                             buttonStyle={{
                               backgroundColor: "#DF4D49",
                               borderRadius: 10,
-                              padding: 10
+                              padding: 10,
                             }}
                             onPress={handleDeleteName}
                             style={{ marginTop: 15, width: "100%" }}
                           />
                           <Button
                             title={translation.t("add")}
-                            buttonStyle={{ borderRadius: 10, backgroundColor: "#5f7ceb", padding: 10 }}
+                            buttonStyle={{
+                              borderRadius: 10,
+                              backgroundColor: "#5f7ceb",
+                              padding: 10,
+                            }}
                             onPress={handleAddName}
                             style={{
                               marginTop: 15,
@@ -425,7 +501,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                             <Text style={{ fontSize: 15 }}>
                               ➤
                               <Text style={{ fontWeight: "500" }}>
-                              {translation.t("FullName")}:{" "}
+                                {translation.t("FullName")}:{" "}
                               </Text>
                               {item.name}
                             </Text>
@@ -440,7 +516,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                             {item.phone && (
                               <Text style={{ fontSize: 15, paddingLeft: 15 }}>
                                 <Text style={{ fontWeight: "500" }}>
-                                {translation.t("Phone")}:
+                                  {translation.t("Phone")}:
                                 </Text>
 
                                 {item.phone}
@@ -526,7 +602,6 @@ const styles = StyleSheet.create({
     paddingRight: 45,
     paddingLeft: 20,
     borderRadius: 5,
-    
   },
   textArea: {
     borderColor: "#F7F7F7",
@@ -575,6 +650,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
+    fontWeight: "bold"
   },
   loginText: {
     textAlign: "center",
@@ -596,7 +672,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#CCCCCD",
     paddingLeft: 10,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   selectedTextStyle: {
     height: 50,
@@ -620,7 +696,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     borderRadius: 5,
   },
-  
+
   profilePicture: {
     height: 100,
     width: "100%",
