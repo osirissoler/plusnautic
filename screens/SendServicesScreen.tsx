@@ -37,52 +37,22 @@ import { Dropdown } from "react-native-element-dropdown";
 let list: any[] = [];
 export default function SendServicesScreen({ navigation, route }: any) {
   const [boatsRecord, setBoatsRecord]: any = useState([]);
+  const [boatsRecord_id, setBoatsRecord_id]: any = useState(null);
   const { translation } = React.useContext(LanguageContext);
   const [isSelecting, setIsSelecting]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [images, setImages]: any = useState([]);
   const [refre, setRefre]: any = useState(false);
-  const [pharmacyValues, setPharmacyValues] = useState([]);
-  const [dockValues, setDockValues] = useState([]);
-  const [dockSelected, setDockSelected] = useState("");
+  const [Pharmacys, setPharmacys]: any = useState([]);
+  const [products, setProducts]: any = useState([]);
+  const [product_id, setProduct_id]: any = useState(87);
 
   const validationSchema = yup.object().shape({
-    description: yup.string().required(translation.t("DescriptionIsRequired")),
-    pharmacy_id: yup.string().required(translation.t("MarinaIsRequired")),
-    dock: yup.string().required(translation.t("DockIsRequired")),
-    // senderFaxNumber: yup.string().required('Sender fax number is required'),
-    // senderEmail: yup.string().email('Please enter valid sender email').required('Sender email is required'),
-    // receiverName: yup.string().required('Receiver name is required'),
-    // receiverFaxNumber: yup.string().required('Receiver fax number is required'),
-    // receiverEmail: yup.string().email('Please enter valid receiver email').required('Receiver email is required')
+    description: yup.string().required("Description is required"),
   });
 
-  useEffect(() => {
-    checkStorage('USER_LOGGED', (id: any) => {
-      const url = `/userPharmacy/getUserPharmacyByUserId/${id}`;
-      fetchData(url).then(async (res) => {
-        const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
-          label: pharmacy.pharmacy_name,
-          value: pharmacy.pharmacy_id,
-        }));
-        setPharmacyValues(mappedValues);
-    })
-    })
-  }, [])
-
-  const searchDock = async (id: any) => {
-      const url = `/products/getProductsByPharmacy/${id}`;
-      fetchData(url).then((res: any) => {
-        const mappedValues = res.pharmacyproduct.map((product: any) => ({
-          label: product.product_name,
-          value: product.product_id,
-        }));
-        console.log(mappedValues);
-        setDockValues(mappedValues);
-      });
-  };
-
   const send = async (item: any) => {
+    if (boatsRecord_id != null) {
       setShowLoading(true);
       checkStorage("USER_LOGGED", async (id: any) => {
         checkStorage("TOKEN", async (token: any) => {
@@ -91,9 +61,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
             description: item.description,
             typeServices_id: route.params.id,
             user_id: id,
+            boatsRecord_id: boatsRecord_id,
             token: token,
-            pharmacy_id: item.pharmacy_id,
-            product_id:item.dock
+            product_id,
           };
           await sendData(url, data).then((response) => {
             sendFile(response.services.id);
@@ -102,17 +72,36 @@ export default function SendServicesScreen({ navigation, route }: any) {
           });
         });
       });
+    } else {
+      alert("Please select a boat");
+    }
+    // setShowLoading(false)
   };
   useEffect(() => {
     geatBoatRecordByUser();
+    getPharmacies();
   }, []);
+
+  const getPharmacies = async () => {
+    let url = `/pharmacies/getPharmacies`;
+    await fetchData(url).then((response) => {
+      if (response.ok) {
+        setPharmacys(response.pharmacy);
+      } else {
+        setPharmacys([]);
+      }
+    });
+  };
 
   const geatBoatRecordByUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
-      let url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+      const url = `/boatsRecords/getBoatRecordByUser/${id}`;
       await fetchData(url).then((response) => {
         if (response.ok) {
           setBoatsRecord(response.boatsRecord);
+          console.log(response);
+        } else {
+          setBoatsRecord([]);
         }
       });
     });
@@ -139,8 +128,8 @@ export default function SendServicesScreen({ navigation, route }: any) {
           onPress: () => pickImg(2),
         },
         {
-          text: translation.t('Cancel')
-        }
+          text: translation.t("Cancel"), // Upload from galery
+        },
       ],
       { cancelable: true, onDismiss: () => setIsSelecting(false) }
     );
@@ -207,171 +196,210 @@ export default function SendServicesScreen({ navigation, route }: any) {
         </Text>
       </View>
 
-      <View style={{ maxHeight: "100%", marginHorizontal: 10 }}>
-        <Formik
-          validationSchema={validationSchema}
-          initialValues={{
-            description: "",
-            pharmacy_id: "",
-            dock:"",
-          }}
-          onSubmit={(values) => {
-            send(values);
+      <View
+        style={{
+          height: "92%",
+          // backgroundColor: "green",
+          marginHorizontal: 10,
+        }}
+      >
+        <View
+          style={{
+            maxHeight: "30%",
+            justifyContent: "center",
+            alignItems: "center",
+            // borderWidth: 1,
           }}
         >
-          {/* //TODO Crear la solicitud de servicios poner que se envie las fotos, description, bote, y el muelle */}
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            isValid,
-            errors,
-            touched,
-            setFieldValue
-          }) => (
-            <View style={{ height: "100%" }}>
-              <View style={{ maxHeight: "40%", backgroundColor: "white" }}>
-                <TouchableOpacity
-                  style={{
-                    width: "30%",
-                    height: 50,
-                    backgroundColor: "#5f7ceb",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                  }}
-                  onPress={() => openImagePickerAsync()}
-                >
-                  <FontAwesome name="file-image-o" size={20} color={"white"} />
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    {translation.t("SelectImage")}
-                  </Text>
-                </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "40%",
+              height: "auto",
+              backgroundColor: "#5f7ceb",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 10,
+              padding: 10,
+            }}
+            onPress={() => openImagePickerAsync()}
+          >
+            <FontAwesome name="file-image-o" size={20} color={"white"} />
+            <Text style={{ color: "white", fontWeight: "bold" }}>
+              {translation.t("SelectImage")}
+            </Text>
+          </TouchableOpacity>
 
-                <View style={{ maxHeight: "70%" }}>
-                  {Object.keys(images).length > 0 && (
-                    <FlatList
-                      refreshing={refre}
-                      style={{ marginTop: 4 }}
-                      data={images}
-                      renderItem={({ item }: any) => (
-                        <TouchableOpacity>
-                          <View>
-                            <Image
-                              source={{ uri: item.uri }}
-                              style={{ width: 100, height: 100 }}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      )}
-                      keyExtractor={(item) => item.uri}
-                      numColumns={4}
-                    />
-                  )}
-                </View>
-              </View>
-              <ScrollView style={{ maxHeight: "70%" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={{ width: "100%" }}>
-                    <Text style={styles.labelInput}></Text>
-                    <Text style={styles.labelInput}>{translation.t("Description")}</Text>
-                    {touched.description && errors.description && (
-                      <Text style={{ color: "red" }}>{errors.description}</Text>
-                    )}
-                    <TextInput
-                      style={styles.textInput}
-                      multiline={true}
-                      numberOfLines={4}
-                      onChangeText={handleChange("description")}
-                      onBlur={handleBlur("description")}
-                      value={values.description}
-                      placeholder={translation.t("DescriptionMsg")}
-                    />
-                     <View>
-                  <Text style={styles.labelInput}>
-                    {translation.t("Marine")}
-                  </Text>
-                  {touched.pharmacy_id && errors.pharmacy_id && (
-                      <Text style={{ color: "red" }}>{errors.pharmacy_id}</Text>
-                    )}
-                  <Dropdown
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={pharmacyValues}
-                    search
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={translation.t("ChooseMarine")}
-                    searchPlaceholder="Search..."
-                    value={values.pharmacy_id}
-                    onChange={(items: any) => {
-                      setFieldValue("pharmacy_id", items.value);
-                      searchDock(items.value);
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={styles.labelInput}>
-                    {translation.t("Docks")}
-                  </Text>
-                  {touched.dock && errors.dock && (
-                      <Text style={{ color: "red" }}>{errors.dock}</Text>
-                    )}
-                  <Dropdown
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={dockValues}
-                    search
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={translation.t("ChooseDocks")}
-                    searchPlaceholder={translation.t("Search")}
-                    onChange={(items: any) => {
-                      setFieldValue("dock", items.value);
-                      setDockSelected(items.value);
-                    }}
-                  />
-                </View>
-                  </View>
-               
-                </View>
-                <TouchableOpacity
-                  style={[
-                    {
-                      width: "100%",
-                      height: 50,
-                      backgroundColor: "#5f7ceb",
+          <View style={{ maxHeight: "70%", }}>
+            {Object.keys(images).length > 0 && (
+              <FlatList
+                refreshing={refre}
+                style={{ marginTop: 4 }}
+                data={images}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity>
+                    <View>
+                      <Image
+                        source={{ uri: item.uri }}
+                        style={{ width: 100, height: 100 }}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.uri}
+                numColumns={4}
+              />
+            )}
+          </View>
+        </View>
+        {/* formulario */}
+        <View style={{ height: "70%" }}>
+          <Formik
+            validationSchema={validationSchema}
+            initialValues={{
+              description: "",
+              boatsRecord_id: "",
+            }}
+            onSubmit={(values) => {
+              send(values);
+            }}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              isValid,
+              errors,
+              touched,
+            }) => (
+              <View style={{ height: "100%" }}>
+                <ScrollView style={{ height: "100%" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                       alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 10,
-                      marginTop: 40,
-                    },
-                    !isValid && { backgroundColor: "#FB4F03" },
-                  ]}
-                  onPress={() => handleSubmit()}
-                >
-                  <Text style={{ color: "#ffffff", fontSize: 18 }}>{translation.t("Send")}</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          )}
-        </Formik>
+                    }}
+                  >
+                    <View style={{ width: "100%" }}>
+                      <Text style={styles.labelInput}></Text>
+                      {touched.description && errors.description && (
+                        <Text style={{ color: "red" }}>
+                          {errors.description}
+                        </Text>
+                      )}
+                      <Text style={styles.labelInput}>
+                        {translation.t("Description")}
+                      </Text>
+                      <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        numberOfLines={4}
+                        onChangeText={handleChange("description")}
+                        onBlur={handleBlur("description")}
+                        value={values.description}
+                        placeholder={translation.t("DescriptionProblem")}
+                      />
+                    </View>
+                  </View>
+
+                  {/* Bote */}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={boatsRecord}
+                      search
+                      maxHeight={300}
+                      labelField="boat_name"
+                      valueField={""}
+                      placeholder="Seleciona  Bote"
+                      searchPlaceholder="Search bote"
+                      value={values.boatsRecord_id}
+                      onChange={(items: any) => {
+                        setBoatsRecord_id(items.id);
+                      }}
+                    />
+                  </View>
+
+                  {/* Marinas o pharmacys*/}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={Pharmacys}
+                      search
+                      maxHeight={300}
+                      labelField="name"
+                      valueField={""}
+                      placeholder={translation.t("ChooseMarine")}
+                      searchPlaceholder={translation.t("Search")}
+                      // value={values.boatsRecord_id}
+                      onChange={async (items: any) => {
+                        let url = `/products/getProductsByPharmacy/${items.id}`;
+                        fetchData(url).then((res: any) => {
+                          if (res.ok) {
+                            setProducts(res.pharmacyproduct);
+                          } else {
+                            setProducts([]);
+                          }
+                        });
+                      }}
+                    />
+                  </View>
+
+                  {/* muelles */}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={products}
+                      search
+                      maxHeight={300}
+                      labelField="product_name"
+                      valueField={""}
+                      placeholder={translation.t("ChooseDocks")}
+                      searchPlaceholder={translation.t("Search")}
+                      onChange={(items: any) => {
+                        setProduct_id(items.pharmacy_product_id);
+                      }}
+                    />
+                  </View>
+
+                  <TouchableOpacity
+                    style={[
+                      {
+                        width: "100%",
+                        height: 50,
+                        backgroundColor: "#5f7ceb",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10,
+                        marginTop: 5,
+                      },
+                      !isValid && { backgroundColor: "#FB4F03" },
+                    ]}
+                    onPress={() => handleSubmit()}
+                  >
+                    <Text style={{ color: "#ffffff", fontSize: 18 }}>Send</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </View>
+            )}
+          </Formik>
+        </View>
       </View>
     </Container>
   );
@@ -461,27 +489,34 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     marginBottom: 20,
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
   },
   icon: {
     marginRight: 5,
   },
   placeholderStyle: {
     fontSize: 16,
-    width: "100%",
-    paddingLeft: 10,
-    borderRadius: 5,
-  },
-  selectedTextStyle: {
     height: 50,
     width: "100%",
+    borderColor: "#5f7ceb",
+    borderWidth: 0.5,
+    backgroundColor: "#FFFFFF",
     paddingRight: 10,
     paddingLeft: 10,
     paddingTop: 13,
     borderRadius: 5,
+    marginBottom: 3,
+  },
+  selectedTextStyle: {
+    height: 50,
+    width: "100%",
+    borderColor: "#5f7ceb",
+    borderWidth: 0.5,
+    backgroundColor: "#FFFFFF",
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingTop: 13,
+    borderRadius: 5,
+    marginBottom: 3,
   },
   iconStyle: {
     width: 20,
@@ -499,3 +534,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+

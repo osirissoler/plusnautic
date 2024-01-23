@@ -33,7 +33,6 @@ export default function MarinasScreen({ navigation, route }:any) {
 	// 		sendData(url, data).then((response) => {
 	// 		  if (response.ok) {
 	// 			//  setShowLoading(false);
-	// 			 console.log('es ok')
 	// 			hideLoadingModal(() => {
 	// 			});
 	// 		  } else {

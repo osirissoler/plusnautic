@@ -328,6 +328,7 @@ export default function ProfileScreen({ navigation }: any) {
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+          
           <Pressable
             style={styles.option}
             onPress={() => {
