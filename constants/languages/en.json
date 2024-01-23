@@ -274,6 +274,10 @@
 "CodeIsUsedMsg": "This code has already been used",
 "DateAfterTodayMsg": "The date must be greater than today",
 "ShowDatePicker":"Select date",
-"DescriptionMsg":"Description of the problem"
+"DescriptionMsg":"Description of the problem",
+"ClientName": "Client Name",
+"Status": "Status",
+"Amount": "Amount",
+"PaymentDetail": "Payment Details"
 
 }

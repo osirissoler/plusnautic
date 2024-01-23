@@ -276,5 +276,9 @@
   "CodeIsUsedMsg":"Este código ya ha sido utilizado",
   "DateAfterTodayMsg":"La fecha debe ser mayor al día de hoy",
   "ShowDatePicker":"Seleccionar fecha",
-  "DescriptionMsg":"Descripción del problema"
+  "DescriptionMsg":"Descripción del problema",
+  "ClientName":"Nombre del cliente",
+  "Status":"Estado",
+  "Amount":"Monto",
+  "PaymentDetail":"Detalles de pago"
 }

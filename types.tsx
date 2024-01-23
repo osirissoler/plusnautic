@@ -54,6 +54,7 @@ export type RootStackParamList = {
   MyGuestScreen:undefined;
   UpdateUser:undefined;
   Notification:undefined;
+  PaymentScreen:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
