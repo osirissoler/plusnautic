@@ -4,13 +4,7 @@ import {
     Text,
     Pressable,
     Image,
-    StyleSheet,
-    FlatList,
-    ScrollView,
-    TouchableOpacity,
-    Modal,
-    Alert,
-    TextInput
+    
 } from 'react-native';
 import { Container, Loading } from '../components/Shared';
 import { LanguageContext } from '../LanguageContext';

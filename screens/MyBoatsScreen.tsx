@@ -12,9 +12,8 @@ import { Cards, Container, Loading, checkStorage } from "../components/Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
 import HeaderComponent from "../components/Header";
-import AdsScreen from "./AdsScreen";
 
-export default function MyBoats({ navigation }: any) {
+export default function MyBoats({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [boats, setBoats] = useState([]);
   const [showLoading, setShowLoading]: any = useState(false);
@@ -22,28 +21,32 @@ export default function MyBoats({ navigation }: any) {
   const [userId, setUserId] = useState(0);
 
   useEffect(() => {
-	  checkStorage("USER_LOGGED", async (id: any) => {
-	setUserId(id);
-		setShowLoading(true)
-      const url = `/boatsRecords/geatBoatRecordByUser/${id}`;
-	  hideLoadingModal(() => {
-		fetchData(url).then((res) => {
-			setBoats(res.boatsRecord);
-		});
-	  })
+    checkStorage("USER_LOGGED", async (id: any) => {
+      setUserId(id);
+      setShowLoading(true);
+      const url = `/boatsRecords/getBoatRecordByUser/${id}`;
+      hideLoadingModal(() => {
+        fetchData(url).then((res) => {
+          setBoats(res.boatsRecord);
+        });
+      });
     });
-  }, []);
+  }, [route]);
 
   const getBoatRecordByUser = async () => {
-    const url = `/boatsRecords/geatBoatRecordByUser/${userId}`;
+    const url = `/boatsRecords/getBoatRecordByUser/${userId}`;
     fetchData(url).then((res) => {
       setBoats(res.boatsRecord);
     });
   };
 
   const redirectToRecordBoats = (id: any) => {
-    navigation.navigate("RecordBoats", {id: id, editMode: false, boats: [{}]});
-	console.log(id)
+    navigation.navigate("RecordBoats", {
+      id: id,
+      editMode: false,
+      boats: [{}],
+    });
+    console.log(id);
   };
 
   const hideLoadingModal = (callback: Function) => {
@@ -55,30 +58,35 @@ export default function MyBoats({ navigation }: any) {
 
   return (
     <Container>
-      <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-
-      <View style={{ height: "100%" }}>
+      <HeaderComponent />
+      <View style={{alignItems:'center', marginBottom:3 }}>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("AddBoatsMsg")}</Text>
+      </View>
+      <View
+        style={{
+          marginVertical: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <TouchableOpacity
+          style={styles.redirectButton}
+          onPress={() => {
+            redirectToRecordBoats(userId);
+          }}
+        >
+          <Text style={styles.buttonText}>{translation.t("add")}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: "85%", marginTop: 5 }}>
         <FlatList
           columnWrapperStyle={{ justifyContent: "space-around" }}
           refreshing={fetching}
           data={boats}
           onRefresh={getBoatRecordByUser}
           style={styles.body}
-		  ListHeaderComponent={
-			<View style={{justifyContent: "center", alignItems: "flex-end", width: "100%"}}>
-			<TouchableOpacity
-                style={styles.redirectButton}
-                onPress={() => {
-					redirectToRecordBoats(userId);
-                }}
-              >
-                <Text style={styles.buttonText}>
-                  +
-                </Text>
-              </TouchableOpacity>
-			  </View>
-		  }
           renderItem={({ item, index }: any) => (
             <TouchableOpacity
               style={{
@@ -87,7 +95,15 @@ export default function MyBoats({ navigation }: any) {
                 alignItems: "center",
                 width: "35%",
               }}
-              onPress={() => navigation.navigate("RecordBoats", {id: userId, editMode: true, boats: boats.map((value) => value).filter((e: any) => e.id === item.id)})}
+              onPress={() =>
+                navigation.navigate("RecordBoats", {
+                  id: userId,
+                  editMode: true,
+                  boats: boats
+                    .map((value) => value)
+                    .filter((e: any) => e.id === item.id),
+                })
+              }
               key={item.id}
             >
               <View style={{ height: 80, width: 80, marginBottom: 10 }}>
@@ -135,10 +151,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
+    // marginTop: 20,
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 18,
+    fontWeight: "bold",
   },
 });

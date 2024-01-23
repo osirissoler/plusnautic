@@ -15,7 +15,7 @@ export default function LanguageScreen({ navigation }: any) {
 	useEffect(() => {
 		translate();
 		checkStorage('USER_LOCALE', (response: any) => {
-			if (!!response) navigation.reset({ index: 0, routes: [{ name: 'SignIn' }] });
+			if (!!response) navigation.reset({ index: 0, routes: [{ name: 'Step1' }] });
 			else {
 				changeDefaultLanguage(Localization.locale);
 				setShowTranslation(true);
@@ -48,7 +48,7 @@ export default function LanguageScreen({ navigation }: any) {
 							justifyContent: 'center',
 							alignItems: 'center'
 						},
-						buttonLocale.includes(locale) && { backgroundColor: '#128780', borderWidth: 0 }
+						buttonLocale.includes(locale) && { backgroundColor: '#5f7ceb', borderWidth: 0 }
 					]}
 				>
 					{buttonLocale.includes(locale) && <FontAwesome name='check' size={10} color={'#fff'} />}
@@ -75,7 +75,7 @@ export default function LanguageScreen({ navigation }: any) {
 						</View>
 						<TouchableOpacity
 							style={styles.loginButton}
-							onPress={() => navigation.reset({ index: 0, routes: [{ name: 'SignIn' }] })}
+							onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Step1' }] })}
 						>
 							<Text style={styles.loginButtonText}>{translation.t('languageNextButtonText')}</Text>
 						</TouchableOpacity>
@@ -114,14 +114,14 @@ const styles = StyleSheet.create({
 		color: '#000'
 	},
 	buttonActive: {
-		backgroundColor: '#12878020',
-		borderColor: '#128780'
+		backgroundColor: '#8060C620',
+		borderColor: '#8060C6'
 	},
 	buttonActiveText: {},
 	loginButton: {
 		width: '100%',
 		height: 50,
-		backgroundColor: '#128780',
+		backgroundColor: '#5f7ceb',
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 10,

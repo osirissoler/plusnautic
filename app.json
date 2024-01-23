@@ -8,7 +8,7 @@
     "scheme": "plusnautic",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/fulllogo.jpg",
+      "image": "./assets/images/fulllogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "bundleIdentifier": "com.plusnautica2.app",
-      "buildNumber": "1",
+      "buildNumber": "3",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you change your profile image.",
         "NSCameraUsageDescription": "The app uses your camera to let you take a picture and set it as your profile image.",

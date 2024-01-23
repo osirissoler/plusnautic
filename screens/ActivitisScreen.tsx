@@ -38,7 +38,7 @@ export default function ActivityScreen({ navigation, route }: any) {
                     width: '100%', height: '100%', padding: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: '#F7F7F7',
+                    backgroundColor: 'white',
                     borderRadius: 15,
                     marginVertical: 10,
                     minHeight: 200
