@@ -46,6 +46,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
   const [Pharmacys, setPharmacys]: any = useState([]);
   const [products, setProducts]: any = useState([]);
   const [product_id, setProduct_id]: any = useState(87);
+  const [pharmacy_id, setPharmacy_id]: any = useState(87);
 
   const validationSchema = yup.object().shape({
     description: yup.string().required("Description is required"),
@@ -64,6 +65,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             boatsRecord_id: boatsRecord_id,
             token: token,
             product_id,
+            pharmacy_id:pharmacy_id
           };
           await sendData(url, data).then((response) => {
             sendFile(response.services.id);
@@ -344,6 +346,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       searchPlaceholder={translation.t("Search")}
                       // value={values.boatsRecord_id}
                       onChange={async (items: any) => {
+                        setPharmacy_id(items.id)
                         let url = `/products/getProductsByPharmacy/${items.id}`;
                         fetchData(url).then((res: any) => {
                           if (res.ok) {
