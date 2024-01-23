@@ -54,7 +54,7 @@
   "homePopularText": "Popular Pack",
   "homeViewAllText": "View All",
   "homeNoProductsText": "No apartments available within this building...",
-  "homeNoCategoriestext": "There are no active categories...",
+  "homeNoCategoriestext": "There are no active type services",
   "homePharmacyChangeAlert": "Cannot change the pharmacy, you already have products on the shopping cart.",
   "listProductsSearchPlaceholder": "Search a name of a product",
   "listCategoriesSearchPlaceholder": "Search building",

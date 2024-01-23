@@ -43,14 +43,12 @@ export default function SendServicesScreen({ navigation, route }: any) {
   const [showLoading, setShowLoading]: any = useState(false);
   const [images, setImages]: any = useState([]);
   const [refre, setRefre]: any = useState(false);
+  const [Pharmacys, setPharmacys]: any = useState([]);
+  const [products, setProducts]: any = useState([]);
+  const [product_id, setProduct_id]: any = useState(87);
 
   const validationSchema = yup.object().shape({
     description: yup.string().required("Description is required"),
-    // senderFaxNumber: yup.string().required('Sender fax number is required'),
-    // senderEmail: yup.string().email('Please enter valid sender email').required('Sender email is required'),
-    // receiverName: yup.string().required('Receiver name is required'),
-    // receiverFaxNumber: yup.string().required('Receiver fax number is required'),
-    // receiverEmail: yup.string().email('Please enter valid receiver email').required('Receiver email is required')
   });
 
   const send = async (item: any) => {
@@ -65,7 +63,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             user_id: id,
             boatsRecord_id: boatsRecord_id,
             token: token,
-            product_id:87
+            product_id,
           };
           await sendData(url, data).then((response) => {
             sendFile(response.services.id);
@@ -81,14 +79,29 @@ export default function SendServicesScreen({ navigation, route }: any) {
   };
   useEffect(() => {
     geatBoatRecordByUser();
+    getPharmacies();
   }, []);
+
+  const getPharmacies = async () => {
+    let url = `/pharmacies/getPharmacies`;
+    await fetchData(url).then((response) => {
+      if (response.ok) {
+        setPharmacys(response.pharmacy);
+      } else {
+        setPharmacys([]);
+      }
+    });
+  };
 
   const geatBoatRecordByUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
-      let url = `/boatsRecords/geatBoatRecordByUser/${id}`;
+      const url = `/boatsRecords/getBoatRecordByUser/${id}`;
       await fetchData(url).then((response) => {
         if (response.ok) {
           setBoatsRecord(response.boatsRecord);
+          console.log(response);
+        } else {
+          setBoatsRecord([]);
         }
       });
     });
@@ -113,6 +126,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
         {
           text: translation.t("profilePictureGaleryText"), // Upload from galery
           onPress: () => pickImg(2),
+        },
+        {
+          text: translation.t("Cancel"), // Upload from galery
         },
       ],
       { cancelable: true, onDismiss: () => setIsSelecting(false) }
@@ -180,136 +196,210 @@ export default function SendServicesScreen({ navigation, route }: any) {
         </Text>
       </View>
 
-      <View style={{ maxHeight: "100%", marginHorizontal: 10 }}>
-        <Formik
-          validationSchema={validationSchema}
-          initialValues={{
-            description: "",
-            boatsRecord_id: "",
-          }}
-          onSubmit={(values) => {
-            send(values);
+      <View
+        style={{
+          height: "92%",
+          // backgroundColor: "green",
+          marginHorizontal: 10,
+        }}
+      >
+        <View
+          style={{
+            maxHeight: "30%",
+            justifyContent: "center",
+            alignItems: "center",
+            // borderWidth: 1,
           }}
         >
-          {/* //TODO Crear la solicitud de servicios poner que se envie las fotos, description, bote, y el muelle */}
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            isValid,
-            errors,
-            touched,
-          }) => (
-            <View style={{ height: "100%" }}>
-              <View style={{ maxHeight: "40%", backgroundColor: "white" }}>
-                <TouchableOpacity
-                  style={{
-                    width: "30%",
-                    height: 50,
-                    backgroundColor: "#5f7ceb",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                  }}
-                  onPress={() => openImagePickerAsync()}
-                >
-                  <FontAwesome name="file-image-o" size={20} color={"white"} />
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    Select image
-                  </Text>
-                </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "40%",
+              height: "auto",
+              backgroundColor: "#5f7ceb",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 10,
+              padding: 10,
+            }}
+            onPress={() => openImagePickerAsync()}
+          >
+            <FontAwesome name="file-image-o" size={20} color={"white"} />
+            <Text style={{ color: "white", fontWeight: "bold" }}>
+              {translation.t("SelectImage")}
+            </Text>
+          </TouchableOpacity>
 
-                <View style={{ maxHeight: "70%" }}>
-                  {Object.keys(images).length > 0 && (
-                    <FlatList
-                      refreshing={refre}
-                      style={{ marginTop: 4 }}
-                      data={images}
-                      renderItem={({ item }: any) => (
-                        <TouchableOpacity>
-                          <View>
-                            <Image
-                              source={{ uri: item.uri }}
-                              style={{ width: 100, height: 100 }}
-                            />
-                          </View>
-                        </TouchableOpacity>
+          <View style={{ maxHeight: "70%", }}>
+            {Object.keys(images).length > 0 && (
+              <FlatList
+                refreshing={refre}
+                style={{ marginTop: 4 }}
+                data={images}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity>
+                    <View>
+                      <Image
+                        source={{ uri: item.uri }}
+                        style={{ width: 100, height: 100 }}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.uri}
+                numColumns={4}
+              />
+            )}
+          </View>
+        </View>
+        {/* formulario */}
+        <View style={{ height: "70%" }}>
+          <Formik
+            validationSchema={validationSchema}
+            initialValues={{
+              description: "",
+              boatsRecord_id: "",
+            }}
+            onSubmit={(values) => {
+              send(values);
+            }}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              isValid,
+              errors,
+              touched,
+            }) => (
+              <View style={{ height: "100%" }}>
+                <ScrollView style={{ height: "100%" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ width: "100%" }}>
+                      <Text style={styles.labelInput}></Text>
+                      {touched.description && errors.description && (
+                        <Text style={{ color: "red" }}>
+                          {errors.description}
+                        </Text>
                       )}
-                      keyExtractor={(item) => item.uri}
-                      numColumns={4}
-                    />
-                  )}
-                </View>
-              </View>
-              <ScrollView style={{ maxHeight: "60%" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={{ width: "100%" }}>
-                    <Text style={styles.labelInput}></Text>
-                    {touched.description && errors.description && (
-                      <Text style={{ color: "red" }}>{errors.description}</Text>
-                    )}
-                    <Text style={styles.labelInput}>Description</Text>
-                    <TextInput
-                      style={styles.textInput}
-                      multiline={true}
-                      numberOfLines={4}
-                      onChangeText={handleChange("description")}
-                      onBlur={handleBlur("description")}
-                      value={values.description}
-                      placeholder={"description of the problem"}
+                      <Text style={styles.labelInput}>
+                        {translation.t("Description")}
+                      </Text>
+                      <TextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        numberOfLines={4}
+                        onChangeText={handleChange("description")}
+                        onBlur={handleBlur("description")}
+                        value={values.description}
+                        placeholder={translation.t("DescriptionProblem")}
+                      />
+                    </View>
+                  </View>
+
+                  {/* Bote */}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={boatsRecord}
+                      search
+                      maxHeight={300}
+                      labelField="boat_name"
+                      valueField={""}
+                      placeholder="Seleciona  Bote"
+                      searchPlaceholder="Search bote"
+                      value={values.boatsRecord_id}
+                      onChange={(items: any) => {
+                        setBoatsRecord_id(items.id);
+                      }}
                     />
                   </View>
-                </View>
-                <View>
-                  <Dropdown
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    // iconStyle={styles.iconStyle}
-                    iconColor={"#5f7ceb"}
-                    data={boatsRecord}
-                    search
-                    maxHeight={300}
-                    labelField="boat_name"
-                    valueField={""}
-                    placeholder="Seleciona  Bote"
-                    searchPlaceholder="Search bote"
-                    value={values.boatsRecord_id}
-                    onChange={(items: any) => {
-                      setBoatsRecord_id(items.id);
-                    }}
-                  />
-                </View>
 
-                <TouchableOpacity
-                  style={[
-                    {
-                      width: "100%",
-                      height: 50,
-                      backgroundColor: "#5f7ceb",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 10,
-                      marginTop: 40,
-                    },
-                    !isValid && { backgroundColor: "#FB4F03" },
-                  ]}
-                  onPress={() => handleSubmit()}
-                >
-                  <Text style={{ color: "#ffffff", fontSize: 18 }}>Send</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          )}
-        </Formik>
+                  {/* Marinas o pharmacys*/}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={Pharmacys}
+                      search
+                      maxHeight={300}
+                      labelField="name"
+                      valueField={""}
+                      placeholder={translation.t("ChooseMarine")}
+                      searchPlaceholder={translation.t("Search")}
+                      // value={values.boatsRecord_id}
+                      onChange={async (items: any) => {
+                        let url = `/products/getProductsByPharmacy/${items.id}`;
+                        fetchData(url).then((res: any) => {
+                          if (res.ok) {
+                            setProducts(res.pharmacyproduct);
+                          } else {
+                            setProducts([]);
+                          }
+                        });
+                      }}
+                    />
+                  </View>
+
+                  {/* muelles */}
+                  <View>
+                    <Dropdown
+                      style={styles.dropdown}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      // iconStyle={styles.iconStyle}
+                      iconColor={"#5f7ceb"}
+                      data={products}
+                      search
+                      maxHeight={300}
+                      labelField="product_name"
+                      valueField={""}
+                      placeholder={translation.t("ChooseDocks")}
+                      searchPlaceholder={translation.t("Search")}
+                      onChange={(items: any) => {
+                        setProduct_id(items.pharmacy_product_id);
+                      }}
+                    />
+                  </View>
+
+                  <TouchableOpacity
+                    style={[
+                      {
+                        width: "100%",
+                        height: 50,
+                        backgroundColor: "#5f7ceb",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10,
+                        marginTop: 5,
+                      },
+                      !isValid && { backgroundColor: "#FB4F03" },
+                    ]}
+                    onPress={() => handleSubmit()}
+                  >
+                    <Text style={{ color: "#ffffff", fontSize: 18 }}>Send</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </View>
+            )}
+          </Formik>
+        </View>
       </View>
     </Container>
   );
