@@ -277,5 +277,8 @@
   "ClientName": "Client Name",
   "Status": "Status",
   "Amount": "Amount",
-  "PaymentDetail": "Payment Details"
+  "PaymentDetail": "Payment Details",
+  "NotificationMsg":"These are your notifications",
+  "TypeOfNotification":"Type of notification",
+  "ServiceCreate":"The service has been sent successfully"
 }

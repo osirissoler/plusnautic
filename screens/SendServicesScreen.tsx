@@ -37,46 +37,42 @@ import { Dropdown } from "react-native-element-dropdown";
 let list: any[] = [];
 export default function SendServicesScreen({ navigation, route }: any) {
   const [boatsRecord, setBoatsRecord]: any = useState([]);
-  const [boatsRecord_id, setBoatsRecord_id]: any = useState(null);
   const { translation } = React.useContext(LanguageContext);
   const [isSelecting, setIsSelecting]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [images, setImages]: any = useState([]);
   const [refre, setRefre]: any = useState(false);
-  const [Pharmacys, setPharmacys]: any = useState([]);
-  const [products, setProducts]: any = useState([]);
-  const [product_id, setProduct_id]: any = useState(87);
-  const [pharmacy_id, setPharmacy_id]: any = useState(87);
+  const [pharmacyValues, setPharmacyValues] = useState([]);
+  const [dockValues, setDockValues] = useState([]);
 
   const validationSchema = yup.object().shape({
-    description: yup.string().required("Description is required"),
+    description: yup.string().required(translation.t("DescriptionIsRequired")),
+    boatsRecord_id: yup.string().required(translation.t("BoatIsRequired")),
+    pharmacy_id: yup.string().required(translation.t("MarinaIsRequired")),
+    dock: yup.string().required(translation.t("DockIsRequired")),
   });
 
   const send = async (item: any) => {
-    if (boatsRecord_id != null) {
-      setShowLoading(true);
-      checkStorage("USER_LOGGED", async (id: any) => {
-        checkStorage("TOKEN", async (token: any) => {
-          let url = `/services/createService`;
-          const data = {
-            description: item.description,
-            typeServices_id: route.params.id,
-            user_id: id,
-            boatsRecord_id: boatsRecord_id,
-            token: token,
-            product_id,
-            pharmacy_id:pharmacy_id
-          };
-          await sendData(url, data).then((response) => {
-            sendFile(response.services.id);
-            // if (response.ok) { showErrorToast('The service has been sent successfully') }
-            // navigation.goBack()
-          });
+    setShowLoading(true);
+    checkStorage("USER_LOGGED", async (id: any) => {
+      checkStorage("TOKEN", async (token: any) => {
+        let url = `/services/createService`;
+        const data = {
+          description: item.description,
+          typeServices_id: route.params.id,
+          user_id: id,
+          boatsRecord_id: item.boatsRecord_id,
+          token: token,
+          product_id: item.dock,
+          pharmacy_id: item.pharmacy_id,
+        };
+        await sendData(url, data).then((response) => {
+          sendFile(response.services.id);
+          // if (response.ok) { showErrorToast('The service has been sent successfully') }
+          // navigation.goBack()
         });
       });
-    } else {
-      alert("Please select a boat");
-    }
+    });
     // setShowLoading(false)
   };
   useEffect(() => {
@@ -86,12 +82,12 @@ export default function SendServicesScreen({ navigation, route }: any) {
 
   const getPharmacies = async () => {
     let url = `/pharmacies/getPharmacies`;
-    await fetchData(url).then((response) => {
-      if (response.ok) {
-        setPharmacys(response.pharmacy);
-      } else {
-        setPharmacys([]);
-      }
+    fetchData(url).then(async (res: any) => {
+      const mappedValues = res.pharmacy.map((pharmacy: any) => ({
+        label: pharmacy.name,
+        value: pharmacy.id,
+      }));
+      setPharmacyValues(mappedValues);
     });
   };
 
@@ -100,14 +96,30 @@ export default function SendServicesScreen({ navigation, route }: any) {
       const url = `/boatsRecords/getBoatRecordByUser/${id}`;
       await fetchData(url).then((response) => {
         if (response.ok) {
-          setBoatsRecord(response.boatsRecord);
-          console.log(response);
+          const mappedValues = response.boatsRecord.map((boat: any) => ({
+            label: boat.boat_name,
+            value: boat.id,
+          }));
+          setBoatsRecord(mappedValues);
         } else {
           setBoatsRecord([]);
         }
       });
     });
   };
+
+  const searchDock = async (id: any) => {
+    const url = `/products/getProductsByPharmacy/${id}`;
+    fetchData(url).then((res: any) => {
+      const mappedValues = res.pharmacyproduct.map((product: any) => ({
+        label: product.product_name,
+        value: product.product_id,
+      }));
+      console.log(mappedValues);
+      setDockValues(mappedValues);
+    });
+  };
+
   const showErrorToast = (message: string) => {
     Toast.show(message, {
       duration: Toast.durations.LONG,
@@ -174,7 +186,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
     setTimeout(() => {
       setImages([]);
       setShowLoading(false);
-      showErrorToast("The service has been sent successfully");
+      showErrorToast(translation.t("ServiceCreate"));
       navigation.goBack();
     }, 1500);
   };
@@ -190,8 +202,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
           style={{
             fontSize: 16,
             textAlign: "center",
-            marginTop: 10,
-            marginBottom: 10,
+            marginVertical: 10
           }}
         >
           {route.params.title}
@@ -207,7 +218,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
       >
         <View
           style={{
-            maxHeight: "30%",
+            maxHeight: "21%",
             justifyContent: "center",
             alignItems: "center",
             // borderWidth: 1,
@@ -231,7 +242,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             </Text>
           </TouchableOpacity>
 
-          <View style={{ maxHeight: "70%", }}>
+          <View style={{ maxHeight: "70%" }}>
             {Object.keys(images).length > 0 && (
               <FlatList
                 refreshing={refre}
@@ -254,12 +265,14 @@ export default function SendServicesScreen({ navigation, route }: any) {
           </View>
         </View>
         {/* formulario */}
-        <View style={{ height: "70%" }}>
+        <View style={{ height: "85%" }}>
           <Formik
             validationSchema={validationSchema}
             initialValues={{
               description: "",
               boatsRecord_id: "",
+              pharmacy_id: "",
+              dock: "",
             }}
             onSubmit={(values) => {
               send(values);
@@ -273,6 +286,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
               isValid,
               errors,
               touched,
+              setFieldValue,
             }) => (
               <View style={{ height: "100%" }}>
                 <ScrollView style={{ height: "100%" }}>
@@ -285,18 +299,18 @@ export default function SendServicesScreen({ navigation, route }: any) {
                   >
                     <View style={{ width: "100%" }}>
                       <Text style={styles.labelInput}></Text>
-                      {touched.description && errors.description && (
-                        <Text style={{ color: "red" }}>
-                          {errors.description}
-                        </Text>
-                      )}
                       <Text style={styles.labelInput}>
                         {translation.t("Description")}
                       </Text>
+                      {touched.description && errors.description && (
+                        <Text style={{ color: "red", marginVertical: 2 }}>
+                          {errors.description}
+                        </Text>
+                      )}
                       <TextInput
                         style={styles.textInput}
                         multiline={true}
-                        numberOfLines={4}
+                        numberOfLines={1}
                         onChangeText={handleChange("description")}
                         onBlur={handleBlur("description")}
                         value={values.description}
@@ -307,6 +321,14 @@ export default function SendServicesScreen({ navigation, route }: any) {
 
                   {/* Bote */}
                   <View>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Boat")}
+                    </Text>
+                    {touched.boatsRecord_id && errors.boatsRecord_id && (
+                        <Text style={{ color: "red", marginVertical: 2 }}>
+                          {errors.boatsRecord_id}
+                        </Text>
+                      )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
@@ -317,66 +339,72 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       data={boatsRecord}
                       search
                       maxHeight={300}
-                      labelField="boat_name"
-                      valueField={""}
-                      placeholder="Seleciona  Bote"
-                      searchPlaceholder="Search bote"
-                      value={values.boatsRecord_id}
+                      labelField="label"
+                      valueField={"value"}
+                      placeholder={translation.t("SelectBoat")}
+                      searchPlaceholder={translation.t("SearchBoat")}
                       onChange={(items: any) => {
-                        setBoatsRecord_id(items.id);
+                        setFieldValue("boatsRecord_id", items.value);
                       }}
                     />
                   </View>
 
                   {/* Marinas o pharmacys*/}
                   <View>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Marine")}
+                    </Text>
+                    {touched.pharmacy_id && errors.pharmacy_id && (
+                        <Text style={{ color: "red", marginVertical: 2 }}>
+                          {errors.pharmacy_id}
+                        </Text>
+                      )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
-                      // iconStyle={styles.iconStyle}
-                      iconColor={"#5f7ceb"}
-                      data={Pharmacys}
+                      iconStyle={styles.iconStyle}
+                      data={pharmacyValues}
                       search
                       maxHeight={300}
-                      labelField="name"
-                      valueField={""}
+                      labelField="label"
+                      valueField="value"
                       placeholder={translation.t("ChooseMarine")}
                       searchPlaceholder={translation.t("Search")}
-                      // value={values.boatsRecord_id}
-                      onChange={async (items: any) => {
-                        setPharmacy_id(items.id)
-                        let url = `/products/getProductsByPharmacy/${items.id}`;
-                        fetchData(url).then((res: any) => {
-                          if (res.ok) {
-                            setProducts(res.pharmacyproduct);
-                          } else {
-                            setProducts([]);
-                          }
-                        });
+                      value={values.pharmacy_id}
+                      onChange={(items: any) => {
+                        setFieldValue("pharmacy_id", items.value);
+                        searchDock(items.value);
                       }}
                     />
                   </View>
 
                   {/* muelles */}
                   <View>
+                    <Text style={styles.labelInput}>
+                      {translation.t("Docks")}
+                    </Text>
+                    {touched.dock && errors.dock && (
+                        <Text style={{ color: "red", marginVertical: 2 }}>
+                          {errors.dock}
+                        </Text>
+                      )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
-                      // iconStyle={styles.iconStyle}
-                      iconColor={"#5f7ceb"}
-                      data={products}
+                      iconStyle={styles.iconStyle}
+                      data={dockValues}
                       search
                       maxHeight={300}
-                      labelField="product_name"
-                      valueField={""}
+                      labelField="label"
+                      valueField="value"
                       placeholder={translation.t("ChooseDocks")}
                       searchPlaceholder={translation.t("Search")}
                       onChange={(items: any) => {
-                        setProduct_id(items.pharmacy_product_id);
+                        setFieldValue("dock", items.value);
                       }}
                     />
                   </View>
@@ -396,7 +424,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
                     ]}
                     onPress={() => handleSubmit()}
                   >
-                    <Text style={{ color: "#ffffff", fontSize: 18 }}>Send</Text>
+                    <Text style={{ color: "#ffffff", fontSize: 18 }}>
+                      {translation.t("Send")}
+                    </Text>
                   </TouchableOpacity>
                 </ScrollView>
               </View>
@@ -455,7 +485,7 @@ const styles = StyleSheet.create({
     color: "#8B8B97",
   },
   textInput: {
-    height: 150,
+    height: 80,
     width: "100%",
     borderColor: "#5f7ceb",
     borderWidth: 0.5,
@@ -492,34 +522,26 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     marginBottom: 20,
+    borderColor: "#5f7ceb",
+    borderWidth: 0.5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   icon: {
     marginRight: 5,
   },
   placeholderStyle: {
     fontSize: 16,
-    height: 50,
-    width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#FFFFFF",
-    paddingRight: 10,
     paddingLeft: 10,
-    paddingTop: 13,
-    borderRadius: 5,
-    marginBottom: 3,
+    color: "gray",
   },
   selectedTextStyle: {
     height: 50,
     width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#FFFFFF",
     paddingRight: 10,
     paddingLeft: 10,
     paddingTop: 13,
     borderRadius: 5,
-    marginBottom: 3,
   },
   iconStyle: {
     width: 20,
@@ -537,4 +559,3 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-

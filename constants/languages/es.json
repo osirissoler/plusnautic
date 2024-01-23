@@ -280,5 +280,8 @@
   "ClientName":"Nombre del cliente",
   "Status":"Estado",
   "Amount":"Monto",
-  "PaymentDetail":"Detalles de pago"
+  "PaymentDetail":"Detalles de pago",
+  "NotificationMsg":"Estas son tus notificaciones",
+  "TypeOfNotification":"Tipo de notificacion",
+  "ServiceCreate":"El servicio ha sido creado correctamente"
 }

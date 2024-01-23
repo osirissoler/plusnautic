@@ -24,7 +24,6 @@ export default function NotificationScreen({ navigation }: any) {
   const [notifications, setNotifications] = useState([])
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
     setShowLoading(true);
     setFetching(true);
 
@@ -35,7 +34,6 @@ export default function NotificationScreen({ navigation }: any) {
       setFetching(false);
       setShowLoading(false);
     }, 2000);
-  });
   }, []);
 
   const getNotification = async () => {
@@ -43,7 +41,6 @@ export default function NotificationScreen({ navigation }: any) {
     fetchData(url).then((response) => {
       if (response.ok) {
         setNotifications(response.notification);
-        console.log(response.notification)
       }
     });
   };
@@ -60,7 +57,7 @@ export default function NotificationScreen({ navigation }: any) {
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{alignItems:'center', marginBottom: 30 }}>
-        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestInvitedMsg")}</Text>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("NotificationMsg")}</Text>
       </View>
       <View style={{ height: "83%", marginBottom: 0 }}>
         {notifications?.length > 0 ? (
@@ -127,7 +124,7 @@ export default function NotificationScreen({ navigation }: any) {
                       </Text>
                       <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          Tipo de notification:
+                          {translation.t("TypeOfNotification")}:
                         </Text>
                         {item.typeNotification}
                       </Text>

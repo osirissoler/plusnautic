@@ -33,7 +33,7 @@ export default function PaymentNotificationScreen({ navigation, route }: any) {
   return (
     <View style={{ backgroundColor: "#F2F2F2", height: "100%" }}>
       <Text style={{ padding: 10, fontSize: 20, fontWeight: "bold" }}>
-        Payment
+        {translation.t("PaymentDetail")}
       </Text>
 
       {/* Client name */}

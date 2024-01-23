@@ -598,7 +598,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 13,
     borderRadius: 5,
-    marginBottom: 3,
   },
   iconStyle: {
     width: 20,
