@@ -13,7 +13,7 @@ import { AntDesign, Octicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as yup from "yup";
 import HeaderComponent from "../components/Header";
-import { Container, Loading } from "../components/Shared";
+import { Container, Loading, checkStorage } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";

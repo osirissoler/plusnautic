@@ -159,7 +159,8 @@ function RootNavigator({ route }: any) {
       <Stack.Screen
         name="Solicitudes"
         component={SendServicesScreen}
-        options={{ headerShown: true, animation: "fade" }}
+        options={{ headerShown: true, headerTitle: translation.t("Requests"),
+          animation: "fade" }}
       />
 
       <Stack.Screen

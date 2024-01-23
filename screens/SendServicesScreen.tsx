@@ -37,15 +37,19 @@ import { Dropdown } from "react-native-element-dropdown";
 let list: any[] = [];
 export default function SendServicesScreen({ navigation, route }: any) {
   const [boatsRecord, setBoatsRecord]: any = useState([]);
-  const [boatsRecord_id, setBoatsRecord_id]: any = useState(null);
   const { translation } = React.useContext(LanguageContext);
   const [isSelecting, setIsSelecting]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [images, setImages]: any = useState([]);
   const [refre, setRefre]: any = useState(false);
+  const [pharmacyValues, setPharmacyValues] = useState([]);
+  const [dockValues, setDockValues] = useState([]);
+  const [dockSelected, setDockSelected] = useState("");
 
   const validationSchema = yup.object().shape({
-    description: yup.string().required("Description is required"),
+    description: yup.string().required(translation.t("DescriptionIsRequired")),
+    pharmacy_id: yup.string().required(translation.t("MarinaIsRequired")),
+    dock: yup.string().required(translation.t("DockIsRequired")),
     // senderFaxNumber: yup.string().required('Sender fax number is required'),
     // senderEmail: yup.string().email('Please enter valid sender email').required('Sender email is required'),
     // receiverName: yup.string().required('Receiver name is required'),
@@ -53,8 +57,32 @@ export default function SendServicesScreen({ navigation, route }: any) {
     // receiverEmail: yup.string().email('Please enter valid receiver email').required('Receiver email is required')
   });
 
+  useEffect(() => {
+    checkStorage('USER_LOGGED', (id: any) => {
+      const url = `/userPharmacy/getUserPharmacyByUserId/${id}`;
+      fetchData(url).then(async (res) => {
+        const mappedValues = res.userPharmacy.map((pharmacy: any) => ({
+          label: pharmacy.pharmacy_name,
+          value: pharmacy.pharmacy_id,
+        }));
+        setPharmacyValues(mappedValues);
+    })
+    })
+  }, [])
+
+  const searchDock = async (id: any) => {
+      const url = `/products/getProductsByPharmacy/${id}`;
+      fetchData(url).then((res: any) => {
+        const mappedValues = res.pharmacyproduct.map((product: any) => ({
+          label: product.product_name,
+          value: product.product_id,
+        }));
+        console.log(mappedValues);
+        setDockValues(mappedValues);
+      });
+  };
+
   const send = async (item: any) => {
-    if (boatsRecord_id != null) {
       setShowLoading(true);
       checkStorage("USER_LOGGED", async (id: any) => {
         checkStorage("TOKEN", async (token: any) => {
@@ -63,9 +91,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
             description: item.description,
             typeServices_id: route.params.id,
             user_id: id,
-            boatsRecord_id: boatsRecord_id,
             token: token,
-            product_id:87
+            pharmacy_id: item.pharmacy_id,
+            product_id:item.dock
           };
           await sendData(url, data).then((response) => {
             sendFile(response.services.id);
@@ -74,10 +102,6 @@ export default function SendServicesScreen({ navigation, route }: any) {
           });
         });
       });
-    } else {
-      alert("Please select a boat");
-    }
-    // setShowLoading(false)
   };
   useEffect(() => {
     geatBoatRecordByUser();
@@ -114,6 +138,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
           text: translation.t("profilePictureGaleryText"), // Upload from galery
           onPress: () => pickImg(2),
         },
+        {
+          text: translation.t('Cancel')
+        }
       ],
       { cancelable: true, onDismiss: () => setIsSelecting(false) }
     );
@@ -185,7 +212,8 @@ export default function SendServicesScreen({ navigation, route }: any) {
           validationSchema={validationSchema}
           initialValues={{
             description: "",
-            boatsRecord_id: "",
+            pharmacy_id: "",
+            dock:"",
           }}
           onSubmit={(values) => {
             send(values);
@@ -200,6 +228,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             isValid,
             errors,
             touched,
+            setFieldValue
           }) => (
             <View style={{ height: "100%" }}>
               <View style={{ maxHeight: "40%", backgroundColor: "white" }}>
@@ -216,7 +245,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                 >
                   <FontAwesome name="file-image-o" size={20} color={"white"} />
                   <Text style={{ color: "white", fontWeight: "bold" }}>
-                    Select image
+                    {translation.t("SelectImage")}
                   </Text>
                 </TouchableOpacity>
 
@@ -242,7 +271,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                   )}
                 </View>
               </View>
-              <ScrollView style={{ maxHeight: "60%" }}>
+              <ScrollView style={{ maxHeight: "70%" }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -252,10 +281,10 @@ export default function SendServicesScreen({ navigation, route }: any) {
                 >
                   <View style={{ width: "100%" }}>
                     <Text style={styles.labelInput}></Text>
+                    <Text style={styles.labelInput}>{translation.t("Description")}</Text>
                     {touched.description && errors.description && (
                       <Text style={{ color: "red" }}>{errors.description}</Text>
                     )}
-                    <Text style={styles.labelInput}>Description</Text>
                     <TextInput
                       style={styles.textInput}
                       multiline={true}
@@ -263,32 +292,65 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       onChangeText={handleChange("description")}
                       onBlur={handleBlur("description")}
                       value={values.description}
-                      placeholder={"description of the problem"}
+                      placeholder={translation.t("DescriptionMsg")}
                     />
-                  </View>
-                </View>
-                <View>
+                     <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Marine")}
+                  </Text>
+                  {touched.pharmacy_id && errors.pharmacy_id && (
+                      <Text style={{ color: "red" }}>{errors.pharmacy_id}</Text>
+                    )}
                   <Dropdown
                     style={styles.dropdown}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
-                    // iconStyle={styles.iconStyle}
-                    iconColor={"#5f7ceb"}
-                    data={boatsRecord}
+                    iconStyle={styles.iconStyle}
+                    data={pharmacyValues}
                     search
                     maxHeight={300}
-                    labelField="boat_name"
-                    valueField={""}
-                    placeholder="Seleciona  Bote"
-                    searchPlaceholder="Search bote"
-                    value={values.boatsRecord_id}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={translation.t("ChooseMarine")}
+                    searchPlaceholder="Search..."
+                    value={values.pharmacy_id}
                     onChange={(items: any) => {
-                      setBoatsRecord_id(items.id);
+                      setFieldValue("pharmacy_id", items.value);
+                      searchDock(items.value);
                     }}
                   />
                 </View>
 
+                <View>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Docks")}
+                  </Text>
+                  {touched.dock && errors.dock && (
+                      <Text style={{ color: "red" }}>{errors.dock}</Text>
+                    )}
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={dockValues}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={translation.t("ChooseDocks")}
+                    searchPlaceholder={translation.t("Search")}
+                    onChange={(items: any) => {
+                      setFieldValue("dock", items.value);
+                      setDockSelected(items.value);
+                    }}
+                  />
+                </View>
+                  </View>
+               
+                </View>
                 <TouchableOpacity
                   style={[
                     {
@@ -304,7 +366,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
                   ]}
                   onPress={() => handleSubmit()}
                 >
-                  <Text style={{ color: "#ffffff", fontSize: 18 }}>Send</Text>
+                  <Text style={{ color: "#ffffff", fontSize: 18 }}>{translation.t("Send")}</Text>
                 </TouchableOpacity>
               </ScrollView>
             </View>
@@ -399,34 +461,27 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     marginBottom: 20,
+    borderColor: "#5f7ceb",
+    borderWidth: 0.5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   icon: {
     marginRight: 5,
   },
   placeholderStyle: {
     fontSize: 16,
-    height: 50,
     width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#FFFFFF",
-    paddingRight: 10,
     paddingLeft: 10,
-    paddingTop: 13,
     borderRadius: 5,
-    marginBottom: 3,
   },
   selectedTextStyle: {
     height: 50,
     width: "100%",
-    borderColor: "#5f7ceb",
-    borderWidth: 0.5,
-    backgroundColor: "#FFFFFF",
     paddingRight: 10,
     paddingLeft: 10,
     paddingTop: 13,
     borderRadius: 5,
-    marginBottom: 3,
   },
   iconStyle: {
     width: 20,

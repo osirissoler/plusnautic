@@ -193,6 +193,7 @@
   "DescriptionProblem": "Description of the problem",
   "SelectBoat": "Select boat",
   "SearchBoat": "Search a boat",
+  "Requests": "Requests",
   "Title": "Title",
   "Boats": "Boats",
   "Boat": "Boat",
@@ -215,6 +216,7 @@
   "DescriptionIsRequired": "Description is required.",
   "BoatIsRequired": "Boat is required.",
   "DockIsRequired": "Dock is required.",
+  "MarinaIsRequired": "Marina is required.",
   "GuestDeleted": "Guest deleted successfully",
   "Confirm": "Confirm",
   "ActionToDo": "What action do you want to perform?",
@@ -271,5 +273,7 @@
   "WrongCode": "Incorrect code",
 "CodeIsUsedMsg": "This code has already been used",
 "DateAfterTodayMsg": "The date must be greater than today",
-"ShowDatePicker":"Select date"
+"ShowDatePicker":"Select date",
+"DescriptionMsg":"Description of the problem"
+
 }

@@ -264,7 +264,7 @@ export default function InvitationScreen({ navigation, route }: any) {
           values,
           isValid,
           errors,
-          touched,
+          touched,x
         }: any) => (
           <View>
             <View

@@ -217,6 +217,7 @@
   "DescriptionIsRequired": "Descripcion es requerido",
   "BoatIsRequired": "El Bote es requerido",
   "DockIsRequired": "El Muelle es requerido",
+  "MarinaIsRequired": "La marina es requerida",
   "GuestDeleted": "Invitado eliminado correctamente",
   "Confirm": "Confirmar",
   "ActionToDo": "¿Que acción desea realizar?",
@@ -274,5 +275,6 @@
   "WrongCode":"Código incorrecto",
   "CodeIsUsedMsg":"Este código ya ha sido utilizado",
   "DateAfterTodayMsg":"La fecha debe ser mayor al día de hoy",
-  "ShowDatePicker":"Seleccionar fecha"
+  "ShowDatePicker":"Seleccionar fecha",
+  "DescriptionMsg":"Descripción del problema"
 }
