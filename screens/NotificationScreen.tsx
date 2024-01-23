@@ -104,7 +104,10 @@ export default function NotificationScreen({ navigation }: any) {
                        <Image
                         source={item.typeNotification_img ? {uri: item.typeNotification_img} : require("../assets/images/notificaciones.png")}
                         style={{ height: 50, width: 50, resizeMode: "contain" }}
-                      />
+                      />: <Image
+                      source={require("../assets/images/notificaciones.png")}
+                      style={{ height: 50, width: 50, resizeMode: "contain" }}
+                    />}
                     </View>
 
                     <View style={{ width: "80%", overflow: "hidden" }}>
