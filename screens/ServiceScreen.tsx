@@ -102,7 +102,7 @@ export default function ServiceScreen({ navigation }: any) {
 	return (
 		<Container>
 			<HeaderComponent />
-			<Text style={styles.title}>Services</Text>
+			<Text style={styles.title}>{translation.t("BottomTabServiceText")}</Text>
 
 			<View>
 				{(Object.keys(typeServices).length > 0 && (
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#F7F7F7',
+		// backgroundColor: '#F7F7F7',
 		borderRadius: 60,
 		marginVertical: 10,
 		width: 100,
