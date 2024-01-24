@@ -246,7 +246,7 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   return (
     <Container
-      style={{ backgroundColor: "#fff", height: "100%" }}
+      style={{ backgroundColor: "#fff" }}
       keyboard={true}
     >
       <HeaderComponent navigation={navigation} />
@@ -268,7 +268,7 @@ export default function InvitationScreen({ navigation, route }: any) {
         }: any) => (
           <View>
             <View
-              style={{ padding: 15, height: `${!editMode ? "80%" : "70%"}` }}
+              style={{ padding: 15, height: `${!editMode ? "86%" : "70%"}` }}
             >
               <ScrollView>
                 <Text style={styles.labelInput}>{translation.t("Title")}</Text>
@@ -531,7 +531,6 @@ export default function InvitationScreen({ navigation, route }: any) {
               </ScrollView>
             </View>
 
-            <View style={{ height: "20%", padding: 10, paddingHorizontal: 15 }}>
               <TouchableOpacity
                 style={
                   isValid
@@ -548,7 +547,6 @@ export default function InvitationScreen({ navigation, route }: any) {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
         )}
       </Formik>
     </Container>
@@ -630,21 +628,19 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     width: "100%",
-    height: "35%",
+    height: 50,
     backgroundColor: "#5f7ceb",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
   },
   registerButtonDisabled: {
     width: "100%",
-    height: "35%",
+    height: 50,
     backgroundColor: "#ccc",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
   },
 
   registerButtonText: {
