@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   Image,
+  Platform,
 } from "react-native";
 import { AntDesign, Octicons } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -263,6 +264,9 @@ export default function RecordBoats({ navigation, route }: any) {
             return setProfilePicture(2);
           },
         },
+        {
+          text: translation.t("Cancel"),
+        }
       ],
       { cancelable: true }
     );
@@ -331,7 +335,7 @@ export default function RecordBoats({ navigation, route }: any) {
           touched,
         }: any) => (
           <View>
-            <ScrollView style={{ padding: 10, height: "80%" }}>
+            <ScrollView style={{ padding: 10, height: "78%"}}>
               <View style={{}}>
                 <Text style={styles.labelInput}>{translation.t("BoatName")}</Text>
                 <TextInput

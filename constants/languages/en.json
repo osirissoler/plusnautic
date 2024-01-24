@@ -237,6 +237,7 @@
   "AirConditioner": "Air conditioner",
   "ElectricPlant": "Electric plant",
   "boatHull": "Boat hull",
+  "BoatName": "Boat name",
   "FullName": "Full name",
   "Phone": "Phone number",
   "TypeEmail": "Type a email",

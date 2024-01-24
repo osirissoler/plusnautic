@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3006/api'
- //'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
+const baseUrl = //'http://localhost:3006/api'
+ 'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
 
 const fetchData = async (url: string) => {
 	try {

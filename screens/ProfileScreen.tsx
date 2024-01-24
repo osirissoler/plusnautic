@@ -85,6 +85,10 @@ export default function ProfileScreen({ navigation }: any) {
           text: translation.t("profilePictureGaleryText"), // Upload from galery
           onPress: () => setProfilePicture(2),
         },
+        {
+          text: translation.t("Cancel"),
+          onPress: () => setIsSelecting(false)
+        }
       ],
       { cancelable: true, onDismiss: () => setIsSelecting(false) }
     );
