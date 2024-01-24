@@ -21,28 +21,19 @@ export default function NotificationScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [fetching, setFetching]: any = useState(false);
-  const [userId, setUserId] = useState(0);
-  const [dockValues, setDockValues]: any = useState([{ label: "" }]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [codeValue, setCodeValue] = useState("");
   const [notifications, setNotifications] = useState([])
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
     setShowLoading(true);
     setFetching(true);
 
     hideLoadingModal(() => {
-      checkStorage("USER_LOGGED", async (id: any) => {
-        setUserId(id);
         getNotification();
-      });
     });
     setTimeout(() => {
       setFetching(false);
       setShowLoading(false);
     }, 2000);
-  });
   }, []);
 
   const getNotification = async () => {
@@ -50,22 +41,7 @@ export default function NotificationScreen({ navigation }: any) {
     fetchData(url).then((response) => {
       if (response.ok) {
         setNotifications(response.notification);
-        console.log(response.notification)
       }
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    Toast.show(message, {
-      duration: Toast.durations.LONG,
-      containerStyle: { backgroundColor: "red", width: "80%" },
-    });
-  };
-
-  const showGoodToast = (message: string) => {
-    Toast.show(message, {
-      duration: Toast.durations.LONG,
-      containerStyle: { backgroundColor: "green", width: "80%" },
     });
   };
 
@@ -76,35 +52,12 @@ export default function NotificationScreen({ navigation }: any) {
     }, 1000);
   };
 
-  const sendCodeToGuest = async () => {
-    try {
-      if(!codeValue){
-        showErrorToast("Debes ingresar el código")
-        return
-      }
-
-      const url = '/guest/updateUserDetailByCode'
-      const data = {code: codeValue, user_id: userId}
-      sendDataPut(url, data).then((response: any) => {
-        if (response.ok) {
-          showGoodToast("Código enviado correctamente");
-          setCodeValue("")
-          setModalVisible(false)
-        } else {
-          showErrorToast(response.message);
-        }
-      });
-    } catch (error) {
-      showErrorToast("Ha occurido un error al enviar codigo");
-    }
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{alignItems:'center', marginBottom: 30 }}>
-        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestInvitedMsg")}</Text>
+        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("NotificationMsg")}</Text>
       </View>
       <View style={{ height: "83%", marginBottom: 0 }}>
         {notifications?.length > 0 ? (
@@ -123,6 +76,7 @@ export default function NotificationScreen({ navigation }: any) {
                   borderRadius: 10,
                   padding: 5,
                 }}
+                onPress={() => navigation.navigate(item.routerName, {router_id: item.router_id})}
               >
                 <View
                   style={{
@@ -149,10 +103,13 @@ export default function NotificationScreen({ navigation }: any) {
                         height: 70,
                       }}
                     >
-                      <Image
-                        source={require("../assets/images/invitacion.png")}
+                      {item.code === "PAYMENT" ? <Image
+                        source={require("../assets/images/payment.png")}
                         style={{ height: 50, width: 50, resizeMode: "contain" }}
-                      />
+                      />: <Image
+                      source={require("../assets/images/notificaciones.png")}
+                      style={{ height: 50, width: 50, resizeMode: "contain" }}
+                    />}
                     </View>
 
                     <View style={{ width: "80%", overflow: "hidden" }}>
@@ -167,7 +124,7 @@ export default function NotificationScreen({ navigation }: any) {
                       </Text>
                       <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          Tipo de notification:
+                          {translation.t("TypeOfNotification")}:
                         </Text>
                         {item.typeNotification}
                       </Text>
@@ -189,43 +146,6 @@ export default function NotificationScreen({ navigation }: any) {
           </View>
         )}
       </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.optionText}>{"Ingresar código"}</Text>
-            <TextInput
-              style={styles.input}
-              placeholder={"Ingresar código"}
-              onChangeText={(text) => setCodeValue(text)}
-              value={codeValue}
-            />
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Button
-                title={translation.t("Cancel")}
-                buttonStyle={{ backgroundColor: "red" }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  setCodeValue("");
-                }}
-              />
-              <Button
-                title={translation.t("Send")}
-                onPress={() => {
-                  sendCodeToGuest()
-                }}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }

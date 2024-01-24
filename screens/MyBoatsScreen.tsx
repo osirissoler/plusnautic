@@ -13,7 +13,7 @@ import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
 import HeaderComponent from "../components/Header";
 
-export default function MyBoats({ navigation, route }: any) {
+export default function MyBoats({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [boats, setBoats] = useState([]);
   const [showLoading, setShowLoading]: any = useState(false);
@@ -21,6 +21,7 @@ export default function MyBoats({ navigation, route }: any) {
   const [userId, setUserId] = useState(0);
 
   useEffect(() => {
+    navigation.addListener('focus', () => {
     checkStorage("USER_LOGGED", async (id: any) => {
       setUserId(id);
       setShowLoading(true);
@@ -31,7 +32,8 @@ export default function MyBoats({ navigation, route }: any) {
         });
       });
     });
-  }, [route]);
+  });
+  }, []);
 
   const getBoatRecordByUser = async () => {
     const url = `/boatsRecords/getBoatRecordByUser/${userId}`;

@@ -63,6 +63,7 @@ import { Image } from "react-native-elements";
 import MyGuestScreen from "../screens/MyGuestScreen";
 import UpdateUserDataScreen from "../screens/UpdateUserDataScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import PaymentNotificationScreen from "../screens/PaymentNotificationScreen";
 
 export default function Navigation({
   colorScheme,
@@ -159,7 +160,8 @@ function RootNavigator({ route }: any) {
       <Stack.Screen
         name="Solicitudes"
         component={SendServicesScreen}
-        options={{ headerShown: true, animation: "fade" }}
+        options={{ headerShown: true, headerTitle: translation.t("Requests"),
+          animation: "fade" }}
       />
 
       <Stack.Screen
@@ -382,7 +384,7 @@ function RootNavigator({ route }: any) {
         name="UpdateUser"
         component={UpdateUserDataScreen}
         options={{
-          headerTitle: translation.t("UpdateUser"),
+          headerTitle: translation.t("MyInformation"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -392,6 +394,17 @@ function RootNavigator({ route }: any) {
       <Stack.Screen
         name="Notification"
         component={NotificationScreen}
+        options={{
+          headerTitle: "Notification",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="PaymentScreen"
+        component={PaymentNotificationScreen}
         options={{
           headerTitle: "Notification",
           headerStyle: { backgroundColor: "#fff" },

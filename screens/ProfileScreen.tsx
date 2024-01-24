@@ -263,7 +263,7 @@ export default function ProfileScreen({ navigation }: any) {
             onPress={() => navigation.navigate("UpdateUser", {userData: user})}
           >
             <Text style={styles.optionText}>
-              {translation.t("UpdateData")}
+              {translation.t("MyInformation")}
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>

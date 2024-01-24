@@ -186,9 +186,9 @@ export default function ListScreen({ navigation }: any) {
                               ? "https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png"
                               : item.driver_img,
                         }}
-                        resizeMode={"cover"}
-                        style={{ width: 30, height: 30 }}
-                        imageStyle={{ borderRadius: 8 }}
+                        style={styles.profilePicture}
+            resizeMode={"cover"}
+            imageStyle={{ borderRadius: 100 }}
                       />
                     </TouchableOpacity>
                     <View style={{}}>
@@ -304,5 +304,10 @@ const styles = StyleSheet.create({
     marginRight: 2,
     color: "gray",
     marginBottom: 3,
+  },
+  profilePicture: {
+    height: 70,
+    width: 70,
+    borderRadius: 100,
   },
 });

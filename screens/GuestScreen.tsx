@@ -24,36 +24,34 @@ export default function GuestScreen({ navigation, route }: any) {
   const [guest, setGuests] = useState([]);
   const [userId, setUserId] = useState(0);
   const [boat, setBoats]: any = useState([]);
-  const [dockValues, setDockValues]: any = useState([{ label: "" }]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [codeValue, setCodeValue] = useState("");
+  const [dockValues, setDockValues]: any = useState([{ label: "" }])
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
-    setShowLoading(true);
-    setFetching(true);
+    navigation.addListener("focus", () => {
+      setShowLoading(true);
+      setFetching(true);
 
-    hideLoadingModal(() => {
-      checkStorage("USER_LOGGED", async (id: any) => {
-        setUserId(id);
-        getGuestByUser(id);
-        searchDock();
-        const url = `/boatsRecords/getBoatRecordByUser/${id}`;
-        fetchData(url).then(async (res: any) => {
-          const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
-            label: boatsRecord.boat_name,
-            value: boatsRecord.id,
-            dock: boatsRecord.dock,
-          }));
-          setBoats(mappedValues);
+      hideLoadingModal(() => {
+        checkStorage("USER_LOGGED", async (id: any) => {
+          setUserId(id);
+          getGuestByUser(id);
+          searchDock();
+          const url = `/boatsRecords/getBoatRecordByUser/${id}`;
+          fetchData(url).then(async (res: any) => {
+            const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
+              label: boatsRecord.boat_name,
+              value: boatsRecord.id,
+              dock: boatsRecord.dock,
+            }));
+            setBoats(mappedValues);
+          });
         });
       });
+      setTimeout(() => {
+        setFetching(false);
+        setShowLoading(false);
+      }, 2000);
     });
-    setTimeout(() => {
-      setFetching(false);
-      setShowLoading(false);
-    }, 2000);
-  });
   }, []);
 
   const searchDock = async () => {
@@ -86,7 +84,7 @@ export default function GuestScreen({ navigation, route }: any) {
     const foundDocksFromMapped = boat.find(
       (a: any) => a.value === boat_id
     ).dock;
-    console.log(foundDocksFromMapped)
+    console.log(foundDocksFromMapped);
     return foundDocksFromMapped;
   };
 
@@ -131,70 +129,38 @@ export default function GuestScreen({ navigation, route }: any) {
     }
   };
 
-  const sendCodeToGuest = async () => {
-    try {
-      if(!codeValue){
-        showErrorToast(translation.t("EnterCodeMsg"))
-        return
-      }
-
-      const url = '/guest/updateUserDetailByCode'
-      const data = {code: codeValue, user_id: userId}
-      sendDataPut(url, data).then((response: any) => {
-        if (response.ok) {
-          showGoodToast(translation.t("CodeSent"));
-          setCodeValue("")
-          setModalVisible(false)
-        } else {
-          showErrorToast(response.message);
-        }
-      });
-    } catch (error) {
-      showErrorToast(translation.t("CodeSentError"));
-    }
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-      <View style={{alignItems:'center', marginBottom:3 }}>
-        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("GuestScreenMsg")}</Text>
-      </View>
-      <View
-        style={{
-          marginVertical: 10,
-          alignItems: "center",
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-between"
-        }}
-      >
-        <TouchableOpacity
-          style={{width: "20%",
-          height: 50,
-          backgroundColor: "#5f7ceb",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10, }}
-          onPress={() =>
-            setModalVisible(true)
-          }
+      <View style={{ alignItems: "center", marginBottom: 3 }}>
+        <Text
+          style={{
+            alignItems: "center",
+            fontWeight: "600",
+            textAlign: "center",
+            fontSize: 15,
+          }}
         >
-          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("Code")}</Text>
-        </TouchableOpacity>
+          {translation.t("GuestScreenMsg")}
+        </Text>
         <TouchableOpacity
-          style={{width: "20%",
-          height: 50,
-          backgroundColor: "#5f7ceb",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10, }}
+          style={{
+            width: "20%",
+            height: 50,
+            backgroundColor: "#5f7ceb",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+            marginVertical: 10
+          }}
           onPress={() =>
             navigation.navigate("CreateInvitations", { showBack: true })
           }
         >
-          <Text style={{color:'white', fontWeight:'bold', fontSize:18}}>{translation.t("add")}</Text>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
+            {translation.t("add")}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={{ height: "83%", marginBottom: 0 }}>
@@ -239,7 +205,9 @@ export default function GuestScreen({ navigation, route }: any) {
                               date: item.date,
                               boat_id: item.boat_id,
                               product_id: item.product_id,
-                              docksId: filterDock(getBoatRecordByUser(item.boat_id))
+                              docksId: filterDock(
+                                getBoatRecordByUser(item.boat_id)
+                              ),
                             },
                           });
                         },
@@ -265,7 +233,7 @@ export default function GuestScreen({ navigation, route }: any) {
                         },
                       },
                       {
-                        text: translation.t("alertButtonNoText"),
+                        text: translation.t("Cancel"),
                       },
                     ]
                   );
@@ -341,49 +309,12 @@ export default function GuestScreen({ navigation, route }: any) {
             )}
           />
         ) : (
-          <View style={{alignItems:'center'}}>
-            <Text>{translation.t("NoGuest")}</Text>
+          <View style={{ justifyContent: "center", alignItems: "center", flex: 1, paddingHorizontal: 10, gap: 20 }}>
+            <Text style={{fontWeight: "bold", fontSize: 16, textAlign: "center"}}>{translation.t("NoGuest")}</Text>
+            <Image source={require("../assets/images/prohibido.png")} style={{height: 80, width: 80}}/>
           </View>
         )}
       </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.optionText}>{translation.t("EnterCode")}</Text>
-            <TextInput
-              style={styles.input}
-              placeholder={"######"}
-              onChangeText={(text) => setCodeValue(text)}
-              value={codeValue}
-            />
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Button
-                title={translation.t("Cancel")}
-                buttonStyle={{ backgroundColor: "#DF4D49", borderRadius: 10, }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  setCodeValue("");
-                }}
-              />
-              <Button
-              buttonStyle={{ backgroundColor: "#5f7ceb", borderRadius: 10, }}
-                title={translation.t("Send")}
-                onPress={() => {
-                  sendCodeToGuest()
-                }}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }

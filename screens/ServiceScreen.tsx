@@ -205,7 +205,7 @@ function ServiceComponent({
   // 			setCountImages(true)
   // 		}
 
-  // 		let url = `/services/createService`
+  // 		let url = /services/createService
   // 		const data = {
   // 			...values,
   // 			typeServices_id: id,
@@ -227,11 +227,11 @@ function ServiceComponent({
   // }
 
   // const sendFile = async (id: any) => {
-  // 	const url = `/services/saveImagesServices/${id}`
+  // 	const url = /services/saveImagesServices/${id}
   // 	images.forEach(async (element: any) => {
   // 		let fileName = element.uri.split('/').pop();
   // 		let match = /\.(\w+)$/.exec(fileName);
-  // 		let fileType = match ? `image/${match[1]}` : `image`;
+  // 		let fileType = match ? image/${match[1]} : image;
 
   // 		let formData = new FormData();
   // 		formData.append('image', { uri: element.uri, name: fileName, fileType });
