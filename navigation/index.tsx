@@ -155,13 +155,24 @@ function RootNavigator({ route }: any) {
       <Stack.Screen
         name="Muelles"
         component={MuellesScreen}
-        options={{ headerShown: true, animation: "fade" }}
+        options={{
+          headerTitle: translation.t("Docks"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+          headerShown: true,
+        }}
       />
       <Stack.Screen
         name="Solicitudes"
         component={SendServicesScreen}
-        options={{ headerShown: true, headerTitle: translation.t("Requests"),
-          animation: "fade" }}
+        options={{
+          headerTitle: translation.t("Requests"),
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
+          headerShown: true,
+        }}
       />
 
       <Stack.Screen
