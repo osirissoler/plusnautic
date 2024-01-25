@@ -38,12 +38,14 @@ export default function GuestScreen({ navigation, route }: any) {
           searchDock();
           const url = `/boatsRecords/getBoatRecordByUser/${id}`;
           fetchData(url).then(async (res: any) => {
-            const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
-              label: boatsRecord.boat_name,
-              value: boatsRecord.id,
-              dock: boatsRecord.dock,
-            }));
-            setBoats(mappedValues);
+            if(res.ok){
+              const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
+                label: boatsRecord.boat_name,
+                value: boatsRecord.id,
+                dock: boatsRecord.dock,
+              }));
+              setBoats(mappedValues);
+            }
           });
         });
       });
@@ -57,12 +59,13 @@ export default function GuestScreen({ navigation, route }: any) {
   const searchDock = async () => {
     const url = `/products/getProducts`;
     fetchData(url).then(async (res: any) => {
-      const mappedValues = await res.product.map((product: any) => ({
-        label: product.name,
-        value: product.id,
-      }));
-      console.log(mappedValues);
-      setDockValues(mappedValues);
+      if(res.ok){
+        const mappedValues = await res.product.map((product: any) => ({
+          label: product.name,
+          value: product.id,
+        }));
+        setDockValues(mappedValues);
+      }
     });
   };
 

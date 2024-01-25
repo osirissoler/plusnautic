@@ -10,11 +10,10 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { checkStorage, Container, Loading } from "../components/Shared";
-import { deleteData, fetchData, sendData, sendDataPut } from "../httpRequests";
+import { Loading, checkLoggedUser, checkStorage } from "../components/Shared";
+import { fetchData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
-import { Button } from "react-native-elements";
 import HeaderComponent from "../components/Header";
 
 export default function NotificationScreen({ navigation }: any) {
@@ -22,13 +21,17 @@ export default function NotificationScreen({ navigation }: any) {
   const [showLoading, setShowLoading]: any = useState(false);
   const [fetching, setFetching]: any = useState(false);
   const [notifications, setNotifications] = useState([])
+  const [userId, setUserId] = useState("")
 
   useEffect(() => {
     setShowLoading(true);
     setFetching(true);
 
     hideLoadingModal(() => {
-        getNotification();
+      checkStorage("USER_LOGGED", (id: string) => {
+        setUserId(id)
+        getNotification(id);
+      })
     });
     setTimeout(() => {
       setFetching(false);
@@ -36,11 +39,12 @@ export default function NotificationScreen({ navigation }: any) {
     }, 2000);
   }, []);
 
-  const getNotification = async () => {
-    const url = `/notification/getNotification`;
+  const getNotification = async (id: string) => {
+    const url = `/notification/getNotification/${id}`;
     fetchData(url).then((response) => {
       if (response.ok) {
         setNotifications(response.notification);
+        console.log(response.notification)
       }
     });
   };
@@ -65,7 +69,7 @@ export default function NotificationScreen({ navigation }: any) {
             refreshing={fetching}
             data={notifications}
             onRefresh={() => {
-                getNotification();
+                getNotification(userId);
             }}
             renderItem={({ item }: any) => (
               <TouchableOpacity
@@ -76,7 +80,7 @@ export default function NotificationScreen({ navigation }: any) {
                   borderRadius: 10,
                   padding: 5,
                 }}
-                onPress={() => navigation.navigate(item.routerName, {router_id: item.router_id})}
+                onPress={() => navigation.navigate(item.typeNotification_router, {router_id: item.router_id})}
               >
                 <View
                   style={{
@@ -103,13 +107,10 @@ export default function NotificationScreen({ navigation }: any) {
                         height: 70,
                       }}
                     >
-                      {item.code === "PAYMENT" ? <Image
-                        source={require("../assets/images/payment.png")}
+                       <Image
+                        source={item.typeNotification_img ? {uri: item.typeNotification_img} : require("../assets/images/notificaciones.png")}
                         style={{ height: 50, width: 50, resizeMode: "contain" }}
-                      />: <Image
-                      source={require("../assets/images/notificaciones.png")}
-                      style={{ height: 50, width: 50, resizeMode: "contain" }}
-                    />}
+                      />
                     </View>
 
                     <View style={{ width: "80%", overflow: "hidden" }}>
@@ -126,7 +127,7 @@ export default function NotificationScreen({ navigation }: any) {
                         <Text style={{ fontWeight: "bold" }}>
                           {translation.t("TypeOfNotification")}:
                         </Text>
-                        {item.typeNotification}
+                        {item.typeNotification_name}
                       </Text>
                       <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
                         <Text style={{ fontWeight: "bold" }}>

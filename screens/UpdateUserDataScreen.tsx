@@ -22,7 +22,6 @@ import { LanguageContext } from "../LanguageContext";
 import { Dropdown } from "react-native-element-dropdown";
 export default function UpdateUserDataScreen({ navigation, route }: any) {
   const { userData } = route.params;
-  console.log(userData);
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [country_id, setCountry_id]: any = useState(0);
@@ -74,7 +73,6 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
           value: country.id,
         }));
         setCountries(mappedValues);
-        console.log(mappedValues);
         setCountry_id(userData ? userData.country_id : response.country[0].id);
       }
     });
@@ -117,7 +115,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       .then((response) => {
         hideLoadingModal(() => {
           if (response.ok) {
-            navigation.navigate("Profile");
+            navigation.navigate("Profile", {userUpdateData: response.user});
             showGoodToast(translation.t("UserUpdated"));
           } else {
             showErrorToast(translation.t("ErrorUserUpdated"));
@@ -143,7 +141,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       .then((response) => {
         hideLoadingModal(() => {
           if (response.ok) {
-            navigation.navigate("Profile");
+            navigation.navigate("Profile", {userUpdateData: response.user});
             showGoodToast(translation.t("UserUpdated"));
           } else {
             showErrorToast(translation.t("ErrorUserUpdated"));

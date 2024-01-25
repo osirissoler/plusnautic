@@ -24,7 +24,8 @@ import asyncStorage from "@react-native-async-storage/async-storage";
 import { fetchData, sendData, sendDataPut } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
 
-export default function ProfileScreen({ navigation }: any) {
+export default function ProfileScreen({ navigation, route }: any) {
+  const {userUpdateData} = route.params
   const { translation } = React.useContext(LanguageContext);
   const [profileImage, setProfileImage]: any = useState("");
   const [isSelecting, setIsSelecting]: any = useState(false);
@@ -32,7 +33,6 @@ export default function ProfileScreen({ navigation }: any) {
   const [user, setUser]: any = useState({});
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
     checkLoggedUser(
       (id: string) => {
         console.log(id);
@@ -64,12 +64,11 @@ export default function ProfileScreen({ navigation }: any) {
       navigation,
       translation
     );
-  })
     return () => {
       setUser({});
       setProfileImage("");
     };
-  }, []);
+  }, [userUpdateData]);
 
   let openImagePickerAsync = async () => {
     setIsSelecting(true);

@@ -21,7 +21,7 @@ export default function PaymentNotificationScreen({ navigation, route }: any) {
   }, []);
 
   const getPaymentNotificationData = (id: any) => {
-    let url = `/notification/getPaymentNotificationData/${id}`;
+    let url = `/placeToPay/getPaymentNotificationData/${id}`;
     fetchData(url).then((response: any) => {
       if (response.ok) {
         setPaymentData(response.paymentData);
