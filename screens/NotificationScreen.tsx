@@ -125,12 +125,6 @@ export default function NotificationScreen({ navigation }: any) {
                       </Text>
                       <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          {translation.t("TypeOfNotification")}:
-                        </Text>
-                        {item.typeNotification_name}
-                      </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
-                        <Text style={{ fontWeight: "bold" }}>
                           {translation.t("Date")}:
                         </Text>
                         {item.date}
