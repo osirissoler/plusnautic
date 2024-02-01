@@ -31,6 +31,7 @@ export default function HomeScreen({ navigation, route }: any) {
   const [showLoading, setShowLoading]: any = useState(false);
   const [listPharmacy, setListPharmacy]: any = useState([]);
   const [visible, setVisible] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     checkLoggedUser(
@@ -91,6 +92,7 @@ export default function HomeScreen({ navigation, route }: any) {
       } else {
         setListPharmacy([]);
         setFetching(false);
+        setError(true)
       }
       setFetching(false);
     });
@@ -104,8 +106,8 @@ export default function HomeScreen({ navigation, route }: any) {
     <Container>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-      <ServiceComponent />
-      <View style={{ height: "100%" }}>
+      {(error) ? <ServiceComponent />
+      :<View style={{ height: "100%" }}>
         <FlatList
           columnWrapperStyle={{ justifyContent: "space-around" }}
           refreshing={fetching}
@@ -152,7 +154,7 @@ export default function HomeScreen({ navigation, route }: any) {
           )}
           numColumns={2}
         ></FlatList>
-      </View>
+      </View>}
     </Container>
   );
 }
