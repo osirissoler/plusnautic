@@ -87,8 +87,10 @@ export default function HomeScreen({ navigation, route }: any) {
     await fetchData(url).then((response) => {
       if (response.ok) {
         setListPharmacy(response.menu);
-        console.log(response.menu[0])
+        console.log(response.menu[0]);
       } else {
+        setListPharmacy([]);
+        setFetching(false);
       }
       setFetching(false);
     });
@@ -102,7 +104,7 @@ export default function HomeScreen({ navigation, route }: any) {
     <Container>
       <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-
+      <ServiceComponent />
       <View style={{ height: "100%" }}>
         <FlatList
           columnWrapperStyle={{ justifyContent: "space-around" }}
@@ -142,7 +144,9 @@ export default function HomeScreen({ navigation, route }: any) {
                 />
               </View>
               <Text style={styles.categoryName}>
-                {(translation.locale.includes("en") && item.name) || (translation.locale.includes("es") && item.nombre) || (translation.locale.includes("fr") && item.nom)}
+                {(translation.locale.includes("en") && item.name) ||
+                  (translation.locale.includes("es") && item.nombre) ||
+                  (translation.locale.includes("fr") && item.nom)}
               </Text>
             </TouchableOpacity>
           )}
@@ -150,6 +154,14 @@ export default function HomeScreen({ navigation, route }: any) {
         ></FlatList>
       </View>
     </Container>
+  );
+}
+
+function ServiceComponent() {
+  return (
+    <View>
+      <Text>Error vuelba a intentar mas tarder</Text>
+    </View>
   );
 }
 
