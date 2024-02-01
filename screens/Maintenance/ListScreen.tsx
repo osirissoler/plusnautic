@@ -121,7 +121,8 @@ export default function ListScreen({ navigation }: any) {
                       filterServicesPrice(item.id);
                       setText(
                         (translation.locale.includes("en") && item.name) ||
-                          (translation.locale.includes("es") && item.nombre)
+                          (translation.locale.includes("es") && item.nombre) ||
+                          (translation.locale.includes("fr") && item.nom)
                       );
                     }}
                   >
@@ -133,7 +134,8 @@ export default function ListScreen({ navigation }: any) {
                     </View>
                     <Text style={styles.productTitle}>
                       {(translation.locale.includes("en") && item.name) ||
-                        (translation.locale.includes("es") && item.nombre)}
+                        (translation.locale.includes("es") && item.nombre) ||
+                        (translation.locale.includes("fr") && item.nom)}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -145,7 +147,7 @@ export default function ListScreen({ navigation }: any) {
           <Text style={styles.productTitle2}>
             {translation.t("maintenance")}
           </Text>
-          <Text style={styles.seeAll}>{text}</Text>
+          {/* <Text style={styles.seeAll}>{text}</Text> */}
           <FlatList
             refreshing={fetching}
             data={userServicesPrice}
@@ -187,8 +189,8 @@ export default function ListScreen({ navigation }: any) {
                               : item.driver_img,
                         }}
                         style={styles.profilePicture}
-            resizeMode={"cover"}
-            imageStyle={{ borderRadius: 100 }}
+                        resizeMode={"cover"}
+                        imageStyle={{ borderRadius: 100 }}
                       />
                     </TouchableOpacity>
                     <View style={{}}>
@@ -213,7 +215,8 @@ export default function ListScreen({ navigation }: any) {
                           {(translation.locale.includes("en") &&
                             item.ServicesStatus_name) ||
                             (translation.locale.includes("es") &&
-                              item.ServicesStatus_nombre)}
+                              item.ServicesStatus_nombre) || (translation.locale.includes("fr") &&
+                              item.ServicesStatus_nom)}
                         </Text>
                       </View>
                       {item.ServicesStatus_code == "PROCCESING" && (

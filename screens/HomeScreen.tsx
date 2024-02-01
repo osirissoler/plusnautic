@@ -77,7 +77,7 @@ export default function HomeScreen({ navigation, route }: any) {
   };
 
   useEffect(() => {
-    getPharmaciesByUSer()
+    getPharmaciesByUSer();
   }, []);
 
   const getPharmaciesByUSer = async () => {
@@ -87,6 +87,7 @@ export default function HomeScreen({ navigation, route }: any) {
     await fetchData(url).then((response) => {
       if (response.ok) {
         setListPharmacy(response.menu);
+        console.log(response.menu[0])
       } else {
       }
       setFetching(false);
@@ -141,8 +142,7 @@ export default function HomeScreen({ navigation, route }: any) {
                 />
               </View>
               <Text style={styles.categoryName}>
-                {(translation.locale.includes("en") && item.name) ||
-                  (translation.locale.includes("es") && item.nombre)}
+                {(translation.locale.includes("en") && item.name) || (translation.locale.includes("es") && item.nombre) || (translation.locale.includes("fr") && item.nom)}
               </Text>
             </TouchableOpacity>
           )}

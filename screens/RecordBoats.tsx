@@ -405,7 +405,7 @@ export default function RecordBoats({ navigation, route }: any) {
                     labelField="label"
                     valueField="value"
                     placeholder={translation.t("ChooseMarine")}
-                    searchPlaceholder="Search..."
+                    searchPlaceholder={translation.t("Search")}
                     value={values.pharmacy_id}
                     onChange={(items: any) => {
                       setFieldValue("pharmacy_id", items.value);

@@ -130,7 +130,7 @@ export default function ServiceScreen({ navigation }: any) {
                 <ServiceComponent
                   title={
                     (translation.locale.includes("en") && item.name) ||
-                    (translation.locale.includes("es") && item.nombre)
+                    (translation.locale.includes("es") && item.nombre) || (translation.locale.includes("fr") && item.nom)
                   }
                   icon={item.img}
                   navigation={navigation}

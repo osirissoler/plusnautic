@@ -285,7 +285,7 @@ function RootNavigator({ route }: any) {
         options={{
           headerTitle: translation.t(
             "headerTitleSearchProduct"
-          ) /* Search Products */,
+          ) ,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}
@@ -334,7 +334,7 @@ function RootNavigator({ route }: any) {
         name="Accept"
         component={AcceptedScreen}
         options={{
-          // headerTitle: translation.t('listServices') /* Search Products */,
+          // headerTitle: translation.t('listServices'),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -354,7 +354,7 @@ function RootNavigator({ route }: any) {
         name="MarinasScreen"
         component={MarinasScreen}
         options={{
-          headerTitle: translation.t('Marinas') /* Search Products */,
+          headerTitle: translation.t('Marinas'),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -364,7 +364,7 @@ function RootNavigator({ route }: any) {
         name="Request"
         component={ServiceScreen}
         options={{
-          headerTitle: translation.t('Request') /* Search Products */,
+          headerTitle: translation.t('Request') ,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -374,7 +374,7 @@ function RootNavigator({ route }: any) {
         name="Activities"
         component={ActivityScreen}
         options={{
-          headerTitle: translation.t('Activities') /* Search Products */,
+          headerTitle: translation.t('Activities') ,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",

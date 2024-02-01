@@ -161,7 +161,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             // marginTop: 10,
             height: 50,
           }}
-          placeholder="Search"
+          placeholder={translation.t("Search")}
           clearButtonMode="always"
           autoCorrect={false}
           autoCapitalize="none"
