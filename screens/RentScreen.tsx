@@ -279,7 +279,7 @@ export default function RentScreen({ navigation, route }:any) {
 						<View style={styles.formInputIcon}>
 						
 							<TextInput
-								placeholder={translation.t('listCategoriesSearchPlaceholder') /* Search a name of a product }
+								placeholder={translation.t('listCategoriesSearchPlaceholder')}
 								placeholderTextColor={'gray'}
 								style={[styles.textInput, { zIndex: 1 }]}
 								onChangeText={filterCategory}

@@ -3,6 +3,7 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import en from './constants/languages/en.json';
 import es from './constants/languages/es.json';
+import fr from './constants/languages/fr.json';
 import { checkStorage } from './components/Shared';
 
 const initialLanguageState = {
@@ -13,7 +14,8 @@ const setDefaultLanguage = (callback: any) => {
     checkStorage('USER_LOCALE', (locale: any) => {
         i18n.translations = {
             en: en,
-            es: es
+            es: es,
+            fr: fr
         };
 
         if (locale == null) {

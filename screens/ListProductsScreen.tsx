@@ -89,7 +89,7 @@ export default function ListProductsScreen({ navigation }: any) {
 			<View style={styles.body}>
 				<View style={styles.formInputIcon}>
 					<TextInput
-						placeholder={translation.t('listProductsSearchPlaceholder') /* Search a name of a product */}
+						placeholder={translation.t('listProductsSearchPlaceholder')}
 						placeholderTextColor={'gray'}
 						style={[styles.textInput, { zIndex: 1 }]}
 						onChangeText={searchProduct}

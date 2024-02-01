@@ -69,8 +69,9 @@ export default function SelectLanguageScreen({ navigation }: any) {
 				<Loading showLoading={showLoading} translation={translation} />
 				<View style={{ paddingVertical: 10, paddingHorizontal: 20, marginTop: 5 }}>
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Button locale={'en'} text={'languageEnglish'} />
+						<Button locale={'en'} text={'languageEnglish'}  />
 						<Button locale={'es'} text={'languageSpanish'} />
+						<Button locale={'fr'} text={'languageFrench'} />
 					</View>
 				</View>
 			</View>
