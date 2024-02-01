@@ -602,17 +602,17 @@ function BottomTabNavigator({ navigation, route }: any) {
         component={HomeScreen}
         options={{
           headerShown: false,
-          title: "",
+          title: "Abordo",
           tabBarIcon: ({ color }) => (
             <View
               style={{
-                height: 70,
-                width: 70,
-                borderRadius: 100,
-                backgroundColor: "#5f7ceb",
-                marginBottom: 8,
-                justifyContent: "center",
-                alignItems: "center",
+                height: 80,
+                width: 80,
+                // borderRadius: 100,
+                // backgroundColor: "#5f7ceb",
+                marginTop: 10,
+                // justifyContent: "center",
+                // alignItems: "center",
               }}
             >
               <TabBarIcon name="apps-sharp" color={color} img={true} />
@@ -663,7 +663,7 @@ function TabBarIcon(props: {
   if (props.img) {
     return (
       <Image
-        style={{ height: 80, width: 80 }}
+        style={{ height: 85, width: 85 }}
         source={require("../assets/images/abordo.png")}
       />
     );
