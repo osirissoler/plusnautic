@@ -530,7 +530,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                 )}
               </ScrollView>
             </View>
-
+            <View style={{paddingHorizontal: 10}}>
               <TouchableOpacity
                 style={
                   isValid
@@ -546,6 +546,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                   {translation.t("Save")}
                 </Text>
               </TouchableOpacity>
+            </View>
             </View>
         )}
       </Formik>
