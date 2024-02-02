@@ -7,7 +7,7 @@ import { LanguageContext } from '../../LanguageContext';
 export default function Step3Screen({ navigation }: any) {
 	const { translation } = React.useContext(LanguageContext);
 	const redirectToSignIn = () => {
-		// asyncStorage.setItem('USER_STEPS', '1');
+		asyncStorage.setItem('USER_STEPS', '1');
 		navigation.navigate('SignIn');
 	};
 
