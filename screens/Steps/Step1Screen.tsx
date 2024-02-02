@@ -9,12 +9,13 @@ export default function Step1Screen({ navigation }: any) {
 	const [showStep, setShowStep]: any = useState(false);
 
 	useEffect(() => {
-		checkStorage('USER_STEPS', (response: any) => {
-			// console.log(response,"paso 1")
-			  navigation.reset({ index: 0, routes: [{ name: 'SignIn' }] });
-			// else setShowStep(true);
+		checkStorage("USER_STEPS", (response: any) => {
+		  console.log(response,"paso 1")
+		  if (!!response)
+			navigation.reset({ index: 0, routes: [{ name: "SignIn" }] });
+		  else setShowStep(true);
 		});
-	}, []);
+	  }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>

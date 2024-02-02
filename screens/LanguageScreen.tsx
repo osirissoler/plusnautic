@@ -71,6 +71,7 @@ export default function LanguageScreen({ navigation }: any) {
 							<View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
 								<Button locale={'en'} text={'languageEnglish'} />
 								<Button locale={'es'} text={'languageSpanish'} />
+								<Button locale={'fr'} text={'languageFrench'} />
 							</View>
 						</View>
 						<TouchableOpacity

@@ -94,24 +94,25 @@ export default function SignInScreen({ navigation }: any) {
   };
 
   const onSignIn = (values: any) => {
-    setShowLoading(true);
-    const url = "/auth/login";
-    sendData(url, values).then((response: any) => {
-      console.log(response.id);
-      hideLoadingModal(() => {
-        if(response.ok){
-          setAuthUser(response.id);
-        }else{
-          // showErrorToast(response.message);
-          setError(true);
-          if(translation.locale.includes("en")){
-            setErrorMesage(response.message);
-          }else{
-            setErrorMesage(response.mensaje);
-          }
-        }
-      });
-    });
+    asyncStorage.clear()
+    // setShowLoading(true);
+    // const url = "/auth/login";
+    // sendData(url, values).then((response: any) => {
+    //   console.log(response.id);
+    //   hideLoadingModal(() => {
+    //     if(response.ok){
+    //       setAuthUser(response.id);
+    //     }else{
+    //       // showErrorToast(response.message);
+    //       setError(true);
+    //       if(translation.locale.includes("en")){
+    //         setErrorMesage(response.message);
+    //       }else{
+    //         setErrorMesage(response.mensaje);
+    //       }
+    //     }
+    //   });
+    // });
   };
 
   const hideLoadingModal = (callback: Function) => {
