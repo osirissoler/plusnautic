@@ -60,7 +60,6 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
       await fetchData(url).then((response) => {
         if (response.ok) {
           setListPharmacy(response.pharmacy);
-          setListPharmacyFull(response.pharmacy);
           const list: any = [];
           response.pharmacy.forEach((element: any) => {
             list.push({
@@ -72,6 +71,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
               ),
             });
           });
+          setListPharmacyFull(list);
           setList(list);
         }
         setFetching(false);
@@ -137,6 +137,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
     });
     setList(filteredData);
   };
+
+  console.log(listPharmacyFull)
 
   const contains = ({ name }: any, query: any) => {
     if (name.toLowerCase().includes(query)) {
