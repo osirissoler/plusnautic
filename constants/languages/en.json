@@ -282,5 +282,6 @@
   "PaymentDetail": "Payment Details",
   "NotificationMsg":"These are your notifications",
   "TypeOfNotification":"Type of notification",
-  "ServiceCreate":"The service has been sent successfully"
+  "ServiceCreate":"The service has been sent successfully",
+  "CountryIsRequired":"The country is required"
 }
