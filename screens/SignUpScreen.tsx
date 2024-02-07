@@ -100,6 +100,9 @@ export default function SignUpScreen({ navigation }: any) {
           "signUpPasswordConfirmationRequiredText"
         ) /* Confirm password is required */
       ),
+      country_id: yup
+      .string()
+      .required("Country is required") /* Country is required */,
   });
 
   useEffect(() => {
@@ -110,8 +113,11 @@ export default function SignUpScreen({ navigation }: any) {
     let url = `/country/getCountryActive`;
     await fetchData(url).then((response: any) => {
       if (response.ok) {
-        setCountries(response.country);
-        setCountry_id(response.country[0].id);
+        const mappedValues = response.country.map((boatsRecord: any) => ({
+          label: boatsRecord.name,
+          value: boatsRecord.id,
+        }));
+        setCountries(mappedValues);
       }
     });
   };
@@ -125,7 +131,7 @@ export default function SignUpScreen({ navigation }: any) {
       email: values.email,
       phone: values.phone,
       password: values.password,
-      country_id,
+      country_id: values.country_id,
     };
     console.log(data);
     sendData(url, data)
@@ -137,6 +143,7 @@ export default function SignUpScreen({ navigation }: any) {
             sendData(url, values).then((response: any) => {
               if (response.ok) {
                 setAuthUser(response.id);
+                asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.country_id));
                 // redirectToRecordBoats()
               }
             });
@@ -307,6 +314,7 @@ export default function SignUpScreen({ navigation }: any) {
             isValid,
             errors,
             touched,
+            setFieldValue
           }: any) => (
             <View>
               <Text style={styles.labelInput}>
@@ -330,7 +338,7 @@ export default function SignUpScreen({ navigation }: any) {
                 autoCapitalize="none"
               />
 
-              <View>
+<View>
                 <Text style={styles.labelInput}>
                   {translation.t("country") /*  Email */}
                 </Text>
@@ -343,13 +351,12 @@ export default function SignUpScreen({ navigation }: any) {
                   data={countries}
                   search
                   maxHeight={300}
-                  labelField="name"
-                  valueField={""}
+                  labelField={"label"}
+                  valueField={"value"}
                   placeholder={translation.t("SelectCountry")}
                   searchPlaceholder={`${translation.t("SearchCountry")}...`}
-                  value={values.boatsRecord_id}
                   onChange={(items: any) => {
-                    setCountry_id(items.id);
+                    setFieldValue("country_id", items.value);
                   }}
                 />
               </View>

@@ -116,6 +116,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
         hideLoadingModal(() => {
           if (response.ok) {
             navigation.navigate("Profile", {userUpdateData: response.user});
+            asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.user.country_id));
             showGoodToast(translation.t("UserUpdated"));
           } else {
             showErrorToast(translation.t("ErrorUserUpdated"));
@@ -142,6 +143,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
         hideLoadingModal(() => {
           if (response.ok) {
             navigation.navigate("Profile", {userUpdateData: response.user});
+            asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.user.country_id));
             showGoodToast(translation.t("UserUpdated"));
           } else {
             showErrorToast(translation.t("ErrorUserUpdated"));

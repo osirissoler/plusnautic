@@ -27,16 +27,16 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const defaultProductImg =
     "http://openmart.online/frontend/imgs/no_image.png?";
-  const [listPharmacy, setListPharmacy]: any = useState([]);
   const [listPharmacyFull, setListPharmacyFull]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [searchQuery, setSearchQuery]: any = useState("");
   const [list, setList]: any = useState([]);
-  const [listByUser, setListByUser]: any = useState([]);
+  const [listByUser, setListByUser]: any = useState(new Set());
 
   useEffect(() => {
     getPharmacies();
+
     if (showBack) {
       navigation.setOptions({ headerShown: true });
     } else {
@@ -45,107 +45,143 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
   }, []);
 
   const getPharmacies = async () => {
+    let listUserId: [];
     setFetching(true);
-    checkStorage("USER_LOGGED", async (userId: any) => {
-      let url = `/pharmacies/getPharmacies`;
-      let urlPharmacyByUser = `/userPharmacy/getUserPharmacyByUserId/${userId}`;
-      await fetchData(urlPharmacyByUser).then((res) => {
-        if (res.ok) {
-          res.userPharmacy.map((element: any) => {
-            listByUser.push(element.pharmacy_id);
-          });
-        }
-      });
 
-      await fetchData(url).then((response) => {
-        if (response.ok) {
-          setListPharmacy(response.pharmacy);
-          const list: any = [];
-          response.pharmacy.forEach((element: any) => {
-            list.push({
+    checkStorage("USER_LOGGED", async (userId: any) => {
+      checkStorage("USER_LOGGED_COUNTRY", async (country_id: any) => {
+        let url = `/pharmacies/getPharmaciesByCountry/${country_id}`;
+        let urlPharmacyByUser = `/userPharmacy/getUserPharmacyByUserId/${userId}`;
+        await fetchData(urlPharmacyByUser).then(async (res: any) => {
+          if (res.ok) {
+            listUserId = await res.userPharmacy.map(
+              (element: any) => element.pharmacy_id
+            );
+            setListByUser(listUserId);
+          }
+        });
+
+        await sendData(url, { additional_ids: listUserId }).then((response) => {
+          if (response.ok) {
+            let list: any = response.pharmacy.map((element: any) => ({
               name: element.name,
               id: element.id,
               img: element.img,
-              selected: listByUser.some((e: any) =>
+              country: element.country_name,
+              selected: listUserId.some((e: any) =>
                 e === element.id ? true : false
               ),
+            }));
+
+            list.sort((a: any, b: any) => {
+              if (a.selected && !b.selected) {
+                return -1;
+              } else if (!a.selected && b.selected) {
+                return 1;
+              } else {
+                return 0;
+              }
             });
-          });
-          setListPharmacyFull(list);
-          setList(list);
-        }
-        setFetching(false);
+
+            setListPharmacyFull(list);
+            setList(list);
+          }
+          setFetching(false);
+        });
       });
     });
   };
 
   const selectPharmacy = (index: any) => {
-    list[index].selected = !list[index].selected;
+    sendPharmacyUser(
+      index,
+      !list.filter((item: any) => item.id == index)[0].selected
+    );
+    list.forEach((item: any) => {
+      if (item.id === index) {
+        item.selected = !item.selected;
+      }
+    });
+
     setTimeout(() => {
       setFetching(false);
     }, 100);
   };
 
-  const sendPharmacyUser = async () => {
+  const sendPharmacyUser = async (pharmacy_id: any, bool: any) => {
     checkStorage("USER_LOGGED", async (id: any) => {
-      const url = "/userPharmacy/createUserPharmacy";
-      const newList = list
-        .filter((element: any) => {
-          return element.selected === true;
-        })
-        .map((e: any) => {
-          return {
-            pharmacy_id: e.id,
-            user_id: id,
-          };
+      if (bool) {
+        const url = "/userPharmacy/createUserPharmacy";
+        await sendData(url, { pharmacy_id, user_id: id }).then((response) => {
+          if (response.ok) {
+            setListByUser((prevState: any) => {
+              // Verificar si el elemento ya está en el array
+              if (!prevState.includes(pharmacy_id)) {
+                // Si no está presente, crear un nuevo array con el elemento añadido y devolverlo
+                return [...prevState, pharmacy_id];
+              } else {
+                // Si ya está presente, devolver el estado anterior sin hacer cambios
+                return prevState;
+              }
+            });
+          }
         });
-      if (list.some((e: any) => e.selected === false)) {
-        const listFalse = list.filter((e: any) => {
-          return e.selected === false;
-        });
-
-        const newListDelete = listFalse.map((e: any) => {
-          return e.id;
-        });
-
+      } else {
         const urlDelete = `/userPharmacy/deleteUserPharmacyById`;
-        sendData(urlDelete, { data: newListDelete });
-      }
+        sendData(urlDelete, { pharmacy_id, user_id: id }).then((res) => {
+          if (res.ok) {
+            setList((prevList: any) =>
+              prevList.map((item: any) => {
+                if (item.id === pharmacy_id) {
+                  // Retorna un nuevo objeto con el valor actualizado
+                  return { ...item, selected: false };
+                }
+                return item; // Retorna el objeto sin cambios
+              })
+            );
 
-      await sendData(url, { data: newList }).then((response) => {
-        if (response.ok) {
-          navigation.reset({
-            index: 0,
-            routes: [
-              {
-                name: "Root",
-                params: { phId: 536 },
-                screen: "Home",
-              },
-            ],
-          });
-        }
-      });
+            setListByUser([
+              ...listByUser.filter((item: any) => item != pharmacy_id),
+            ]);
+          }
+        });
+      }
     });
   };
 
   const handleChange = (query: string) => {
     setSearchQuery(query);
-    const formattedQuery = query.toLowerCase();
-    const filteredData = filter(listPharmacyFull, (data: any) => {
-      return contains(data, formattedQuery);
-    });
-    setList(filteredData);
-  };
+    if (query) {
+      const url = `/pharmacies/getPharmacyByText/${query}`;
+      fetchData(url).then((res: any) => {
+        const listResult: any = [];
+        res.result.forEach((element: any) => {
+          listResult.push({
+            name: element.name,
+            id: element.id,
+            img: element.img,
+            country: element.country_name,
+            selected: listByUser.some((e: any) =>
+              e === element.id ? true : false
+            ),
+          });
+        });
 
-  console.log(listPharmacyFull)
-
-  const contains = ({ name }: any, query: any) => {
-    if (name.toLowerCase().includes(query)) {
-      return true;
+        setList(
+          listResult.sort((a: any, b: any) => {
+            if (a.selected && !b.selected) {
+              return -1;
+            } else if (!a.selected && b.selected) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
+        );
+      });
+    } else {
+      getPharmacies();
     }
-
-    return false;
   };
 
   return (
@@ -168,9 +204,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
           autoCorrect={false}
           autoCapitalize="none"
           value={searchQuery}
-          onChangeText={(query) => {
-            handleChange(query);
-          }}
+          onChangeText={handleChange}
         />
         <FontAwesome
           style={styles.inputIcon}
@@ -179,7 +213,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
           color={"#5f7ceb"}
         />
       </View>
-      <View style={{ height: "70%" }}>
+      <View style={{ height: `${!showBack ? "70%" : "90%"}` }}>
         <FlatList
           refreshing={fetching}
           data={list}
@@ -188,20 +222,21 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             <TouchableOpacity
               style={styles.productCard}
               onPress={() => {
-                selectPharmacy(index);
+                selectPharmacy(item.id);
                 setFetching(true);
               }}
             >
               <View style={styles.productImage}>
                 <Image
                   source={{ uri: item.img ? item.img : defaultProductImg }}
-                  style={{ flex: 1, resizeMode: "contain"}}
+                  style={{ flex: 1, resizeMode: "contain" }}
                 />
               </View>
-              <View style={{width:'60%', alignItems:'center'}}>
+              <View style={{ width: "60%", marginLeft: 10 }}>
                 <Text style={styles.productTitle}>{item.name}</Text>
+                <Text style={styles.productCountry}>{item.country}</Text>
               </View>
-              <View style={{width:'15%' }}>
+              <View style={{ width: "15%" }}>
                 <View
                   style={
                     {
@@ -210,39 +245,59 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                     }
                   }
                 >
-                 
-                    <Pressable>
-                      <CheckBox
-                        checked={item.selected}
-                        checkedColor="green"
-                        onPress={() => {
-                          selectPharmacy(index);
-                          setFetching(true);
-                        }}
-                      />
-                    </Pressable>
-                  
+                  <Pressable>
+                    <CheckBox
+                      checked={item.selected}
+                      checkedColor="green"
+                      onPress={() => {
+                        selectPharmacy(index);
+                        setFetching(true);
+                      }}
+                    />
+                  </Pressable>
                 </View>
               </View>
             </TouchableOpacity>
           )}
         ></FlatList>
       </View>
-      <View style={{ height: "10%", marginHorizontal: 15, marginTop: 10 }}>
-        <TouchableOpacity
-          style={styles.registerButton}
-          onPress={() => {
-            sendPharmacyUser();
-          }}
-        >
-          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
-            {translation.t("Save")}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {!showBack && (
+        <View style={{ height: "10%", marginHorizontal: 15, marginTop: 10 }}>
+          <TouchableOpacity
+            style={[
+              styles.registerButton,
+              list.filter((item: any) => item.selected == true).length == 0 && {
+                backgroundColor: "#ccc",
+              },
+            ]}
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: "Root",
+                    params: {
+                      phId: 536,
+                    },
+                    screen: "Home",
+                  },
+                ],
+              });
+            }}
+            disabled={
+              list.filter((item: any) => item.selected == true).length == 0
+            }
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
+              {translation.t("home")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </Container>
   );
 }
+
 const styles = StyleSheet.create({
   productCard: {
     padding: 10,
@@ -257,11 +312,17 @@ const styles = StyleSheet.create({
   },
   productImage: {
     height: 80,
-    width: '25%',
+    width: "25%",
   },
   productTitle: {
     fontSize: 16,
     fontWeight: "500",
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  productCountry: {
+    fontSize: 12,
+    fontWeight: "600",
   },
 
   productAdd: {

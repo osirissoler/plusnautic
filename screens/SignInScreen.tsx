@@ -101,6 +101,7 @@ export default function SignInScreen({ navigation }: any) {
       hideLoadingModal(() => {
         if(response.ok){
           setAuthUser(response.id);
+          asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.country_id));
         }else{
           // showErrorToast(response.message);
           setError(true);
