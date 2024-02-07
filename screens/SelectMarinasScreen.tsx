@@ -20,7 +20,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData, sendData } from "../httpRequests";
 import { CheckBox } from "react-native-elements";
-import filter from "lodash.filter";
+import Toast from "react-native-root-toast";
 
 export default function SelectMarinasScreen({ navigation, route }: any) {
   const { showBack } = route.params || {};
@@ -124,6 +124,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                 return prevState;
               }
             });
+          } else {
+            showErrorToastGood(translation.t("httpConnectionError"))
           }
         });
       } else {
@@ -143,6 +145,8 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
             setListByUser([
               ...listByUser.filter((item: any) => item != pharmacy_id),
             ]);
+          } else {
+            showErrorToastGood(translation.t("httpConnectionError"))
           }
         });
       }
@@ -182,6 +186,13 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
     } else {
       getPharmacies();
     }
+  };
+
+  const showErrorToastGood = (message: string) => {
+    Toast.show(message, {
+      duration: Toast.durations.LONG,
+      containerStyle: { backgroundColor: "red", width: "80%" },
+    });
   };
 
   return (
@@ -250,7 +261,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                       checked={item.selected}
                       checkedColor="green"
                       onPress={() => {
-                        selectPharmacy(index);
+                        selectPharmacy(item.id);
                         setFetching(true);
                       }}
                     />
