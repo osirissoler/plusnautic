@@ -14,7 +14,7 @@ export default function Step3Screen({ navigation }: any) {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.imageParent}>
-				<Image style={styles.image} source={require('../../assets/images/steps3-image.png')} />
+				<Image style={styles.image} source={require('../../assets/images/plusnauticIcon.png')} />
 			</View>
 			<Text style={styles.title}>{translation.t('step3Title')}</Text>
 			<View style={styles.buttonOutline}>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 	buttonOutline: {
 		borderRadius: 40,
 		borderWidth: 6,
-		borderColor: '#40AA54',
+		borderColor: '#5f7ceb',
 		height: 80,
 		width: 80,
 		justifyContent: 'center',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		borderRadius: 100,
-		backgroundColor: '#40AA54',
+		backgroundColor: '#5f7ceb',
 		height: 55,
 		width: 55,
 		justifyContent: 'center',

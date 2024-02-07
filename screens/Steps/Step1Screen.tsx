@@ -21,7 +21,7 @@ export default function Step1Screen({ navigation }: any) {
 			{showStep && (
 				<>
 					<View style={styles.imageParent}>
-						<Image style={styles.image} source={require('../../assets/images/steps1-image.png')} />
+						<Image style={styles.image} source={require('../../assets/images/plusnauticIcon.png')} />
 					</View>
 					<Text style={styles.title}>{translation.t('step1Title')}</Text>
 					<View style={styles.buttonOutline}>
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 		borderRadius: 40,
 		borderWidth: 6,
 		borderLeftColor: '#F7F7F7',
-		borderTopColor: '#40AA54',
-		borderRightColor: '#40AA54',
+		borderTopColor: '#5f7ceb',
+		borderRightColor: '#5f7ceb',
 		borderBottomColor: '#F7F7F7',
 		height: 80,
 		width: 80,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		borderRadius: 100,
-		backgroundColor: '#40AA54',
+		backgroundColor: '#5f7ceb',
 		height: 55,
 		width: 55,
 		justifyContent: 'center',
