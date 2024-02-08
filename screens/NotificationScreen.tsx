@@ -53,7 +53,7 @@ export default function NotificationScreen({ navigation }: any) {
     setTimeout(() => {
       setShowLoading(false);
       callback();
-    }, 100);
+    }, 500);
   };
 
   return (

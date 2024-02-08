@@ -102,7 +102,10 @@ export default function SignUpScreen({ navigation }: any) {
       ),
       country_id: yup
       .string()
-      .required("Country is required") /* Country is required */,
+      .required(translation.t("CountryIsRequired")) /* Country is required */,
+      address: yup
+      .string()
+      .required(translation.t("addressAddressRequiredText")) /* Address is required */,
   });
 
   useEffect(() => {
@@ -132,6 +135,7 @@ export default function SignUpScreen({ navigation }: any) {
       phone: values.phone,
       password: values.password,
       country_id: values.country_id,
+      address: values.address
     };
     console.log(data);
     sendData(url, data)
@@ -303,6 +307,7 @@ export default function SignUpScreen({ navigation }: any) {
             phone: "43242342",
             password: "Test123456",
             passwordConfirmation: "Test123456",
+            address: "Santo Domingo Norte"
           }}
           onSubmit={(values: any) => onSignUp(values)}
         >
@@ -360,6 +365,15 @@ export default function SignUpScreen({ navigation }: any) {
                   }}
                 />
               </View>
+              <Text style={styles.labelInput}>
+                {translation.t("addressAddressLabel") /*  Address */}
+              </Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={handleChange("address")}
+                onBlur={handleBlur("address")}
+                value={values.address}
+              />
 
               <Text style={styles.labelInput}>
                 {translation.t("userPhoneNumberLabel") /*  Phone Number */}
