@@ -32,6 +32,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
     email: userData.email,
     phone: userData.phone,
     country_id: userData.country_id,
+    address: userData.address,
     password: "",
     passwordConfirmation: "",
   });
@@ -58,6 +59,9 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       .required(
         translation.t("signUpEmailRequiredText") /* Email is required */
       ),
+      address: yup
+      .string()
+      .required(translation.t("addressAddressRequiredText")) /* Address is required */,
   });
 
   useEffect(() => {
@@ -109,6 +113,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
         password: values.password,
         country_id: country_id,
         user_id: values.id,
+        address: values.address
       };
 
       sendData(url, data)
@@ -137,6 +142,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       phone: values.phone,
       country_id: country_id,
       user_id: values.id,
+      address: values.address
     };
     sendData(url, data)
       .then((response) => {
@@ -284,6 +290,15 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
                   }}
                 />
               </View>
+              <Text style={styles.labelInput}>
+                {translation.t("addressAddressLabel") /*  Address */}
+              </Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={handleChange("address")}
+                onBlur={handleBlur("address")}
+                value={values.address}
+              />
 
               <Text style={styles.labelInput}>
                 {translation.t("userPhoneNumberLabel") /*  Phone Number */}
