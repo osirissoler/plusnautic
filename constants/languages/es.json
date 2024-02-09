@@ -285,5 +285,7 @@
   "NotificationMsg":"Estas son tus notificaciones",
   "TypeOfNotification":"Tipo de notificacion",
   "ServiceCreate":"El servicio ha sido creado correctamente",
-  "CountryIsRequired":"El país es requerido"
+  "CountryIsRequired":"El país es requerido",
+  "AddGuestErrorMsg":"Para agregar debe tener email o telefono",
+  "AddGuestEmailInvalid":"Debe ingresar un correo electronico válido"
 }
