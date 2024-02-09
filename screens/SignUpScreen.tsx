@@ -302,12 +302,12 @@ export default function SignUpScreen({ navigation }: any) {
         <Formik
           validationSchema={validationSchema}
           initialValues={{
-            fullName: "test",
-            email: "test@test.com",
-            phone: "43242342",
-            password: "Test123456",
-            passwordConfirmation: "Test123456",
-            address: "Santo Domingo Norte"
+            fullName: "",
+            email: "",
+            phone: "",
+            password: "",
+            passwordConfirmation: "",
+            address: ""
           }}
           onSubmit={(values: any) => onSignUp(values)}
         >
