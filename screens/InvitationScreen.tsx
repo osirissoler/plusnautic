@@ -54,10 +54,10 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   useEffect(() => {
-    if(dataToEdit){
-      const [month, day, year] = dataToEdit?.date.split('/');
+    if (dataToEdit) {
+      const [month, day, year] = dataToEdit?.date.split("/");
       const fechaObj = new Date(`${year}-${month}-${day}T10:00:00.00Z`);
-            console.log(fechaObj)
+      console.log(fechaObj);
       setDate(fechaObj);
     }
   }, []);
@@ -99,7 +99,7 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   const filterDock = (dockId: any) => {
     const data = dockValues.find((a: any) => a.value == dockId);
-    console.log(data)
+    console.log(dockId);
     setFilteredDocks([data]);
     return data;
   };
@@ -127,7 +127,6 @@ export default function InvitationScreen({ navigation, route }: any) {
 
   const createInvitation = (values: any) => {
     try {
-
       const currentDate = new Date();
 
       if (!date) {
@@ -140,15 +139,15 @@ export default function InvitationScreen({ navigation, route }: any) {
       //   return;
       // }
 
-      if(currentDate.getTime() > date.getTime()){
+      if (currentDate.getTime() > date.getTime()) {
         showErrorToast(translation.t("DateAfterTodayMsg"));
-        return
+        return;
       }
 
       const data = {
         title: values.title,
         description: values.description,
-        date: moment(date).format('MM/DD/YYYY'),
+        date: moment(date).format("MM/DD/YYYY"),
         guestDetails: namesArray,
         boat_id: values.boat_id,
         product_id: filteredDocks[0].value,
@@ -158,7 +157,7 @@ export default function InvitationScreen({ navigation, route }: any) {
         id: dataToEdit?.idGuest,
         title: values.title,
         description: values.description,
-        date: moment(date).format('MM/DD/YYYY'),
+        date: moment(date).format("MM/DD/YYYY"),
         boat_id: values.boat_id,
         product_id: filteredDocks[0].value,
       };
@@ -192,14 +191,19 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   const handleAddName = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (name) {
-      if (email || phone) {
-        setNamesArray([...namesArray, { name, email, phone }]);
-        setName("");
-        setEmail("");
-        setPhone("");
+      if (email|| phone) {
+        if(emailRegex.test(email)){
+          setNamesArray([...namesArray, { name, email, phone }]);
+          setName("");
+          setEmail("");
+          setPhone("");
+        } else {
+          showErrorToast(translation.t("AddGuestEmailInvalid"));
+        }
       } else {
-        showErrorToast("Para agregar debe tener email o telefono");
+        showErrorToast(translation.t("AddGuestErrorMsg"));
       }
     }
   };
@@ -246,10 +250,7 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   return (
-    <Container
-      style={{ backgroundColor: "#fff" }}
-      keyboard={true}
-    >
+    <Container style={{ backgroundColor: "#fff" }} keyboard={true}>
       <HeaderComponent navigation={navigation} />
       <Loading showLoading={showLoading} translation={translation} />
       <Formik
@@ -265,7 +266,8 @@ export default function InvitationScreen({ navigation, route }: any) {
           values,
           isValid,
           errors,
-          touched,x
+          touched,
+          x,
         }: any) => (
           <View>
             <View
@@ -284,7 +286,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                   {translation.t("Description")}
                 </Text>
                 <TextInput
-                  style={[styles.textInput, {height: 80}]}
+                  style={[styles.textInput, { height: 80 }]}
                   onChangeText={handleChange("description")}
                   onBlur={handleBlur("description")}
                   value={values.description}
@@ -314,7 +316,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                     searchPlaceholder={translation.t("Search")}
                     onChange={(items: any) => {
                       setFieldValue("boat_id", items.value);
-                      filterDock(items.value);
+                      filterDock(items.dock);
                     }}
                   />
                 </View>
@@ -343,9 +345,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                   />
                 </View>
 
-                <Text style={styles.labelInput}>
-                  {translation.t("Date")}
-                </Text>
+                <Text style={styles.labelInput}>{translation.t("Date")}</Text>
                 {/* <TextInput
                   placeholder="MM/DD/YYYY"
                   style={styles.textInput}
@@ -354,15 +354,35 @@ export default function InvitationScreen({ navigation, route }: any) {
                   keyboardType="numeric"
                   maxLength={10}
                 /> */}
-                <Text style={{fontSize: 15, marginVertical: 10, fontWeight: "600"}}>{moment(date).format('MM/DD/YYYY')}</Text>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    marginVertical: 10,
+                    fontWeight: "600",
+                  }}
+                >
+                  {moment(date).format("MM/DD/YYYY")}
+                </Text>
                 <View>
                   {Platform.OS === "android" && (
                     <View>
                       <TouchableOpacity
-                      style={{height: 40, backgroundColor: "#5f7ceb", borderRadius: 10, padding: 10, justifyContent: "center", alignItems: "center"}}
+                        style={{
+                          height: 40,
+                          backgroundColor: "#5f7ceb",
+                          borderRadius: 10,
+                          padding: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
                         onPress={showDatepicker}
                       >
-                        <Text style={[styles.registerButtonText, {fontWeight: "500"}]}>
+                        <Text
+                          style={[
+                            styles.registerButtonText,
+                            { fontWeight: "500" },
+                          ]}
+                        >
                           {translation.t("ShowDatePicker")}
                         </Text>
                       </TouchableOpacity>
@@ -532,7 +552,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                 )}
               </ScrollView>
             </View>
-            <View style={{paddingHorizontal: 10}}>
+            <View style={{ paddingHorizontal: 10 }}>
               <TouchableOpacity
                 style={
                   isValid
@@ -549,7 +569,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                 </Text>
               </TouchableOpacity>
             </View>
-            </View>
+          </View>
         )}
       </Formik>
     </Container>
@@ -649,7 +669,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   loginText: {
     textAlign: "center",

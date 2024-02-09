@@ -275,12 +275,7 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
       {!showBack && (
         <View style={{ height: "10%", marginHorizontal: 15, marginTop: 10 }}>
           <TouchableOpacity
-            style={[
-              styles.registerButton,
-              list.filter((item: any) => item.selected == true).length == 0 && {
-                backgroundColor: "#ccc",
-              },
-            ]}
+            style={styles.registerButton}
             onPress={() => {
               navigation.reset({
                 index: 0,
@@ -295,9 +290,9 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                 ],
               });
             }}
-            disabled={
-              list.filter((item: any) => item.selected == true).length == 0
-            }
+            // disabled={
+            //   list.filter((item: any) => item.selected == true).length == 0
+            // }
           >
             <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
               {translation.t("home")}
