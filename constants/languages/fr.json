@@ -56,7 +56,7 @@
   "homePopularText": "Pack populaire",
   "homeViewAllText": "Tout voir",
   "homeNoProductsText": "Aucun produit disponible dans cet immeuble...",
-  "homeNoCategoriestext": "Aucune catégorie active...",
+  "homeNoCategoriestext": "Aucune prestations de service active...",
   "homePharmacyChangeAlert": "Impossible de changer de pharmacie, des produits sont présents dans le panier d'achat.",
   "listProductsSearchPlaceholder": "Rechercher le nom d'un produit",
   "listCategoriesSearchPlaceholder": "Rechercher le nom d'un immeuble",
