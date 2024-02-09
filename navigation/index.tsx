@@ -467,14 +467,14 @@ function BottomTabNavigator({ navigation, route }: any) {
     });
   };
 
-  const supportedURL = "https://tierrabuenaapp.page.link/tierra";
+  const supportedURL = "https://abordo.page.link/abordoapp";
   const goAbordo = async() => {
-    // const supported = await Linking.canOpenURL(supportedURL);
-    // if (supported) {
-    //   await Linking.openURL(supportedURL);
-    // } else {
-    //   Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
-    // }
+    const supported = await Linking.canOpenURL(supportedURL);
+    if (supported) {
+      await Linking.openURL(supportedURL);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
+    }
   };
 
   return (
