@@ -87,18 +87,19 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   const searchDock = async () => {
-    const url = `/products/getProducts`;
+    const url = `/products/getPharmacyProducts`;
     fetchData(url).then(async (res: any) => {
-      const mappedValues = await res.product.map((product: any) => ({
-        label: product.name,
-        value: product.id,
+      const mappedValues = await res.pharmacyProduct.map((product: any) => ({
+        label: product.product_name,
+        value: product.product_id,
       }));
       await setDockValues(mappedValues);
     });
   };
 
   const filterDock = (dockId: any) => {
-    const data = dockValues.find((a: any) => a.value === dockId);
+    const data = dockValues.find((a: any) => a.value == dockId);
+    console.log(data)
     setFilteredDocks([data]);
     return data;
   };
