@@ -283,10 +283,11 @@ export default function InvitationScreen({ navigation, route }: any) {
                   {translation.t("Description")}
                 </Text>
                 <TextInput
-                  style={styles.textInput}
+                  style={[styles.textInput, {height: 80}]}
                   onChangeText={handleChange("description")}
                   onBlur={handleBlur("description")}
                   value={values.description}
+                  multiline={true}
                 />
 
                 <View>
