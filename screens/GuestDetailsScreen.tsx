@@ -71,7 +71,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
   const sendDataToBackend = async (data: any) => {
     try {
       if (!editMode) {
-        if (namesArray) {
+        if (!namesArray) {
           return;
         }
 

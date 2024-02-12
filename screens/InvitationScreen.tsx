@@ -67,11 +67,16 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   useEffect(() => {
-    searchDock();
-    checkStorage("USER_LOGGED", async (id: any) => {
-      getHistorialGuest(id);
-      getBoatRecord(id);
-    });
+    try {
+      searchDock();
+      checkStorage("USER_LOGGED", async (id: any) => {
+        getHistorialGuest(id);
+        getBoatRecord(id);
+      });
+    } catch (error) {
+      showErrorToast("httpConnectionError")
+      setShowLoading(false)
+    }
   }, []);
 
   const getBoatRecord = (id: any) => {
@@ -144,8 +149,9 @@ export default function InvitationScreen({ navigation, route }: any) {
         return;
       }
 
+
       const data = {
-        title: values.title,
+        title: values.title.charAt(0).toUpperCase() + values.title.slice(1).toLowerCase(),
         description: values.description,
         date: moment(date).format("MM/DD/YYYY"),
         guestDetails: namesArray,
@@ -155,7 +161,7 @@ export default function InvitationScreen({ navigation, route }: any) {
 
       const dataPut = {
         id: dataToEdit?.idGuest,
-        title: values.title,
+        title: values.title.charAt(0).toUpperCase() + values.title.slice(1).toLowerCase(),
         description: values.description,
         date: moment(date).format("MM/DD/YYYY"),
         boat_id: values.boat_id,
@@ -171,6 +177,9 @@ export default function InvitationScreen({ navigation, route }: any) {
               showGoodToast(translation.t("sendRequestSuccess"));
               navigation.navigate("GuestScreen", { refresh: res });
             });
+          } else {
+            showErrorToast(res.message)
+            setShowLoading(false)
           }
         });
       } else {
@@ -182,6 +191,9 @@ export default function InvitationScreen({ navigation, route }: any) {
               showGoodToast(translation.t("sendRequestSuccess"));
               navigation.navigate("GuestScreen", { refresh: res });
             });
+          } else {
+            showErrorToast(res.message)
+            setShowLoading(false)
           }
         });
       }

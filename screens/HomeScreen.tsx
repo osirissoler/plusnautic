@@ -162,7 +162,7 @@ export default function HomeScreen({ navigation, route }: any) {
 function ServiceComponent() {
   return (
     <View>
-      <Text>Error vuelba a intentar mas tarder</Text>
+      <Text>Error vuelva a intentar mas tarde</Text>
     </View>
   );
 }

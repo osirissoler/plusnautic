@@ -52,7 +52,7 @@ export default function GuestScreen({ navigation, route }: any) {
       setTimeout(() => {
         setFetching(false);
         setShowLoading(false);
-      }, 2000);
+      }, 1000);
     });
   }, []);
 
