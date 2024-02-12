@@ -33,11 +33,11 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon_coopharma.png",
+        "foregroundImage": "./assets/images/plusnauticIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.plusnautica2.app",
-      "versionCode": 18,
+      "versionCode": 21,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
