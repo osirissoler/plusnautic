@@ -275,7 +275,7 @@
   "Reject":"Rechazar",
   "WrongCode":"Código incorrecto",
   "CodeIsUsedMsg":"Este código ya ha sido utilizado",
-  "DateAfterTodayMsg":"La fecha debe ser mayor al día de hoy",
+  "DateAfterTodayMsg":"La fecha no puede ser antes de hoy",
   "ShowDatePicker":"Seleccionar fecha",
   "DescriptionMsg":"Descripción del problema",
   "ClientName":"Nombre del cliente",

@@ -133,22 +133,23 @@ export default function InvitationScreen({ navigation, route }: any) {
   const createInvitation = (values: any) => {
     try {
       const currentDate = new Date();
+      currentDate.setUTCHours(0, 0, 0, 0);
 
       if (!date) {
         showErrorToast(translation.t("EnterDate"));
         return;
       }
 
-      // if (!moment(date, "DD/MM/YYYY", true).isValid()) {
-      //   showErrorToast(translation.t("EnterValidDateFormat"));
-      //   return;
-      // }
-
       if (currentDate.getTime() > date.getTime()) {
+        console.log(date.getTime())
         showErrorToast(translation.t("DateAfterTodayMsg"));
         return;
       }
 
+      if(namesArray.length <= 0){
+        showErrorToast(translation.t("DateAfterTodayMsg"));
+        return
+      }
 
       const data = {
         title: values.title.charAt(0).toUpperCase() + values.title.slice(1).toLowerCase(),
