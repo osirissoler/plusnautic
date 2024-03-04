@@ -92,6 +92,13 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
     });
   };
 
+  const hideLoadingModal = (callback: Function) => {
+		setTimeout(() => {
+			setShowLoading(false);
+			callback();
+		}, 100);
+	};
+
   const selectPharmacy = (index: any) => {
     sendPharmacyUser(
       index,
@@ -108,47 +115,54 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
     }, 100);
   };
 
+  
+
   const sendPharmacyUser = async (pharmacy_id: any, bool: any) => {
+    setShowLoading(true)
     checkStorage("USER_LOGGED", async (id: any) => {
       if (bool) {
         const url = "/userPharmacy/createUserPharmacy";
-        await sendData(url, { pharmacy_id, user_id: id }).then((response) => {
-          if (response.ok) {
-            setListByUser((prevState: any) => {
-              // Verificar si el elemento ya está en el array
-              if (!prevState.includes(pharmacy_id)) {
-                // Si no está presente, crear un nuevo array con el elemento añadido y devolverlo
-                return [...prevState, pharmacy_id];
-              } else {
-                // Si ya está presente, devolver el estado anterior sin hacer cambios
-                return prevState;
-              }
-            });
-          } else {
-            showErrorToastGood(translation.t("httpConnectionError"))
-          }
-        });
+        hideLoadingModal(async () => {
+          await sendData(url, { pharmacy_id, user_id: id }).then((response) => {
+            if (response.ok) {
+              setListByUser((prevState: any) => {
+                // Verificar si el elemento ya está en el array
+                if (!prevState.includes(pharmacy_id)) {
+                  // Si no está presente, crear un nuevo array con el elemento añadido y devolverlo
+                  return [...prevState, pharmacy_id];
+                } else {
+                  // Si ya está presente, devolver el estado anterior sin hacer cambios
+                  return prevState;
+                }
+              });
+            } else {
+              showErrorToastGood(translation.t("httpConnectionError"))
+            }
+          });
+        })
       } else {
         const urlDelete = `/userPharmacy/deleteUserPharmacyById`;
-        sendData(urlDelete, { pharmacy_id, user_id: id }).then((res) => {
-          if (res.ok) {
-            setList((prevList: any) =>
-              prevList.map((item: any) => {
-                if (item.id === pharmacy_id) {
-                  // Retorna un nuevo objeto con el valor actualizado
-                  return { ...item, selected: false };
-                }
-                return item; // Retorna el objeto sin cambios
-              })
-            );
-
-            setListByUser([
-              ...listByUser.filter((item: any) => item != pharmacy_id),
-            ]);
-          } else {
-            showErrorToastGood(translation.t("httpConnectionError"))
-          }
-        });
+        hideLoadingModal(async () => {
+          await sendData(urlDelete, { pharmacy_id, user_id: id }).then((res) => {
+            if (res.ok) {
+              setList((prevList: any) =>
+                prevList.map((item: any) => {
+                  if (item.id === pharmacy_id) {
+                    // Retorna un nuevo objeto con el valor actualizado
+                    return { ...item, selected: false };
+                  }
+                  return item; // Retorna el objeto sin cambios
+                })
+              );
+  
+              setListByUser([
+                ...listByUser.filter((item: any) => item != pharmacy_id),
+              ]);
+            } else {
+              showErrorToastGood(translation.t("httpConnectionError"))
+            }
+          });
+        })
       }
     });
   };
