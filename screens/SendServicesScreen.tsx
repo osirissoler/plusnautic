@@ -177,7 +177,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
       let match = /\.(\w+)$/.exec(fileName);
       let fileType = match ? `image/${match[1]}` : `image`;
 
-      let formData = new FormData();
+      let formData: any = new FormData();
       formData.append("image", { uri: element.uri, name: fileName, fileType });
       const data = formData;
       await sendData(url, data);

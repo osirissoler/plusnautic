@@ -1,66 +1,225 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-    View,
-    Text,
-    Pressable,
-    Image,
-    StyleSheet,
-    FlatList,
-    ScrollView,
-    TouchableOpacity,
-    Modal,
-    Alert,
-    TextInput
-} from 'react-native';
-import { Container, Loading } from '../components/Shared';
-import { LanguageContext } from '../LanguageContext';
+  View,
+  Text,
+  Pressable,
+  Image,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  Alert,
+  TextInput,
+} from "react-native";
+import { Container, Loading } from "../components/Shared";
+import { LanguageContext } from "../LanguageContext";
+import { hideLoadingModal } from "../utils";
+import { fetchData } from "../httpRequests";
 
 export default function ActivityScreen({ navigation, route }: any) {
-    const { translation } = React.useContext(LanguageContext);
-    const [showLoading, setShowLoading]: any = useState(true);
-    const [initialImg, setinitialImage] = useState('https://i.pinimg.com/originals/3f/e5/32/3fe532c1bdc63084ab65c1427609a3bd.gif');
+  const { translation } = React.useContext(LanguageContext);
+  const [showLoading, setShowLoading]: any = useState(true);
+  const [events, setEvents] = useState([]);
+  const [typeEvents, setTypeEvents]: any = useState([]);
+  const [initialImg, setinitialImage] = useState(
+    "https://i.pinimg.com/originals/3f/e5/32/3fe532c1bdc63084ab65c1427609a3bd.gif"
+  );
+  const [fetching, setFetching]: any = useState(false);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setShowLoading(false);
+  useEffect(() => {
+    setShowLoading(true);
+    setFetching(true);
 
-        }, 1500);
+    hideLoadingModal(() => {
+      getEvents();
+    }, setShowLoading);
 
-    }, []);
+    setTimeout(() => {
+      setFetching(false);
+      setShowLoading(false);
+    }, 100);
+  }, []);
 
+  const getEvents = async () => {
+    const url = `/typeEvents/getTypeEvents`;
+    fetchData(url).then((response: any) => {
+      if (response.ok) {
+        setEvents(response.boatShows);
+        setTypeEvents(response.typeEvents);
+      }
+    });
+  };
 
-
-    return (
-        <Container>
-            <Loading showLoading={showLoading} translation={translation} />
-            <View
-                style={{
-                    width: '100%', height: '100%', padding: 10,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 15,
-                    marginVertical: 10,
-                    minHeight: 200
-                }}
+  return (
+    <Container>
+      <Loading showLoading={showLoading} translation={translation} />
+      {events.length == 0 ? (
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            padding: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white",
+            borderRadius: 15,
+            marginVertical: 10,
+            minHeight: 200,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 20,
+                marginBottom: 10,
+              }}
             >
-                <View >
-                    <Text style={{
-                        fontWeight: 'bold', fontSize: 20, marginBottom:10
-                    }}>There are no activities to show</Text>
+              There are no activities to show
+            </Text>
+          </View>
+          <Image
+            style={{
+              // marginBottom: 20,
+              height: 180,
+              width: "90%",
+              borderRadius: 100,
+            }}
+            source={{ uri: initialImg }}
+          />
+        </View>
+      ) : (
+        <View style={{ padding: 10 }}>
+          <FlatList
+            refreshing={fetching}
+            data={events}
+            onRefresh={() => {
+              getEvents();
+            }}
+            renderItem={({ item }: any) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("ActivitisDetailScreen", {
+                    event_id: item.id,
+                  })
+                }
+                style={{ marginHorizontal: 10, marginVertical: 5 }}
+              >
+                <View style={styles.cardContainer}>
+                  <View style={styles.cardContent}>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginVertical: 10,
+                        marginHorizontal: 10,
+                        width: "25%",
+                        height: 60,
+                      }}
+                    >
+                      <Image
+                        source={{
+                          uri: "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
+                        }}
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          resizeMode: "contain",
+                          borderRadius: 10,
+                          borderColor: "gray",
+                        }}
+                      />
+                    </View>
+
+                    <View style={{ width: "65%", marginLeft: 10 }}>
+                      <View style={{ marginBottom: 10 }}>
+                        <Text
+                          numberOfLines={1}
+                          style={{
+                            marginVertical: 3,
+                            fontWeight: "600",
+                            fontSize: 19,
+                            color: "#4f4f4f",
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          ellipsizeMode="tail"
+                          style={{ fontWeight: "500" }}
+                        >
+                          {
+                            typeEvents?.find(
+                              (type: any) => type.id == item.typeEvent_id
+                            )?.name
+                          }
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          // justifyContent: "space-between",
+                          gap: 50,
+                          width: "100%",
+                        }}
+                      >
+                        <View style={{ flexDirection: "column" }}>
+                          <Text
+                            style={{ fontWeight: "bold", color: "#777777" }}
+                          >
+                            {translation.t("Date")} init:
+                          </Text>
+
+                          <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
+                            {item.dateInit}
+                          </Text>
+                        </View>
+
+                        <View style={{ flexDirection: "column" }}>
+                          <Text
+                            style={{ fontWeight: "bold", color: "#777777" }}
+                          >
+                            {translation.t("Date")} final:
+                          </Text>
+                          <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
+                            {item.dateInit}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
-                {/* <Image source={{ uri: 'https://i.gifer.com/origin/7b/7bce0846b060c95fd5d256b370c5897e.gif' }} style={{ flex: 1, resizeMode: 'contain' }} /> */}
-                {/* <Image source={{ uri: 'https://coopharma-file.nyc3.digitaloceanspaces.com/WhatsApp%20Image%202022-12-12%20at%204.32.10%20PM.jpeg' }} style={{ flex: 1, resizeMode: 'contain' }} /> */}
-
-                <Image style={{
-                    // marginBottom: 20,
-                    height: 180,
-                    width: '90%',
-                    borderRadius: 100,
-                }} source={{ uri: initialImg }} />
-
-            </View>
-        </Container>
-
-    )
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
+    </Container>
+  );
 }
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    borderColor: "#8B8B9720",
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 5,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    padding: 10
+  },
+});

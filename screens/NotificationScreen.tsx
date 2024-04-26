@@ -15,6 +15,7 @@ import { fetchData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import HeaderComponent from "../components/Header";
+import { hideLoadingModal } from "../utils";
 
 export default function NotificationScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -32,7 +33,7 @@ export default function NotificationScreen({ navigation }: any) {
         setUserId(id)
         getNotification(id);
       })
-    });
+    }, setShowLoading);
     setTimeout(() => {
       setFetching(false);
       setShowLoading(false);
@@ -47,13 +48,6 @@ export default function NotificationScreen({ navigation }: any) {
         console.log(response.notification)
       }
     });
-  };
-
-  const hideLoadingModal = (callback: Function) => {
-    setTimeout(() => {
-      setShowLoading(false);
-      callback();
-    }, 500);
   };
 
   return (
