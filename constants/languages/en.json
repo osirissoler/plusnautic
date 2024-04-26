@@ -280,10 +280,12 @@
   "Status": "Status",
   "Amount": "Amount",
   "PaymentDetail": "Payment Details",
-  "NotificationMsg":"These are your notifications",
-  "TypeOfNotification":"Type of notification",
-  "ServiceCreate":"The service has been sent successfully",
-  "CountryIsRequired":"The country is required",
+  "NotificationMsg": "These are your notifications",
+  "TypeOfNotification": "Type of notification",
+  "ServiceCreate": "The service has been sent successfully",
+  "CountryIsRequired": "The country is required",
   "AddGuestErrorMsg": "To add, you must have an email or phone number",
-"AddGuestEmailInvalid": "You must enter a valid email address"
+  "AddGuestEmailInvalid": "You must enter a valid email address",
+  "ShoppingCart": "Shopping cart",
+  "shoppingCartTicketsCountText": "Il n'y a aucune entrée à afficher."
 }

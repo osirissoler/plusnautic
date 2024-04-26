@@ -33,12 +33,8 @@ import NewCardScreen from "../screens/NewCardScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import ProductDetailsScreen from "../screens/ProductDetailsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import RentScreen from "../screens/RentScreen";
-import PaymentsScreent1 from "../screens/PaymentsScreent1";
 import SelectLanguageScreen from "../screens/SelectLanguageScreen";
 import ServiceScreen from "../screens/ServiceScreen";
-import ShopperScreen from "../screens/ShopperScreen";
-import ShoppingCartScreen from "../screens/ShoppingCartScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import Step1Screen from "../screens/Steps/Step1Screen";
@@ -64,6 +60,9 @@ import MyGuestScreen from "../screens/MyGuestScreen";
 import UpdateUserDataScreen from "../screens/UpdateUserDataScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import PaymentNotificationScreen from "../screens/PaymentNotificationScreen";
+import ActivitisDetailScreen from "../screens/ActivitisDetailScreen";
+import BuyTicketsScreen from "../screens/BuyTicketsScreen";
+import ShoppingCartScreen from "../screens/ShoppingCartScreen";
 
 export default function Navigation({
   colorScheme,
@@ -283,9 +282,7 @@ function RootNavigator({ route }: any) {
         name="ListProducts"
         component={ListProductsScreen}
         options={{
-          headerTitle: translation.t(
-            "headerTitleSearchProduct"
-          ) ,
+          headerTitle: translation.t("headerTitleSearchProduct"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}
@@ -354,7 +351,7 @@ function RootNavigator({ route }: any) {
         name="MarinasScreen"
         component={MarinasScreen}
         options={{
-          headerTitle: translation.t('Marinas'),
+          headerTitle: translation.t("Marinas"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -364,7 +361,7 @@ function RootNavigator({ route }: any) {
         name="Request"
         component={ServiceScreen}
         options={{
-          headerTitle: translation.t('Request') ,
+          headerTitle: translation.t("Request"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -374,13 +371,13 @@ function RootNavigator({ route }: any) {
         name="Activities"
         component={ActivityScreen}
         options={{
-          headerTitle: translation.t('Activities') ,
+          headerTitle: translation.t("Activities"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="MyGuestScreen"
         component={MyGuestScreen}
         options={{
@@ -424,6 +421,41 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="ActivitisDetailScreen"
+        component={ActivitisDetailScreen}
+        options={{
+          headerTitle: "Event detail",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="BuyTicketsScreen"
+        component={BuyTicketsScreen}
+        options={{
+          headerTitle: "Tickets",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="ShoppingCart"
+        component={ShoppingCartScreen}
+        options={{
+          headerTitle: "Tickets",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "flip",
+          headerShown: false,
+        }}
+      />
+
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -531,29 +563,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
         initialParams={route.params}
       /> */}
-      {/* <BottomTab.Screen
-				name='ShoppingCart'
-				component={ShoppingCartScreen}
-				options={{
-					title: '',
-					headerShown: false,
-					tabBarIcon: ({ color }) => (
-						<View
-							style={{
-								height: 60,
-								width: 60,
-								borderRadius: 100,
-								backgroundColor: '#128780',
-								marginBottom: 8,
-								justifyContent: 'center',
-								alignItems: 'center'
-							}}
-						>
-							<TabBarIcon name='basket-outline' color={'#fff'} />
-						</View>
-					)
-				}}
-			/> */}
+
       {/* <BottomTab.Screen
 				name='Shopper'
 				component={ShopperScreen}
@@ -621,7 +631,7 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
         initialParams={route.params}
         listeners={{
-          tabPress: (e:any) => {
+          tabPress: (e: any) => {
             goAbordo();
           },
         }}

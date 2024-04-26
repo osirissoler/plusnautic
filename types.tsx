@@ -35,26 +35,29 @@ export type RootStackParamList = {
   ProductDetails: undefined;
   Checkout: undefined;
   Forms: undefined;
-  ListScreen:undefined;
-  Accept:undefined;
+  ListScreen: undefined;
+  Accept: undefined;
   RecordBoats: undefined;
-  Marinas:undefined;
-  Muelles:undefined;
-  Solicitudes:undefined;
-  MyBoats:undefined;
-  Gestor:undefined;
+  Marinas: undefined;
+  Muelles: undefined;
+  Solicitudes: undefined;
+  MyBoats: undefined;
+  Gestor: undefined;
   CreateInvitations: undefined;
   GuestDetailsScreen: undefined;
   GuestScreen: undefined;
-  prueba:undefined;
-  App:undefined;
-  MarinasScreen:undefined;
-  Request:undefined;
-  Activities:undefined;
-  MyGuestScreen:undefined;
-  UpdateUser:undefined;
-  Notification:undefined;
-  PaymentScreen:undefined;
+  prueba: undefined;
+  App: undefined;
+  MarinasScreen: undefined;
+  Request: undefined;
+  Activities: undefined;
+  MyGuestScreen: undefined;
+  UpdateUser: undefined;
+  Notification: undefined;
+  PaymentScreen: undefined;
+  ActivitisDetailScreen: undefined;
+  BuyTicketsScreen: undefined;
+  ShoppingCart: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -65,7 +68,6 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 export type RootTabParamList = {
   Home: undefined;
   Service: undefined;
-  ShoppingCart: undefined;
   Shopper: undefined;
   Profile: undefined;
   Payments:undefined;

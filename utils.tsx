@@ -7,10 +7,17 @@
 //     //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 // });
 
-export const formatter = (money:any)=>{
-return money? ' $' +money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'):'0.00'
-}
+export const formatter = (money: any) => {
+  return money
+    ? " $" + money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+    : "0.00";
+};
 
-export const formatter2 = (money:any)=>{
-    return money?  +money.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,'):'0.00'
-    }
+export const formatter2 = (money: any) => {
+  return money ? +money.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, "$&,") : "0.00";
+};
+
+export const hideLoadingModal = (callback: Function, setShowLoading: Function) => {
+    setShowLoading(false);
+    callback();
+};

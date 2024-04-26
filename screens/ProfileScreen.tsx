@@ -62,7 +62,7 @@ export default function ProfileScreen({ navigation, route }: any) {
         // setShowLoading(false)
       },
       navigation,
-      translation
+      translation 
     );
     return () => {
       setUser({});
@@ -263,7 +263,9 @@ export default function ProfileScreen({ navigation, route }: any) {
 					</Pressable> */}
           <Pressable
             style={styles.option}
-            onPress={() => navigation.navigate("UpdateUser", {userData: user})}
+            onPress={() =>
+              navigation.navigate("UpdateUser", { userData: user })
+            }
           >
             <Text style={styles.optionText}>
               {translation.t("MyInformation")}
@@ -283,8 +285,17 @@ export default function ProfileScreen({ navigation, route }: any) {
             style={styles.option}
             onPress={() => navigation.navigate("Notification")}
           >
+            <Text style={styles.optionText}>Notification</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("ShoppingCart", { showBack: true })
+            }
+          >
             <Text style={styles.optionText}>
-              Notification
+              {translation.t("ShoppingCart")}
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
@@ -313,7 +324,7 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>{translation.t("Guest")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable> */}
-         
+
           <Pressable
             style={styles.option}
             onPress={() => {
@@ -325,7 +336,7 @@ export default function ProfileScreen({ navigation, route }: any) {
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
-          
+
           <Pressable
             style={styles.option}
             onPress={() => {
@@ -366,13 +377,14 @@ export default function ProfileScreen({ navigation, route }: any) {
           </Pressable> */}
         </View>
         <View style={styles.footer}>
-          
           <TouchableOpacity
             onPress={() => {
               OpenURLButton();
             }}
           >
-            <Text style={{color:'#5f7ceb', fontSize:18}}>{translation.t("profileTermsText")}</Text>
+            <Text style={{ color: "#5f7ceb", fontSize: 18 }}>
+              {translation.t("profileTermsText")}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
