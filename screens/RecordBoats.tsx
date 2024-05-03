@@ -104,7 +104,6 @@ export default function RecordBoats({ navigation, route }: any) {
           label: product.product_name,
           value: product.product_id,
         }));
-        console.log(mappedValues);
         setDockValues(mappedValues);
       });
     } else {
@@ -114,7 +113,6 @@ export default function RecordBoats({ navigation, route }: any) {
           label: product.product_name,
           value: product.product_id,
         }));
-        console.log(mappedValues);
         setDockValues(mappedValues);
       });
     }

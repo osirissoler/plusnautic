@@ -210,6 +210,8 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
             <TextInput
               style={styles.input}
               value={inputEmailValue}
+              keyboardType="email-address"
+              autoCapitalize={"none"}
               onChangeText={(text) => {
                 setInputEmailValue(text);
               }}
@@ -503,7 +505,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
                     }}
                   >
                     <ImageBackground
-                      source={{uri: item.user_img}}
+                      source={{ uri: item.user_img }}
                       style={styles.profilePicture}
                       resizeMode={"cover"}
                       imageStyle={{ borderRadius: 100 }}
@@ -648,6 +650,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
+    width: "90%",
     margin: 10,
     backgroundColor: "white",
     borderRadius: 20,
@@ -663,9 +666,8 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   input: {
+    width:'100%',
     height: 50,
-    minWidth: 200,
-    maxWidth: 250,
     borderColor: "#F7F7F7",
     borderWidth: 2,
     backgroundColor: "#F7F7F7",
