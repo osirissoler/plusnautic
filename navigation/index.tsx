@@ -63,6 +63,7 @@ import PaymentNotificationScreen from "../screens/PaymentNotificationScreen";
 import ActivitisDetailScreen from "../screens/ActivitisDetailScreen";
 import BuyTicketsScreen from "../screens/BuyTicketsScreen";
 import ShoppingCartScreen from "../screens/ShoppingCartScreen";
+import QrCodeScreen from "../screens/QrCodeScreen";
 
 export default function Navigation({
   colorScheme,
@@ -425,11 +426,11 @@ function RootNavigator({ route }: any) {
         name="ActivitisDetailScreen"
         component={ActivitisDetailScreen}
         options={{
-          headerTitle: "Event detail",
+          headerTitle: "Event data",
           headerStyle: { backgroundColor: "#fff" },
-          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          headerTitleStyle: { color: "#000", fontWeight: "500" },
           animation: "fade",
-          headerShown: false,
+          headerShown: true,
         }}
       />
       <Stack.Screen
@@ -440,7 +441,7 @@ function RootNavigator({ route }: any) {
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
-          headerShown: false,
+          headerShown: true,
         }}
       />
 
@@ -448,11 +449,22 @@ function RootNavigator({ route }: any) {
         name="ShoppingCart"
         component={ShoppingCartScreen}
         options={{
-          headerTitle: "Tickets",
+          headerTitle: "Cart",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "flip",
-          headerShown: false,
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="QrCodeScreen"
+        component={QrCodeScreen}
+        options={{
+          headerTitle: "Qr code",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "slide_from_right",
         }}
       />
 
