@@ -79,7 +79,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
   return (
     <Container>
       <ScrollView style={{ paddingHorizontal: 30 }}>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -123,7 +123,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
           >
             Event data
           </Text>
-        </View>
+        </View> */}
 
         <HeaderComponent />
         <Loading showLoading={showLoading} translation={translation} />

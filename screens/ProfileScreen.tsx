@@ -10,6 +10,7 @@ import {
   ImageBackground,
   Alert,
   Button,
+  Image,
 } from "react-native";
 import HeaderComponent from "../components/Header";
 import {
@@ -141,7 +142,7 @@ export default function ProfileScreen({ navigation, route }: any) {
     let match = /\.(\w+)$/.exec(fileName);
     let fileType = match ? `image/${match[1]}` : `image`;
 
-    let formData = new FormData();
+    let formData: any = new FormData();
     formData.append("image", { uri: resultUri, name: fileName, fileType });
 
     const url = "/user/updateClientImage/" + user.id;
@@ -270,6 +271,15 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>
               {translation.t("MyInformation")}
             </Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("QrCodeScreen", { qrCode: user.qrCode })
+            }
+          >
+            <Text style={styles.optionText}>Qr code</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           <Pressable

@@ -10,6 +10,7 @@ import {
   Linking,
   Alert,
   Modal,
+  Pressable,
 } from "react-native";
 
 import HeaderComponent from "../components/Header";
@@ -19,79 +20,23 @@ import {
   Container,
   Loading,
 } from "../components/Shared";
-import { fetchData, sendData } from "../httpRequests";
+import { sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
-import { AntDesign, Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import ImageViewer from "react-native-image-zoom-viewer";
+import { AntDesign } from "@expo/vector-icons";
 import { formatter } from "../utils";
 import Toast from "react-native-root-toast";
 import { Dropdown } from "react-native-element-dropdown";
+import { CheckBox } from "react-native-elements";
 
 export default function BuyTicketsScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
-  const [ticketsArr, setTicketsArr] = useState(route.params.tickets)
-  const [ticket, setTicket]: any =  useState({})
+  const [ticketsArr, setTicketsArr] = useState(route.params.tickets);
+  const [ticket, setTicket]: any = useState({});
   const [showLoading, setShowLoading]: any = useState(false);
-  const [error, setError] = useState(false);
-  const [eventData, setEventData]: any = useState({});
-  const [product, setProduct]: any = useState({});
   const [ticketPrice, setTicketPrice]: any = useState(0.0);
   const [ticketAmount, setTicketAmount]: any = useState(1);
-  const [product_imgs, setProduct_imgs]: any = useState([]);
-  const [product_img, setProduct_img]: any = useState({});
+  const [selectedIndex, setSelectedIndex] = useState("");
 
-  useEffect(() => {
-    getBoatShowById();
-  }, [route.params.event_id]);
-
-  const getBoatShowById = async () => {
-    let url = `/typeEvents/getBoatShowById/${route.params.event_id}`;
-    await fetchData(url).then((response: any) => {
-      if (response.ok) {
-        setEventData(response.data.boatShows);
-      } else {
-        setError(true);
-      }
-    });
-  };
-
-  useEffect(() => fetchProduct(), []);
-
-  const fetchProduct = () => {
-    console.log("shodetail", route.params);
-    setShowLoading(true);
-    checkStorage("USER_PHARMACY", (response: any) => {
-      const pharmacy = JSON.parse(response);
-      const url = "/products/getPharmaciesProductByid";
-      const params = route.params;
-      const data = {
-        id: params.productId,
-        pharmacy_id: 566,
-      };
-      sendData(url, data).then((response: any) => {
-        hideLoadingModal(() => {
-          if (Object.keys(response).length > 0) {
-            const product = response["pharmacyProduct"];
-            setProduct(product);
-            const url2 = `/gallery/getImgs/${product.product_id}`;
-            fetchData(url2).then((response2: any) => {
-              if (response2.ok) {
-                setProduct_imgs([
-                  { url: product.product_img },
-                  ...response2.imagens,
-                ]);
-                setProduct_img({ url: product.product_img });
-              }
-            });
-            setTicketPrice(product.price);
-          } else {
-            setProduct({});
-            setProduct(0);
-          }
-        });
-      });
-    });
-  };
 
   const modifyPrice = (type: number) => {
     let price: number = ticketPrice;
@@ -103,9 +48,9 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
       price = price - ticket.price;
       quantity -= 1;
     }
-    
+
     if (quantity <= ticket.amount) {
-      console.log(price)
+      console.log(price);
       if (price >= ticket.price) {
         setTicketAmount(quantity);
         setTicketPrice(roundNumber(price));
@@ -136,14 +81,14 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
           [
             {
               text: translation.t("productDetailsKeepBuyingText"), // Keep Buying
-              onPress: () => {
-                navigation.navigate("Root", { screen: "home" });
-              },
+              // onPress: () => {
+              //   navigation.navigate("Root", { screen: "home" });
+              // },
             },
             {
               text: translation.t("productDetailsGoCartText"), // Go to Cart
               onPress: () => {
-                navigation.navigate("Root", { screen: "ShoppingCart" });
+                navigation.navigate("ShoppingCart");
               },
             },
           ]
@@ -163,7 +108,6 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
           user_id: id,
           ticket_id: ticket.id,
         };
-        console.log("add to cart", data);
         sendData(url, data)
           .then((response: any) => {
             hideLoadingModal(() => {
@@ -204,132 +148,89 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
     }, 1500);
   };
 
-
   return (
     <Container>
-      <ScrollView style={{ paddingHorizontal: 30 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 15,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              alignItems: "flex-end",
-              marginHorizontal: 5,
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: 2,
-              borderColor: "#b2b9c9",
-            }}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 5,
-                marginHorizontal: 5,
-              }}
-            >
-              <Ionicons
-                name="arrow-back-outline"
-                size={33}
-                style={{ color: "#000" }}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 23,
-              fontWeight: "500",
-              width: "70%",
-            }}
-          >
-            Tickets
-          </Text>
-        </View>
+      <View style={{ paddingHorizontal: 25 }}>
         <Loading showLoading={showLoading} translation={translation} />
 
-        <View>
-          <Text style={{ fontWeight: "500", color: "#8B8B97" }}>
-            Categorias
-          </Text>
-          <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={ticketsArr}
-            search
-            // value={rou}
-            labelField="ticketCategory_name"
-            valueField="id"
-            maxHeight={300}
-            placeholder={"Selecciona ticket"}
-            searchPlaceholder={"Busca ticket"}
-            onChange={(items: any) => {
-              setTicket(
-                ticketsArr.find((ticket: any) => ticket.id == items.id)
-              );
-              setTicketPrice(
-                ticketsArr.find((ticket: any) => ticket.id == items.id)?.price
-              );
-            }}
-          />
-          <MaterialIcons
-            style={styles.inputIconOther}
-            name="location-pin"
-            size={20}
-            color="black"
-          />
-        </View>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 23,
+            fontWeight: "500",
+            marginVertical: 10,
+          }}
+        >
+          Select tickets to buy
+        </Text>
 
-        <View style={styles.body}>
-          <Text style={styles.productName}>{ticket.ticketCategory_name}</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 20,
-            }}
-          >
-            <Text style={styles.ticketPrice}>{formatter(ticketPrice)}</Text>
-            {ticket.amount > 0 && (
-              <View
-                style={{ flexDirection: "row", justifyContent: "space-around" }}
-              >
-                <AntDesign
-                  name="minus"
-                  size={24}
-                  style={styles.priceIcon}
-                  onPress={() => modifyPrice(2)}
-                />
-                <Text style={{ fontSize: 20, alignSelf: "center" }}>
-                  {ticketAmount}
-                </Text>
-                <AntDesign
-                  name="plus"
-                  size={24}
-                  style={styles.priceIcon}
-                  onPress={() => modifyPrice(1)}
-                />
-              </View>
-            )}
-          </View>
-          {(ticket.amount > 0 && (
-            <TouchableOpacity style={styles.productAdd} onPress={addToCart}>
-              <Text style={styles.productAddText}>
-                 Add to cart
-              </Text>
-            </TouchableOpacity>
-          )) ||
-            (ticket.amount == 0 && (
+        <FlatList
+          style={{
+            paddingHorizontal: 15,
+            backgroundColor: "#F2F2F2",
+            height: "65%",
+            marginTop: 10,
+            paddingTop: 5,
+            borderRadius: 10,
+          }}
+          // refreshing={isFetching}
+          // onRefresh={onRefresh}
+          data={ticketsArr}
+          renderItem={({ item, index }) => (
+            <TicketCard
+              key={index}
+              item={item}
+              index={index}
+              selectedIndex={selectedIndex}
+              setTicket={setTicket}
+              setTicketPrice={setTicketPrice}
+              setSelectedIndex={setSelectedIndex}
+              setTicketAmount={setTicketAmount}
+            />
+          )}
+        />
+
+        {parseInt(selectedIndex) >= 0 && (
+          <View style={styles.body}>
+            <Text style={styles.productName}>{ticket.ticketCategory_name}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 20,
+              }}
+            >
+              <Text style={styles.ticketPrice}>{formatter(ticketPrice)}</Text>
+              {ticket.amount > 0 && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <AntDesign
+                    name="minus"
+                    size={24}
+                    style={styles.priceIcon}
+                    onPress={() => modifyPrice(2)}
+                  />
+                  <Text style={{ fontSize: 20, alignSelf: "center" }}>
+                    {ticketAmount}
+                  </Text>
+                  <AntDesign
+                    name="plus"
+                    size={24}
+                    style={styles.priceIcon}
+                    onPress={() => modifyPrice(1)}
+                  />
+                </View>
+              )}
+            </View>
+            {ticket.amount > 0 ? (
+              <TouchableOpacity style={styles.productAdd} onPress={addToCart}>
+                <Text style={styles.productAddText}>Add to cart</Text>
+              </TouchableOpacity>
+            ) : (
               <Text
                 style={{
                   textAlign: "center",
@@ -338,16 +239,70 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
                   color: "red",
                 }}
               >
-                {
-                  translation.t(
-                    "productDetailsStockError"
-                  ) /* Product out of stock */
-                }
+                {translation.t("productDetailsStockError")}
               </Text>
-            ))}
-        </View>
-      </ScrollView>
+            )}
+          </View>
+        )}
+      </View>
     </Container>
+  );
+}
+
+function TicketCard({
+  item,
+  index,
+  selectedIndex,
+  setTicket,
+  setTicketPrice,
+  setSelectedIndex,
+  setTicketAmount,
+}: any) {
+  const isSelected = index === selectedIndex;
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        setTicket(item);
+        setTicketPrice(item?.price);
+        setSelectedIndex(index);
+        setTicketAmount(1)
+      }}
+    >
+      <View style={styles.productCard}>
+        <Pressable>
+          <CheckBox
+            checked={isSelected}
+            checkedColor="#5f7ceb"
+            onPress={() => {
+              setTicket(item);
+              setTicketPrice(item?.price);
+              setSelectedIndex(index);
+              setTicketAmount(1)
+            }}
+          />
+        </Pressable>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            position: "relative",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={require("../assets/images/invitados.png")}
+            style={{ resizeMode: "cover", height: 80, width: 80 }}
+          />
+          <View>
+            <Text style={styles.productTitle}>{item.ticketCategory_name}</Text>
+            <Text style={styles.productPrice}>{formatter(item.price)}</Text>
+          </View>
+        </View>
+      </View>
+      <View style={{ ...styles.circle, top: "35%", left: -20 }} />
+      <View style={{ ...styles.circle, top: "35%", right: -20 }} />
+    </TouchableOpacity>
   );
 }
 
@@ -355,62 +310,11 @@ const styles = StyleSheet.create({
   body: {
     padding: 10,
     flexDirection: "column",
-    marginBottom: 60,
-  },
-  headerImage: {
-    marginBottom: 20,
-    height: 220,
-    width: "100%",
-    borderRadius: 10,
-  },
-  locationMap: {
-    marginBottom: 20,
-    height: 190,
-    width: "100%",
-    borderRadius: 10,
-  },
-  sectionTitle: {
-    fontWeight: "500",
-    color: "gray",
-    fontSize: 15,
-  },
-  sectionText: {
-    fontSize: 17,
-    fontWeight: "500",
-    letterSpacing: 0.5,
-  },
-  dateContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderColor: "#b2b9c9",
-    paddingBottom: 10,
-    marginTop: 6,
-  },
-  datesContainer: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 30,
+    height: "20%",
   },
 
   // Tickets
 
-  ticketDetail: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    paddingVertical: 15,
-    borderColor: "#b2b9c9",
-  },
-
-  productImage: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 40,
-    borderRadius: 20,
-  },
   productName: {
     marginTop: 30,
     marginBottom: 20,
@@ -447,6 +351,36 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "500",
+  },
+
+  // TICKET CARD
+
+  productCard: {
+    padding: 20,
+    marginVertical: 8,
+    borderRadius: 5,
+    flexDirection: "column",
+    justifyContent: "space-around",
+    position: "relative",
+    backgroundColor: "#fff",
+    height: 150,
+  },
+  circle: {
+    height: 45,
+    width: 45,
+    borderRadius: 100,
+    backgroundColor: "#F2F2F2",
+    position: "absolute",
+  },
+
+  productTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: "500",
+    alignSelf: "center",
   },
 
   // DROPDOWN STYLES

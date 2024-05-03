@@ -58,6 +58,7 @@ export type RootStackParamList = {
   ActivitisDetailScreen: undefined;
   BuyTicketsScreen: undefined;
   ShoppingCart: undefined;
+  QrCodeScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
