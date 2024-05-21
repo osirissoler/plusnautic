@@ -186,6 +186,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
           <Text style={styles.buttonText}>{translation.t("add")}</Text>
         </TouchableOpacity>
       </View>
+      
       <Modal
         animationType="slide"
         transparent={true}

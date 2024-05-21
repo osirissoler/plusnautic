@@ -309,7 +309,19 @@ export default function ProfileScreen({ navigation, route }: any) {
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("MyTicketsScreen", { showBack: true })
+            }
+          >
+            <Text style={styles.optionText}>{translation.t("MyTickets")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+
           {/* MyBoats */}
+
           {/* <Pressable
             style={styles.option}
             onPress={() => navigation.navigate("MyBoats")}
@@ -324,7 +336,9 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>{translation.t("Marinas")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+
           {/* Guest */}
+
           {/* <Pressable
             style={styles.option}
             onPress={() =>

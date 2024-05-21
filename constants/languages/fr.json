@@ -289,5 +289,7 @@
   "AddGuestErrorMsg": "Pour ajouter, vous devez avoir un e-mail ou un numéro de téléphone",
   "AddGuestEmailInvalid": "Vous devez saisir une adresse e-mail valide",
   "ShoppingCart": "Panier",
-  "shoppingCartTicketsCountText": "No hay tickets para mostrar."
+  "shoppingCartTicketsCountText": "Il n'y a aucune entrée à afficher.",
+  "MyTickets": "Mes billets",
+  "MyTicketsScreenMsg": "Cette section permet de voir les billets que vous avez achetés et ceux que vous avez réclamés auprès d'autres personnes."
 }

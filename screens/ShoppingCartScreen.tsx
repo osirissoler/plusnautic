@@ -185,7 +185,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
         {
           text: "OK",
           onPress: () => {
-            navigation.navigate("ShoppingCart");
+            navigation.navigate("Profile");
           },
         },
       ]

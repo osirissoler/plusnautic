@@ -64,6 +64,8 @@ import ActivitisDetailScreen from "../screens/ActivitisDetailScreen";
 import BuyTicketsScreen from "../screens/BuyTicketsScreen";
 import ShoppingCartScreen from "../screens/ShoppingCartScreen";
 import QrCodeScreen from "../screens/QrCodeScreen";
+import MyTicketsScreen from "../screens/MyTicketsScreen";
+import TicketDetailsScreen from "../components/MyTickets/TicketDetailsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -450,6 +452,30 @@ function RootNavigator({ route }: any) {
         component={ShoppingCartScreen}
         options={{
           headerTitle: "Cart",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "flip",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="MyTicketsScreen"
+        component={MyTicketsScreen}
+        options={{
+          headerTitle: "My Tickets",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "flip",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="TicketDetailsScreen"
+        component={TicketDetailsScreen}
+        options={{
+          headerTitle: "My Tickets",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "flip",
