@@ -289,5 +289,7 @@
   "AddGuestErrorMsg": "Para agregar debe tener email o telefono",
   "AddGuestEmailInvalid": "Debe ingresar un correo electronico válido",
   "ShoppingCart": "Carrito",
-  "shoppingCartTicketsCountText": "No hay tickets para mostrar."
+  "shoppingCartTicketsCountText": "No hay tickets para mostrar.",
+  "MyTickets": "Mis tickets",
+  "MyTicketsScreenMsg": "Esta section es para ver los tickets que has comprado y los que has reclamado por parte de otras personas."
 }

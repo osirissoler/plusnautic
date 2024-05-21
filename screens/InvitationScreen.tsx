@@ -263,7 +263,7 @@ export default function InvitationScreen({ navigation, route }: any) {
   };
 
   return (
-    <Container style={{ backgroundColor: "#fff" }} keyboard={true}>
+    <Container keyboard={true}>
       <HeaderComponent navigation={navigation} />
       <Loading showLoading={showLoading} translation={translation} />
       <Formik
@@ -284,7 +284,7 @@ export default function InvitationScreen({ navigation, route }: any) {
         }: any) => (
           <View>
             <View
-              style={{ padding: 15, height: `${!editMode ? "86%" : "70%"}` }}
+              style={{ padding: 15, height: `${!editMode ? "86%" : "80%"}` }}
             >
               <ScrollView>
                 <Text style={styles.labelInput}>{translation.t("Title")}</Text>
@@ -359,14 +359,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                 </View>
 
                 <Text style={styles.labelInput}>{translation.t("Date")}</Text>
-                {/* <TextInput
-                  placeholder="MM/DD/YYYY"
-                  style={styles.textInput}
-                  // value={date}
-                  onChangeText={handleDateChange}
-                  keyboardType="numeric"
-                  maxLength={10}
-                /> */}
+
                 <Text
                   style={{
                     fontSize: 15,
