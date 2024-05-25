@@ -23,7 +23,7 @@ export default function EnterTicketCodeModal({
         showErrorToast(translation.t("EnterCodeMsg"));
         return;
       }
-
+      
       const url = `/tickets/redeemTickets`;
       const data = { code: codeValue, user_id: userId };
 

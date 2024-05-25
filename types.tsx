@@ -61,6 +61,8 @@ export type RootStackParamList = {
   QrCodeScreen: undefined;
   MyTicketsScreen: undefined;
   TicketDetailsScreen: undefined;
+  EventBoothsScreen: undefined;
+  BoothProductsScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

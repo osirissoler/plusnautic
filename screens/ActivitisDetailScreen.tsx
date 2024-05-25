@@ -293,13 +293,35 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
         style={{
           paddingHorizontal: 20,
           marginBottom: 10,
-          justifyContent: "center",
+          justifyContent: "space-around",
           alignItems: "center",
+          flexDirection: "row",
         }}
       >
         <TouchableOpacity
           style={{
-            width: "100%",
+            width: "45%",
+            height: 50,
+            backgroundColor: "gray",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+            marginTop: 5,
+          }}
+          onPress={() =>
+            navigation.navigate("EventBoothsScreen", {
+              id: eventData?.id,
+            })
+          }
+        >
+          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600" }}>
+            Booths
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            width: "45%",
             height: 50,
             backgroundColor: "#5f7ceb",
             alignItems: "center",

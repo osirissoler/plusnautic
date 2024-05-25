@@ -291,5 +291,14 @@
   "ShoppingCart": "Carrito",
   "shoppingCartTicketsCountText": "No hay tickets para mostrar.",
   "MyTickets": "Mis tickets",
-  "MyTicketsScreenMsg": "Esta section es para ver los tickets que has comprado y los que has reclamado por parte de otras personas."
+  "MyTicketsScreenMsg": "Esta section es para ver los tickets que has comprado y los que has reclamado por parte de otras personas.",
+  "PurchasedTickets": "Comprados",
+  "ReceivedTickets": "Recibidos",
+  "NoTicketsMsg": "No hay boletos",
+  "Event": "Evento",
+  "Category": "Categoría",
+  "TicketsAmount": "Cantidad de boletos",
+  "Transferred": "Transferido",
+  "AmountTransferred": "Cantidad transferida",
+  "Transfer": "Transferir boletos"
 }

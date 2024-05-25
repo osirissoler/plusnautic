@@ -49,29 +49,6 @@ export default function PurchasedTickets({
     });
   };
 
-  // const pressActions = (item: any) => {
-  //   Alert.alert(translation.t("Confirm"), translation.t("ActionToDo"), [
-  //     {
-  //       text: "Ver detalles",
-  //       onPress: async () => {
-  //         navigation.navigate("TicketDetailsScreen", {
-  //           ticketUser_id: item.id,
-  //         });
-  //       },
-  //     },
-  //     {
-  //       text: "Traspasar",
-  //       onPress: async () => {
-  //         setShowModal(true);
-  //         setTicketData({ ...item });
-  //       },
-  //     },
-  //     {
-  //       text: translation.t("Cancel"),
-  //     },
-  //   ]);
-  // };
-
   return (
     <View style={{ height: "70%", marginBottom: 0 }}>
       <OptionModal
@@ -81,6 +58,7 @@ export default function PurchasedTickets({
         item={itemData}
         setTicketData={setTicketData}
         setShowModal={setShowModal}
+        translation={translation}
       />
 
       {tickets.length > 0 ? (
@@ -100,6 +78,7 @@ export default function PurchasedTickets({
           renderItem={({ item }: any) => (
             <TicketCard
               item={item}
+              translation={translation}
               setShowModalOption={setShowModalOption}
               setItemData={setItemData}
             />
@@ -118,7 +97,7 @@ export default function PurchasedTickets({
           <Text
             style={{ fontWeight: "bold", fontSize: 16, textAlign: "center" }}
           >
-            There is not tickets
+            {translation.t("NoTicketsMsg")}
           </Text>
           <Image
             source={require("../../assets/images/non-tickets.png")}
@@ -137,6 +116,7 @@ function OptionModal({
   item,
   setTicketData,
   setShowModal,
+  translation,
 }: {
   showModalOption: boolean;
   setShowModalOption: Function;
@@ -144,6 +124,7 @@ function OptionModal({
   item: any;
   setTicketData: Function;
   setShowModal: Function;
+  translation: any
 }) {
   return (
     <Modal
@@ -193,7 +174,7 @@ function OptionModal({
               <Ionicons name="document" size={25} color="#0F3D87" />
             </View>
             <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
-              Ver detalles
+              {translation.t("SeeDetails")}
             </Text>
           </TouchableOpacity>
 
@@ -204,9 +185,9 @@ function OptionModal({
               paddingVertical: 10,
             }}
             onPress={() => {
-              setTicketData({...item});
+              setTicketData({ ...item });
               setShowModal(true);
-              setShowModalOption(false)
+              setShowModalOption(false);
             }}
           >
             <View
@@ -219,7 +200,7 @@ function OptionModal({
               <Ionicons name="person" size={25} color="#0F3D87" />
             </View>
             <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
-              Traspasar
+              {translation.t("Transfer")}
             </Text>
           </TouchableOpacity>
 
@@ -242,7 +223,9 @@ function OptionModal({
             >
               <Ionicons name="close" size={25} color="red" />
             </View>
-            <Text style={{ fontWeight: "700", paddingLeft: 10 }}>Cancelar</Text>
+            <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
+              {translation.t("Cancel")}
+            </Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -250,7 +233,12 @@ function OptionModal({
   );
 }
 
-function TicketCard({ item, setShowModalOption, setItemData }: any) {
+function TicketCard({
+  item,
+  setShowModalOption,
+  setItemData,
+  translation,
+}: any) {
   return (
     <TouchableOpacity
       style={styles.productCard}
@@ -281,17 +269,21 @@ function TicketCard({ item, setShowModalOption, setItemData }: any) {
       >
         <View style={{ gap: 4 }}>
           <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Evento:</Text>
+            <Text style={styles.productTitle}>{translation.t("Event")}:</Text>
             <Text style={styles.productName}>{item.event_name}</Text>
           </View>
 
           <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Categoria:</Text>
+            <Text style={styles.productTitle}>
+              {translation.t("Category")}:
+            </Text>
             <Text style={styles.productName}>{item.ticketCategory_name}</Text>
           </View>
 
           <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Cantidad de tickets:</Text>
+            <Text style={styles.productTitle}>
+              {translation.t("TicketsAmount")}:
+            </Text>
             <Text style={styles.productName}>{item.amount}</Text>
           </View>
 
@@ -303,7 +295,9 @@ function TicketCard({ item, setShowModalOption, setItemData }: any) {
           </View>
 
           <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Traspasado:</Text>
+            <Text style={styles.productTitle}>
+              {translation.t("Transferred")}:
+            </Text>
             <Text style={styles.productName}>
               {item.isTransferred ? "SI" : "NO"}
             </Text>
@@ -311,7 +305,9 @@ function TicketCard({ item, setShowModalOption, setItemData }: any) {
 
           {item?.isTransferred == true && (
             <View style={styles.productDataContainer}>
-              <Text style={styles.productTitle}>Cantidad traspasada:</Text>
+              <Text style={styles.productTitle}>
+                {translation.t("AmountTransferred")}:
+              </Text>
               <Text style={styles.productName}>{item.amountTrappased}</Text>
             </View>
           )}

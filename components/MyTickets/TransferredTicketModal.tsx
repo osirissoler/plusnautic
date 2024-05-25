@@ -14,6 +14,7 @@ import { Loading } from "../Shared";
 import { Button } from "react-native-elements";
 import { MultiSelect } from "react-native-element-dropdown";
 import { formatter } from "../../utils";
+import { AlertDialog } from "../AlertDialog";
 
 export default function TransferredTicketModal({
   setShowModal,
@@ -30,6 +31,7 @@ export default function TransferredTicketModal({
   const [ticketDetails, setTicketDetails]: any = useState([]);
   const [ticketDetailsFilter, setTicketDetailsFilter]: any = useState([]);
   const [selectedTickets, setSelectedTickets]: any = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
     getTicketUserDetails(ticketData.id);
@@ -93,7 +95,7 @@ export default function TransferredTicketModal({
   const transferTicketsFunction = async () => {
     setShowLoading(true);
     const url = `/tickets/TransferTicketsToUsers`;
-    await sendData(url, { ticketsArr: transferredTicketsArr }).then(
+    await sendData(url, { ticketsArr: transferredTicketsArr, language: translation.locale }).then(
       (response: any) => {
         if (response.ok) {
           setShowLoading(false);
@@ -134,6 +136,21 @@ export default function TransferredTicketModal({
         setShowModal(!showModal);
       }}
     >
+      <AlertDialog
+        modalVisible={showDialog}
+        setModalVisible={setShowDialog}
+        color="#5f7ceb"
+        iconName={"alert-circle"}
+        confirmation={(res: any) => {
+          transferTicketsFunction();
+          setShowDialog(false);
+        }}
+        title={"Confirmación"}
+        description={"Estas seguro de realizar esta transferencia de tickets?"}
+        confirmButtonText={"Confirmar"}
+        cancelButtonText={"Cancelar"}
+      />
+
       <Loading showLoading={showLoading} translation={translation} />
       <View
         style={{
@@ -253,7 +270,7 @@ export default function TransferredTicketModal({
                     <View style={{ flexDirection: "column" }}>
                       {item.selectedTickets.map((item: number) => (
                         <Text key={item}>
-                          -{" "}
+                          •{" "}
                           {
                             ticketDetailsFilter.find(
                               (e: any) => e.value == item
@@ -305,7 +322,8 @@ export default function TransferredTicketModal({
             style={{ marginTop: 15 }}
             title={translation.t("Send")}
             onPress={() => {
-              transferTicketsFunction();
+              // transferTicketsFunction();
+              setShowDialog(true);
             }}
             disabled={transferredTicketsArr.length == 0}
           />

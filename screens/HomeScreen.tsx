@@ -104,7 +104,7 @@ export default function HomeScreen({ navigation, route }: any) {
 
   return (
     <Container>
-      <HeaderComponent />
+      <HeaderComponent screen={"home"} navigation={navigation}/>
       <Loading showLoading={showLoading} translation={translation} />
       {(error) ? <ServiceComponent />
       :<View style={{ height: "100%" }}>

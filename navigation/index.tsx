@@ -66,6 +66,8 @@ import ShoppingCartScreen from "../screens/ShoppingCartScreen";
 import QrCodeScreen from "../screens/QrCodeScreen";
 import MyTicketsScreen from "../screens/MyTicketsScreen";
 import TicketDetailsScreen from "../components/MyTickets/TicketDetailsScreen";
+import EventBoothsScreen from "../screens/EventBoothsScreen";
+import BoothProductsScreen from "../screens/BoothProductsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -491,6 +493,30 @@ function RootNavigator({ route }: any) {
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
+        }}
+      />
+
+      <Stack.Screen
+        name="EventBoothsScreen"
+        component={EventBoothsScreen}
+        options={{
+          headerTitle: "Booths",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="BoothProductsScreen"
+        component={BoothProductsScreen}
+        options={{
+          headerTitle: "Booths",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
         }}
       />
 

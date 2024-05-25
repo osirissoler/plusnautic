@@ -291,5 +291,14 @@
   "ShoppingCart": "Panier",
   "shoppingCartTicketsCountText": "Il n'y a aucune entrée à afficher.",
   "MyTickets": "Mes billets",
-  "MyTicketsScreenMsg": "Cette section permet de voir les billets que vous avez achetés et ceux que vous avez réclamés auprès d'autres personnes."
+  "MyTicketsScreenMsg": "Cette section permet de voir les billets que vous avez achetés et ceux que vous avez réclamés auprès d'autres personnes.",
+  "PurchasedTickets": "Achetés",
+  "ReceivedTickets": "Reçus",
+  "NoTicketsMsg": "Il n'y a pas de billets",
+  "Event": "Événement",
+  "Category": "Catégorie",
+  "TicketsAmount": "Quantité de billets",
+  "Transferred": "Transféré",
+  "AmountTransferred": "Quantité transférée",
+  "Transfer": "Transférer des billets"
 }
