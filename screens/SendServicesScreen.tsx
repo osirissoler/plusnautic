@@ -44,6 +44,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
   const [refre, setRefre]: any = useState(false);
   const [pharmacyValues, setPharmacyValues] = useState([]);
   const [dockValues, setDockValues] = useState([]);
+  const [marineDockValues, setMarineDockValues]:any = useState({})
 
   const validationSchema = yup.object().shape({
     description: yup.string().required(translation.t("DescriptionIsRequired")),
@@ -94,11 +95,13 @@ export default function SendServicesScreen({ navigation, route }: any) {
   const geatBoatRecordByUser = async () => {
     checkStorage("USER_LOGGED", async (id: any) => {
       const url = `/boatsRecords/getBoatRecordByUser/${id}`;
-      await fetchData(url).then((response) => {
+      await fetchData(url).then((response: any) => {
         if (response.ok) {
           const mappedValues = response.boatsRecord.map((boat: any) => ({
             label: boat.boat_name,
             value: boat.id,
+            dock: boat.dock,
+            pharmacy: boat.Pharmacy_id,
           }));
           setBoatsRecord(mappedValues);
         } else {
@@ -115,7 +118,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
         label: product.product_name,
         value: product.product_id,
       }));
-      console.log(mappedValues);
+      console.log(mappedValues)
       setDockValues(mappedValues);
     });
   };
@@ -202,7 +205,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
           style={{
             fontSize: 16,
             textAlign: "center",
-            marginVertical: 10
+            marginVertical: 10,
           }}
         >
           {route.params.title}
@@ -325,10 +328,10 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       {translation.t("Boat")}
                     </Text>
                     {touched.boatsRecord_id && errors.boatsRecord_id && (
-                        <Text style={{ color: "red", marginVertical: 2 }}>
-                          {errors.boatsRecord_id}
-                        </Text>
-                      )}
+                      <Text style={{ color: "red", marginVertical: 2 }}>
+                        {errors.boatsRecord_id}
+                      </Text>
+                    )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
@@ -345,6 +348,12 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       searchPlaceholder={translation.t("SearchBoat")}
                       onChange={(items: any) => {
                         setFieldValue("boatsRecord_id", items.value);
+                        console.log(items.dock);
+                        searchDock(items.pharmacy);
+                        setMarineDockValues({
+                          pharmacy: items.pharmacy,
+                          dock: items.dock,
+                        });
                       }}
                     />
                   </View>
@@ -355,10 +364,10 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       {translation.t("Marine")}
                     </Text>
                     {touched.pharmacy_id && errors.pharmacy_id && (
-                        <Text style={{ color: "red", marginVertical: 2 }}>
-                          {errors.pharmacy_id}
-                        </Text>
-                      )}
+                      <Text style={{ color: "red", marginVertical: 2 }}>
+                        {errors.pharmacy_id}
+                      </Text>
+                    )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
@@ -366,13 +375,14 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       inputSearchStyle={styles.inputSearchStyle}
                       iconStyle={styles.iconStyle}
                       data={pharmacyValues}
+                      value={marineDockValues.pharmacy}
                       search
                       maxHeight={300}
                       labelField="label"
                       valueField="value"
                       placeholder={translation.t("ChooseMarine")}
                       searchPlaceholder={translation.t("Search")}
-                      value={values.pharmacy_id}
+                      // value={values.pharmacy_id}
                       onChange={(items: any) => {
                         setFieldValue("pharmacy_id", items.value);
                         searchDock(items.value);
@@ -386,10 +396,10 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       {translation.t("Docks")}
                     </Text>
                     {touched.dock && errors.dock && (
-                        <Text style={{ color: "red", marginVertical: 2 }}>
-                          {errors.dock}
-                        </Text>
-                      )}
+                      <Text style={{ color: "red", marginVertical: 2 }}>
+                        {errors.dock}
+                      </Text>
+                    )}
                     <Dropdown
                       style={styles.dropdown}
                       placeholderStyle={styles.placeholderStyle}
@@ -397,6 +407,11 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       inputSearchStyle={styles.inputSearchStyle}
                       iconStyle={styles.iconStyle}
                       data={dockValues}
+                      value={
+                        dockValues.find(
+                          (item: any) => item.value == marineDockValues.dock
+                        )
+                      }
                       search
                       maxHeight={300}
                       labelField="label"

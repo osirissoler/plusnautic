@@ -16,6 +16,7 @@ import { Container, Loading } from "../components/Shared";
 import { LanguageContext } from "../LanguageContext";
 import { hideLoadingModal } from "../utils";
 import { fetchData } from "../httpRequests";
+import moment from "moment";
 
 export default function ActivityScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -90,13 +91,20 @@ export default function ActivityScreen({ navigation, route }: any) {
           />
         </View>
       ) : (
-        <View style={{ padding: 10 }}>
+        <View style={{ padding: 10, height: "95%" }}>
           <FlatList
             refreshing={fetching}
             data={events}
             onRefresh={() => {
               getEvents();
             }}
+            ListHeaderComponent={
+                <View style={{ marginVertical: 10 }}>
+                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                    Eventos disponibles
+                  </Text>
+                </View>
+            }
             renderItem={({ item }: any) => (
               <TouchableOpacity
                 onPress={() =>
@@ -104,89 +112,86 @@ export default function ActivityScreen({ navigation, route }: any) {
                     event_id: item.id,
                   })
                 }
-                style={{ marginHorizontal: 10, marginVertical: 5 }}
+                style={{ paddingHorizontal: 5 }}
               >
                 <View style={styles.cardContainer}>
-                  <View style={styles.cardContent}>
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginVertical: 10,
-                        marginHorizontal: 10,
-                        width: "25%",
-                        height: 60,
+                  <View
+                    style={{
+                      width: "30%",
+                      padding: item.image ? 0 : 15,
+                    }}
+                  >
+                    <Image
+                      source={{
+                        uri: item.image
+                          ? item.image
+                          : "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
                       }}
-                    >
-                      <Image
-                        source={{
-                          uri: "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
-                        }}
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        resizeMode: "cover",
+                        borderRadius: 10,
+                        borderColor: "gray",
+                      }}
+                    />
+                  </View>
+
+                  <View
+                    style={{
+                      width: "65%",
+                      marginLeft: 5,
+                      paddingVertical: 10,
+                      paddingHorizontal: 5,
+                    }}
+                  >
+                    <View style={{ marginBottom: 10 }}>
+                      <Text
+                        numberOfLines={1}
                         style={{
-                          height: "100%",
-                          width: "100%",
-                          resizeMode: "contain",
-                          borderRadius: 10,
-                          borderColor: "gray",
+                          marginVertical: 3,
+                          fontWeight: "600",
+                          fontSize: 17,
+                          color: "#4f4f4f",
                         }}
-                      />
+                      >
+                        {item.name} Hola que tal como está todo, yo solo estoy
+                        probando
+                      </Text>
+                      <Text ellipsizeMode="tail" style={{ fontWeight: "500" }}>
+                        {
+                          typeEvents?.find(
+                            (type: any) => type.id == item.typeEvent_id
+                          )?.name
+                        }
+                      </Text>
                     </View>
 
-                    <View style={{ width: "65%", marginLeft: 10 }}>
-                      <View style={{ marginBottom: 10 }}>
-                        <Text
-                          numberOfLines={1}
-                          style={{
-                            marginVertical: 3,
-                            fontWeight: "600",
-                            fontSize: 19,
-                            color: "#4f4f4f",
-                          }}
-                        >
-                          {item.name}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        // justifyContent: "space-between",
+                        gap: 50,
+                        width: "100%",
+                      }}
+                    >
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ fontWeight: "bold", color: "#777777" }}>
+                          {translation.t("Date")} init:
                         </Text>
-                        <Text
-                          ellipsizeMode="tail"
-                          style={{ fontWeight: "500" }}
-                        >
-                          {
-                            typeEvents?.find(
-                              (type: any) => type.id == item.typeEvent_id
-                            )?.name
-                          }
+
+                        <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
+                          {moment(item.dateInit).format("YYYY-MM-DD")}
                         </Text>
                       </View>
 
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          // justifyContent: "space-between",
-                          gap: 50,
-                          width: "100%",
-                        }}
-                      >
-                        <View style={{ flexDirection: "column" }}>
-                          <Text
-                            style={{ fontWeight: "bold", color: "#777777" }}
-                          >
-                            {translation.t("Date")} init:
-                          </Text>
-
-                          <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
-                            {item.dateInit}
-                          </Text>
-                        </View>
-
-                        <View style={{ flexDirection: "column" }}>
-                          <Text
-                            style={{ fontWeight: "bold", color: "#777777" }}
-                          >
-                            {translation.t("Date")} final:
-                          </Text>
-                          <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
-                            {item.dateInit}
-                          </Text>
-                        </View>
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ fontWeight: "bold", color: "#777777" }}>
+                          {translation.t("Date")} final:
+                        </Text>
+                        <Text style={{ fontWeight: "600", color: "#4f4f4f" }}>
+                          {moment(item.dateFinal).format("YYYY-MM-DD")}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -205,21 +210,25 @@ const styles = StyleSheet.create({
     borderColor: "#8B8B9720",
     marginBottom: 10,
     borderRadius: 10,
-    padding: 5,
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 2, // Ajusta la altura para ver mejor la sombra
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5, // Asegura que esta propiedad esté presente para Android
+    height: 110,
+    overflow: "visible", // Cambia de "hidden" a "visible" o elimínala
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
   },
   cardContent: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    padding: 10
+    padding: 10,
   },
 });

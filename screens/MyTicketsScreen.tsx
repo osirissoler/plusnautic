@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { checkStorage, Loading } from "../components/Shared";
-import { deleteData, fetchData } from "../httpRequests";
+import { fetchData } from "../httpRequests";
 import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import HeaderComponent from "../components/Header";
@@ -29,42 +29,10 @@ export default function MyTicketsScreen({ navigation, route }: any) {
     hideLoadingModal(() => {
       checkStorage("USER_LOGGED", async (id: any) => {
         setUserId(id);
-        // getTicketUser(id)
       });
     }, setShowLoading);
   }, []);
 
-  const showErrorToast = (message: string) => {
-    Toast.show(message, {
-      duration: Toast.durations.LONG,
-      containerStyle: { backgroundColor: "red", width: "80%" },
-    });
-  };
-
-  const showGoodToast = (message: string) => {
-    Toast.show(message, {
-      duration: Toast.durations.LONG,
-      containerStyle: { backgroundColor: "green", width: "80%" },
-    });
-  };
-
-  const deleteGuest = async (id: any) => {
-    try {
-      setShowLoading(true);
-      const url = `/guest/deleteGuest/${id}`;
-      hideLoadingModal(async () => {
-        await deleteData(url).then((response: any) => {
-          if (response.ok) {
-            showGoodToast(translation.t("GuestDeleted"));
-          }
-        });
-      }, setShowLoading);
-    } catch (error: any) {
-      hideLoadingModal(() => {
-        showErrorToast(`${error}`);
-      }, setShowLoading);
-    }
-  };
 
   const getTicketUser = async (id: number) => {
     const url = `/tickets/getTicketsDetailsByUser/${id}`;
@@ -138,13 +106,15 @@ export default function MyTicketsScreen({ navigation, route }: any) {
           style={[styles.tab, activeTab === 0 && styles.activeTab]}
           onPress={() => handleTabPress(0)}
         >
-          <Text style={styles.tabText}>Purchased</Text>
+          <Text style={styles.tabText}>
+            {translation.t("PurchasedTickets")}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 1 && styles.activeTab]}
           onPress={() => handleTabPress(1)}
         >
-          <Text style={styles.tabText}>Received</Text>
+          <Text style={styles.tabText}>{translation.t("ReceivedTickets")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -153,7 +123,6 @@ export default function MyTicketsScreen({ navigation, route }: any) {
           navigation={navigation}
           setTicketData={setTicketData}
           translation={translation}
-          deleteGuest={deleteGuest}
           userId={userId}
           setShowLoading={setShowLoading}
           setShowModal={setShowModal}

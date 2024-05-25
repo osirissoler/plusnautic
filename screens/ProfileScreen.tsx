@@ -298,7 +298,7 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>Notification</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
-          <Pressable
+          {/* <Pressable
             style={styles.option}
             onPress={() =>
               navigation.navigate("ShoppingCart", { showBack: true })
@@ -308,7 +308,7 @@ export default function ProfileScreen({ navigation, route }: any) {
               {translation.t("ShoppingCart")}
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             style={styles.option}
@@ -339,15 +339,15 @@ export default function ProfileScreen({ navigation, route }: any) {
 
           {/* Guest */}
 
-          {/* <Pressable
+          <Pressable
             style={styles.option}
             onPress={() =>
-              navigation.navigate("GuestScreen", { showBack: true })
+              navigation.navigate("MyGuestScreen", { showBack: true })
             }
           >
-            <Text style={styles.optionText}>{translation.t("Guest")}</Text>
+            <Text style={styles.optionText}>{translation.t("MyGuest")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable> */}
+          </Pressable>
 
           <Pressable
             style={styles.option}
