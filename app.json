@@ -2,7 +2,7 @@
   "expo": {
     "name": "Plusnautic",
     "slug": "plusnautic",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/plusnauticIcon.png",
     "scheme": "plusnautic",
@@ -37,7 +37,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.plusnautica2.app",
-      "versionCode": 23,
+      "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
