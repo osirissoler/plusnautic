@@ -28,7 +28,7 @@ export default function RecordBoats({ navigation, route }: any) {
   const [pharmacyValues, setPharmacyValues] = useState([]);
   const [dockValues, setDockValues] = useState([]);
   const [dockSelected, setDockSelected] = useState("");
-  const [boat, setBoat] = useState(route.params.boats[0]);
+  const [boat, setBoat] = useState(route.params.boats);
   const [boatImage, setBoatImage]: any = useState("");
   const [initialValues, setInitialValues] = useState({
     id: boat.id,
@@ -308,7 +308,8 @@ export default function RecordBoats({ navigation, route }: any) {
     }
   };
 
-  console.log(boat.dock)
+  console.log(boat.Pharmacy_id, "id");
+  console.log(pharmacyValues);
 
   return (
     <Container
@@ -333,9 +334,11 @@ export default function RecordBoats({ navigation, route }: any) {
           touched,
         }: any) => (
           <View>
-            <ScrollView style={{ padding: 10, height: "78%"}}>
+            <ScrollView style={{ padding: 10, height: "78%" }}>
               <View style={{}}>
-                <Text style={styles.labelInput}>{translation.t("BoatName")}</Text>
+                <Text style={styles.labelInput}>
+                  {translation.t("BoatName")}
+                </Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("boat_name")}
@@ -343,21 +346,27 @@ export default function RecordBoats({ navigation, route }: any) {
                   value={values.boat_name}
                 />
 
-                <Text style={styles.labelInput}>{translation.t("boatHull")}</Text>
+                <Text style={styles.labelInput}>
+                  {translation.t("boatHull")}
+                </Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("boat_hull")}
                   onBlur={handleBlur("boat_hull")}
                   value={values.boat_hull}
                 />
-                <Text style={styles.labelInput}>{translation.t("ElectricPlant")}</Text>
+                <Text style={styles.labelInput}>
+                  {translation.t("ElectricPlant")}
+                </Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange("electric_plant")}
                   onBlur={handleBlur("electric_plant")}
                   value={values.electric_plant}
                 />
-                <Text style={styles.labelInput}>{translation.t("AirConditioner")}</Text>
+                <Text style={styles.labelInput}>
+                  {translation.t("AirConditioner")}
+                </Text>
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
@@ -366,7 +375,9 @@ export default function RecordBoats({ navigation, route }: any) {
                   onBlur={handleBlur("air_conditioner")}
                   value={values.air_conditioner}
                 />
-                <Text style={styles.labelInput}>{translation.t("BoatImage")}</Text>
+                <Text style={styles.labelInput}>
+                  {translation.t("BoatImage")}
+                </Text>
 
                 <TouchableOpacity
                   style={{
@@ -398,13 +409,14 @@ export default function RecordBoats({ navigation, route }: any) {
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
                     data={pharmacyValues}
+                    // value={route.params.editMode ? da}
                     search
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
                     placeholder={translation.t("ChooseMarine")}
                     searchPlaceholder={translation.t("Search")}
-                    value={values.pharmacy_id}
+                    value={boat.Pharmacy_id}
                     onChange={(items: any) => {
                       setFieldValue("pharmacy_id", items.value);
                       searchDock(items.value);
@@ -429,7 +441,7 @@ export default function RecordBoats({ navigation, route }: any) {
                     valueField="value"
                     placeholder={translation.t("ChooseDocks")}
                     searchPlaceholder={translation.t("Search")}
-                    value={dockValues.find((a: any) => (a.value == boat.dock))}
+                    value={dockValues.find((a: any) => a.value == boat.dock)}
                     onChange={(items: any) => {
                       setFieldValue("dock", items.value);
                       setDockSelected(items.value);
@@ -446,7 +458,9 @@ export default function RecordBoats({ navigation, route }: any) {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={styles.labelInput}>{translation.t("Engine") + " 1"}</Text>
+                  <Text style={styles.labelInput}>
+                    {translation.t("Engine") + " 1"}
+                  </Text>
 
                   <View
                     style={{

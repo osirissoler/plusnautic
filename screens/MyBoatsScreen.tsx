@@ -103,7 +103,7 @@ export default function MyBoats({ navigation }: any) {
                   editMode: true,
                   boats: boats
                     .map((value) => value)
-                    .filter((e: any) => e.id === item.id),
+                    .find((e: any) => e.id === item.id),
                 })
               }
               key={item.id}
