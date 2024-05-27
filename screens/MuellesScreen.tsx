@@ -24,19 +24,22 @@ export default function MuellesScreen({ navigation, route }:any) {
     const [fetching, setFetching]: any = useState(false)
     const [showLoading, setShowLoading]: any = useState(false)
     const [visible, setVisible] = useState(true);
-
+    const [userId, setUserId] = useState(0)
 
 
     useEffect(() => {
-        getPharmacies()
+            checkStorage("USER_LOGGED", async (id: any) => {
+                setUserId(id)
+                getPharmacies(id)
+            })
     }, [])
 
-    const getPharmacies = async () => {
+    const getPharmacies = async (user_id: number) => {
         setFetching(true)
-        let url = `/products/getProductsByPharmacy/${route.params.id}`
+        let url = `/boatsRecords/getDocksByBoatAndPharmacy/${user_id}/${route.params.id}`;
         await fetchData(url).then((response) => {
             if (response.ok) {
-                listProducs(response.pharmacyproduct)
+                listProducs(response.docksArr);
 
             } else {
             }
@@ -76,56 +79,65 @@ export default function MuellesScreen({ navigation, route }:any) {
     }
 
     return (
-        <Container>
-            <Loading showLoading={showLoading} translation={translation} />
-            <HeaderComponent />
+      <Container>
+        <Loading showLoading={showLoading} translation={translation} />
+        <HeaderComponent />
 
-            <View style={{ height: '100%' }}>
-                <FlatList
-                    refreshing={fetching}
-                    data={listProduct}
-                    onRefresh={getPharmacies}
-                    style={styles.body}
-                    ListHeaderComponent={
-                        <View>
-                            {(visible)
-                                ? <AdsScreen code={"Services"} img={initialImg} />
-                                : <Image style={styles.headerImage} source={{ uri: initialImg }} />
-                            }
-                        </View>
-                    }
-                    renderItem={({ item, index }: any) => (
-                        <TouchableOpacity style={styles.productCard} onPress={() => {
-                            navigation.navigate('ProductDetails', {item})
-                            // ProductDetails
-                        }
-
-                        }>
-                            <View style={styles.productImage}>
-                                <Image
-                                    source={{ uri: item.product_img ? item.product_img : defaultProductImg }}
-                                    style={{ flex: 1, resizeMode: 'contain' }}
-                                />
-                            </View>
-                            <View style={{ justifyContent: 'space-between', width: 160 }}>
-                                <Text style={styles.productTitle}>{item.product_name}</Text>
-                                <Text style={styles.productTitle}>{item.product_description}</Text>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        marginTop: 20
-                                    }}
-                                >
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                >
-                </FlatList>
-            </View>
-        </Container >
-    )
+        <View style={{ height: "100%" }}>
+          <FlatList
+            refreshing={fetching}
+            data={listProduct}
+            onRefresh={() => getPharmacies(userId)}
+            style={styles.body}
+            ListHeaderComponent={
+              <View>
+                {visible ? (
+                  <AdsScreen code={"Services"} img={initialImg} />
+                ) : (
+                  <Image
+                    style={styles.headerImage}
+                    source={{ uri: initialImg }}
+                  />
+                )}
+              </View>
+            }
+            renderItem={({ item, index }: any) => (
+              <TouchableOpacity
+                style={styles.productCard}
+                onPress={() => {
+                  navigation.navigate("ProductDetails", { item });
+                  // ProductDetails
+                }}
+              >
+                <View style={styles.productImage}>
+                  <Image
+                    source={{
+                      uri: item.product_img
+                        ? item.product_img
+                        : defaultProductImg,
+                    }}
+                    style={{ flex: 1, resizeMode: "contain" }}
+                  />
+                </View>
+                <View style={{ justifyContent: "space-between", width: 160 }}>
+                  <Text style={styles.productTitle}>{item.product_name}</Text>
+                  <Text style={styles.productTitle}>
+                    {item.product_description}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 20,
+                    }}
+                  ></View>
+                </View>
+              </TouchableOpacity>
+            )}
+          ></FlatList>
+        </View>
+      </Container>
+    );
 }
 const styles = StyleSheet.create({
     productCard: {
