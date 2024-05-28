@@ -100,12 +100,14 @@ export default function SignUpScreen({ navigation }: any) {
           "signUpPasswordConfirmationRequiredText"
         ) /* Confirm password is required */
       ),
-      country_id: yup
+    country_id: yup
       .string()
       .required(translation.t("CountryIsRequired")) /* Country is required */,
-      address: yup
+    address: yup
       .string()
-      .required(translation.t("addressAddressRequiredText")) /* Address is required */,
+      .required(
+        translation.t("addressAddressRequiredText")
+      ) /* Address is required */,
   });
 
   useEffect(() => {
@@ -135,7 +137,7 @@ export default function SignUpScreen({ navigation }: any) {
       phone: values.phone,
       password: values.password,
       country_id: values.country_id,
-      address: values.address
+      address: values.address,
     };
     console.log(data);
     sendData(url, data)
@@ -147,7 +149,10 @@ export default function SignUpScreen({ navigation }: any) {
             sendData(url, values).then((response: any) => {
               if (response.ok) {
                 setAuthUser(response.id);
-                asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.country_id));
+                asyncStorage.setItem(
+                  "USER_LOGGED_COUNTRY",
+                  JSON.stringify(response.country_id)
+                );
                 // redirectToRecordBoats()
               }
             });
@@ -307,7 +312,7 @@ export default function SignUpScreen({ navigation }: any) {
             phone: "",
             password: "",
             passwordConfirmation: "",
-            address: ""
+            address: "",
           }}
           onSubmit={(values: any) => onSignUp(values)}
         >
@@ -319,7 +324,7 @@ export default function SignUpScreen({ navigation }: any) {
             isValid,
             errors,
             touched,
-            setFieldValue
+            setFieldValue,
           }: any) => (
             <View>
               <Text style={styles.labelInput}>
@@ -343,7 +348,7 @@ export default function SignUpScreen({ navigation }: any) {
                 autoCapitalize="none"
               />
 
-<View>
+              <View>
                 <Text style={styles.labelInput}>
                   {translation.t("country") /*  Email */}
                 </Text>
@@ -607,7 +612,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#CCCCCD",
     paddingLeft: 10,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   selectedTextStyle: {
     height: 50,
