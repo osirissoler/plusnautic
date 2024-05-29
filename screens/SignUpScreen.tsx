@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 5,
   },
   registerButtonDisabled: {
     width: "100%",
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 5,
   },
 
   registerButtonText: {

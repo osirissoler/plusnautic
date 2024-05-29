@@ -37,7 +37,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.plusnautica2.app",
-      "versionCode": 1,
+      "versionCode": 3,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",

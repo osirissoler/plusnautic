@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { checkStorage, Loading } from "../components/Shared";
 import { fetchData } from "../httpRequests";
-import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
-import HeaderComponent from "../components/Header";
 import ReceivedTicket from "../components/MyTickets/ReceivedTickets";
 import PurchasedTickets from "../components/MyTickets/PurchasedTickets";
 import EnterTicketCodeModal from "../components/MyTickets/EnterTicketCodeModal";
@@ -79,6 +77,7 @@ export default function MyTicketsScreen({ navigation, route }: any) {
             fontWeight: "600",
             textAlign: "center",
             fontSize: 15,
+            marginTop: 10
           }}
         >
           {translation.t("MyTicketsScreenMsg")}

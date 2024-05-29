@@ -185,7 +185,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
         {
           text: "OK",
           onPress: () => {
-            navigation.navigate("Profile");
+            navigation.navigate("Root");
           },
         },
       ]
@@ -194,7 +194,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
 
   const consulting = async () => {
     const url = `/placeToPay/consultSessionStripeFacilitoPay/${requestId}`;
-    const urlApproved = `/tickets/createTicketUser`;
+    const urlApproved = `/tickets/createOrUpdateTicketUser`;
 
     fetchData(url).then(async (res: any) => {
       if (res.payment_status == "REJECTED") {
@@ -211,6 +211,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
             placeToPayRequestId_id: id,
             price: ticket.price,
             amount: ticket.amount,
+            category_code: ticket.ticketCategory_code
           };
         });
 
@@ -429,6 +430,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginVertical: 20,
     color: "red",
+    textAlign: "center"
   },
   imageParent: {
     height: 330,

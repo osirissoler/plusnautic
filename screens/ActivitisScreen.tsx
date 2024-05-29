@@ -155,7 +155,7 @@ export default function ActivityScreen({ navigation, route }: any) {
                           color: "#4f4f4f",
                         }}
                       >
-                        {item.name}
+                        {item.name} 
                       </Text>
                       <Text ellipsizeMode="tail" style={{ fontWeight: "500" }}>
                         {

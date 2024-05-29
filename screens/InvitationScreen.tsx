@@ -74,8 +74,8 @@ export default function InvitationScreen({ navigation, route }: any) {
         getBoatRecord(id);
       });
     } catch (error) {
-      showErrorToast("httpConnectionError")
-      setShowLoading(false)
+      showErrorToast("httpConnectionError");
+      setShowLoading(false);
     }
   }, []);
 
@@ -146,13 +146,17 @@ export default function InvitationScreen({ navigation, route }: any) {
         return;
       }
 
-      if(namesArray.length <= 0){
-        showErrorToast(translation.t("DateAfterTodayMsg"));
-        return
+      if (!editMode) {
+        if (namesArray.length <= 0) {
+          showErrorToast(translation.t("DateAfterTodayMsg"));
+          return;
+        }
       }
 
       const data = {
-        title: values.title.charAt(0).toUpperCase() + values.title.slice(1).toLowerCase(),
+        title:
+          values.title.charAt(0).toUpperCase() +
+          values.title.slice(1).toLowerCase(),
         description: values.description,
         date: moment(date).format("MM/DD/YYYY"),
         guestDetails: namesArray,
@@ -162,7 +166,9 @@ export default function InvitationScreen({ navigation, route }: any) {
 
       const dataPut = {
         id: dataToEdit?.idGuest,
-        title: values.title.charAt(0).toUpperCase() + values.title.slice(1).toLowerCase(),
+        title:
+          values.title.charAt(0).toUpperCase() +
+          values.title.slice(1).toLowerCase(),
         description: values.description,
         date: moment(date).format("MM/DD/YYYY"),
         boat_id: values.boat_id,
@@ -179,8 +185,8 @@ export default function InvitationScreen({ navigation, route }: any) {
               navigation.navigate("GuestScreen", { refresh: res });
             });
           } else {
-            showErrorToast(res.message)
-            setShowLoading(false)
+            showErrorToast(res.message);
+            setShowLoading(false);
           }
         });
       } else {
@@ -193,8 +199,8 @@ export default function InvitationScreen({ navigation, route }: any) {
               navigation.navigate("GuestScreen", { refresh: res });
             });
           } else {
-            showErrorToast(res.message)
-            setShowLoading(false)
+            showErrorToast(res.message);
+            setShowLoading(false);
           }
         });
       }
@@ -206,8 +212,8 @@ export default function InvitationScreen({ navigation, route }: any) {
   const handleAddName = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (name) {
-      if (email|| phone) {
-        if(emailRegex.test(email)){
+      if (email || phone) {
+        if (emailRegex.test(email)) {
           setNamesArray([...namesArray, { name, email, phone }]);
           setName("");
           setEmail("");
@@ -443,6 +449,7 @@ export default function InvitationScreen({ navigation, route }: any) {
                             setEmail(text);
                           }}
                           placeholder={translation.t("TypeEmail")}
+                          autoCapitalize="none"
                         />
                         <Text style={styles.labelInput}>
                           {translation.t("Phone")}

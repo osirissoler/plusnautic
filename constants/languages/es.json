@@ -174,7 +174,7 @@
   "ChooseMarine": "Elige la marina",
   "ChooseBoats": "Elige el bote",
   "ChooseDocks": "Elige los muelles",
-  "MyBoats": "Mis botes",
+  "MyBoats": "Mis embarcaciones",
   "add": "Añadir",
   "Docks": "Muelles",
   "CreateInvitation": "Create invitation",
@@ -234,7 +234,7 @@
   "TotalOfGuest": "Total de invitados",
   "openSite": "¿ Estas seguro de que quieres abrir este sitio ?",
   "AddBoatsMsg": "Añadir mi embarcación náutica",
-  "GuestScreenMsg": "Mis invitados. Invita a tu equipo usando nuestra plataforma.",
+  "GuestScreenMsg": "Crea actividades privadas e invita a tus amigos a ellas. Tambien puedes ver invitaciones que te han hecho",
   "BoatImage": "Imagen del bote",
   "AirConditioner:": "Aire acondicionado",
   "ElectricPlant": "Planta eléctrica",
@@ -300,5 +300,7 @@
   "TicketsAmount": "Cantidad de boletos",
   "Transferred": "Transferido",
   "AmountTransferred": "Cantidad transferida",
-  "Transfer": "Transferir boletos"
+  "Transfer": "Transferir boletos",
+  "QrCode": "Codigo QR",
+  "NoDocksMsg": "No tienes muelles registrados en esta marina."
 }

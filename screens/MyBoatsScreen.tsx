@@ -62,8 +62,17 @@ export default function MyBoats({ navigation }: any) {
     <View style={{ backgroundColor: "#fff", height: "95%" }}>
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
-      <View style={{alignItems:'center', marginBottom:3 }}>
-        <Text style={{alignItems:'center', fontWeight: "600", textAlign: "center", fontSize: 15}}>{translation.t("AddBoatsMsg")}</Text>
+      <View style={{ alignItems: "center", marginBottom: 3 }}>
+        <Text
+          style={{
+            alignItems: "center",
+            fontWeight: "600",
+            textAlign: "center",
+            fontSize: 15,
+          }}
+        >
+          {translation.t("AddBoatsMsg")}
+        </Text>
       </View>
       <View
         style={{
@@ -108,16 +117,29 @@ export default function MyBoats({ navigation }: any) {
               }
               key={item.id}
             >
-              <View style={{ height: 80, width: 80, marginBottom: 10 }}>
+              <View
+                style={{
+                  height: 100,
+                  width: 100,
+                  marginBottom: 10,
+                  borderRadius: 10,
+                }}
+              >
                 <Image
                   source={{ uri: item.img ? item.img : null }}
-                  style={{ flex: 1, resizeMode: "contain" }}
+                  style={{
+                    flex: 1,
+                    resizeMode: "cover",
+                    borderRadius: 10,
+                    borderWidth: 1.2,
+                    borderColor: "#706b6b",
+                  }}
                 />
               </View>
               <Text style={styles.categoryName}>{item.boat_name}</Text>
             </TouchableOpacity>
           )}
-          numColumns={2}
+          numColumns={3}
         ></FlatList>
       </View>
     </View>
@@ -142,9 +164,10 @@ const styles = StyleSheet.create({
     // aspectRatio:1/1
   },
   categoryName: {
-    fontSize: 15,
-    fontWeight: "400",
+    fontSize: 12,
+    fontWeight: "500",
     textAlign: "center",
+    textTransform: "uppercase"
   },
   redirectButton: {
     width: "20%",
