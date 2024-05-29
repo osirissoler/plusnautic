@@ -258,10 +258,7 @@ export default function ProfileScreen({ navigation, route }: any) {
 						<Text style={styles.optionText}>{translation.t('headerTitlePayments')}</Text>
 						<AntDesign style={styles.optionIcon} name='right' size={16} />
 					</Pressable> */}
-          {/* <Pressable style={styles.option} onPress={() => navigation.navigate('Addresses')}>
-						<Text style={styles.optionText}>{translation.t('headerTitleAddresses')}</Text>
-						<AntDesign style={styles.optionIcon} name='right' size={16} />
-					</Pressable> */}
+
           <Pressable
             style={styles.option}
             onPress={() =>
@@ -288,6 +285,14 @@ export default function ProfileScreen({ navigation, route }: any) {
             onPress={() => navigation.navigate("Notification")}
           >
             <Text style={styles.optionText}>Notification</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable> */}
+
+          {/* <Pressable
+            style={styles.option}
+            onPress={() => navigation.navigate("MarinasScreen")}
+          >
+            <Text style={styles.optionText}>{translation.t("Marinas")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable> */}
 

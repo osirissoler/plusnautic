@@ -258,30 +258,30 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                 setFetching(true);
               }}
             >
-
-                <View
-                  style={{
-                    width: "30%",
-                    padding: item.img ? 0 : 15,
+              <View
+                style={{
+                  width: "30%",
+                  padding: item.img ? 0 : 15,
+                }}
+              >
+                <Image
+                  source={{
+                    uri: item.img
+                      ? item.img
+                      : "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
                   }}
-                >
-                  <Image
-                    source={{
-                      uri: item.img
-                        ? item.img
-                        : "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
-                    }}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      resizeMode: "cover",
-                      borderRadius: 10,
-                      borderColor: "gray",
-                    }}
-                  />
-                </View>
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    resizeMode: "contain",
+                    borderRadius: 10,
+                    borderColor: "gray",
+                    marginLeft: item.img ? 10 : 0,
+                  }}
+                />
+              </View>
 
-              <View style={{ width: "50%", marginLeft: 10 }}>
+              <View style={{ width: "50%", marginLeft: 20 }}>
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productCountry}>{item.country}</Text>
               </View>

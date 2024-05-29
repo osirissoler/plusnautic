@@ -139,7 +139,7 @@ export default function HomeScreen({ navigation, route }: any) {
               }}
               key={item.id}
             >
-              <View style={{ height: 80, width: 80, marginBottom: 10 }}>
+              <View style={{ height: 150, width: 150, marginBottom: 5 }}>
                 <Image
                   source={{ uri: item.img }}
                   style={{ flex: 1, resizeMode: "contain" }}
@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "400",
     textAlign: "center",
-    marginTop: 10,
   },
 
   productCard: {
