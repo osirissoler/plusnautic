@@ -10,8 +10,6 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import { AntDesign, Foundation, Entypo } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 import {
   deleteData,
   fetchData,
@@ -24,6 +22,7 @@ import Toast from "react-native-root-toast";
 import { Button, Image } from "react-native-elements";
 import HeaderComponent from "../Header";
 import { formatter, hideLoadingModal } from "../../utils";
+import moment from "moment";
 
 export default function TicketDetailsScreen({ navigation, route }: any) {
   const { ticketUser_id } = route.params;
@@ -47,7 +46,7 @@ export default function TicketDetailsScreen({ navigation, route }: any) {
       await fetchData(url).then((response: any) => {
         if (response.ok) {
           setTicketDetail(response.ticketDetails);
-          console.log(response)
+          console.log(response);
         }
       });
     } catch (error) {
@@ -91,77 +90,7 @@ export default function TicketDetailsScreen({ navigation, route }: any) {
           numColumns={1}
           refreshing={fetching}
           onRefresh={() => getTicketsDetails(ticketUser_id)}
-          renderItem={({ item }) => (
-            // <TouchableOpacity
-            //   style={styles.option}
-            //   onPress={() =>
-            //     Alert.alert(
-            //       translation.t("Confirm"),
-            //       translation.t("ActionToDo"),
-            //       [
-            //         {
-            //           text: translation.t("Delete"),
-            //           onPress: () => {
-            //             Alert.alert(
-            //               translation.t("Warning"),
-            //               `${
-            //                 ticketDetail.length !== 1
-            //                   ? translation.t("MakeSureOnDeleteGuest")
-            //                   : translation.t("LastGuestMsg")
-            //               }`,
-            //               [
-            //                 {
-            //                   text: translation.t("alertButtonYesText"),
-            //                   onPress: () => {
-            //                     deleteticketDetail(item.id);
-            //                   },
-            //                 },
-            //                 {
-            //                   text: translation.t("alertButtonNoText"),
-            //                 },
-            //               ]
-            //             );
-            //           },
-            //         },
-            //         {
-            //           text: translation.t("Cancel"),
-            //         },
-            //       ]
-            //     )
-            //   }
-            // >
-            //   <View
-            //     style={{
-            //       justifyContent: "center",
-            //       alignItems: "center",
-            //       width: "20%",
-            //     }}
-            //   >
-            //     <Image
-            //       source={require("../../assets/images/ticket.png")}
-            //       style={{ height: 60, width: 60, resizeMode: "contain" }}
-            //     />
-            //   </View>
-            //   <View
-            //     style={{
-            //       gap: 10,
-            //       width: "70%",
-            //       paddingLeft: 15,
-            //       borderLeftColor: "gray",
-            //       borderLeftWidth: 1,
-            //     }}
-            //   >
-            //     <Text style={[styles.optionText, { fontWeight: "bold" }]}>
-            //       {item.serialNumber}
-            //     </Text>
-
-            //     <Text style={[styles.optionText, { fontWeight: "400" }]}>
-            //       {formatter(item.price)}
-            //     </Text>
-            //   </View>
-            // </TouchableOpacity>
-            <TicketCard item={item} />
-          )}
+          renderItem={({ item }) => <TicketCard item={item} />}
         />
       </View>
 
@@ -169,7 +98,7 @@ export default function TicketDetailsScreen({ navigation, route }: any) {
         style={{
           justifyContent: "center",
           alignItems: "center",
-          height: "10%"
+          height: "10%",
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -181,7 +110,7 @@ export default function TicketDetailsScreen({ navigation, route }: any) {
 }
 
 function TicketCard({ item }: any) {
-  console.log(item);
+  console.log(item, "Tickets");
   return (
     <TouchableOpacity>
       <View style={styles.productCard}>
@@ -190,31 +119,29 @@ function TicketCard({ item }: any) {
             flexDirection: "column",
             justifyContent: "space-around",
             alignItems: "flex-start",
-            gap: 20,
+            height: "80%",
           }}
         >
-          <Text>{item.serialNumber}</Text>
-
           <View
             style={{
-              alignItems: "center",
-              width: "100%",
               justifyContent: "space-between",
               flexDirection: "row",
-              paddingHorizontal: 35,
+              width: "100%",
             }}
           >
-            <View>
-              <Text style={styles.productTitle}>Event:</Text>
-              <Text style={styles.productTitle}>{item.event_name}</Text>
-            </View>
+            <Text>{item.serialNumber}</Text>
 
             <View
               style={{
                 alignItems: "flex-end",
+                width: "50%",
               }}
             >
-              <Text style={styles.productTitle}>
+              <Text
+                style={styles.productTitle}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {item.ticketCategory_name}
               </Text>
               <Text style={styles.productTitle}>
@@ -222,11 +149,56 @@ function TicketCard({ item }: any) {
               </Text>
             </View>
           </View>
+
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              paddingHorizontal: 25,
+            }}
+          >
+            <View style={{ width: "100%", gap: 2 }}>
+              <Text style={[styles.productTitle, { fontWeight: "bold" }]}>
+                Event:
+              </Text>
+              <Text
+                style={[styles.productTitle, { textAlign: "justify" }]}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {item.event_name}
+              </Text>
+
+              <View style={{ flexDirection: "row", gap: 5 }}>
+                <Text style={[styles.productTitle, { fontWeight: "bold" }]}>
+                  Fecha evento:
+                </Text>
+                <Text style={styles.productTitle}>
+                  {moment(item.event_dateInit).format("YYYY-MM-DD")}
+                </Text>
+              </View>
+
+              <View style={{ flexDirection: "row", gap: 5 }}>
+                <Text style={[styles.productTitle, { fontWeight: "bold" }]}>
+                  Fecha ticket:
+                </Text>
+                <Text style={styles.productTitle}>
+                  {moment(item.created_at).format("YYYY-MM-DD")}
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
 
         <Image
           source={{ uri: item.barCode }}
-          style={{ resizeMode: "cover", height: 30, width: "100%" }}
+          style={{
+            resizeMode: "cover",
+            height: 30,
+            width: "100%",
+            marginTop: 15,
+          }}
         />
       </View>
 
@@ -238,7 +210,7 @@ function TicketCard({ item }: any) {
 
 const styles = StyleSheet.create({
   childBody: {
-    marginTop: 10
+    marginTop: 10,
   },
   labelInput: {
     fontSize: 15,
@@ -348,7 +320,7 @@ const styles = StyleSheet.create({
 
   // TICKET CARD
 
-    productCard: {
+  productCard: {
     padding: 20,
     marginVertical: 8,
     borderRadius: 5,

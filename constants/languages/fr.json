@@ -234,7 +234,7 @@
   "TotalOfGuest": "Total des invités",
   "openSite": "Êtes-vous sûr de vouloir ouvrir ce site ?",
   "AddBoatsMsg": "Ajouter mon embarcation nautique",
-  "GuestScreenMsg": "Mes invités. Invitez votre équipe en utilisant notre plateforme.",
+  "GuestScreenMsg": "Créez des activités privées et invitez vos amis à y participer. Vous pouvez également voir les invitations qui vous ont été envoyées.",
   "BoatImage": "Image du bateau",
   "AirConditioner:": "Climatisation",
   "ElectricPlant": "Centrale électrique",
@@ -300,5 +300,7 @@
   "TicketsAmount": "Quantité de billets",
   "Transferred": "Transféré",
   "AmountTransferred": "Quantité transférée",
-  "Transfer": "Transférer des billets"
+  "Transfer": "Transférer des billets",
+  "QrCode": "QR Code",
+  "NoDocksMsg": "Vous n'avez pas de quais enregistrés dans cette marina."
 }

@@ -44,7 +44,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
   const [refre, setRefre]: any = useState(false);
   const [pharmacyValues, setPharmacyValues] = useState([]);
   const [dockValues, setDockValues] = useState([]);
-  const [marineDockValues, setMarineDockValues]:any = useState({})
+  const [marineDockValues, setMarineDockValues]: any = useState({});
 
   const validationSchema = yup.object().shape({
     description: yup.string().required(translation.t("DescriptionIsRequired")),
@@ -118,7 +118,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
         label: product.product_name,
         value: product.product_id,
       }));
-      console.log(mappedValues)
+      console.log(mappedValues);
       setDockValues(mappedValues);
     });
   };
@@ -354,6 +354,8 @@ export default function SendServicesScreen({ navigation, route }: any) {
                           pharmacy: items.pharmacy,
                           dock: items.dock,
                         });
+                        setFieldValue("pharmacy_id", items.pharmacy);
+                        setFieldValue("dock", items.dock);
                       }}
                     />
                   </View>
@@ -407,11 +409,9 @@ export default function SendServicesScreen({ navigation, route }: any) {
                       inputSearchStyle={styles.inputSearchStyle}
                       iconStyle={styles.iconStyle}
                       data={dockValues}
-                      value={
-                        dockValues.find(
-                          (item: any) => item.value == marineDockValues.dock
-                        )
-                      }
+                      value={dockValues.find(
+                        (item: any) => item.value == marineDockValues.dock
+                      )}
                       search
                       maxHeight={300}
                       labelField="label"

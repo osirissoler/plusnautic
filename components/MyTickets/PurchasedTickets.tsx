@@ -13,6 +13,7 @@ import { formatter, hideLoadingModal } from "../../utils";
 import { checkStorage } from "../Shared";
 import { fetchData } from "../../httpRequests";
 import { Ionicons } from "@expo/vector-icons";
+import moment from "moment";
 
 export default function PurchasedTickets({
   navigation,
@@ -311,6 +312,13 @@ function TicketCard({
               <Text style={styles.productName}>{item.amountTrappased}</Text>
             </View>
           )}
+
+          <View style={styles.productDataContainer}>
+            <Text style={styles.productTitle}>Fecha evento:</Text>
+            <Text style={styles.productName}>
+              {moment(item.event_dateInit).format("YYYY-MM-DD")}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>

@@ -279,9 +279,44 @@ export default function ProfileScreen({ navigation, route }: any) {
               navigation.navigate("QrCodeScreen", { qrCode: user.qrCode })
             }
           >
-            <Text style={styles.optionText}>Qr code</Text>
+            <Text style={styles.optionText}>{translation.t("QrCode")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+
+          {/* <Pressable
+            style={styles.option}
+            onPress={() => navigation.navigate("Notification")}
+          >
+            <Text style={styles.optionText}>Notification</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable> */}
+
+          <Pressable
+            style={styles.option}
+            onPress={() => navigation.navigate("MyBoats")}
+          >
+            <Text style={styles.optionText}>{translation.t("MyBoats")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+
+          <Pressable
+            style={styles.option}
+            onPress={() =>
+              navigation.navigate("MyTicketsScreen", { showBack: true })
+            }
+          >
+            <Text style={styles.optionText}>{translation.t("MyTickets")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+
+          <Pressable
+            style={styles.option}
+            onPress={() => navigation.navigate("Marinas", { showBack: true })}
+          >
+            <Text style={styles.optionText}>{translation.t("Marinas")}</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+
           <Pressable
             style={styles.option}
             onPress={() => navigation.navigate("SelectLanguage")}
@@ -289,13 +324,6 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>
               {translation.t("languageTitle")}
             </Text>
-            <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
-          <Pressable
-            style={styles.option}
-            onPress={() => navigation.navigate("Notification")}
-          >
-            <Text style={styles.optionText}>Notification</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
           {/* <Pressable
@@ -310,16 +338,6 @@ export default function ProfileScreen({ navigation, route }: any) {
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable> */}
 
-          <Pressable
-            style={styles.option}
-            onPress={() =>
-              navigation.navigate("MyTicketsScreen", { showBack: true })
-            }
-          >
-            <Text style={styles.optionText}>{translation.t("MyTickets")}</Text>
-            <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
-
           {/* MyBoats */}
 
           {/* <Pressable
@@ -329,16 +347,9 @@ export default function ProfileScreen({ navigation, route }: any) {
             <Text style={styles.optionText}>{translation.t("MyBoats")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable> */}
-          <Pressable
-            style={styles.option}
-            onPress={() => navigation.navigate("Marinas", { showBack: true })}
-          >
-            <Text style={styles.optionText}>{translation.t("Marinas")}</Text>
-            <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
 
           {/* Guest */}
-
+          {/* 
           <Pressable
             style={styles.option}
             onPress={() =>
@@ -347,7 +358,7 @@ export default function ProfileScreen({ navigation, route }: any) {
           >
             <Text style={styles.optionText}>{translation.t("MyGuest")}</Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             style={styles.option}

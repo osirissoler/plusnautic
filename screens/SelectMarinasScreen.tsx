@@ -238,11 +238,18 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
           color={"#5f7ceb"}
         />
       </View>
-      <View style={{ height: `${!showBack ? "70%" : "90%"}` }}>
+      <View
+        style={{
+          height: `${!showBack ? "70%" : "90%"}`,
+          paddingHorizontal: 10,
+          paddingTop: 10,
+        }}
+      >
         <FlatList
           refreshing={fetching}
           data={list}
           onRefresh={getPharmacies}
+          style={{ paddingHorizontal: 5 }}
           renderItem={({ item, index }: any) => (
             <TouchableOpacity
               style={styles.productCard}
@@ -251,13 +258,30 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
                 setFetching(true);
               }}
             >
-              <View style={styles.productImage}>
-                <Image
-                  source={{ uri: item.img ? item.img : defaultProductImg }}
-                  style={{ flex: 1, resizeMode: "contain" }}
-                />
-              </View>
-              <View style={{ width: "60%", marginLeft: 10 }}>
+
+                <View
+                  style={{
+                    width: "30%",
+                    padding: item.img ? 0 : 15,
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: item.img
+                        ? item.img
+                        : "https://plus-nautic.nyc3.digitaloceanspaces.com/yate.png",
+                    }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      resizeMode: "cover",
+                      borderRadius: 10,
+                      borderColor: "gray",
+                    }}
+                  />
+                </View>
+
+              <View style={{ width: "50%", marginLeft: 10 }}>
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productCountry}>{item.country}</Text>
               </View>
@@ -320,15 +344,23 @@ export default function SelectMarinasScreen({ navigation, route }: any) {
 
 const styles = StyleSheet.create({
   productCard: {
-    padding: 10,
-    marginVertical: 4,
-    marginHorizontal: 15,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.1)",
+    borderColor: "#8B8B9720",
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2, // Ajusta la altura para ver mejor la sombra
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Asegura que esta propiedad esté presente para Android
+    height: 110,
+    overflow: "visible", // Cambia de "hidden" a "visible" o elimínala
     flexDirection: "row",
-    // justifyContent: "space-around",
     alignItems: "center",
+    width: "100%",
   },
   productImage: {
     height: 80,

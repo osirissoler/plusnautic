@@ -212,7 +212,7 @@ export default function GuestDetailsScreen({ navigation, route }: any) {
               style={styles.input}
               value={inputEmailValue}
               keyboardType="email-address"
-              autoCapitalize={"none"}
+              autoCapitalize="none"
               onChangeText={(text) => {
                 setInputEmailValue(text);
               }}

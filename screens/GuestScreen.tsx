@@ -16,6 +16,9 @@ import Toast from "react-native-root-toast";
 import { LanguageContext } from "../LanguageContext";
 import { Button } from "react-native-elements";
 import HeaderComponent from "../components/Header";
+import MyGuests from "../components/MyGuests/MyGuests";
+import ReceivedGuests from "../components/MyGuests/ReceivedGuests";
+import TypeCodeModal from "../components/MyGuests/TypeCodeModal";
 
 export default function GuestScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -24,7 +27,13 @@ export default function GuestScreen({ navigation, route }: any) {
   const [guest, setGuests] = useState([]);
   const [userId, setUserId] = useState(0);
   const [boat, setBoats]: any = useState([]);
-  const [dockValues, setDockValues]: any = useState([{ label: "" }])
+  const [dockValues, setDockValues]: any = useState([{ label: "" }]);
+  const [activeTab, setActiveTab] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [codeValue, setCodeValue] = useState("");
+  const [guestDetailsData, setGuestDetailsData]: any = useState([]);
+  const [guestModalVisible, setGuestModalVisible] = useState(false);
+  const [userGuest, setUserGuest] = useState([]);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
@@ -36,9 +45,10 @@ export default function GuestScreen({ navigation, route }: any) {
           setUserId(id);
           getGuestByUser(id);
           searchDock();
+          getGuestDetailsByUserId(id);
           const url = `/boatsRecords/getBoatRecordByUser/${id}`;
           fetchData(url).then(async (res: any) => {
-            if(res.ok){
+            if (res.ok) {
               const mappedValues = res.boatsRecord.map((boatsRecord: any) => ({
                 label: boatsRecord.boat_name,
                 value: boatsRecord.id,
@@ -56,10 +66,23 @@ export default function GuestScreen({ navigation, route }: any) {
     });
   }, []);
 
+  const getGuestDetailsByUserId = async (id: any) => {
+    const url = `/guest/getGuestDetailsByUserId/${id}`;
+    fetchData(url).then((response) => {
+      if (response.ok) {
+        setUserGuest(response.guestDetails);
+      }
+    });
+  };
+
+  const handleTabPress = (index: any) => {
+    setActiveTab(index);
+  };
+
   const searchDock = async () => {
     const url = `/products/getProducts`;
     fetchData(url).then(async (res: any) => {
-      if(res.ok){
+      if (res.ok) {
         const mappedValues = await res.product.map((product: any) => ({
           label: product.name,
           value: product.id,
@@ -106,10 +129,8 @@ export default function GuestScreen({ navigation, route }: any) {
   };
 
   const hideLoadingModal = (callback: Function) => {
-    setTimeout(() => {
       setShowLoading(false);
       callback();
-    }, 1000);
   };
 
   const deleteGuest = async (id: any) => {
@@ -132,21 +153,78 @@ export default function GuestScreen({ navigation, route }: any) {
     }
   };
 
+  const getGuestDetailsByCode = async () => {
+    try {
+      if (!codeValue) {
+        showErrorToast(translation.t("EnterCodeMsg"));
+        return;
+      }
+
+      const urlGet = `/guest/getGuestDetailsByCode/${codeValue}`;
+      fetchData(urlGet).then((res: any) => {
+        if (res.ok) {
+          if (res.guestDetails.ServiceStatus_code != "PENDING") {
+            showErrorToast(translation.t("CodeIsUsedMsg"));
+            return;
+          }
+          setGuestDetailsData(res.guestDetails);
+          setModalVisible(false);
+          setGuestModalVisible(true);
+        } else {
+          showErrorToast(translation.t("WrongCode"));
+        }
+      });
+    } catch (error) {
+      showErrorToast(translation.t("CodeSentError"));
+    }
+  };
+
+  const updateStatusToGuest = async (servicesStatusCode: any) => {
+    try {
+      const url = "/guest/updateUserDetailByCode";
+      const data = {
+        code: codeValue,
+        user_id: userId,
+        servicesStatusCode: servicesStatusCode,
+      };
+      sendDataPut(url, data).then((response: any) => {
+        if (response.ok) {
+          showGoodToast(translation.t("CodeSent"));
+          setCodeValue("");
+          setGuestModalVisible(false);
+          getGuestDetailsByUserId(userId);
+          setActiveTab(1)
+        } else {
+          showErrorToast(response.message);
+        }
+      });
+    } catch (error) {
+      showErrorToast(translation.t("CodeSentError"));
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 10 }}>
-      <HeaderComponent />
       <Loading showLoading={showLoading} translation={translation} />
-      <View style={{ alignItems: "center", marginBottom: 3 }}>
-        <Text
-          style={{
-            alignItems: "center",
-            fontWeight: "600",
-            textAlign: "center",
-            fontSize: 15,
-          }}
-        >
-          {translation.t("GuestScreenMsg")}
-        </Text>
+      <HeaderComponent />
+      <Text
+        style={{
+          alignItems: "center",
+          fontWeight: "600",
+          textAlign: "center",
+          fontSize: 15,
+        }}
+      >
+        {translation.t("GuestScreenMsg")}
+      </Text>
+      <View
+        style={{
+          alignItems: "center",
+          marginBottom: 3,
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
         <TouchableOpacity
           style={{
             width: "20%",
@@ -155,7 +233,7 @@ export default function GuestScreen({ navigation, route }: any) {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: 10,
-            marginVertical: 10
+            marginVertical: 10,
           }}
           onPress={() =>
             navigation.navigate("CreateInvitations", { showBack: true })
@@ -165,159 +243,84 @@ export default function GuestScreen({ navigation, route }: any) {
             {translation.t("add")}
           </Text>
         </TouchableOpacity>
-      </View>
-      <View style={{ height: "83%", marginBottom: 0 }}>
-        {guest.length > 0 ? (
-          <FlatList
-            refreshing={fetching}
-            data={guest}
-            onRefresh={() => {
-              getGuestByUser(userId);
-            }}
-            renderItem={({ item }: any) => (
-              <TouchableOpacity
-                style={{
-                  borderColor: "#8B8B9720",
-                  backgroundColor: "#F7F7F7",
-                  marginBottom: 10,
-                  borderRadius: 10,
-                  padding: 5,
-                }}
-                onPress={() => {
-                  Alert.alert(
-                    translation.t("Confirm"),
-                    translation.t("ActionToDo"),
-                    [
-                      {
-                        text: translation.t("SeeDetails"),
-                        onPress: async () => {
-                          navigation.navigate("GuestDetailsScreen", {
-                            guest_id: item.id,
-                          });
-                        },
-                      },
-                      {
-                        text: translation.t("Edit"),
-                        onPress: async () => {
-                          navigation.navigate("CreateInvitations", {
-                            editMode: true,
-                            dataToEdit: {
-                              idGuest: item.id,
-                              title: item.title,
-                              description: item.description,
-                              date: item.date,
-                              boat_id: item.boat_id,
-                              product_id: item.product_id,
-                              docksId: filterDock(
-                                getBoatRecordByUser(item.boat_id)
-                              ),
-                            },
-                          });
-                        },
-                      },
-                      {
-                        text: translation.t("Delete"),
-                        onPress: () => {
-                          Alert.alert(
-                            translation.t("Warning"),
-                            translation.t("MakeSureOnDeleteInvitation"),
-                            [
-                              {
-                                text: translation.t("alertButtonYesText"),
-                                onPress: () => {
-                                  deleteGuest(item.id);
-                                },
-                              },
-                              {
-                                text: translation.t("alertButtonNoText"),
-                              },
-                            ]
-                          );
-                        },
-                      },
-                      {
-                        text: translation.t("Cancel"),
-                      },
-                    ]
-                  );
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: 60,
-                        marginVertical: 10,
-                        marginHorizontal: 10,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <Image
-                        source={require("../assets/images/invitacion.png")}
-                        style={{ height: 50, width: 50, resizeMode: "contain" }}
-                      />
-                    </View>
 
-                    <View style={{ width: "80%", overflow: "hidden" }}>
-                      <Text
-                        numberOfLines={1}
-                        style={{ marginVertical: 3, fontWeight: "bold" }}
-                      >
-                        {item.title}
-                      </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
-                        {item.description}
-                      </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
-                        <Text style={{ fontWeight: "bold" }}>
-                          {translation.t("Boat")}:{" "}
-                        </Text>
-                        {item.boat_name}
-                      </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
-                        <Text style={{ fontWeight: "bold" }}>
-                          {translation.t("Date")}:{" "}
-                        </Text>
-                        {item.date}
-                      </Text>
-                      <Text ellipsizeMode="tail" style={{ marginVertical: 0 }}>
-                        <Text style={{ fontWeight: "bold" }}>
-                          {translation.t("Dock")}:{" "}
-                        </Text>
-                        {
-                          dockValues?.find(
-                            (a: any) => a.value == item.product_id
-                          )?.label
-                        }
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <View style={{ justifyContent: "center", alignItems: "center", flex: 1, paddingHorizontal: 10, gap: 20 }}>
-            <Text style={{fontWeight: "bold", fontSize: 16, textAlign: "center"}}>{translation.t("NoGuest")}</Text>
-            <Image source={require("../assets/images/prohibido.png")} style={{height: 80, width: 80}}/>
-          </View>
-        )}
+        <TouchableOpacity
+          style={{
+            width: "20%",
+            height: 50,
+            backgroundColor: "#5f7ceb",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+            marginVertical: 10,
+          }}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
+            {translation.t("Code")}
+          </Text>
+        </TouchableOpacity>
       </View>
+
+      <View style={styles.tabs}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 0 && styles.activeTab]}
+          onPress={() => handleTabPress(0)}
+        >
+          <Text style={styles.tabText}>Mis invitaciones</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 1 && styles.activeTab]}
+          onPress={() => handleTabPress(1)}
+        >
+          <Text style={styles.tabText}>Invitaciones recibidas</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TypeCodeModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        translation={translation}
+        setCodeValue={setCodeValue}
+        codeValue={codeValue}
+        getGuestDetailsByCode={getGuestDetailsByCode}
+        updateStatusToGuest={updateStatusToGuest}
+        guestModalVisible={guestModalVisible}
+        setGuestModalVisible={setGuestModalVisible}
+        guestDetailsData={guestDetailsData}
+        dockValues={dockValues}
+      />
+
+      {activeTab === 0 && (
+        <MyGuests
+          getGuestByUser={getGuestByUser}
+          filterDock={filterDock}
+          getBoatRecordByUser={getBoatRecordByUser}
+          deleteGuest={deleteGuest}
+          guest={guest}
+          fetching={fetching}
+          userId={userId}
+          dockValues={dockValues}
+          translation={translation}
+          navigation={navigation}
+        />
+      )}
+
+      {activeTab === 1 && (
+        <ReceivedGuests
+          translation={translation}
+          showLoading={showLoading}
+          setShowLoading={setShowLoading}
+          navigation={navigation}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          guestDetailsData={guestDetailsData}
+          guest={userGuest}
+          setGuests={setUserGuest}
+          userId={userId}
+          dockValues={dockValues}
+        />
+      )}
     </View>
   );
 }
@@ -516,5 +519,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     fontWeight: "bold",
+  },
+
+  // Tabs
+
+  tabs: {
+    flexDirection: "row",
+    backgroundColor: "#F2F2F2",
+    marginBottom: 20,
+  },
+  tab: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
+  },
+  activeTab: {
+    borderBottomColor: "#5f7ceb",
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
