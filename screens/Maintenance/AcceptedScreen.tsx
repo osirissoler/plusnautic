@@ -10,6 +10,7 @@ import {
   ImageBackground,
   Alert,
   BackHandler,
+  ScrollView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import asyncStorage from "@react-native-async-storage/async-storage";
@@ -27,6 +28,7 @@ import axios from "axios";
 import WebView from "react-native-webview";
 import { checkStorage, Loading } from "../../components/Shared";
 import ServicesNotificationPayments from "./ServicesNotificationPayments";
+import SendReview from "../gestor/Review";
 
 export default function AcceptedScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -39,6 +41,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [userLogged, setUserLogged]: any = useState({});
 
   const [items, setItems]: any = useState(route.params.item);
+  console.log(items.driver_id, "item");
   const [priceP, setPriceP]: any = useState(route.params.item.price);
   const [currentPosition, setcurrentPosition]: any = useState(0);
   const URLToRiderect = "https://panel-plusnautic.netlify.app/success";
@@ -50,7 +53,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [requestId, setrequestId]: any = useState("");
   const [contador, setContador]: any = useState(0);
   const [id, setId]: any = useState(0);
-  console.log("aqu", route.params.item.signatureUSer);
+  // console.log("aqu", route.params.item.signatureUSer);
   useEffect(() => {
     fillMarkedDatesAll();
   }, []);
@@ -85,6 +88,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
     setAllDate(saveDAte);
   };
 
+  const reload = () => {};
   const acceptRequest = async () => {
     const url = `/services/updateUserServicesAccepted`;
     const data = {
@@ -100,8 +104,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
         //   index: 0,
         //   routes: [{ name: 'Service' }]
         // });
-        navigation.goBack()
-        
+        navigation.goBack();
       }
     });
   };
@@ -183,7 +186,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
     //     ],
     //   });
     // });
-    navigation.goBack()
+    navigation.goBack();
   };
 
   const alerta = () => {
@@ -228,7 +231,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
             ).then((res2) => {
               if (res2.ok) {
                 // navigation.navigate("Profile");
-                navigation.goBack()
+                navigation.goBack();
               }
             });
           }
@@ -248,7 +251,9 @@ export default function AcceptedScreen({ navigation, route }: any) {
     }
   };
   return (
-    <View style={{ height: "100%", backgroundColor: "#ffffff" }}>
+    <View
+      style={{ height: "100%", backgroundColor: "#ffffff", borderWidth: 0 }}
+    >
       <Loading showLoading={showLoading} translation={translation} />
       {!placeToPayOperationFineshed && showPlaceToPayview && (
         <View style={{ height: "100%" }}>
@@ -261,99 +266,165 @@ export default function AcceptedScreen({ navigation, route }: any) {
 
       {!(!placeToPayOperationFineshed && showPlaceToPayview) && (
         <View style={{ height: "100%", backgroundColor: "white" }}>
-          <View
-            style={{
-              height: "7%",
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-              alignItems: "center",
-            }}
-          >
-            <Text style={styles.labelInput}>
-              {translation.t("EstimatedPrice")} {formatter(items.price)}
-            </Text>
-          </View>
-
-          <View style={{ height: "45%", paddingHorizontal: 10 }}>
-            <Calendar
-              style={{
-                borderColor: "gray",
-                height: 310,
-              }}
-              theme={{
-                backgroundColor: "#5f7ceb",
-                textSectionTitleColor: "#5f7ceb",
-                selectedDayBackgroundColor: "blue",
-                textDisabledColor: "grey",
-                arrowColor: "black",
-              }}
-              minDate={minDate}
-              markingType={"period"}
-              markedDates={allDate}
-            ></Calendar>
-          </View>
-
-          <View style={{ height: "10%", justifyContent: "center" }}>
+          <ScrollView>
             <View
               style={{
-                height: "30%",
-                alignItems: "center",
-                paddingVertical: 5,
+                height: "auto",
                 paddingHorizontal: 10,
+                paddingVertical: 10,
+                alignItems: "center",
               }}
             >
-              {firstDate == null ? (
-                <Text style={{ color: "#5f7ceb" }}>
-                  {moment().format("LL").toUpperCase()}
-                </Text>
-              ) : (
-                <View style={{ flexDirection: "row" }}>
+              <Text style={styles.labelInput}>
+                {translation.t("EstimatedPrice")} {formatter(items.price)}
+              </Text>
+            </View>
+
+            <View style={{ height: "auto", paddingHorizontal: 10 }}>
+              <Calendar
+                style={{
+                  borderColor: "gray",
+                  height: 310,
+                }}
+                theme={{
+                  backgroundColor: "#5f7ceb",
+                  textSectionTitleColor: "#5f7ceb",
+                  selectedDayBackgroundColor: "blue",
+                  textDisabledColor: "grey",
+                  arrowColor: "black",
+                }}
+                minDate={minDate}
+                markingType={"period"}
+                markedDates={allDate}
+              ></Calendar>
+            </View>
+
+            <View
+              style={{
+                height: "auto",
+                justifyContent: "center",
+                borderWidth: 0,
+                paddingVertical: 20,
+              }}
+            >
+              <View
+                style={{
+                  height: "auto",
+                  alignItems: "center",
+                  paddingVertical: 5,
+                  paddingHorizontal: 20,
+                }}
+              >
+                {firstDate == null ? (
                   <Text style={{ color: "#5f7ceb" }}>
-                    {/* <Text style={{ color: 'black' }}> Selected date </Text> */}
-                    ({moment(firstDate).format("LL").toUpperCase()})
+                    {moment().format("LL").toUpperCase()}
                   </Text>
-                  <Text> {lastdate != null ? "to" : ""} </Text>
-                  {lastdate != null ? (
+                ) : (
+                  <View style={{ flexDirection: "row" }}>
                     <Text style={{ color: "#5f7ceb" }}>
-                      ({moment(lastdate).format("LL").toUpperCase()})
+                      {/* <Text style={{ color: 'black' }}> Selected date </Text> */}
+                      ({moment(firstDate).format("LL").toUpperCase()})
                     </Text>
-                  ) : (
-                    <Text></Text>
-                  )}
+                    <Text> {lastdate != null ? "to" : ""} </Text>
+                    {lastdate != null ? (
+                      <Text style={{ color: "#5f7ceb" }}>
+                        ({moment(lastdate).format("LL").toUpperCase()})
+                      </Text>
+                    ) : (
+                      <Text></Text>
+                    )}
+                  </View>
+                )}
+              </View>
+            </View>
+
+            {items.Services.isPaid == true &&
+              items.Services.servicesStatus_id != 3 && (
+                <View style={{ height: "23%" }}>
+                  <ServicesNotificationPayments
+                    items={items}
+                    navigation={navigation}
+                  />
                 </View>
               )}
-            </View>
-          </View>
-
-          {items.Services.isPaid == true &&
-            items.Services.servicesStatus_id != 3 && (
-              <View style={{ height: "23%" }}>
+            {/* evaluacion */}
+            {items.Services.servicesStatus_id === 3 && (
+              <View style={{ alignItems: "center" }}>
+                <View>
+                  <TouchableOpacity
+                    style={styles.productCard2}
+                    onPress={() => {
+                      navigation.navigate("Gestor", {
+                        img: items.driver_img,
+                        name: items.driver_first_name,
+                        lastName: items.driver_last_name,
+                        id: items.driver_id,
+                      });
+                    }}
+                  >
+                    <ImageBackground
+                      source={{
+                        uri:
+                          items.driver_img == null || items.driver_img == ""
+                            ? "https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png"
+                            : items.driver_img,
+                      }}
+                      style={{ height: 70, width: 70, borderRadius: 100 }}
+                      resizeMode={"cover"}
+                      imageStyle={{ borderRadius: 100 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Text style={{ fontWeight: "bold", fontSize: 19 }}>
+                  {items.driver_first_name} {items.driver_last_name}
+                </Text>
                 
-                <ServicesNotificationPayments
-                  items={items}
-                  navigation={navigation}
-                />
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: 40,
+                    backgroundColor: "#5f7ceb",
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    marginTop: 5,
+                  }}
+                  onPress={() => {
+                    navigation.navigate("Gestor", {
+                      img: items.driver_img,
+                      name: items.driver_first_name,
+                      lastName: items.driver_last_name,
+                      id: items.driver_id,
+                    });
+                  }}
+                >
+                  <Text style={{ fontWeight: "bold", color: "white" }}>
+                    {translation.t("review")}
+                  </Text>
+                </TouchableOpacity>
               </View>
             )}
 
-          <View style={{ height: "23%", alignItems: "center" }}>
-          {items.Services.servicesStatus_id === 3 && (
-            <View style={{ height: "23%", alignItems: "center" }}>
-              <Image
-                source={{
-                  uri: items.signatureUSer,
-                }}
-                style={{ height: 90, width: 150 }}
-              />
-              <View>
-                <Text>-------------------------------</Text>
-                <Text style={{ fontWeight: "bold", textAlign: "center" }}>
-                  Signature
-                </Text>
-              </View>
+            <View style={{ height: "auto", alignItems: "center", marginTop: 15, }}>
+              {items.Services.servicesStatus_id === 3 && (
+                <View style={{ height: "23%", alignItems: "center" }}>
+                  <Image
+                    source={{
+                      uri: items.signatureUSer,
+                    }}
+                    style={{ height: 90, width: 150 }}
+                  />
+                  <View>
+                    <Text>-------------------------------</Text>
+                    <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+                      Signature
+                    </Text>
+                  </View>
+                </View>
+              )}
             </View>
-          )}
-          </View>
+          </ScrollView>
 
           {items.Services.isPaid == false && (
             <View style={{ height: "15%" }}>

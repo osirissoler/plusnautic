@@ -18,6 +18,7 @@ import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Container, Loading } from "../../components/Shared";
 import HeaderComponent from "../../components/Header";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 export default function ListScreen({ navigation }: any) {
   const navigationn = useNavigation();
@@ -49,6 +50,7 @@ export default function ListScreen({ navigation }: any) {
     await fetchData(url).then(async (res) => {
       if (res.ok) {
         setTypeServices(res.services);
+        // console.log(res.services[0], 'jejeje')
       }
     });
     setFetching(false);
@@ -60,10 +62,11 @@ export default function ListScreen({ navigation }: any) {
       const id = response;
       setText("All request");
       let url = `/services/getInfoPriceService/${id}`;
-      fetchData(url).then((response) => {
+      fetchData(url).then((response: any) => {
         if (response.ok) {
           setUserServicesPrice(response.service);
           setUserServicesPrice1(response.service);
+          console.log(response.service);
         }
       });
       setFetching(false);
@@ -71,7 +74,7 @@ export default function ListScreen({ navigation }: any) {
   };
 
   const filterServicesPrice = async (id: any) => {
-    const data = userServicesPrice1.filter((e) => {
+    const data = userServicesPrice1.filter((e:any) => {
       return e.Services.TypeServices.id === id;
     });
     setUserServicesPrice(data);
@@ -147,7 +150,7 @@ export default function ListScreen({ navigation }: any) {
           <Text style={styles.productTitle2}>
             {translation.t("maintenance")}
           </Text>
-          {/* <Text style={styles.seeAll}>{text}</Text> */}
+          {/* <Text style={styles.seeAll}>aaaaa</Text> */}
           <FlatList
             refreshing={fetching}
             data={userServicesPrice}
@@ -155,7 +158,7 @@ export default function ListScreen({ navigation }: any) {
             renderItem={({ item }: any) => (
               <View
                 style={{
-                  height: 90,
+                  height: 100,
                   borderColor: "#8B8B9720",
                   backgroundColor: "#F7F7F7",
                   marginBottom: 10,
@@ -192,6 +195,7 @@ export default function ListScreen({ navigation }: any) {
                         resizeMode={"cover"}
                         imageStyle={{ borderRadius: 100 }}
                       />
+                      
                     </TouchableOpacity>
                     <View style={{}}>
                       <Text style={{ fontWeight: "bold", marginVertical: 5 }}>
@@ -206,18 +210,51 @@ export default function ListScreen({ navigation }: any) {
                       </View>
                       <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          Services status
-                          {
-                            // translation.t('payout') Status
-                          }{" "}
+                          Services status{" "}
                         </Text>
+
                         <Text>
                           {(translation.locale.includes("en") &&
                             item.ServicesStatus_name) ||
                             (translation.locale.includes("es") &&
-                              item.ServicesStatus_nombre) || (translation.locale.includes("fr") &&
+                              item.ServicesStatus_nombre) ||
+                            (translation.locale.includes("fr") &&
                               item.ServicesStatus_nom)}
                         </Text>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Tipo de servicios{" "}
+                        </Text>
+
+                        <Text>
+                          {(translation.locale.includes("en") &&
+                            item.typeServices_name) ||
+                            (translation.locale.includes("es") &&
+                              item.typeServices_nombre) ||
+                            (translation.locale.includes("fr") &&
+                              item.typeServices_nom)}
+                        </Text>
+                      </View>
+
+                      {item.ServicesStatus_code == "COMPLETADO" && (
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {(translation.locale.includes("en") &&
+                              "Finish date") ||
+                              (translation.locale.includes("es") &&
+                                "Fecha de finalizacion") ||
+                              (translation.locale.includes("fr") &&
+                                "Date de fin")}{" "}
+                          </Text>
+
+                          <Text>
+                            {moment(item.servicesEndData).format("DD/MM/YYYY")}
+                          </Text>
+                        </View>
+                      )}
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
                       </View>
                       {item.ServicesStatus_code == "PROCCESING" && (
                         <View style={{ flexDirection: "row" }}>
