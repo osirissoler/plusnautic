@@ -141,7 +141,7 @@ export default function ProfileScreen({ navigation, route }: any) {
     let match = /\.(\w+)$/.exec(fileName);
     let fileType = match ? `image/${match[1]}` : `image`;
 
-    let formData = new FormData();
+    let formData:any = new FormData();
     formData.append("image", { uri: resultUri, name: fileName, fileType });
 
     const url = "/user/updateClientImage/" + user.id;

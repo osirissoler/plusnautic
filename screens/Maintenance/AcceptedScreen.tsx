@@ -50,7 +50,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [requestId, setrequestId]: any = useState("");
   const [contador, setContador]: any = useState(0);
   const [id, setId]: any = useState(0);
-  console.log("aqu", route.params.item.signatureUSer);
+  // console.log("aqu", route.params.item.signatureUSer);
   useEffect(() => {
     fillMarkedDatesAll();
   }, []);
@@ -212,6 +212,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
         alerta();
         const url2 = `/services/updateUserServicesCompleted/${items.id}/${id}`;
         sendDataPut(url2, {}).then((res) => {
+          console.log('Se actualizaron')
           if (res.ok) {
             showErrorToastGood("Request made correctly");
             // navigation.navigate("Profile");
@@ -238,14 +239,15 @@ export default function AcceptedScreen({ navigation, route }: any) {
   };
 
   const onNavigationStateChange = (state: any) => {
-    if (state.navigationType === "other") {
+    console.log(state.url, "state", "placetoPayUrl", placetoPayUrl)
+    // if (state.navigationType === "other") {
       if (state.url != placetoPayUrl) {
         if (contador === 0) {
           setContador(contador + 1);
           consulting();
         }
       }
-    }
+    // }
   };
   return (
     <View style={{ height: "100%", backgroundColor: "#ffffff" }}>
