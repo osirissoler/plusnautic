@@ -671,7 +671,8 @@ function BottomTabNavigator({ navigation, route }: any) {
         }}
         initialParams={route.params}
       /> */}
-      <BottomTab.Screen
+
+      {/* <BottomTab.Screen
         name="App"
         component={HomeScreen}
         options={{
@@ -699,7 +700,8 @@ function BottomTabNavigator({ navigation, route }: any) {
             goAbordo();
           },
         }}
-      />
+      /> */}
+      
       {/* <BottomTab.Screen
 				name='Request'
 				component={MyOrdersScreen}

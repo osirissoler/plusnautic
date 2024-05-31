@@ -11,6 +11,9 @@ import {
   FlatList,
   Modal,
   TextInput,
+  ScrollView,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import { Rating } from "react-native-elements";
@@ -92,7 +95,8 @@ export default function SendReview({ navigation, route, id, reload }: any) {
   };
 
   return (
-    <View>
+    <View
+    >
       <TouchableOpacity
         style={{
           flexDirection: "row",
@@ -106,16 +110,18 @@ export default function SendReview({ navigation, route, id, reload }: any) {
         }}
         onPress={() => setShowModal(true)}
       >
-        <Text style={{ fontWeight: "bold", color: "white" }}>{translation.t("review")}</Text>
+        <Text style={{ fontWeight: "bold", color: "white" }}>
+          {translation.t("review")}
+        </Text>
       </TouchableOpacity>
 
       <Modal visible={showModal} animationType="slide">
-        <View
+        <ScrollView
           style={{
-            height: "100%",
+            height: "90%",
             width: "100%",
             backgroundColor: "white",
-            paddingVertical: 50,
+            paddingVertical: Platform.OS == "ios" ? 50 : 10,
             paddingHorizontal: 15,
           }}
         >
@@ -135,7 +141,6 @@ export default function SendReview({ navigation, route, id, reload }: any) {
           >
             <View
               style={{
-                
                 width: "20%",
                 alignItems: "center",
               }}
@@ -147,18 +152,25 @@ export default function SendReview({ navigation, route, id, reload }: any) {
                 imageStyle={{ borderRadius: 100 }}
               />
             </View>
-            <View
-              style={{ marginLeft: 5, width: "80%" }}
-            >
-              <Text style={{ fontSize: 16, marginBottom: 3, fontWeight:'bold' }}>
+            <View style={{ marginLeft: 5, width: "80%" }}>
+              <Text
+                style={{ fontSize: 16, marginBottom: 3, fontWeight: "bold" }}
+              >
                 {user.first_name}
               </Text>
-              <Text style={{ fontSize: 16 }} numberOfLines={2}>
-              {translation.t("messageEvalation")}
+              <Text style={{ fontSize: 16 }} numberOfLines={3}>
+                {translation.t("messageEvalation")}
               </Text>
             </View>
           </View>
-          <View style={{ marginTop: 15,  flexDirection: "row", justifyContent:'center', alignItems:'center' }}>
+          <View
+            style={{
+              marginTop: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Rating
               imageSize={40}
               fractions={1}
@@ -167,7 +179,7 @@ export default function SendReview({ navigation, route, id, reload }: any) {
                 setValue(valor);
               }}
             />
-            <Text style={{fontSize:18, paddingLeft:10}}>{value}</Text>
+            <Text style={{ fontSize: 18, paddingLeft: 10 }}>{value}</Text>
           </View>
 
           <View style={{ marginTop: 30 }}>
@@ -231,7 +243,7 @@ export default function SendReview({ navigation, route, id, reload }: any) {
               )}
             </Formik>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     </View>
   );

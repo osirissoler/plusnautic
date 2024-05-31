@@ -4,6 +4,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { checkStorage } from "./Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
+import { FloatingAction } from "react-native-floating-action";
+import FloatingButton from "./FloatingButton";
 
 export default function HeaderComponent({
   screen,
@@ -55,19 +57,25 @@ export default function HeaderComponent({
 
       {screen === "home" && (
         <View style={[styles.screenOptions, { justifyContent: "flex-end" }]}>
-          <View style={{ flex: 1, alignItems: "flex-end" }}>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              flexDirection: "row",
+            }}
+          >
+            <FloatingButton />
+
             <TouchableOpacity
               style={styles.optionIcon}
               onPress={() =>
                 navigation.navigate("ShoppingCart", { showBack: true })
               }
             >
-
-                <View style={styles.ticketsContainer}>
-                  <Text style={styles.ticketsAmount}>
-                    {displayTicketsLength}
-                  </Text>
-                </View>
+              <View style={styles.ticketsContainer}>
+                <Text style={styles.ticketsAmount}>{displayTicketsLength}</Text>
+              </View>
 
               <AntDesign name="shoppingcart" size={35} />
             </TouchableOpacity>
@@ -85,6 +93,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 10000
   },
   logo: {
     height: 50,

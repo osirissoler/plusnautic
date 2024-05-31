@@ -6,7 +6,10 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Linking,
+  Alert,
 } from "react-native";
+import { FloatingAction } from "react-native-floating-action";
 
 import HeaderComponent from "../components/Header";
 import {
@@ -19,6 +22,7 @@ import { fetchData, sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
 import AdsScreen from "./AdsScreen";
 import asyncStorage from "@react-native-async-storage/async-storage";
+import FloatingButton from "../components/FloatingButton";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -32,6 +36,62 @@ export default function HomeScreen({ navigation, route }: any) {
   const [listPharmacy, setListPharmacy]: any = useState([]);
   const [visible, setVisible] = useState(true);
   const [error, setError] = useState(false);
+
+  const actions = [
+    {
+      text: "Abordo",
+      icon: require("../assets/images/abordo.png"),
+      name: "abordo",
+      position: 2,
+      buttonSize: 55,
+      color: "#5f7ceb",
+      size: 100,
+      textStyle: {
+        fontSize: 14,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
+    },
+    {
+      text: "Store",
+      icon: require("../assets/images/callcenter.png"),
+      name: "store",
+      position: 1,
+      size: 100,
+      color: "#5f7ceb",
+      buttonSize: 55,
+      textStyle: {
+        fontSize: 14,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
+    },
+    {
+      // size: -100,
+      text: "Call center",
+      icon: require("../assets/images/callcenter.png"),
+      name: "callcenter",
+      position: 3,
+      // color: "rgb(0,0,0,.1)",
+      color: "#5f7ceb",
+      buttonSize: 55,
+      textStyle: {
+        fontSize: 14,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
+    },
+  ];
+
+  const supportedURL = "https://abordo.page.link/abordoapp";
+  const goAbordo = async () => {
+    const supported = await Linking.canOpenURL(supportedURL);
+    if (supported) {
+      await Linking.openURL(supportedURL);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
+    }
+  };
 
   useEffect(() => {
     checkLoggedUser(
@@ -92,7 +152,7 @@ export default function HomeScreen({ navigation, route }: any) {
       } else {
         setListPharmacy([]);
         setFetching(false);
-        setError(true)
+        setError(true);
       }
       setFetching(false);
     });
@@ -104,57 +164,77 @@ export default function HomeScreen({ navigation, route }: any) {
 
   return (
     <Container>
-      <HeaderComponent screen={"home"} navigation={navigation}/>
+      <HeaderComponent screen={"home"} navigation={navigation} />
       <Loading showLoading={showLoading} translation={translation} />
-      {(error) ? <ServiceComponent />
-      :<View style={{ height: "100%" }}>
-        <FlatList
-          columnWrapperStyle={{ justifyContent: "space-around" }}
-          refreshing={fetching}
-          data={listPharmacy}
-          onRefresh={getPharmaciesByUSer}
-          ListHeaderComponent={
-            <View>
-              {visible ? (
-                <AdsScreen code={"Home"} img={initialImg} />
-              ) : (
-                <Image
-                  style={styles.headerImage}
-                  source={{ uri: initialImg }}
-                />
-              )}
-            </View>
-          }
-          style={styles.body}
-          renderItem={({ item, index }: any) => (
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
-                width: "35%",
-              }}
-              onPress={() => {
-                navigation.navigate(item.router, { showBack: true });
-              }}
-              key={item.id}
-            >
-              <View style={{ height: 150, width: 150, marginBottom: 5 }}>
-                <Image
-                  source={{ uri: item.img }}
-                  style={{ flex: 1, resizeMode: "contain" }}
-                />
+      {error ? (
+        <ServiceComponent />
+      ) : (
+        <View style={{ height: "100%" }}>
+          <FlatList
+            columnWrapperStyle={{ justifyContent: "space-around" }}
+            refreshing={fetching}
+            data={listPharmacy}
+            onRefresh={getPharmaciesByUSer}
+            ListHeaderComponent={
+              <View>
+                {visible ? (
+                  <AdsScreen code={"Home"} img={initialImg} />
+                ) : (
+                  <Image
+                    style={styles.headerImage}
+                    source={{ uri: initialImg }}
+                  />
+                )}
               </View>
-              <Text style={styles.categoryName}>
-                {(translation.locale.includes("en") && item.name) ||
-                  (translation.locale.includes("es") && item.nombre) ||
-                  (translation.locale.includes("fr") && item.nom)}
-              </Text>
-            </TouchableOpacity>
-          )}
-          numColumns={2}
-        ></FlatList>
-      </View>}
+            }
+            style={styles.body}
+            renderItem={({ item, index }: any) => (
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "35%",
+                }}
+                onPress={() => {
+                  navigation.navigate(item.router, { showBack: true });
+                }}
+                key={item.id}
+              >
+                <View style={{ height: 150, width: 150, marginBottom: 5 }}>
+                  <Image
+                    source={{ uri: item.img }}
+                    style={{ flex: 1, resizeMode: "contain" }}
+                  />
+                </View>
+                <Text style={styles.categoryName}>
+                  {(translation.locale.includes("en") && item.name) ||
+                    (translation.locale.includes("es") && item.nombre) ||
+                    (translation.locale.includes("fr") && item.nom)}
+                </Text>
+              </TouchableOpacity>
+            )}
+            numColumns={2}
+          ></FlatList>
+        </View>
+      )}
+
+      {/* <FloatingAction
+        actions={actions}
+        onPressItem={(name) => {
+          if (name == "abordo") return goAbordo();
+          if (name == "store") return goAbordo();
+          if (name == "callcenter") return console.log(name);
+        }}
+        // floatingIcon={require("./path-to-main-icon.png")}
+        position="left" // Puedes cambiar la posición a 'left' o 'center'
+        distanceToEdge={10}
+        actionsPaddingTopBottom={0} // Remueve el padding entre los botones
+        buttonSize={50}
+        color="#5f7ceb"
+        tintColor={"rgb(0,0,0)"}
+        showBackground={false}
+      /> */}
     </Container>
   );
 }
