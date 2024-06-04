@@ -22,8 +22,6 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [agendaArr, setAgendaArr] = useState([]);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [showModalOption, setShowModalOption]: any = useState(false);
-  const [itemData, setItemData] = useState({});
   const [initialImg, setinitialImage] = useState(
     "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
   );
@@ -53,15 +51,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   return (
     <Container style={{ backgroundColor: "#425fc9" }}>
       <Loading showLoading={showLoading} translation={translation} />
-
-      <OptionModal
-        showModalOption={showModalOption}
-        setShowModalOption={setShowModalOption}
-        navigation={navigation}
-        item={itemData}
-        translation={translation}
-      />
-
+      
       <View style={styles.upperContainer}>
         <HeaderComponent />
         <Image
@@ -112,20 +102,9 @@ export default function EventCalendarScreen({ navigation, route }: any) {
           // onRefresh={onRefresh}
           data={agendaArr}
           renderItem={({ item, index }) => (
-            //   <View
-            //     style={{
-            //       backgroundColor: "black",
-            //       width: 10,
-            //       height: "50%",
-            //       borderRadius: 10,
-            //       marginLeft: 1,
-            //     }}
-            //   />
             <TicketCard
               key={index}
               item={item}
-              setShowModalOption={setShowModalOption}
-              setItemData={setItemData}
               translation={translation}
             />
           )}
@@ -155,104 +134,8 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   );
 }
 
-function OptionModal({
-  showModalOption,
-  setShowModalOption,
-  navigation,
-  item,
-  translation,
-}: {
-  showModalOption: boolean;
-  setShowModalOption: Function;
-  navigation: any;
-  item: any;
-  translation: any;
-}) {
-  return (
-    <Modal
-      animationType={"none"}
-      transparent={true}
-      visible={showModalOption}
-      onRequestClose={() => setShowModalOption(false)}
-    >
-      <TouchableOpacity
-        style={{
-          flex: 1,
-          backgroundColor: "#00000060",
-          justifyContent: "flex-end",
-        }}
-        onPress={() => setShowModalOption(false)}
-      >
-        <View
-          style={{
-            backgroundColor: "white",
-            height: "auto",
-            paddingVertical: 20,
-            paddingHorizontal: 20,
-            borderRadius: 15,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingVertical: 10,
-            }}
-            onPress={() => {
-              navigation.navigate("BoothProductsScreen", {
-                sponsorBooth_Sponsor_id: item.id,
-              });
-
-              setShowModalOption(false);
-            }}
-          >
-            <View
-              style={{
-                padding: 10,
-                backgroundColor: "#F2F2F2",
-                borderRadius: 10,
-              }}
-            >
-              <Ionicons name="document" size={25} color="#0F3D87" />
-            </View>
-            <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
-              Ver productos
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingVertical: 10,
-            }}
-            onPress={() => {
-              setShowModalOption(false);
-            }}
-          >
-            <View
-              style={{
-                padding: 10,
-                backgroundColor: "#F2F2F2",
-                borderRadius: 10,
-              }}
-            >
-              <Ionicons name="close" size={25} color="red" />
-            </View>
-            <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
-              {translation.t("Cancel")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Modal>
-  );
-}
-
 function TicketCard({
   item,
-  setShowModalOption,
-  setItemData,
   translation,
 }: any) {
   return (
@@ -268,10 +151,6 @@ function TicketCard({
       />
       <TouchableOpacity
         style={styles.productCard}
-        onPress={() => {
-          setShowModalOption(true);
-          setItemData(item);
-        }}
       >
         <View style={{ width: "80%", paddingLeft: 10, gap: 10 }}>
           <View style={styles.productDataContainer}>

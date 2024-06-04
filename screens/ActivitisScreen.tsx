@@ -17,6 +17,7 @@ import { LanguageContext } from "../LanguageContext";
 import { hideLoadingModal } from "../utils";
 import { fetchData } from "../httpRequests";
 import moment from "moment";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function ActivityScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -27,6 +28,7 @@ export default function ActivityScreen({ navigation, route }: any) {
     "https://i.pinimg.com/originals/3f/e5/32/3fe532c1bdc63084ab65c1427609a3bd.gif"
   );
   const [fetching, setFetching]: any = useState(false);
+  const [searchQuery, setSearchQuery]: any = useState("");
 
   useEffect(() => {
     setShowLoading(true);
@@ -52,9 +54,48 @@ export default function ActivityScreen({ navigation, route }: any) {
     });
   };
 
+  const handleChange = (query: string) => {
+    setSearchQuery(query);
+    if (query) {
+      const url = `/typeEvents/getTypeEventsByText/${query}`;
+      fetchData(url).then((res: any) => {
+        if (res.ok) {
+          setEvents(res.boatShows);
+          setTypeEvents(res.typeEvents);
+        }
+      });
+    } else {
+      getEvents();
+    }
+  };
+
   return (
     <Container>
       <Loading showLoading={showLoading} translation={translation} />
+      <View style={{ height: "10%", padding: 10, gap: 10 }}>
+        <TextInput
+          style={{
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 8,
+            borderColor: "#ccc",
+            height: 50,
+          }}
+          placeholder={translation.t("Search")}
+          clearButtonMode="always"
+          autoCorrect={false}
+          autoCapitalize="none"
+          value={searchQuery}
+          onChangeText={handleChange}
+        />
+        <FontAwesome
+          style={styles.inputIcon}
+          name={"search"}
+          size={20}
+          color={"#5f7ceb"}
+        />
+      </View>
+
       {events.length == 0 ? (
         <View
           style={{
@@ -99,11 +140,11 @@ export default function ActivityScreen({ navigation, route }: any) {
               getEvents();
             }}
             ListHeaderComponent={
-                <View style={{ marginVertical: 10 }}>
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                    Eventos disponibles
-                  </Text>
-                </View>
+              <View style={{ marginBottom: 15 }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Eventos disponibles
+                </Text>
+              </View>
             }
             renderItem={({ item }: any) => (
               <TouchableOpacity
@@ -155,7 +196,7 @@ export default function ActivityScreen({ navigation, route }: any) {
                           color: "#4f4f4f",
                         }}
                       >
-                        {item.name} 
+                        {item.name}
                       </Text>
                       <Text ellipsizeMode="tail" style={{ fontWeight: "500" }}>
                         {
@@ -228,6 +269,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
+    padding: 10,
+  },
+  inputIcon: {
+    position: "absolute",
+    right: 15,
+    top: 12.5,
+    zIndex: 2,
     padding: 10,
   },
 });

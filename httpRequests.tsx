@@ -2,7 +2,7 @@ import axios from "axios";
 import NetInfo from "@react-native-community/netinfo";
 
 const baseUrl = //"http://localhost:3006/api";
-'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
+ 'https://plus-nautic-prod-yqmvk.ondigitalocean.app/api';
 
 const fetchData = async (url: string) => {
   const isConnected = await checkInternetConnection();
