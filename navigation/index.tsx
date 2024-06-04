@@ -68,6 +68,7 @@ import MyTicketsScreen from "../screens/MyTicketsScreen";
 import TicketDetailsScreen from "../components/MyTickets/TicketDetailsScreen";
 import EventBoothsScreen from "../screens/EventBoothsScreen";
 import BoothProductsScreen from "../screens/BoothProductsScreen";
+import EventCalendarScreen from "../screens/EventCalendarScreen";
 
 export default function Navigation({
   colorScheme,
@@ -513,6 +514,18 @@ function RootNavigator({ route }: any) {
         component={BoothProductsScreen}
         options={{
           headerTitle: "Booths",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="EventCalendarScreen"
+        component={EventCalendarScreen}
+        options={{
+          headerTitle: "Agenda",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",

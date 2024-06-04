@@ -18,6 +18,7 @@ import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Container, Loading } from "../../components/Shared";
 import HeaderComponent from "../../components/Header";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 export default function ListScreen({ navigation }: any) {
   const navigationn = useNavigation();
@@ -71,7 +72,7 @@ export default function ListScreen({ navigation }: any) {
   };
 
   const filterServicesPrice = async (id: any) => {
-    const data = userServicesPrice1.filter((e) => {
+    const data = userServicesPrice1.filter((e: any) => {
       return e.Services.TypeServices.id === id;
     });
     setUserServicesPrice(data);
@@ -193,7 +194,7 @@ export default function ListScreen({ navigation }: any) {
                         imageStyle={{ borderRadius: 100 }}
                       />
                     </TouchableOpacity>
-                    <View style={{}}>
+                    <View style={{ width: "60%" }}>
                       <Text style={{ fontWeight: "bold", marginVertical: 5 }}>
                         {item.driver_first_name} {item.driver_last_name}
                       </Text>
@@ -219,6 +220,46 @@ export default function ListScreen({ navigation }: any) {
                               item.ServicesStatus_nom)}
                         </Text>
                       </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Tipo de servicios{" "}
+                        </Text>
+
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          style={{ maxWidth: "50%"}}
+                        >
+                          {(translation.locale.includes("en") &&
+                            item.typeServices_name) ||
+                            (translation.locale.includes("es") &&
+                              item.typeServices_nombre) ||
+                            (translation.locale.includes("fr") &&
+                              item.typeServices_nom)}
+                        </Text>
+                      </View>
+
+                      {item.ServicesStatus_code == "COMPLETADO" && (
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {(translation.locale.includes("en") &&
+                              "Finish date") ||
+                              (translation.locale.includes("es") &&
+                                "Fecha de finalizacion") ||
+                              (translation.locale.includes("fr") &&
+                                "Date de fin")}{" "}
+                          </Text>
+
+                          <Text>
+                            {moment(item.servicesEndData).format("DD/MM/YYYY")}
+                          </Text>
+                        </View>
+                      )}
+
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+                      </View>
+
                       {item.ServicesStatus_code == "PROCCESING" && (
                         <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontWeight: "bold" }}>
@@ -228,31 +269,32 @@ export default function ListScreen({ navigation }: any) {
                         </View>
                       )}
                     </View>
-                  </View>
-                  <View style={{ paddingRight: 10 }}>
-                    <TouchableOpacity
-                      style={{ marginHorizontal: 10 }}
-                      onPress={() => {
-                        navigation.navigate("Accept", { item: item });
-                      }}
-                    >
-                      <Ionicons
-                        name="md-exit-outline"
-                        size={25}
-                        color="#5f7ceb"
-                      />
-                    </TouchableOpacity>
-                    {item.ServicesStatus_code == "ACEPTADO" && (
-                      <View>
-                        <Text>{translation.t("checkoutPayNowText")}</Text>
-                      </View>
-                    )}
 
-                    {item.ServicesStatus_code == "PENDING" && (
-                      <View>
-                        <Text>{translation.t("Accept")}</Text>
-                      </View>
-                    )}
+                    <View style={{ paddingRight: 10, width: "20%"}}>
+                      <TouchableOpacity
+                        style={{ marginHorizontal: 10 }}
+                        onPress={() => {
+                          navigation.navigate("Accept", { item: item });
+                        }}
+                      >
+                        <Ionicons
+                          name="md-exit-outline"
+                          size={25}
+                          color="#5f7ceb"
+                        />
+                      </TouchableOpacity>
+                      {item.ServicesStatus_code == "ACEPTADO" && (
+                        <View>
+                          <Text>{translation.t("checkoutPayNowText")}</Text>
+                        </View>
+                      )}
+
+                      {item.ServicesStatus_code == "PENDING" && (
+                        <View>
+                          <Text>{translation.t("Accept")}</Text>
+                        </View>
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>

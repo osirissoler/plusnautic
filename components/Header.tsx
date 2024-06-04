@@ -4,6 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { checkStorage } from "./Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
+import FloatingButton from "./FloatingButton";
 
 export default function HeaderComponent({
   screen,

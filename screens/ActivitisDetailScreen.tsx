@@ -20,7 +20,7 @@ import {
 } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
 import { Button } from "react-native-elements";
 import GoMap from "./GoMap";
 import Navigation from "../navigation";
@@ -79,52 +79,6 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
   return (
     <Container>
       <ScrollView style={{ paddingHorizontal: 30 }}>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 15,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              alignItems: "flex-end",
-              marginHorizontal: 5,
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: 2,
-              borderColor: "#b2b9c9",
-            }}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 5,
-                marginHorizontal: 5,
-              }}
-            >
-              <Ionicons
-                name="arrow-back-outline"
-                size={33}
-                style={{ color: "#000" }}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 23,
-              fontWeight: "500",
-              width: "70%",
-            }}
-          >
-            Event data
-          </Text>
-        </View> */}
-
         <HeaderComponent />
         <Loading showLoading={showLoading} translation={translation} />
 
@@ -209,7 +163,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
               }}
             >
               <Ionicons name="location" size={14} color="#0F3D87" /> Get
-              direwction - 4.2Km
+              direction - 4.2Km
             </Text>
           </View>
 
@@ -250,7 +204,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
               justifyContent: "center",
               gap: 25,
               paddingTop: 10,
-              paddingBottom: 10,
+              paddingBottom: 60,
             }}
           >
             {eventData.facebook_url && (
@@ -293,20 +247,56 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
         style={{
           paddingHorizontal: 20,
           marginBottom: 10,
-          justifyContent: "space-around",
+          justifyContent: "space-evenly",
           alignItems: "center",
           flexDirection: "row",
+          position: "absolute",
+          bottom: 25,
+          width: "100%",
         }}
       >
         <TouchableOpacity
           style={{
-            width: "45%",
+            width: "13%",
             height: 50,
-            backgroundColor: "gray",
+            backgroundColor: "#fff",
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: 10,
+            borderRadius: 100,
             marginTop: 5,
+            shadowColor: "#000", // color de la sombra
+            shadowOffset: { width: 0, height: 2 }, // desplazamiento de la sombra
+            shadowOpacity: 0.4, // opacidad de la sombra
+            shadowRadius: 3.84, // radio de la sombra
+            elevation: 5, // altura de la sombra (para Android)
+          }}
+          onPress={() =>
+            navigation.navigate("EventCalendarScreen", {
+              id: eventData?.id,
+              eventData
+            })
+          }
+        >
+          {/* <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600" }}>
+            Booths
+          </Text> */}
+          <Ionicons name="calendar" size={23} color={"grey"} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            width: "13%",
+            height: 50,
+            backgroundColor: "#fff",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 100,
+            marginTop: 5,
+            shadowColor: "#000", // color de la sombra
+            shadowOffset: { width: 0, height: 2 }, // desplazamiento de la sombra
+            shadowOpacity: 0.4, // opacidad de la sombra
+            shadowRadius: 3.84, // radio de la sombra
+            elevation: 5, // altura de la sombra (para Android)
           }}
           onPress={() =>
             navigation.navigate("EventBoothsScreen", {
@@ -314,9 +304,10 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             })
           }
         >
-          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600" }}>
+          {/* <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600" }}>
             Booths
-          </Text>
+          </Text> */}
+          <AntDesign name="isv" size={23} color={"gray"} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -326,8 +317,10 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             backgroundColor: "#5f7ceb",
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: 10,
+            borderRadius: 50,
             marginTop: 5,
+            flexDirection: "row",
+            gap: 10,
           }}
           onPress={() =>
             navigation.navigate("BuyTicketsScreen", {
@@ -335,9 +328,10 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             })
           }
         >
-          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600" }}>
+          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>
             Buy tickets
           </Text>
+          <Entypo name="ticket" size={23} color={"#fff"} />
         </TouchableOpacity>
       </View>
     </Container>
