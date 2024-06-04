@@ -66,7 +66,6 @@ export default function ListScreen({ navigation }: any) {
         if (response.ok) {
           setUserServicesPrice(response.service);
           setUserServicesPrice1(response.service);
-          console.log(response.service);
         }
       });
       setFetching(false);

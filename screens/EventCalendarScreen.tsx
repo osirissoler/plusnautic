@@ -136,24 +136,19 @@ export default function EventCalendarScreen({ navigation, route }: any) {
             justifyContent: "center",
             alignItems: "center",
             paddingHorizontal: 10,
-            gap: 20,
             height: "80%",
           }}
         >
           <Text
             style={{
               fontWeight: "bold",
-              fontSize: 16,
+              fontSize: 20,
               textAlign: "center",
-              color: "red",
+              color: "#fff",
             }}
           >
-            There is not booths
+            There is not agenda
           </Text>
-          <Image
-            source={require("../assets/images/puesto.png")}
-            style={{ height: 80, width: 80 }}
-          />
         </View>
       )}
     </Container>
