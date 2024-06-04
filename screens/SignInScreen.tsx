@@ -39,11 +39,11 @@ export default function SignInScreen({ navigation }: any) {
   const [errorMesage, setErrorMesage]: any = useState("");
   const [error, setError]: any = useState(false);
 
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification]:any = useState(null);
 
-  const call = useRef(true);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  const call:any = useRef(true);
+  const notificationListener:any = useRef();
+  const responseListener:any = useRef();
 
   useEffect(() => {
     // clearAsyncStorage()
@@ -84,7 +84,7 @@ export default function SignInScreen({ navigation }: any) {
       });
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {});
+      Notifications.addNotificationResponseReceivedListener((response:any) => {});
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current

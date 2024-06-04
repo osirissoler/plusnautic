@@ -68,6 +68,10 @@ import MyTicketsScreen from "../screens/MyTicketsScreen";
 import TicketDetailsScreen from "../components/MyTickets/TicketDetailsScreen";
 import EventBoothsScreen from "../screens/EventBoothsScreen";
 import BoothProductsScreen from "../screens/BoothProductsScreen";
+import HomeStoreScreen from "../components/store/HomeStoreScreen";
+import ProductDetailsStore from "../components/store/ProductDetailsStore";
+import CartStoreScreen2 from "../components/store/CartStorescreen";
+import CartStore from "../components/store/CartStore";
 
 export default function Navigation({
   colorScheme,
@@ -530,10 +534,48 @@ function RootNavigator({ route }: any) {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+
+      {/* store */}
+
+      <Stack.Screen
+        name="HomeStoreScreen"
+        component={HomeStoreScreen}
+        options={{
+          headerTitle: "Store",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="ProductDetailsStore"
+        component={ProductDetailsStore}
+        options={{
+          headerTitle: "Product Details ",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="CartStoreScreen"
+        component={CartStore}
+        options={{
+          headerTitle: "Cart Store",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
-
+//
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
@@ -564,7 +606,7 @@ function BottomTabNavigator({ navigation, route }: any) {
   };
 
   const supportedURL = "https://abordo.page.link/abordoapp";
-  const goAbordo = async() => {
+  const goAbordo = async () => {
     const supported = await Linking.canOpenURL(supportedURL);
     if (supported) {
       await Linking.openURL(supportedURL);
@@ -701,7 +743,7 @@ function BottomTabNavigator({ navigation, route }: any) {
           },
         }}
       /> */}
-      
+
       {/* <BottomTab.Screen
 				name='Request'
 				component={MyOrdersScreen}

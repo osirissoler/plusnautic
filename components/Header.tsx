@@ -65,7 +65,7 @@ export default function HeaderComponent({
               flexDirection: "row",
             }}
           >
-            <FloatingButton />
+            <FloatingButton navigation={navigation} />
 
             <TouchableOpacity
               style={styles.optionIcon}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 10000
+    zIndex: 10000,
   },
   logo: {
     height: 50,

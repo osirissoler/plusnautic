@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Animated, Image, Linking, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-const FloatingButton = () => {
+const FloatingButton = ({navigation}:any) => {
   const [icon_1] = useState(new Animated.Value(0));
   const [icon_2] = useState(new Animated.Value(0));
   const [icon_3] = useState(new Animated.Value(0));
@@ -72,7 +72,7 @@ const FloatingButton = () => {
         </TouchableOpacity>
       </Animated.View>
       <Animated.View style={[styles.circle, { bottom: icon_2 }]}>
-        <TouchableOpacity onPress={goAbordo}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeStoreScreen')}>
           <Icon name="shopping-bag" size={25} color="#5f7ceb" />
         </TouchableOpacity>
       </Animated.View>
