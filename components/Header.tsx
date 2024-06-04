@@ -4,7 +4,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { checkStorage } from "./Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
-import { FloatingAction } from "react-native-floating-action";
 import FloatingButton from "./FloatingButton";
 
 export default function HeaderComponent({

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Animated, Image, Linking, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-const FloatingButton = ({navigation}:any) => {
+const FloatingButton = () => {
   const [icon_1] = useState(new Animated.Value(0));
   const [icon_2] = useState(new Animated.Value(0));
   const [icon_3] = useState(new Animated.Value(0));
@@ -72,12 +73,16 @@ const FloatingButton = ({navigation}:any) => {
         </TouchableOpacity>
       </Animated.View>
       <Animated.View style={[styles.circle, { bottom: icon_2 }]}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomeStoreScreen')}>
+        <TouchableOpacity onPress={goAbordo}>
           <Icon name="shopping-bag" size={25} color="#5f7ceb" />
         </TouchableOpacity>
       </Animated.View>
       <Animated.View style={[styles.circle, { bottom: icon_3 }]}>
-        <TouchableOpacity onPress={() => {console.log("Hola")}}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Hola");
+          }}
+        >
           <Icon name="headset" size={25} color="#5f7ceb" />
         </TouchableOpacity>
       </Animated.View>
@@ -88,7 +93,7 @@ const FloatingButton = ({navigation}:any) => {
           pop === false ? popIn() : popOut();
         }}
       >
-        <Icon name="plus" size={25} color="#FFFF" />
+        <Ionicons name="menu" size={30} color="#fff" />
       </TouchableOpacity>
     </View>
   );
