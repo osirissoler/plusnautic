@@ -26,39 +26,7 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
   const [fetching, setFetching]: any = useState(false);
   const [punctuation, setPunctuation]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [comments, setComments] = useState([
-    //   {
-    //     name: "osiris Soler Ramirez",
-    //     img: "https://scontent.fhex4-1.fna.fbcdn.net/v/t39.30808-6/341996147_718964956592860_7697224133555462430_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHqxPm8JLyZaupGIhAtiZEWSTFsiUx7NbFJMWyJTHs1sfACYsn-cZ72wY9Rd7LROBGYi-sruJ_piNI6LsYSk2AB&_nc_ohc=UH1BzOUOdSIAX96E6RP&_nc_ht=scontent.fhex4-1.fna&oh=00_AfDUuhjZU8fS5PDsaWhC_Kq4wf939hiON-vP3BARlAUeAg&oe=6593EAA8",
-    //     raiting: 3.5,
-    //     description: `Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..." "There is no one who loves pain itself who seeks after it and wants to have it, simply because it is pain,
-    // `,
-    //   },
-    //   {
-    //     name: "osiris",
-    //     img: "https://scontent.fhex4-1.fna.fbcdn.net/v/t39.30808-6/341996147_718964956592860_7697224133555462430_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHqxPm8JLyZaupGIhAtiZEWSTFsiUx7NbFJMWyJTHs1sfACYsn-cZ72wY9Rd7LROBGYi-sruJ_piNI6LsYSk2AB&_nc_ohc=UH1BzOUOdSIAX96E6RP&_nc_ht=scontent.fhex4-1.fna&oh=00_AfDUuhjZU8fS5PDsaWhC_Kq4wf939hiON-vP3BARlAUeAg&oe=6593EAA8",
-    //     raiting: 3.5,
-    //     description: `Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..." "There is no one who loves pain itself who seeks after it and wants to have it, simply because it is pain,`,
-    //   },
-    //   {
-    //     name: "osiris",
-    //     img: "https://scontent.fhex4-1.fna.fbcdn.net/v/t39.30808-6/341996147_718964956592860_7697224133555462430_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHqxPm8JLyZaupGIhAtiZEWSTFsiUx7NbFJMWyJTHs1sfACYsn-cZ72wY9Rd7LROBGYi-sruJ_piNI6LsYSk2AB&_nc_ohc=UH1BzOUOdSIAX96E6RP&_nc_ht=scontent.fhex4-1.fna&oh=00_AfDUuhjZU8fS5PDsaWhC_Kq4wf939hiON-vP3BARlAUeAg&oe=6593EAA8",
-    //     raiting: 3.5,
-    //     description: `Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..." "There is no one who loves pain itself who seeks after it and wants to have it, simply because it is pain,`,
-    //   },
-    //   {
-    //     name: "osiris",
-    //     img: "https://scontent.fhex4-1.fna.fbcdn.net/v/t39.30808-6/341996147_718964956592860_7697224133555462430_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHqxPm8JLyZaupGIhAtiZEWSTFsiUx7NbFJMWyJTHs1sfACYsn-cZ72wY9Rd7LROBGYi-sruJ_piNI6LsYSk2AB&_nc_ohc=UH1BzOUOdSIAX96E6RP&_nc_ht=scontent.fhex4-1.fna&oh=00_AfDUuhjZU8fS5PDsaWhC_Kq4wf939hiON-vP3BARlAUeAg&oe=6593EAA8",
-    //     raiting: 3.5,
-    //     description: `Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..." "There is no one who loves pain itself who seeks after it and wants to have it, simply because it is pain,`,
-    //   },
-    //   {
-    //     name: "osiris",
-    //     img: "https://scontent.fhex4-1.fna.fbcdn.net/v/t39.30808-6/341996147_718964956592860_7697224133555462430_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHqxPm8JLyZaupGIhAtiZEWSTFsiUx7NbFJMWyJTHs1sfACYsn-cZ72wY9Rd7LROBGYi-sruJ_piNI6LsYSk2AB&_nc_ohc=UH1BzOUOdSIAX96E6RP&_nc_ht=scontent.fhex4-1.fna&oh=00_AfDUuhjZU8fS5PDsaWhC_Kq4wf939hiON-vP3BARlAUeAg&oe=6593EAA8",
-    //     raiting: 3.5,
-    //     description: `Buen trabajO`,
-    //   },
-  ]);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     getReviewsByspecialist();
@@ -68,15 +36,17 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
     setShowLoading(true);
     setFetching(true);
     let url = `/ratings/getRatingsByDriver/${items.id}`;
-    await fetchData(url).then((response) => {
+    let urlUser = `/ratings/getRatingsByUser/${items.id}`;
+
+    await fetchData(items.GetByDriver ? url : urlUser).then((response) => {
       if (response.ok) {
         hideLoadingModal(() => {
-          setComments(response.ratingsByDriver);
+          setComments(response.ratings);
           setPunctuation(response.punctuation);
         });
       } else {
         hideLoadingModal(() => {
-          console.log('false')
+          console.log("false");
         });
       }
     });
@@ -105,7 +75,10 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
       >
         <Image
           source={{
-            uri: items.img,
+            uri:
+              items.img == null || items.img == ""
+                ? "https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png"
+                : items.img,
           }}
           style={{ height: 100, width: 100, borderRadius: 100 }}
         />
@@ -119,14 +92,15 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
             justifyContent: "center",
             alignItems: "center",
           }}
+          pointerEvents="none"
         >
           <Rating imageSize={25} fractions={1} startingValue={punctuation} />
           <Text style={{ fontWeight: "bold" }}> {formatter2(punctuation)}</Text>
         </View>
-        <SendReview id={items.id} reload={reload} />
+        {items.GetByDriver && <SendReview id={items.id} reload={reload} />}
       </View>
       <View style={{ backgroundColor: "white", height: "75%" }}>
-        {comments.length != 0 ? (
+        {comments?.length != 0 ? (
           <FlatList
             refreshing={fetching}
             data={comments}
@@ -134,9 +108,9 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
             style={{}}
             renderItem={({ item }: any) => (
               <Component
-                name={item.user_first_name}
-                lastName={item.user_last_name}
-                img={item.user_img}
+                name={item.first_name}
+                lastName={item.last_name}
+                img={item.img}
                 raiting={item.punctuation}
                 date={item.date_elapsed}
                 comments={item.review}
@@ -194,9 +168,11 @@ function Component({
                 {name} {lastName}
               </Text>
             </View>
-            <View style={{flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }} pointerEvents="none">
               <Rating imageSize={15} fractions={1} startingValue={raiting} />
-              <Text style={{marginLeft:3, fontSize:10, color:'gray'}}>{raiting}</Text>
+              <Text style={{ marginLeft: 3, fontSize: 10, color: "gray" }}>
+                {raiting}
+              </Text>
             </View>
           </View>
           <View style={{ width: "35%", alignItems: "flex-end" }}>

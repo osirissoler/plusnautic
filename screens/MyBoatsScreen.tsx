@@ -59,7 +59,7 @@ export default function MyBoats({ navigation }: any) {
   };
 
   return (
-    <View style={{ backgroundColor: "#fff", height: "95%" }}>
+    <Container style={{ backgroundColor: "#fff" }}>
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
       <View style={{ alignItems: "center", marginBottom: 3 }}>
@@ -142,7 +142,7 @@ export default function MyBoats({ navigation }: any) {
           numColumns={3}
         ></FlatList>
       </View>
-    </View>
+    </Container>
   );
 }
 

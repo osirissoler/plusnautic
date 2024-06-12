@@ -157,7 +157,7 @@ export default function ListScreen({ navigation }: any) {
             renderItem={({ item }: any) => (
               <View
                 style={{
-                  height: 100,
+                  // height: 100,
                   borderColor: "#8B8B9720",
                   backgroundColor: "#F7F7F7",
                   marginBottom: 10,
@@ -180,6 +180,7 @@ export default function ListScreen({ navigation }: any) {
                           name: item.driver_first_name,
                           lastName: item.driver_last_name,
                           id: item.driver_id,
+                          GetByDriver: true,
                         });
                       }}
                     >
@@ -194,9 +195,9 @@ export default function ListScreen({ navigation }: any) {
                         resizeMode={"cover"}
                         imageStyle={{ borderRadius: 100 }}
                       />
-                      
                     </TouchableOpacity>
-                    <View style={{ width: "60%" }}>
+
+                    <View style={{ width: "55%", paddingTop: 5, overflow: "hidden" }}>
                       <Text style={{ fontWeight: "bold", marginVertical: 5 }}>
                         {item.driver_first_name} {item.driver_last_name}
                       </Text>
@@ -209,7 +210,7 @@ export default function ListScreen({ navigation }: any) {
                       </View>
                       <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>
-                          Services status{" "}
+                          {translation.t("orderDetailsStatusText")}
                         </Text>
 
                         <Text>
@@ -222,14 +223,14 @@ export default function ListScreen({ navigation }: any) {
                         </Text>
                       </View>
                       <View style={{ flexDirection: "row" }}>
-                        <Text style={{ fontWeight: "bold" }}>
-                          Tipo de servicios{" "}
+                        <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                          {translation.t("TypeServices")}:{" "}
                         </Text>
 
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          style={{ maxWidth: "50%"}}
+                          style={{ maxWidth: "50%" }}
                         >
                           {(translation.locale.includes("en") &&
                             item.typeServices_name) ||
@@ -271,7 +272,13 @@ export default function ListScreen({ navigation }: any) {
                       )}
                     </View>
 
-                    <View style={{ paddingRight: 10, width: "20%"}}>
+                    <View
+                      style={{
+                        width: "25%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       <TouchableOpacity
                         style={{ marginHorizontal: 10 }}
                         onPress={() => {
@@ -284,6 +291,7 @@ export default function ListScreen({ navigation }: any) {
                           color="#5f7ceb"
                         />
                       </TouchableOpacity>
+
                       {item.ServicesStatus_code == "ACEPTADO" && (
                         <View>
                           <Text>{translation.t("checkoutPayNowText")}</Text>
@@ -333,8 +341,8 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     marginVertical: 10,
     marginHorizontal: 10,
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
   },
   productTitle: {
     fontSize: 13,
@@ -352,8 +360,8 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   profilePicture: {
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     borderRadius: 100,
   },
 });

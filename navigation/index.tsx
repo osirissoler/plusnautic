@@ -114,7 +114,13 @@ function RootNavigator({ route }: any) {
         name="Gestor"
         component={ProfilegestorScreen}
         initialParams={{ showBack } as any}
-        options={{ headerShown: true, animation: "fade" }}
+        options={{
+          headerShown: true,
+          animation: "fade",
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitle: translation.t("ReviewScreen"),
+        }}
       />
       <Stack.Screen
         name="CreateInvitations"

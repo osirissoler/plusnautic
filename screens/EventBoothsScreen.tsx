@@ -12,9 +12,10 @@ import {
 import { Container, Loading, checkStorage } from "../components/Shared";
 
 import { LanguageContext } from "../LanguageContext";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, Feather } from "@expo/vector-icons";
 import { formatter, hideLoadingModal } from "../utils";
 import { fetchData } from "../httpRequests";
+import HeaderComponent from "../components/Header";
 
 export default function EventBoothsScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -27,7 +28,7 @@ export default function EventBoothsScreen({ navigation, route }: any) {
     setShowLoading(true);
 
     hideLoadingModal(() => {
-        getBoothsByBoatShow(route.params.id);
+      getBoothsByBoatShow(route.params.id);
     }, setShowLoading);
 
     setTimeout(() => {
@@ -46,7 +47,7 @@ export default function EventBoothsScreen({ navigation, route }: any) {
 
   return (
     <Container>
-      <View style={{ paddingHorizontal: 25 }}>
+      <View style={{ paddingHorizontal: 10 }}>
         <Loading showLoading={showLoading} translation={translation} />
         <OptionModal
           showModalOption={showModalOption}
@@ -55,8 +56,9 @@ export default function EventBoothsScreen({ navigation, route }: any) {
           item={itemData}
           translation={translation}
         />
+        <HeaderComponent />
 
-        <Text
+        {/* <Text
           style={{
             fontSize: 23,
             fontWeight: "500",
@@ -64,7 +66,7 @@ export default function EventBoothsScreen({ navigation, route }: any) {
           }}
         >
           Puestos de ventas
-        </Text>
+        </Text> */}
 
         <Text
           style={{
@@ -75,13 +77,13 @@ export default function EventBoothsScreen({ navigation, route }: any) {
             marginBottom: 10,
           }}
         >
-          En este apartado puedes ver tus espacios de ventas
+          {translation.t("BoothsMsg")}
         </Text>
 
         {boothsArr.length > 0 ? (
           <FlatList
             style={{
-              paddingHorizontal: 15,
+              paddingHorizontal: 10,
               backgroundColor: "#F2F2F2",
               height: "90%",
               paddingTop: 5,
@@ -118,7 +120,7 @@ export default function EventBoothsScreen({ navigation, route }: any) {
                 color: "red",
               }}
             >
-              There is not booths
+              {translation.t("NoBooths")}
             </Text>
             <Image
               source={require("../assets/images/puesto.png")}
@@ -192,7 +194,7 @@ function OptionModal({
               <Ionicons name="document" size={25} color="#0F3D87" />
             </View>
             <Text style={{ fontWeight: "700", paddingLeft: 10 }}>
-              Ver productos
+              {translation.t("ViewProducts")}
             </Text>
           </TouchableOpacity>
 
@@ -239,57 +241,99 @@ function TicketCard({
         setItemData(item);
       }}
     >
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          width: "10%",
-        }}
-      >
-        <Image
-          source={require("../assets/images/puesto.png")}
-          style={{ height: 60, width: 60, resizeMode: "contain" }}
-        />
+      <View style={{ flexDirection: "row", marginLeft: 10 }}>
+        <View
+          style={{
+            borderWidth: 2,
+            borderColor: "rgba(0, 0, 0, 0.2)",
+            borderRadius: 100,
+            justifyContent: "center",
+            alignItems: "center",
+            height: 70,
+            width: 70,
+          }}
+        >
+          <Image
+            source={require("../assets/images/puesto.png")}
+            style={{ height: 50, width: 50, resizeMode: "cover" }}
+          />
+        </View>
+
+        <View
+          style={{
+            width: "80%",
+            borderLeftColor: "gray",
+            marginLeft: 10,
+          }}
+        >
+          <View style={{ gap: 4 }}>
+            <View
+              style={{
+                position: "absolute",
+                right: 10,
+                top: -5,
+                flexDirection: "row",
+                gap: 2,
+                justifyContent: "center",
+              }}
+            >
+              <Text style={styles.productName}>
+                {item?.boothsProducts?.length > 99
+                  ? "99+"
+                  : item?.boothsProducts?.length}
+              </Text>
+              <Feather name="package" size={24} />
+            </View>
+
+            <View style={{ flexDirection: "column", width: "70%" }}>
+              <Text style={styles.productTitle}>
+                {item.name}
+              </Text>
+              <Text
+                style={[styles.productTitle, { fontSize: 12, color: "grey" }]}
+              >
+                {item.boatShow_name}
+              </Text>
+            </View>
+
+            <View style={[styles.productDataContainer, {marginTop: 10, paddingRight: 10}]}>
+              <Text style={styles.productName}>{item.description}</Text>
+            </View>
+
+            {/* <View style={styles.productDataContainer}>
+              <Text style={styles.productTitle}>Cantidad de productos:</Text>
+              <Text style={styles.productName}>
+                {item?.boothsProducts?.length}
+              </Text>
+            </View> */}
+          </View>
+        </View>
       </View>
+
       <View
         style={{
-          width: "80%",
-          paddingLeft: 15,
-          borderLeftColor: "gray",
-          borderLeftWidth: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: 10,
+          width: "100%",
         }}
       >
-        <View style={{ gap: 4 }}>
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Nombre:</Text>
-            <Text style={styles.productName}>{item.name}</Text>
-          </View>
+        <View style={{ flexDirection: "column", gap: 1 }}>
+          <Text style={[styles.productTitle, { fontSize: 12 }]}>
+            Date init:
+          </Text>
+          <Text style={[styles.productName, { color: "grey", fontSize: 13 }]}>
+            {item.dateInit}
+          </Text>
+        </View>
 
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productName}>{item.description}</Text>
-          </View>
-
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>{translation.t("Event")}:</Text>
-            <Text style={styles.productName}>{item.boatShow_name}</Text>
-          </View>
-
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Cantidad de productos:</Text>
-            <Text style={styles.productName}>
-              {item?.boothsProducts?.length}
-            </Text>
-          </View>
-
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Fecha init:</Text>
-            <Text style={styles.productName}>{item.dateInit}</Text>
-          </View>
-
-          <View style={styles.productDataContainer}>
-            <Text style={styles.productTitle}>Fecha final:</Text>
-            <Text style={styles.productName}>{item.dateFinal}</Text>
-          </View>
+        <View style={{ flexDirection: "column", gap: 1 }}>
+          <Text style={[styles.productTitle, { fontSize: 12 }]}>
+            Date final:
+          </Text>
+          <Text style={[styles.productName, { color: "grey", fontSize: 13 }]}>
+            {item.dateFinal}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -308,14 +352,13 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   productCard: {
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#fff",
     gap: 15,
     paddingVertical: 15,
-    paddingHorizontal: 30,
-    paddingRight: 15,
+    paddingHorizontal: 10,
     borderColor: "#D4D5D5",
     borderWidth: 1,
     borderRadius: 10,

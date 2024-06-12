@@ -82,7 +82,7 @@ export default function ActivityScreen({ navigation, route }: any) {
             height: 50,
           }}
           placeholder={translation.t("Search")}
-          clearButtonMode="always"
+          // clearButtonMode="always"
           autoCorrect={false}
           autoCapitalize="none"
           value={searchQuery}
@@ -118,7 +118,7 @@ export default function ActivityScreen({ navigation, route }: any) {
                 marginBottom: 10,
               }}
             >
-              There are no activities to show
+              {translation.t("NoEvents")}
             </Text>
           </View>
           <Image
@@ -142,7 +142,7 @@ export default function ActivityScreen({ navigation, route }: any) {
             ListHeaderComponent={
               <View style={{ marginBottom: 15 }}>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                  Eventos disponibles
+                  {translation.t("AvailableEvents")}
                 </Text>
               </View>
             }

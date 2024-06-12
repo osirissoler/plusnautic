@@ -9,6 +9,7 @@ import {
   ScrollView,
   Linking,
   Alert,
+  Platform,
 } from "react-native";
 
 import HeaderComponent from "../components/Header";
@@ -96,13 +97,15 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             gap: 6,
           }}
         >
-          <Text style={styles.sectionTitle}>Event title</Text>
+          <Text style={styles.sectionTitle}>{translation.t("EventTitle")}</Text>
           <Text style={styles.sectionText}> {eventData.name}</Text>
         </View>
 
         <View style={styles.datesContainer}>
           <View style={{ width: "45%" }}>
-            <Text style={styles.sectionTitle}>Start date</Text>
+            <Text style={styles.sectionTitle}>
+              {translation.t("StartDate")}
+            </Text>
 
             <View style={styles.dateContainer}>
               <Text style={styles.sectionText}>{eventData.dateInit}</Text>
@@ -111,7 +114,9 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
           </View>
 
           <View style={{ width: "45%" }}>
-            <Text style={styles.sectionTitle}>Final date</Text>
+            <Text style={styles.sectionTitle}>
+              {translation.t("FinalDate")}
+            </Text>
 
             <View style={styles.dateContainer}>
               <Text style={styles.sectionText}>{eventData.dateInit}</Text>
@@ -121,7 +126,9 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
         </View>
 
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Description</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+            {translation.t("Description")}
+          </Text>
           <Text style={{ color: "gray", marginTop: 10, fontSize: 15 }}>
             {eventData.description}
           </Text>
@@ -141,7 +148,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
                 fontSize: 18,
               }}
             >
-              Location
+              {translation.t("Location")}
             </Text>
 
             <Text style={{ color: "gray", fontSize: 15 }}>
@@ -162,13 +169,26 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
                 color: "#0F3D87",
               }}
             >
-              <Ionicons name="location" size={14} color="#0F3D87" /> Get
-              direction - 4.2Km
+              {/* <Ionicons name="location" size={14} color="#0F3D87" /> Get
+              direction - 4.2Km */}
             </Text>
           </View>
 
           <TouchableOpacity
             style={{ width: "30%", height: 110, borderRadius: 10 }}
+            onPress={() => {
+              if (Platform.OS == "ios") {
+                Linking.openURL(
+                  `maps://app?daddr=${eventData?.latitude},${
+                    eventData?.longitude
+                  }&dirflg=d&t=m&q=${encodeURIComponent(eventData?.name)}`
+                );
+              } else {
+                Linking.openURL(
+                  `google.navigation:q=${eventData?.latitude}+${eventData?.longitude}`
+                );
+              }
+            }}
           >
             <GoMap
               latitude={eventData?.latitude}
@@ -178,7 +198,9 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
         </View>
 
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Tickets</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+            {translation.t("Tickets")}
+          </Text>
           {tickets?.map((item: any) => (
             <View key={item.id} style={styles.ticketDetail}>
               <Text style={{ fontWeight: "600" }}>
@@ -186,7 +208,9 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
               </Text>
 
               <View style={{ flexDirection: "row", gap: 5 }}>
-                <Text style={{ fontWeight: "600" }}>Price:</Text>
+                <Text style={{ fontWeight: "600" }}>
+                  {translation.t("price")}:
+                </Text>
                 <Text>{item.price}.00$</Text>
               </View>
             </View>
@@ -195,7 +219,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
 
         <View style={{ marginTop: 20 }}>
           <Text style={[styles.sectionTitle, { fontSize: 17 }]}>
-            Social media
+            {translation.t("SocialMedia")}
           </Text>
 
           <View
@@ -273,7 +297,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
           onPress={() =>
             navigation.navigate("EventCalendarScreen", {
               id: eventData?.id,
-              eventData
+              eventData,
             })
           }
         >
@@ -328,8 +352,18 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             })
           }
         >
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>
-            Buy tickets
+          <Text
+            style={{
+              color: "#fff",
+              fontSize:
+                translation.locale.includes("es") ||
+                translation.locale.includes("fr")
+                  ? 13
+                  : 15,
+              fontWeight: "600",
+            }}
+          >
+            {translation.t("BuyTickets")}
           </Text>
           <Entypo name="ticket" size={23} color={"#fff"} />
         </TouchableOpacity>

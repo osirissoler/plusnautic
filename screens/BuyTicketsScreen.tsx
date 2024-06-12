@@ -155,13 +155,13 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
 
         <Text
           style={{
-            textAlign: "center",
-            fontSize: 23,
+            fontSize: 20,
             fontWeight: "500",
-            marginVertical: 10,
+            marginVertical: 12,
+            marginTop: 15,
           }}
         >
-          Select tickets to buy
+          {translation.t("SelectTicketsMsg")}
         </Text>
 
         <FlatList
@@ -228,7 +228,9 @@ export default function BuyTicketsScreen({ navigation, route }: any) {
             </View>
             {ticket.amount > 0 ? (
               <TouchableOpacity style={styles.productAdd} onPress={addToCart}>
-                <Text style={styles.productAddText}>Add to cart</Text>
+                <Text style={styles.productAddText}>
+                  {translation.t("AddProductCar")}
+                </Text>
               </TouchableOpacity>
             ) : (
               <Text

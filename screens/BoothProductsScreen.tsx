@@ -23,11 +23,8 @@ import { AlertDialog } from "../components/AlertDialog";
 
 export default function BoothProductsScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
-  const [user_id, setUser_id] = useState("");
   const [boothProducts, setBoothProducts]: any = useState([]);
   const [isFetching, setIsFetching]: any = useState(false);
-  const [requestId, setrequestId]: any = useState("");
-  const [id, setId]: any = useState(0);
   const [showLoading, setShowLoading]: any = useState(false);
   const [showAddProductModal, setShowAddProductModal]: any = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -50,7 +47,6 @@ export default function BoothProductsScreen({ navigation, route }: any) {
 
   return (
     <Container>
-
       <View style={{ paddingHorizontal: 15 }}>
         <Loading showLoading={showLoading} translation={translation} />
 
@@ -66,7 +62,7 @@ export default function BoothProductsScreen({ navigation, route }: any) {
                 fontSize: 15,
               }}
             >
-              Aqui puedes ver los productos de este puesto.
+              {translation.t("ProductsBoothsMsg")}
             </Text>
           </View>
 
@@ -87,7 +83,7 @@ export default function BoothProductsScreen({ navigation, route }: any) {
                   />
                 </View>
                 <Text style={styles.productCount}>
-                  No hay productos añadidos a tu puesto
+                  {translation.t("NoProductsMsg")}
                 </Text>
               </View>
             ) : (
@@ -108,6 +104,7 @@ export default function BoothProductsScreen({ navigation, route }: any) {
                     setShowAddProductModal={setShowAddProductModal}
                     setEditMode={setEditMode}
                     setProductData={setProductData}
+                    translation={translation}
                   />
                 )}
               />
@@ -119,14 +116,7 @@ export default function BoothProductsScreen({ navigation, route }: any) {
   );
 }
 
-function TicketCard({
-  item,
-  setShowAddProductModal,
-  setEditMode,
-  setProductData
-}: any) {
-  const [showDialog, setShowDialog] = useState(false);
-
+function TicketCard({ item, translation }: any) {
   return (
     <View style={styles.productCard}>
       <View
@@ -171,7 +161,9 @@ function TicketCard({
           <View style={{ marginTop: 10, gap: 5 }}>
             <Text style={styles.productTitle}>{item.name}</Text>
 
-            <Text style={{ fontSize: 16 }}>Cantidad: {item.amount}</Text>
+            <Text style={{ fontSize: 16 }}>
+              {translation.t("ProductAmount")}: {item.amount}
+            </Text>
             <View
               style={{
                 backgroundColor: item.isActive ? "green" : "red",
@@ -189,7 +181,9 @@ function TicketCard({
                   },
                 ]}
               >
-                {item.isActive ? "Activo" : "Inactivo"}
+                {item.isActive
+                  ? translation.t("Active")
+                  : translation.t("Inactive")}
               </Text>
             </View>
           </View>

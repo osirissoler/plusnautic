@@ -298,6 +298,21 @@ export default function ProfileScreen({ navigation, route }: any) {
 
           <Pressable
             style={styles.option}
+            onPress={() =>
+              navigation.navigate("Gestor", {
+                ...user,
+                img: user.img,
+                name: user.first_name,
+                GetByDriver: false
+              })
+            }
+          >
+            <Text style={styles.optionText}>My reviews</Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+
+          <Pressable
+            style={styles.option}
             onPress={() => navigation.navigate("MyBoats")}
           >
             <Text style={styles.optionText}>{translation.t("MyBoats")}</Text>

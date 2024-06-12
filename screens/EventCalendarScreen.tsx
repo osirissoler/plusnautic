@@ -51,7 +51,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   return (
     <Container style={{ backgroundColor: "#425fc9" }}>
       <Loading showLoading={showLoading} translation={translation} />
-      
+
       <View style={styles.upperContainer}>
         <HeaderComponent />
         <Image
@@ -77,7 +77,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
           </Text>
         </View>
       </View>
-
+      {/* 
       <Text
         style={{
           fontSize: 23,
@@ -88,12 +88,12 @@ export default function EventCalendarScreen({ navigation, route }: any) {
         }}
       >
         Agenda
-      </Text>
+      </Text> */}
 
       {agendaArr?.length > 0 ? (
         <FlatList
           style={{
-            height: "90%",
+            height: "65%",
             paddingTop: 5,
             borderRadius: 10,
             // backgroundColor: "#5f7ceb",
@@ -102,11 +102,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
           // onRefresh={onRefresh}
           data={agendaArr}
           renderItem={({ item, index }) => (
-            <TicketCard
-              key={index}
-              item={item}
-              translation={translation}
-            />
+            <TicketCard key={index} item={item} translation={translation} />
           )}
         />
       ) : (
@@ -126,7 +122,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
               color: "#fff",
             }}
           >
-            There is not agenda
+            {translation.t("NoAgenda")}
           </Text>
         </View>
       )}
@@ -134,10 +130,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   );
 }
 
-function TicketCard({
-  item,
-  translation,
-}: any) {
+function TicketCard({ item, translation }: any) {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <View
@@ -149,9 +142,7 @@ function TicketCard({
           marginLeft: 5,
         }}
       />
-      <TouchableOpacity
-        style={styles.productCard}
-      >
+      <TouchableOpacity style={styles.productCard}>
         <View style={{ width: "80%", paddingLeft: 10, gap: 10 }}>
           <View style={styles.productDataContainer}>
             <Text style={[styles.productTitle, { fontSize: 20 }]}>
@@ -170,37 +161,24 @@ function TicketCard({
           </View>
         </View>
 
-        {/* <View style={styles.datesContainer}>
-          <View style={{ paddingRight: 10 }}>
-            <Text style={styles.sectionTitle}>Start hour</Text>
-
-            <View style={styles.dateContainer}>
-              <Text style={styles.sectionText}>{item.hourInit}</Text>
-              <AntDesign name="clockcircle" size={23} color={"#b2b9c9"} />
-            </View>
-          </View>
-
-          <View style={{ paddingRight: 10, marginTop: 15 }}>
-            <Text style={styles.sectionTitle}>Final hour</Text>
-
-            <View style={styles.dateContainer}>
-              <Text style={styles.sectionText}>{item.hourFinal}</Text>
-              <AntDesign name="clockcircle" size={23} color={"#b2b9c9"} />
-            </View>
-          </View>
-        </View> */}
         <View style={styles.datesContainer}>
           <AntDesign name="clockcircle" size={23} color={"#fff"} />
 
           <View style={{ gap: 10 }}>
             <View style={styles.dateContainer}>
-              <Text style={[styles.sectionText, {color: "#fff"}]}>{item.hourInit}</Text>
+              <Text style={[styles.sectionText, { color: "#fff" }]}>
+                {item.hourInit}
+              </Text>
             </View>
 
-            <Text style={{ fontSize: 17, fontWeight: "600", color: "#fff" }}>To</Text>
+            <Text style={{ fontSize: 17, fontWeight: "600", color: "#fff" }}>
+              To
+            </Text>
 
             <View style={styles.dateContainer}>
-              <Text style={[styles.sectionText, {color: "#fff"}]}>{item.hourFinal}</Text>
+              <Text style={[styles.sectionText, { color: "#fff" }]}>
+                {item.hourFinal}
+              </Text>
             </View>
           </View>
         </View>
@@ -237,14 +215,14 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff"
+    color: "#fff",
   },
   productName: {
     fontSize: 16,
     fontWeight: "500",
     alignSelf: "center",
     flexShrink: 1,
-    color: "#fff"
+    color: "#fff",
   },
   optionText: {
     fontSize: 16,
@@ -268,7 +246,7 @@ const styles = StyleSheet.create({
   },
   headerImage: {
     marginBottom: 20,
-    height: 200,
+    height: 170,
     width: "100%",
     borderRadius: 10,
   },
