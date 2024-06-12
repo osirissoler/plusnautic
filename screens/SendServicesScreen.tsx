@@ -240,7 +240,7 @@ export default function SendServicesScreen({ navigation, route }: any) {
             onPress={() => openImagePickerAsync()}
           >
             <FontAwesome name="file-image-o" size={20} color={"white"} />
-            <Text style={{ color: "white", fontWeight: "bold" }}>
+            <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
               {translation.t("SelectImage")}
             </Text>
           </TouchableOpacity>
