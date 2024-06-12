@@ -2,7 +2,7 @@
   "expo": {
     "name": "Plusnautic",
     "slug": "plusnautic",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "orientation": "portrait",
     "icon": "./assets/images/plusnauticIcon.png",
     "scheme": "plusnautic",
@@ -22,7 +22,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "bundleIdentifier": "com.plusnautica2.app",
-      "buildNumber": "3",
+      "buildNumber": "1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you change your profile image.",
         "NSCameraUsageDescription": "The app uses your camera to let you take a picture and set it as your profile image.",
@@ -37,7 +37,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.plusnautica2.app",
-      "versionCode": 3,
+      "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
