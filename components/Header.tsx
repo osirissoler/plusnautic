@@ -15,21 +15,10 @@ export default function HeaderComponent({
   const { translation } = React.useContext(LanguageContext);
 
   useEffect(() => {
-    getTicketsCart();
-  }, []);
-
-  const checkUserStorage = () => {
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: "Root",
-          params: { phId: 536 },
-          screen: "Home",
-        },
-      ],
+    navigation?.addListener("focus", () => {
+      getTicketsCart();
     });
-  };
+  }, []);
 
   const getTicketsCart = () => {
     checkStorage("USER_LOGGED", (id: number) => {

@@ -100,7 +100,7 @@ export default function ProfilegestorScreen({ navigation, route }: any) {
         {items.GetByDriver && <SendReview id={items.id} reload={reload} />}
       </View>
       <View style={{ backgroundColor: "white", height: "75%" }}>
-        {comments?.length != 0 ? (
+        {comments?.length > 0 ? (
           <FlatList
             refreshing={fetching}
             data={comments}

@@ -73,6 +73,7 @@ import ProductDetailsStore from "../components/store/ProductDetailsStore";
 // import CartStoreScreen2 from "../components/store/CartStorescreen";
 import CartStore from "../components/store/CartStore";
 import EventCalendarScreen from "../screens/EventCalendarScreen";
+import NewAddressScreen from "../screens/NewAddresssScreen";
 
 export default function Navigation({
   colorScheme,
@@ -269,6 +270,15 @@ function RootNavigator({ route }: any) {
         component={AddressesScreen}
         options={{
           headerTitle: translation.t("headerTitleAddresses") /* Addresses */,
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+        }}
+      />
+      <Stack.Screen
+        name="NewAddress"
+        component={NewAddressScreen}
+        options={{
+          headerTitle: translation.t("headerTitleNewAddress") /* New Address */,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}

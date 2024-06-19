@@ -272,6 +272,15 @@ export default function ProfileScreen({ navigation, route }: any) {
           </Pressable>
           <Pressable
             style={styles.option}
+            onPress={() => navigation.navigate("Addresses")}
+          >
+            <Text style={styles.optionText}>
+              {translation.t("headerTitleAddresses")}
+            </Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
+          <Pressable
+            style={styles.option}
             onPress={() =>
               navigation.navigate("QrCodeScreen", { qrCode: user.qrCode })
             }
