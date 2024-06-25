@@ -15,16 +15,18 @@ import { Loading } from "../Shared";
 import { LanguageContext } from "../../LanguageContext";
 import AdsScreen from "../../screens/AdsScreen";
 import { formatter, formatter2 } from "../../utils";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { fetchData } from "../../httpRequests";
 import FloatingButton from "../FloatingButton";
 
-const HomeStoreScreen = ({ navigation, route }: any) => {
+const ProductStoreScreen = ({ navigation, route }: any) => {
+   
   const { translation } = React.useContext(LanguageContext);
 
   const [showLoading, setShowLoading]: any = useState(false);
-  const [store, setStore]: any = useState([{}, {}, {}]);
+  const [product, setProduct]: any = useState([{}, {}, {}]);
   const [fetching, setFetching]: any = useState(false);
+  const [store, setStore]: any = useState(route.params.item);
 
   const [visible, setVisible] = useState(true);
   const [initialImg, setinitialImage] = useState(
@@ -33,17 +35,17 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
 
   useEffect(() => {
-    getAllStore();
+    getProduct();
   }, []);
 
-  const getAllStore = async () => {
+  const getProduct = async () => {
     setShowLoading(true);
-    const url = `/store/getAllStore`;
+    const url = `/store/getAllProductStore/${store.id}/10/0`;
     fetchData(url).then(async (response) => {
       if (response.ok) {
-        setStore(response.store);
+        setProduct(response.products);
       } else {
-        setStore([]);
+        setProduct([]);
       }
     });
     setTimeout(() => {
@@ -85,11 +87,9 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
       <Loading showLoading={showLoading} translation={translation} />
       <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
         <FlatList
-          data={store}
+          data={product}
           refreshing={fetching}
-          onRefresh={() => {
-            getAllStore();
-          }}
+          onRefresh={() => {}}
           ListEmptyComponent={
             <Text style={{ fontSize: 16, marginTop: 20 }}>
               {translation.t("homeNoProductsText")}
@@ -118,12 +118,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
           style={{ padding: 20, flexDirection: "column" }}
           renderItem={({ item }) => (
             <View>
-              <Pressable
-                style={styles.productCard}
-                onPress={() =>
-                  navigation.navigate("ProductStoreScreen", { item })
-                }
-              >
+              <Pressable style={styles.productCard}>
                 <View style={styles.productImage}>
                   <Image
                     source={{
@@ -141,20 +136,20 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
                       marginTop: 20,
                     }}
                   >
-                    {/* <Text style={styles.productPrice}>
+                    <Text style={styles.productPrice}>
                       {formatter(item.price)}
-                    </Text> */}
-                    <Pressable style={styles.productAdd}>
-                      <Entypo
-                        name="eye"
-                        size={24}
-                        style={styles.productAddIcon}
-                      />
-                      {/* <AntDesign
+                    </Text>
+                    <Pressable
+                      style={styles.productAdd}
+                      onPress={() =>
+                        navigation.navigate("ProductDetailsStore", { item })
+                      }
+                    >
+                      <AntDesign
                         name="plus"
                         size={18}
                         style={styles.productAddIcon}
-                      /> */}
+                      />
                     </Pressable>
                   </View>
                 </View>
@@ -320,4 +315,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeStoreScreen;
+export default ProductStoreScreen;

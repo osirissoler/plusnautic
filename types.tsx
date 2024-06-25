@@ -67,6 +67,8 @@ export type RootStackParamList = {
   ProductDetailsStore:undefined;
   CartStoreScreen:undefined;
   EventCalendarScreen: undefined;
+  ProductStoreScreen:undefined;
+  CartProductDetails:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

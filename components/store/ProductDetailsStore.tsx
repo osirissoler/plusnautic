@@ -25,6 +25,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
 
   const [item, setItem]: any = useState(route.params.item);
+  console.log(item.price, "jejejej")
   const [showLoading, setShowLoading]: any = useState(false);
   const [product, setProduct]: any = useState({});
   const [showModalImagen, setShowModalImagen]: any = useState(false);
@@ -41,6 +42,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
     setProductPrice(item.price);
     fetchData(url).then((response: any) => {
       if (response.ok) {
+        console.log(response.imagens, "response.imagens");
         setProduct_imgs([{ url: item.img }, ...response.imagens]);
         setProduct_img({ url: item.img });
       }
@@ -59,6 +61,8 @@ export default function ProductDetailsStore({ navigation, route }: any) {
         storeProduct_id: item.id,
         user_id: id,
         amount: productQuantity,
+        store_id:item.store_id,
+        // productPrice:0
       };
 
       sendData(url, data).then((response: any) => {
@@ -133,50 +137,71 @@ export default function ProductDetailsStore({ navigation, route }: any) {
     <SafeAreaView style={styles.container}>
       <Loading showLoading={showLoading} translation={translation} />
       <View style={styles.body}>
-        <View style={styles.productImage}>
-          <TouchableOpacity
-            style={{ height: 150, width: "100%", alignItems: "center" }}
-            onPress={() => setShowModalImagen(true)}
-          >
-            <Image
-              source={product_img}
-              style={{
-                flex: 1,
-                height: 170,
-                width: "100%",
-                resizeMode: "contain",
-              }}
-            />
-          </TouchableOpacity>
-        </View>
+        {product_img.url != '' ? (
+          <View style={styles.productImage}>
+            <TouchableOpacity
+              style={{ height: 150, width: "100%", alignItems: "center" }}
+              onPress={() => setShowModalImagen(true)}
+            >
+              <Image
+                source={product_img}
+                style={{
+                  flex: 1,
+                  height: 170,
+                  width: "100%",
+                  resizeMode: "contain",
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={{justifyContent:'center', alignItems:'center'}}>
+            <Text>No hay imagen que mostrar</Text>
+          </View>
+        )}
 
         <View>
-          <FlatList
-            horizontal={true}
-            style={{ height: "15%" }}
-            data={product_imgs}
-            renderItem={({ item }: any) => (
-              <TouchableOpacity
-                onPress={() => {
-                  let index = product_imgs.findIndex((e: any) => {
-                    return e.url === item.url;
-                  });
+          {product_imgs.length > 0 ? (
+            <FlatList
+              horizontal={true}
+              style={{ height: "15%", borderWidth: 0 }}
+              data={product_imgs}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    let index = product_imgs.findIndex((e: any) => {
+                      return e.url === item.url;
+                    });
 
-                  setIndex(index);
-                  setProduct_img({ url: item.url });
-                }}
-              >
-                <View
-                  style={{ height: 70, width: 70, marginBottom: 10, margin: 2 }}
+                    setIndex(index);
+                    setProduct_img({ url: item.url });
+                  }}
                 >
-                  <Image
-                    source={{ uri: item.url }}
-                    style={{ width: "100%", flex: 1, resizeMode: "contain" }}
-                  />
-                </View>
-              </TouchableOpacity>
-            )}
-          ></FlatList>
+                  <View
+                    style={{
+                      height: 70,
+                      width: 70,
+                      marginBottom: 10,
+                      margin: 2,
+                    }}
+                  >
+                    {item.url && (
+                      <Image
+                        source={{ uri: item.url }}
+                        style={{
+                          width: "100%",
+                          flex: 1,
+                          resizeMode: "contain",
+                        }}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              )}
+            ></FlatList>
+          ) : (
+            <View>{/* <Text>No hay imagen que mostrar</Text> */}</View>
+          )}
         </View>
 
         <View>
@@ -276,6 +301,7 @@ const styles = StyleSheet.create({
     padding: 40,
     // backgroundColor: 'rgba(213, 240, 219, 0.5)',
     borderRadius: 20,
+    borderWidth: 0,
   },
   productName: {
     marginTop: 30,
