@@ -185,9 +185,37 @@ function Addresses({ navigation, setAddress, translation }: any) {
           {translation.t("addressSelectTitle") /* Select Delivery Address */}
         </Text>
       </View>
+
+      {/* {Object.keys(addresses).length < 2 && ( */}
+      <TouchableOpacity
+        style={styles.productCard}
+        onPress={() => navigation.navigate("NewAddress")}
+      >
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text style={{ fontSize: 16, marginBottom: 15 }}>
+            {translation.t("addressNewTitle") /* Add new address */}
+          </Text>
+          <Pressable
+            style={{
+              backgroundColor: "#5f7ceb",
+              width: 35,
+              borderRadius: 5,
+              height: 25,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => navigation.navigate("NewAddress")}
+          >
+            <AntDesign name="plus" size={18} style={{ color: "#fff" }} />
+          </Pressable>
+        </View>
+      </TouchableOpacity>
+      {/* )} */}
+
       <FlatList
         data={addresses}
         refreshing={isFetching}
+        style={{height: "90%"}}
         renderItem={({ item }: any) => (
           <TouchableOpacity
             key={item.id}
@@ -248,7 +276,7 @@ function Addresses({ navigation, setAddress, translation }: any) {
                   flexDirection: "row",
                   alignItems: "center",
                   maxWidth: "60%",
-                //   backgroundColor: "black",
+                  //   backgroundColor: "black",
                   paddingRight: 20,
                 }}
               >
@@ -321,31 +349,6 @@ function Addresses({ navigation, setAddress, translation }: any) {
           </TouchableOpacity>
         )}
       ></FlatList>
-      {Object.keys(addresses).length < 2 && (
-        <TouchableOpacity
-          style={styles.productCard}
-          onPress={() => navigation.navigate("NewAddress")}
-        >
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ fontSize: 16, marginBottom: 15 }}>
-              {translation.t("addressNewTitle") /* Add new address */}
-            </Text>
-            <Pressable
-              style={{
-                backgroundColor: "#5f7ceb",
-                width: 35,
-                borderRadius: 5,
-                height: 25,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => navigation.navigate("NewAddress")}
-            >
-              <AntDesign name="plus" size={18} style={{ color: "#fff" }} />
-            </Pressable>
-          </View>
-        </TouchableOpacity>
-      )}
     </>
   );
 }
