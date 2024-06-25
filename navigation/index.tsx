@@ -75,6 +75,7 @@ import CartStore from "../components/store/CartStore";
 import EventCalendarScreen from "../screens/EventCalendarScreen";
 import ProductStoreScreen from "../components/store/ProductStoreScreen";
 import CartProductDetails from "../components/store/CartProductDetails";
+import NewAddressScreen from "../screens/NewAddresssScreen";
 
 export default function Navigation({
   colorScheme,
