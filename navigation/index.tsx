@@ -73,7 +73,8 @@ import ProductDetailsStore from "../components/store/ProductDetailsStore";
 // import CartStoreScreen2 from "../components/store/CartStorescreen";
 import CartStore from "../components/store/CartStore";
 import EventCalendarScreen from "../screens/EventCalendarScreen";
-import NewAddressScreen from "../screens/NewAddresssScreen";
+import ProductStoreScreen from "../components/store/ProductStoreScreen";
+import CartProductDetails from "../components/store/CartProductDetails";
 
 export default function Navigation({
   colorScheme,
@@ -570,7 +571,19 @@ function RootNavigator({ route }: any) {
         name="HomeStoreScreen"
         component={HomeStoreScreen}
         options={{
-          headerTitle: "Store",
+          headerTitle: "Stores",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="ProductStoreScreen"
+        component={ProductStoreScreen}
+        options={{
+          headerTitle: "Products",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -593,6 +606,18 @@ function RootNavigator({ route }: any) {
       <Stack.Screen
         name="CartStoreScreen"
         component={CartStore}
+        options={{
+          headerTitle: "Cart Store",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="CartProductDetails"
+        component={CartProductDetails}
         options={{
           headerTitle: "Cart Store",
           headerStyle: { backgroundColor: "#fff" },
