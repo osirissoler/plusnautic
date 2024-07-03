@@ -10,30 +10,35 @@ import {
   Text,
   FlatList,
   Pressable,
+  Modal,
 } from "react-native";
 import { Loading } from "../Shared";
 import { LanguageContext } from "../../LanguageContext";
 import AdsScreen from "../../screens/AdsScreen";
 import { formatter, formatter2 } from "../../utils";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { fetchData } from "../../httpRequests";
 import FloatingButton from "../FloatingButton";
 
 const ProductStoreScreen = ({ navigation, route }: any) => {
-   
   const { translation } = React.useContext(LanguageContext);
-
+  const [fetchingCategories, setFetchingCategories]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [product, setProduct]: any = useState([{}, {}, {}]);
   const [fetching, setFetching]: any = useState(false);
   const [store, setStore]: any = useState(route.params.item);
-
+  const [openModal, setOpenModal]: any = useState(false);
   const [visible, setVisible] = useState(true);
   const [initialImg, setinitialImage] = useState(
     "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
   );
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
-
+  const [category, setCategory]: any = useState([{}, {}, {}]);
+  const [initial, setInitial]: any = useState(0);
+  const [category_id, setCategory_id]: any = useState(0);
+  const limit = 10
+  
+  
   useEffect(() => {
     getProduct();
   }, []);
@@ -51,6 +56,37 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     setTimeout(() => {
       setShowLoading(false);
     }, 1000);
+  };
+
+  const getProductByCategoryStore = async (id:any) => {
+    setShowLoading(true);
+    const url = `/store/getProductByCategoryStore/${id}/${limit}/${initial}`;
+    fetchData(url).then(async (response) => {
+      if (response.ok) {
+        setProduct(response.products);
+      } else {
+        setProduct([]);
+      }
+    });
+    setTimeout(() => {
+      setShowLoading(false);
+    }, 1000);
+  };
+  const getCategoryByStoreIdApp = async () => {
+    const url = `/store/getCategoryByStoreIdApp/${store.id}`;
+    fetchData(url).then(async (response) => {
+      if (response.ok) {
+        setCategory(response.category);
+      } else {
+        setCategory([]);
+      }
+    });
+  };
+  const setActiveCategory = (category: any) => {
+    setCategory_id(category.id)
+    setOpenModal(false);
+    setInitial(0)
+    getProductByCategoryStore(category.id)
   };
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
@@ -71,20 +107,77 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
             {/* <FloatingButton navigation={navigation} /> */}
             <View></View>
 
-            <TouchableOpacity
-              style={styles.optionIcon}
-              onPress={() => navigation.navigate("CartStoreScreen")}
-            >
-              <View style={styles.ticketsContainer}>
-                <Text style={styles.ticketsAmount}>3</Text>
+            <View style={{ alignItems: "center", borderWidth: 0 }}>
+              <TouchableOpacity
+                style={styles.optionIcon}
+                onPress={() => {
+                  setOpenModal(true), getCategoryByStoreIdApp();
+                }}
+              >
+                <AntDesign name="filter" size={22} color="#60941A" />
+              </TouchableOpacity>
+              <View>
+                <Text style={{ color: "#60941A" }}>Category</Text>
               </View>
-
-              <AntDesign name="shoppingcart" size={35} />
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
       <Loading showLoading={showLoading} translation={translation} />
+      <Modal visible={openModal} animationType="slide">
+        <View style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
+          <View style={{ position: "relative", justifyContent: "center" }}>
+            <Text
+              style={{
+                fontSize: 16,
+                textAlign: "center",
+                marginTop: 20,
+                marginBottom: 30,
+              }}
+            >
+              {translation.t("homeModalFilterLabel") /* Filter */}
+            </Text>
+            <View style={{ position: "absolute", right: 0 }}>
+              <MaterialCommunityIcons
+                name="close"
+                size={24}
+                style={styles.categoryIcon}
+                onPress={() => setOpenModal(false)}
+              />
+            </View>
+          </View>
+          <Text style={{ fontSize: 16, marginVertical: 10 }}>
+            {translation.t("homeModalCategoriesLabel") /* Categories */}
+          </Text>
+        </View>
+        <FlatList
+          style={{ height: "85%" }}
+          data={category}
+          columnWrapperStyle={{ justifyContent: "space-around" }}
+          refreshing={fetchingCategories}
+          onRefresh={() => {}}
+          renderItem={({ item }: any) => (
+            <TouchableOpacity style={[
+              styles.categoryCard,
+              item.active ? styles.categoryCardActive : null,
+            ]}  onPress={() => setActiveCategory(item)} key={item.id}>
+              <View style={{ height: 50, width: 50, marginBottom: 10 }}>
+                <Image
+                  source={{ uri: item.img }}
+                  style={{ flex: 1, resizeMode: "contain" }}
+                />
+              </View>
+              <Text style={styles.categoryName}>
+                  {(translation.locale.includes("en") && item.name) ||
+                    (translation.locale.includes("es") && item.nombre)||
+                    (translation.locale.includes("fr") && item.nom)}
+                    
+                </Text>
+            </TouchableOpacity>
+          )}
+          numColumns={2}
+        ></FlatList>
+      </Modal>
       <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
         <FlatList
           data={product}
@@ -294,6 +387,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 100,
     position: "relative",
+    backgroundColor: "#F7F7F7",
   },
   ticketsContainer: {
     position: "absolute",

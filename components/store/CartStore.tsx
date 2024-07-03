@@ -23,10 +23,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading, checkLoggedUser, checkStorage } from "../Shared";
 import ImageViewer from "react-native-image-zoom-viewer";
 import { formatter } from "../../utils";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 import HeaderComponent from "../Header";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import Tooltip from "react-native-walkthrough-tooltip";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function CartStore({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -37,7 +39,8 @@ export default function CartStore({ navigation, route }: any) {
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
   const [total, setTotal]: any = useState(0);
   const [driver_price, setDriver_price]: any = useState(0);
-
+  const [toolTipVisible, setToolTipVisible]: any = useState(0);
+  const [user_id, setUser_id]: any = useState(null);
   useEffect(() => fetchProduct(), []);
 
   useEffect(() => {
@@ -47,18 +50,15 @@ export default function CartStore({ navigation, route }: any) {
   }, []);
 
   const fetchProduct = () => {
-    let a: any = [];
     setShowLoading(true);
     checkStorage("USER_LOGGED", (id: any) => {
+      setUser_id(id);
       const url = `/store/getProductCartStoreByUser/${id}`;
       fetchData(url).then((response: any) => {
         if (response.ok) {
           setProducts(response.products);
           setTotal(response.total);
           setDriver_price(response.driver_price);
-          // response.products.map((e: any) => {
-          //   a.push(e.amount * e.price);
-          // });
         } else {
           setProducts([]);
         }
@@ -79,12 +79,6 @@ export default function CartStore({ navigation, route }: any) {
     });
   };
 
-  const booleanRef = useRef<boolean>(false);
-  const toggleBoolean = (value: any) => {
-    booleanRef.current = value;
-    fetchProduct();
-  };
-
   const modifyPrice = (type: number, item: any) => {
     const url = `/store/addAndReduceProductCart/${item.id}/${item.storeProduct_id}`;
     sendDataPut(url, { type, amount: item.amount }).then((response: any) => {
@@ -99,15 +93,15 @@ export default function CartStore({ navigation, route }: any) {
       style={{
         backgroundColor: "white",
         height: "100%",
-        paddingVertical: 20,
-        paddingHorizontal: 15,
+        paddingVertical: 10,
+        paddingHorizontal: 8,
       }}
     >
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
 
       {products.length > 0 ? (
-        <View style={{ height: "60%", borderWidth: 0 }}>
+        <View style={{ height: "66%", borderWidth: 0 }}>
           <FlatList
             extraData={products}
             style={{ height: "50%" }}
@@ -117,34 +111,72 @@ export default function CartStore({ navigation, route }: any) {
             }}
             data={products}
             renderItem={({ item, index }: any) => (
-              <View>
+              <View
+                style={{
+                  padding: 10,
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+              >
                 {item?.map((item2: any, index2: any) => (
                   <View key={item2.id}>
                     {0 == index2 && (
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          marginVertical: 10,
-                        }}
-                      >
-                        <Text>{item2.store_name}</Text>
-                        <TouchableOpacity
-                          onPress={() => {
-                            navigation.navigate("CartProductDetails", {
-                              data: item2,
-                            });
+                      <View>
+                        <View style={{ alignItems: "center" }}>
+                          <Text style={{ fontWeight: "400", fontSize: 19 }}>
+                            {item2.store_name}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginVertical: 7,
                           }}
                         >
-                          <Text>Ver detalle</Text>
-                        </TouchableOpacity>
+                          <Tooltip
+                            isVisible={toolTipVisible}
+                            content={
+                              <Text>
+                                En las opcione de envio puede configurar si
+                                quiere recoger orecibir el envio, pude
+                                selecionar el lugar en donde sera entregado el
+                                pauete!
+                              </Text>
+                            }
+                            placement="top"
+                            onClose={() => setToolTipVisible(false)}
+                          >
+                            <TouchableOpacity
+                              onPress={() => {
+                                setToolTipVisible(true);
+                              }}
+                            >
+                              <FontAwesome
+                                name="info-circle"
+                                size={20}
+                                color="#5f7ceb"
+                              />
+                            </TouchableOpacity>
+                          </Tooltip>
+                          <TouchableOpacity
+                            onPress={() => {
+                              navigation.navigate("CartProductDetails", {
+                                data: item2,
+                              });
+                            }}
+                          >
+                            <Text style={{ color: "#5f7ceb" }}>
+                              Ver opciones de envio
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     )}
 
                     <View style={styles.productCard}>
                       <TouchableOpacity
                         onPress={() => {
-                          console.log(item2);
                           deleteProductcartStore(item2.id);
                         }}
                         style={styles.productCardDelete}
@@ -268,10 +300,7 @@ export default function CartStore({ navigation, route }: any) {
               <Text>Costo por Envio</Text>
             </View>
             <View>
-              <Text style={styles.cartPrice}>
-                {/* {formatter(booleanRef.current == false ? total.send : 0)} */}
-                {formatter(driver_price)}
-              </Text>
+              <Text style={styles.cartPrice}>{formatter(driver_price)}</Text>
             </View>
           </View>
           <View style={styles.cartPrices}>
@@ -280,11 +309,6 @@ export default function CartStore({ navigation, route }: any) {
             </View>
             <View>
               <Text style={{ ...styles.cartPrice, fontWeight: "bold" }}>
-                {/* {formatter(
-                booleanRef.current == true
-                  ? total.total - total.send
-                  : total.total
-              )} */}
                 {formatter(total.total)}
               </Text>
             </View>
@@ -295,7 +319,15 @@ export default function CartStore({ navigation, route }: any) {
       {products.length > 0 && (
         <View style={{ width: "100%" }}>
           <TouchableOpacity
-            //   onPress={() => changeGiftStatus()}
+            onPress={() =>
+              navigation.navigate("PayDetails", {
+                item: {
+                  ...total,
+                  user_id: Number(user_id),
+                  shippingPrice: driver_price,
+                },
+              })
+            }
             style={{
               width: "100%",
               backgroundColor: "#5f7ceb",
@@ -338,9 +370,9 @@ const styles = StyleSheet.create({
     height: 330,
   },
   productCard: {
-    padding: 20,
+    padding: 13,
     marginVertical: 8,
-    borderRadius: 20,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
     flexDirection: "column",

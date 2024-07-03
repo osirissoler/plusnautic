@@ -11,6 +11,7 @@ import {
   FlatList,
   Pressable,
   Modal,
+  ScrollView
 } from "react-native";
 import { LanguageContext } from "../../LanguageContext";
 import {
@@ -20,13 +21,16 @@ import {
   sendDataPut,
 } from "../../httpRequests";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Loading, checkLoggedUser, checkStorage } from "../Shared";
+import { Addresses, Loading, checkLoggedUser, checkStorage } from "../Shared";
 import ImageViewer from "react-native-image-zoom-viewer";
 import { formatter } from "../../utils";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 import HeaderComponent from "../Header";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import AddressesScreen from "../../screens/AddressesScreen";
+import NewAddressScreen from "../../screens/NewAddresssScreen";
+
 
 export default function CartProductDetails({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -97,7 +101,7 @@ export default function CartProductDetails({ navigation, route }: any) {
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
 
-      <View style={{ height: "60%", borderWidth: 0 }}>
+      <View style={{ maxHeight: "60%", borderWidth: 0 }}>
         <FlatList
           extraData={products}
           style={{ height: "50%" }}
@@ -173,6 +177,10 @@ export default function CartProductDetails({ navigation, route }: any) {
         ></FlatList>
       </View>
 
+      {(isChecked)&&<View style={{borderWidth:0, height:'40%'}}>
+        <Addresses navigation={navigation} translation={translation} />
+      </View>}
+
       <View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text
@@ -186,21 +194,6 @@ export default function CartProductDetails({ navigation, route }: any) {
             {/* {translation.t("checkoutPickupText")} */}
             Prefiere incluir envio
           </Text>
-
-          {/* <BouncyCheckbox
-            isChecked={isChecked}
-            size={25}
-            fillColor="#60941A"
-            textStyle={{
-              textDecorationLine: "none",
-              color: "#60941A",
-            }}
-            disableText
-            text={translation.t("profileTermsText")}
-            onPress={(isChecked: boolean) => {
-              toggleBoolean(isChecked);
-            }}
-          ></BouncyCheckbox> */}
           <TouchableOpacity
             style={{
               height: 25,
@@ -228,6 +221,8 @@ export default function CartProductDetails({ navigation, route }: any) {
           </TouchableOpacity>
         </View>
       </View>
+
+      
 
       <View style={{ width: "100%", marginTop: 10 }}>
         <View style={styles.cartPrices}>

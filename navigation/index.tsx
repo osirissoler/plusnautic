@@ -76,6 +76,9 @@ import EventCalendarScreen from "../screens/EventCalendarScreen";
 import ProductStoreScreen from "../components/store/ProductStoreScreen";
 import CartProductDetails from "../components/store/CartProductDetails";
 import NewAddressScreen from "../screens/NewAddresssScreen";
+import PayDetails from "../components/store/PayDetails";
+import ListOrder from "../components/store/ListOrder";
+import OrderDetails from "../components/store/OrderDetails";
 
 export default function Navigation({
   colorScheme,
@@ -627,6 +630,41 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="PayDetails"
+        component={PayDetails}
+        options={{
+          headerTitle: "Pay",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      
+       <Stack.Screen
+        name="ListOrder"
+        component={ListOrder}
+        options={{
+          headerTitle: "Mis ordenes",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{
+          headerTitle: "Detalle",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      
     </Stack.Navigator>
   );
 }
