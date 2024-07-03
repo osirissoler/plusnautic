@@ -11,7 +11,7 @@ import {
   FlatList,
   Pressable,
   Modal,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { LanguageContext } from "../../LanguageContext";
 import {
@@ -41,35 +41,47 @@ export default function CartProductDetails({ navigation, route }: any) {
   const [total, setTotal]: any = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [storeRequestStatusSend, setStoreRequestStatusSend]: any = useState({});
+  const [addresses, setAddresses]: any = useState([]);
 
-  useEffect(() => fetchProduct(), []);
+  useEffect(() => {
+    fetchProduct();
+    // fetchAddresses();
+  }, []);
 
- const fetchProduct = () => {
-    let a: any = [];
+  const fetchProduct = () => {
     setShowLoading(true);
-    checkStorage("USER_LOGGED", () => {
-      const url = `/store/getProductCartDetailsByStore/${route.params.data.user_id}/${route.params.data.store_id}`;
-      fetchData(url).then(async (response: any) => {
-        if (response.ok) {
-          setDriver_price(response.driver_price);
-          setProducts(response.products);
-          setTotal(response.total);
-          setIsChecked(response.driverActive);
-          setStoreRequestStatusSend(response.storeRequestStatusSend);
-            if (response.products.length == 0) {
-              navigation.goBack();
-            }
-         
-        } else {
-          setProducts([]);
+    const url = `/store/getProductCartDetailsByStore/${route.params.data.user_id}/${route.params.data.store_id}`;
+    fetchData(url).then(async (response: any) => {
+      if (response.ok) {
+        setDriver_price(response.driver_price);
+        setProducts(response.products);
+        setTotal(response.total);
+        setIsChecked(response.driverActive);
+        setStoreRequestStatusSend(response.storeRequestStatusSend);
+        if (response.products.length == 0) {
+          navigation.goBack();
         }
-      });
+      } else {
+        setProducts([]);
+      }
     });
     setTimeout(() => {
       setShowLoading(false);
     }, 1000);
   };
 
+  // const fetchAddresses = () => {
+  //   const url = "/user/getClientDirection";
+  //   const data = {
+  //     user_id: route.params.data.user_id,
+  //   };
+  //   sendData(url, data).then((response: any) => {
+  //     if (Object.keys(response).length > 0) {
+  //       const addresses = response["clientDirection"];
+  //       setAddresses(addresses);
+  //     }
+  //   });
+  // };
   const toggleBoolean = () => {
     const url = `/store/updateStoreRequestStatus/${storeRequestStatusSend.id}`;
     sendDataPut(url, { value: !isChecked }).then(async (response: any) => {
@@ -175,13 +187,6 @@ export default function CartProductDetails({ navigation, route }: any) {
           )}
         ></FlatList>
       </View>
-
-      {isChecked && (
-        <View style={{ borderWidth: 0, height: "40%" }}>
-          <AddressesScreen navigation={navigation} translation={translation} />
-        </View>
-      )}
-
       <View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text

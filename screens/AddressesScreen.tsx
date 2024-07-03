@@ -1,11 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView, Alert, Text, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import {  Loading, checkStorage } from '../components/Shared';
-import { LanguageContext } from '../LanguageContext';
-import { sendData } from '../httpRequests';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import GoMap from './GoMap';
-import { AddressCard } from '../components/AddressCard';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import { Loading, checkStorage } from "../components/Shared";
+import { LanguageContext } from "../LanguageContext";
+import { sendData } from "../httpRequests";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import GoMap from "./GoMap";
+import { AddressCard } from "../components/AddressCard";
 
 interface Address {
   id: number;
@@ -25,108 +34,117 @@ interface Address {
   longitude: number;
 }
 
-export default function AddressesScreen({ navigation }: any) {
-	const { translation } = React.useContext(LanguageContext);
-	  const [addresses, setAddresses]: any = useState([]);
-    const [isFetching, setIsFetching]: any = useState(false);
-    const [showLoading, setShowLoading]: any = useState(false);
+export default function AddressesScreen({ navigation, direction }: any) {
+  const { translation } = React.useContext(LanguageContext);
+  const [addresses, setAddresses]: any = useState([]);
+  const [isFetching, setIsFetching]: any = useState(false);
+  const [showLoading, setShowLoading]: any = useState(false);
 
-    useEffect(() => {
-      navigation.addListener("focus", () => {
-        fetchAddresses();
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      fetchAddresses();
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
+
+  const fetchAddresses = () => {
+    checkStorage("USER_LOGGED", (userId: any) => {
+      const url = "/user/getClientDirection";
+      const data = {
+        user_id: userId,
+      };
+      sendData(url, data).then((response: any) => {
+        if (Object.keys(response).length > 0) {
+          const addresses = response["clientDirection"];
+          const url = `/user/getUserById/${userId}`;
+          sendData(url, {}).then((response: any) => {
+            const user = response["user"];
+            // console.log(user.client_direction_id, "kkkkkk")
+            direction(user.client_direction_id)
+            const defaultAddress = addresses.find(
+              (address: any) => address.id == user.client_direction_id
+            );
+            if (defaultAddress) {
+              defaultAddress.default = true;
+              // if (setAddress) setAddress(defaultAddress);
+            }
+            setAddresses(addresses);
+          });
+        } else {
+          // if (setAddress) setAddress({});
+          setAddresses([]);
+        }
       });
-    }, []);
+    });
+  };
 
-    const fetchAddresses = () => {
-      checkStorage("USER_LOGGED", (userId: any) => {
-        const url = "/user/getClientDirection";
-        const data = {
-          user_id: userId,
-        };
-        sendData(url, data).then((response: any) => {
-          if (Object.keys(response).length > 0) {
-            const addresses = response["clientDirection"];
-            const url = `/user/getUserById/${userId}`;
-            sendData(url, {}).then((response: any) => {
-              const user = response["user"];
-              const defaultAddress = addresses.find(
-                (address: any) => address.id == user.client_direction_id
-              );
-              if (defaultAddress) {
-                defaultAddress.default = true;
-                // if (setAddress) setAddress(defaultAddress);
-              }
-              setAddresses(addresses);
+  const hideLoadingModal = (callback: Function) => {
+    setTimeout(() => {
+      setShowLoading(false);
+      callback();
+    }, 1500);
+  };
+
+  const setDefaultAddress = (item: any) => {
+    setShowLoading(true);
+    checkStorage("USER_LOGGED", (userId: any) => {
+      const url = `/user/getUserById/${userId}`;
+      sendData(url, {}).then((response: any) => {
+        hideLoadingModal(() => {
+          const user = response["user"];
+          const url = "/user/updateCliente";
+          if (item.id != user.client_direction_id) {
+           
+            const data = {
+              user_id: user.id,
+              client_direction_id: item.id,
+            };
+            // console.log(data.client_direction_id, "data jajaja")
+            direction(data.client_direction_id)
+            sendData(url, data).then((response: any) => {
+              fetchAddresses();
+              // if (setAddress) setAddress(item);
             });
-          } else {
-            // if (setAddress) setAddress({});
-            setAddresses([]);
           }
         });
       });
-    };
+    });
+  };
 
-    const hideLoadingModal = (callback: Function) => {
-      setTimeout(() => {
-        setShowLoading(false);
-        callback();
-      }, 1500);
-    };
-
-    const setDefaultAddress = (item: any) => {
-      setShowLoading(true);
-      checkStorage("USER_LOGGED", (userId: any) => {
-        const url = `/user/getUserById/${userId}`;
-        sendData(url, {}).then((response: any) => {
-          hideLoadingModal(() => {
-            const user = response["user"];
-            const url = "/user/updateCliente";
-            if (item.id != user.client_direction_id) {
+  const deleteAddress = (id: any) => {
+    Alert.alert(
+      translation.t("alertWarningTitle"),
+      translation.t("addressRemoveItemText"), // Do you want to delete this address?
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+            setShowLoading(true);
+            checkStorage("USER_LOGGED", (userId: any) => {
+              const url = "/user/deleteClientDirection";
               const data = {
-                user_id: user.id,
-                client_direction_id: item.id,
+                id: id,
+                user_id: userId,
               };
               sendData(url, data).then((response: any) => {
-                fetchAddresses();
-                // if (setAddress) setAddress(item);
-              });
-            }
-          });
-        });
-      });
-    };
-
-    const deleteAddress = (id: any) => {
-      Alert.alert(
-        translation.t("alertWarningTitle"),
-        translation.t("addressRemoveItemText"), // Do you want to delete this address?
-        [
-          {
-            text: "Yes",
-            onPress: () => {
-              setShowLoading(true);
-              checkStorage("USER_LOGGED", (userId: any) => {
-                const url = "/user/deleteClientDirection";
-                const data = {
-                  id: id,
-                  user_id: userId,
-                };
-                sendData(url, data).then((response: any) => {
-                  hideLoadingModal(() => {
-                    fetchAddresses();
-                  });
+                hideLoadingModal(() => {
+                  fetchAddresses();
                 });
               });
-            },
+            });
           },
-          {
-            text: translation.t("alertButtonNoText"),
-          },
-        ]
-      );
-    };
+        },
+        {
+          text: translation.t("alertButtonNoText"),
+        },
+      ]
+    );
+  };
 
-	return (
+  return (
     <SafeAreaView style={styles.container}>
       <View style={styles.body}>
         <Loading showLoading={showLoading} translation={translation} />
@@ -163,7 +181,7 @@ export default function AddressesScreen({ navigation }: any) {
         <FlatList
           data={addresses}
           refreshing={isFetching}
-		  style={{height: "90%"}}
+          style={{ height: "90%" }}
           renderItem={({ item }: any) => (
             <AddressCard
               item={item}
@@ -185,9 +203,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
   },
   body: {
-    marginHorizontal: 20,
-    marginVertical: 30,
-    padding: 20,
+    // marginHorizontal: 20,
+    // marginVertical: 30,
+    height:'100%',
+    padding: 10,
     backgroundColor: "#ffffff",
     borderRadius: 20,
   },

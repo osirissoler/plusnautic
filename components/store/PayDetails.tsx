@@ -20,10 +20,12 @@ import {
   sendData,
   sendDataPut,
 } from "../../httpRequests";
-import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { Loading } from "../Shared";
 import WebView from "react-native-webview";
+import AddressesScreen from "../../screens/AddressesScreen";
+import { formatter } from "../../utils";
 
 export default function PayDetails({ navigation, route }: any) {
   console.log(route.params.item);
@@ -38,6 +40,7 @@ export default function PayDetails({ navigation, route }: any) {
   const [placeToPayOperationFineshed, setplaceToPayOperationFineshed]: any =
     useState(false);
   const [contador, setContador]: any = useState(0);
+  const [clientDirection_id, setClientDirection_id]: any = useState(null);
 
   async function getIpClient() {
     try {
@@ -82,10 +85,11 @@ export default function PayDetails({ navigation, route }: any) {
       } else if (res.payment_status == "PENDING") {
         consulting();
       } else if (res.payment_status == "APPROVED") {
+        setShowLoading(true);
         const url = `/store/createOrder/${item.user_id}`;
-        sendData(url, { ...item }).then((res) => {
-          if(res.ok){
-          navigation.goBack();
+        sendData(url, { ...item, clientDirection_id }).then((res) => {
+          if (res.ok) {
+            navigation.goBack();
           }
         });
         // navigation.goBack();
@@ -129,8 +133,9 @@ export default function PayDetails({ navigation, route }: any) {
   };
 
   return (
-    <View style={{ height: "100%" }}>
+    <View style={{ height: "100%", backgroundColor: "white" }}>
       <Loading showLoading={showLoading} translation={translation} />
+
       {!placeToPayOperationFineshed && showPlaceToPayview && (
         <View style={{ height: "100%" }}>
           <WebView
@@ -139,6 +144,77 @@ export default function PayDetails({ navigation, route }: any) {
           />
         </View>
       )}
+      <View style={{ borderWidth: 0, height: "69%" }}>
+        {item.shippingPrice !== 0 ? (
+          <AddressesScreen
+            navigation={navigation}
+            translation={translation}
+            direction={(value: any) => {
+              setClientDirection_id(value);
+              //   console.log(value, "aqui");
+            }}
+          />
+        ) : (
+          <View style={{}}>
+            <Text>
+              Las direcione de entrenga no estan dispoble ya que no tienen envio
+              agregados
+            </Text>
+          </View>
+        )}
+      </View>
+      <View style={{ width: "100%", marginTop: 10, height: "18%", borderWidth:0, paddingHorizontal: 8, }}>
+        <View style={styles.cartPrices}>
+          <Text>Sub Total</Text>
+          <Text style={styles.cartPrice}>{formatter(item.amount)}</Text>
+        </View>
+        <View style={styles.cartPrices}>
+          <View>
+            <Text>IVU Estatal</Text>
+          </View>
+          <View>
+            <Text style={styles.cartPrice}>{formatter(item.stateTax)}</Text>
+          </View>
+        </View>
+        <View style={styles.cartPrices}>
+          <View>
+            <Text>IVU Municipal</Text>
+          </View>
+          <View>
+            <Text style={styles.cartPrice}>{formatter(item.municipalTax)}</Text>
+          </View>
+        </View>
+        <View style={styles.cartPrices}>
+          <View>
+            <Text>Costo de Transaccion</Text>
+          </View>
+          <View>
+            <Text style={styles.cartPrice}>
+              {formatter(item.transationFee)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.cartPrices}>
+          <View>
+            <Text>Costo por Envio</Text>
+          </View>
+          <View>
+            <Text style={styles.cartPrice}>
+              {formatter(item.shippingPrice)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.cartPrices}>
+          <View>
+            <Text style={{ fontWeight: "bold" }}>Total</Text>
+          </View>
+          <View>
+            <Text style={{ ...styles.cartPrice, fontWeight: "bold" }}>
+              {formatter(item.total)}
+            </Text>
+          </View>
+        </View>
+      </View>
       <View style={{ height: "13%" }}>
         <TouchableOpacity
           style={{
@@ -195,3 +271,13 @@ export default function PayDetails({ navigation, route }: any) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  cartPrices: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 2,
+  },
+  cartPrice: {
+    textAlign: "right",
+  },
+});
