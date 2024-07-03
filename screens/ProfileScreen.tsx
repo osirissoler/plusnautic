@@ -355,6 +355,17 @@ export default function ProfileScreen({ navigation, route }: any) {
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>
+          <Pressable
+            style={styles.option}
+            onPress={() => navigation.navigate("ListOrder")}
+
+          >
+            {/* ListOrder */}
+            <Text style={styles.optionText}>
+              Order
+            </Text>
+            <AntDesign style={styles.optionIcon} name="right" size={16} />
+          </Pressable>
           {/* <Pressable
             style={styles.option}
             onPress={() =>
@@ -451,6 +462,7 @@ export default function ProfileScreen({ navigation, route }: any) {
             </Text>
           </TouchableOpacity>
         </View>
+        
       </ScrollView>
     </Container>
   );
