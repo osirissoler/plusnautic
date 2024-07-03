@@ -21,7 +21,7 @@ import {
   sendDataPut,
 } from "../../httpRequests";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Addresses, Loading, checkLoggedUser, checkStorage } from "../Shared";
+import { Loading, checkLoggedUser, checkStorage } from "../Shared";
 import ImageViewer from "react-native-image-zoom-viewer";
 import { formatter } from "../../utils";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -30,7 +30,6 @@ import HeaderComponent from "../Header";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AddressesScreen from "../../screens/AddressesScreen";
 import NewAddressScreen from "../../screens/NewAddresssScreen";
-
 
 export default function CartProductDetails({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -45,7 +44,7 @@ export default function CartProductDetails({ navigation, route }: any) {
 
   useEffect(() => fetchProduct(), []);
 
-  const fetchProduct = () => {
+ const fetchProduct = () => {
     let a: any = [];
     setShowLoading(true);
     checkStorage("USER_LOGGED", () => {
@@ -177,9 +176,11 @@ export default function CartProductDetails({ navigation, route }: any) {
         ></FlatList>
       </View>
 
-      {(isChecked)&&<View style={{borderWidth:0, height:'40%'}}>
-        <Addresses navigation={navigation} translation={translation} />
-      </View>}
+      {isChecked && (
+        <View style={{ borderWidth: 0, height: "40%" }}>
+          <AddressesScreen navigation={navigation} translation={translation} />
+        </View>
+      )}
 
       <View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -221,8 +222,6 @@ export default function CartProductDetails({ navigation, route }: any) {
           </TouchableOpacity>
         </View>
       </View>
-
-      
 
       <View style={{ width: "100%", marginTop: 10 }}>
         <View style={styles.cartPrices}>
