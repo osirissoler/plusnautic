@@ -11,7 +11,7 @@ import {
   FlatList,
   Pressable,
 } from "react-native";
-import { Loading } from "../Shared";
+import { Loading, checkStorage } from "../Shared";
 import { LanguageContext } from "../../LanguageContext";
 import AdsScreen from "../../screens/AdsScreen";
 import { formatter, formatter2 } from "../../utils";
@@ -24,6 +24,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
 
   const [showLoading, setShowLoading]: any = useState(false);
   const [store, setStore]: any = useState([{}, {}, {}]);
+  const [count, setCount]: any = useState(0);
   const [fetching, setFetching]: any = useState(false);
 
   const [visible, setVisible] = useState(true);
@@ -32,9 +33,30 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
   );
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
 
+  // useEffect(() => {
+  //   // getAllStore();
+  //   // getProductCartAmount();
+  // }, []);
+
   useEffect(() => {
-    getAllStore();
+    navigation.addListener("focus", () => {
+      getProductCartAmount();
+      getAllStore();
+    });
   }, []);
+
+  const getProductCartAmount = async () => {
+    checkStorage("USER_LOGGED", (id: any) => {
+      const url = `/store/getProductCartAmount/${id}`;
+      fetchData(url).then(async (response) => {
+        if (response.ok) {
+          setCount(response.count);
+        } else {
+          setCount(0);
+        }
+      });
+    });
+  };
 
   const getAllStore = async () => {
     setShowLoading(true);
@@ -74,7 +96,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
               onPress={() => navigation.navigate("CartStoreScreen")}
             >
               <View style={styles.ticketsContainer}>
-                <Text style={styles.ticketsAmount}>3</Text>
+                <Text style={styles.ticketsAmount}>{count}</Text>
               </View>
 
               <AntDesign name="shoppingcart" size={35} />
