@@ -24,6 +24,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { formatter } from "../../utils";
 
 export default function OrderDetails({ navigation, route }: any) {
+    console.log(route.params.item.user_id)
   const [showLoading, setShowLoading]: any = useState(false);
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [history, setHistory]: any = useState([]);
@@ -58,11 +59,11 @@ export default function OrderDetails({ navigation, route }: any) {
   };
 
   const getHistoryOrders = () => {
-    const url = `/store/getHistoryOrders/${233}/${route.params.item.id}`;
+    const url = `/store/getHistoryOrders/${route.params.item.user_id}/${route.params.item.id}`;
     fetchData(url).then((response: any) => {
       if (response.ok) {
         setHistory(response.history);
-        console.log(response.history)
+        console.log(response, 'hhhh')
       } else {
         setHistory([]);
       }
