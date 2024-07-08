@@ -36,9 +36,8 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
   const [category, setCategory]: any = useState([{}, {}, {}]);
   const [initial, setInitial]: any = useState(0);
   const [category_id, setCategory_id]: any = useState(0);
-  const limit = 10
-  
-  
+  const limit = 10;
+
   useEffect(() => {
     getProduct();
   }, []);
@@ -58,7 +57,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     }, 1000);
   };
 
-  const getProductByCategoryStore = async (id:any) => {
+  const getProductByCategoryStore = async (id: any) => {
     setShowLoading(true);
     const url = `/store/getProductByCategoryStore/${id}/${limit}/${initial}`;
     fetchData(url).then(async (response) => {
@@ -83,10 +82,10 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     });
   };
   const setActiveCategory = (category: any) => {
-    setCategory_id(category.id)
+    setCategory_id(category.id);
     setOpenModal(false);
-    setInitial(0)
-    getProductByCategoryStore(category.id)
+    setInitial(0);
+    getProductByCategoryStore(category.id);
   };
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
@@ -105,7 +104,16 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
             }}
           >
             {/* <FloatingButton navigation={navigation} /> */}
-            <View></View>
+            <Pressable
+              style={styles.optionIcon}
+              onPress={() =>
+                navigation.navigate("ListProducts", {
+                  data: { store_id: store.id },
+                })
+              }
+            >
+              <AntDesign name="search1" size={22} color="#5f7ceb" />
+            </Pressable>
 
             <View style={{ alignItems: "center", borderWidth: 0 }}>
               <TouchableOpacity
@@ -114,10 +122,10 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                   setOpenModal(true), getCategoryByStoreIdApp();
                 }}
               >
-                <AntDesign name="filter" size={22} color="#60941A" />
+                <AntDesign name="filter" size={22} color="#5f7ceb" />
               </TouchableOpacity>
               <View>
-                <Text style={{ color: "#60941A" }}>Category</Text>
+                <Text style={{ color: "#5f7ceb" }}>Category</Text>
               </View>
             </View>
           </View>
@@ -157,10 +165,14 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           refreshing={fetchingCategories}
           onRefresh={() => {}}
           renderItem={({ item }: any) => (
-            <TouchableOpacity style={[
-              styles.categoryCard,
-              item.active ? styles.categoryCardActive : null,
-            ]}  onPress={() => setActiveCategory(item)} key={item.id}>
+            <TouchableOpacity
+              style={[
+                styles.categoryCard,
+                item.active ? styles.categoryCardActive : null,
+              ]}
+              onPress={() => setActiveCategory(item)}
+              key={item.id}
+            >
               <View style={{ height: 50, width: 50, marginBottom: 10 }}>
                 <Image
                   source={{ uri: item.img }}
@@ -168,11 +180,10 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                 />
               </View>
               <Text style={styles.categoryName}>
-                  {(translation.locale.includes("en") && item.name) ||
-                    (translation.locale.includes("es") && item.nombre)||
-                    (translation.locale.includes("fr") && item.nom)}
-                    
-                </Text>
+                {(translation.locale.includes("en") && item.name) ||
+                  (translation.locale.includes("es") && item.nombre) ||
+                  (translation.locale.includes("fr") && item.nom)}
+              </Text>
             </TouchableOpacity>
           )}
           numColumns={2}
@@ -211,7 +222,9 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           style={{ padding: 20, flexDirection: "column" }}
           renderItem={({ item }) => (
             <View>
-              <Pressable style={styles.productCard}>
+              <Pressable style={styles.productCard} onPress={() =>
+                        navigation.navigate("ProductDetailsStore", { item })
+                      }>
                 <View style={styles.productImage}>
                   <Image
                     source={{
@@ -234,9 +247,6 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                     </Text>
                     <Pressable
                       style={styles.productAdd}
-                      onPress={() =>
-                        navigation.navigate("ProductDetailsStore", { item })
-                      }
                     >
                       <AntDesign
                         name="plus"
@@ -346,7 +356,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   productAdd: {
-    backgroundColor: "#60941A",
+    backgroundColor: "#5f7ceb",
     padding: 4,
     borderRadius: 100,
   },

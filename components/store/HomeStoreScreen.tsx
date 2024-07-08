@@ -60,17 +60,21 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
 
   const getAllStore = async () => {
     setShowLoading(true);
-    const url = `/store/getAllStore`;
-    fetchData(url).then(async (response) => {
-      if (response.ok) {
-        setStore(response.store);
-      } else {
-        setStore([]);
-      }
-    });
-    setTimeout(() => {
-      setShowLoading(false);
-    }, 1000);
+    checkStorage("USER_LOGGED_COUNTRY", (id: any) => {
+      console.log(id, 'kekekekek')
+      const url = `/store/getAllStoreByContry/${id}`;
+      fetchData(url).then(async (response) => {
+        if (response.ok) {
+          setStore(response.store);
+        } else {
+          setStore([]);
+        }
+      });
+      setTimeout(() => {
+        setShowLoading(false);
+      }, 1000);
+    })
+    
   };
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
@@ -321,6 +325,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 100,
     position: "relative",
+    // backgroundColor: '#F7F7F7',
   },
   ticketsContainer: {
     position: "absolute",
