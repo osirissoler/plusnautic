@@ -51,7 +51,7 @@
   "listPharmaciesSearchPlaceholder": "Search a name of a pharmacy or city",
   "homeModalFilterLabel": "Filter",
   "homeModalCategoriesLabel": "Categories",
-  "homeLocationText": "Current Pharmacy",
+  "homeLocationText": "Current Category",
   "homePopularText": "Popular Pack",
   "homeViewAllText": "View All",
   "homeNoProductsText": "No apartments available within this building...",

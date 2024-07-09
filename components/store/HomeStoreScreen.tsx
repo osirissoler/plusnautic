@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -33,6 +33,8 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
   );
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
 
+  const skip = useRef<number>(0);
+
   // useEffect(() => {
   //   // getAllStore();
   //   // getProductCartAmount();
@@ -61,7 +63,6 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
   const getAllStore = async () => {
     setShowLoading(true);
     checkStorage("USER_LOGGED_COUNTRY", (id: any) => {
-      console.log(id, 'kekekekek')
       const url = `/store/getAllStoreByContry/${id}`;
       fetchData(url).then(async (response) => {
         if (response.ok) {
@@ -109,6 +110,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
         </View>
       </View>
       <Loading showLoading={showLoading} translation={translation} />
+      
       <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
         <FlatList
           data={store}

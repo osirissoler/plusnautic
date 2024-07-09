@@ -42,6 +42,7 @@ export default function CartProductDetails({ navigation, route }: any) {
   const [isChecked, setIsChecked] = useState(false);
   const [storeRequestStatusSend, setStoreRequestStatusSend]: any = useState({});
   const [addresses, setAddresses]: any = useState([]);
+  const skip = useRef<number>(0);
 
   useEffect(() => {
     fetchProduct();
