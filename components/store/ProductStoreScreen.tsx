@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   Image,
-  Linking,
-  Alert,
   Text,
   FlatList,
   Pressable,
@@ -15,16 +12,20 @@ import {
 import { Loading } from "../Shared";
 import { LanguageContext } from "../../LanguageContext";
 import AdsScreen from "../../screens/AdsScreen";
-import { formatter, formatter2 } from "../../utils";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { formatter } from "../../utils";
+import {
+  AntDesign,
+  Feather,
+  MaterialCommunityIcons,
+  SimpleLineIcons,
+} from "@expo/vector-icons";
 import { fetchData } from "../../httpRequests";
-import FloatingButton from "../FloatingButton";
 
 const ProductStoreScreen = ({ navigation, route }: any) => {
   const { translation } = React.useContext(LanguageContext);
   const [fetchingCategories, setFetchingCategories]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [product, setProduct]: any = useState([{}, {}, {}]);
+  const [product, setProducts]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
   const [store, setStore]: any = useState(route.params.item);
   const [openModal, setOpenModal]: any = useState(false);
@@ -33,23 +34,32 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
   );
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
-  const [category, setCategory]: any = useState([{}, {}, {}]);
-  const [initial, setInitial]: any = useState(0);
-  const [category_id, setCategory_id]: any = useState(0);
-  const limit = 10;
-
+  const [category, setCategory]: any = useState([]);
+  const [category_name, setCategory_name]: any = useState(null);
+  const [limit, setLimit]: any = useState(100);
+  const skip = useRef<number>(0);
+  const category_id = useRef<number>(0);
   useEffect(() => {
     getProduct();
   }, []);
 
   const getProduct = async () => {
     setShowLoading(true);
-    const url = `/store/getAllProductStore/${store.id}/10/0`;
-    fetchData(url).then(async (response) => {
+    const url = `/store/getAllProductStore/${store.id}/${limit}/${skip.current}`;
+    fetchData(url).then(async (response: any) => {
       if (response.ok) {
-        setProduct(response.products);
+        if (skip.current === 0) {
+          await setProducts([]);
+          await setProducts([...response.products]);
+        } else {
+          setProducts([...product, ...response.products]);
+          // console.log(response.products.length)
+        }
       } else {
-        setProduct([]);
+        skip.current = await 0;
+        await setProducts([]);
+        setCategory_name(null);
+        category_id.current = 0;
       }
     });
     setTimeout(() => {
@@ -57,20 +67,31 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     }, 1000);
   };
 
-  const getProductByCategoryStore = async (id: any) => {
+  const getProductByCategoryStore = async () => {
     setShowLoading(true);
-    const url = `/store/getProductByCategoryStore/${id}/${limit}/${initial}`;
-    fetchData(url).then(async (response) => {
-      if (response.ok) {
-        setProduct(response.products);
-      } else {
-        setProduct([]);
-      }
-    });
+    if (category_id.current !== 0) {
+      const url = `/store/getProductByCategoryStore/${category_id.current}/${limit}/${skip.current}`;
+      fetchData(url).then(async (response) => {
+        if (response.ok) {
+          if (skip.current == 0) {
+            await setProducts([]);
+            await setProducts([...response.products]);
+          } else {
+            setProducts([...product, ...response.products]);
+          }
+        } else {
+          skip.current = await 0;
+          await setProducts([]);
+          setCategory_name(null);
+          category_id.current = 0;
+        }
+      });
+    }
     setTimeout(() => {
       setShowLoading(false);
     }, 1000);
   };
+
   const getCategoryByStoreIdApp = async () => {
     const url = `/store/getCategoryByStoreIdApp/${store.id}`;
     fetchData(url).then(async (response) => {
@@ -81,11 +102,12 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
       }
     });
   };
-  const setActiveCategory = (category: any) => {
-    setCategory_id(category.id);
-    setOpenModal(false);
-    setInitial(0);
-    getProductByCategoryStore(category.id);
+  const setActiveCategory = async (category: any) => {
+    await setCategory_name(category.name);
+    category_id.current = await category.id;
+    await setOpenModal(false);
+    skip.current = await 0;
+    await getProductByCategoryStore();
   };
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
@@ -132,6 +154,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
         </View>
       </View>
       <Loading showLoading={showLoading} translation={translation} />
+      {/* categorys */}
       <Modal visible={openModal} animationType="slide">
         <View style={{ paddingVertical: 40, paddingHorizontal: 20 }}>
           <View style={{ position: "relative", justifyContent: "center" }}>
@@ -143,7 +166,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                 marginBottom: 30,
               }}
             >
-              {translation.t("homeModalFilterLabel") /* Filter */}
+              {translation.t("homeModalFilterLabel")}
             </Text>
             <View style={{ position: "absolute", right: 0 }}>
               <MaterialCommunityIcons
@@ -189,16 +212,47 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           numColumns={2}
         ></FlatList>
       </Modal>
+      {category_name != null && (
+        <View style={styles.header}>
+          <Pressable style={{ flexDirection: "row" }} onPress={() => {}}>
+            <Feather name="map-pin" size={21} style={{ marginHorizontal: 3 }} />
+            <Text style={styles.locationTitle}>
+              {translation.t("homeLocationText")}
+            </Text>
+            <SimpleLineIcons
+              name="arrow-down"
+              size={16}
+              style={{
+                marginHorizontal: 5,
+                color: "#40AA54",
+                alignSelf: "flex-end",
+              }}
+            />
+          </Pressable>
+
+          <Text style={styles.locationText}>{category_name}</Text>
+        </View>
+      )}
       <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
         <FlatList
           data={product}
           refreshing={fetching}
-          onRefresh={() => {}}
-          ListEmptyComponent={
-            <Text style={{ fontSize: 16, marginTop: 20 }}>
-              {translation.t("homeNoProductsText")}
-            </Text>
-          }
+          onRefresh={() => {
+            getProduct();
+          }}
+          // ListEmptyComponent={
+          //   <Text style={{ fontSize: 16, marginTop: 20 }}>
+          //     {translation.t("homeNoProductsText")}
+          //   </Text>
+          // }
+          onEndReached={async () => {
+            skip.current = (await skip.current) + limit;
+            if (category_id.current !== 0) {
+              await getProductByCategoryStore();
+            } else {
+              await getProduct();
+            }
+          }}
           ListHeaderComponent={
             <View>
               <View>
@@ -221,10 +275,13 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           onEndReachedThreshold={0}
           style={{ padding: 20, flexDirection: "column" }}
           renderItem={({ item }) => (
-            <View>
-              <Pressable style={styles.productCard} onPress={() =>
-                        navigation.navigate("ProductDetailsStore", { item })
-                      }>
+            <View key={item.id}>
+              <Pressable
+                style={styles.productCard}
+                onPress={() =>
+                  navigation.navigate("ProductDetailsStore", { item })
+                }
+              >
                 <View style={styles.productImage}>
                   <Image
                     source={{
@@ -245,9 +302,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                     <Text style={styles.productPrice}>
                       {formatter(item.price)}
                     </Text>
-                    <Pressable
-                      style={styles.productAdd}
-                    >
+                    <Pressable style={styles.productAdd}>
                       <AntDesign
                         name="plus"
                         size={18}

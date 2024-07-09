@@ -35,7 +35,6 @@ export default function ListProductsScreen({ navigation, route }: any) {
     setFetching(true);
     const url = `/store/getProductByStoreId/${data.store_id}/${limit}/${skip.current}`;
     fetchData(url).then(async (response: any) => {
-      console.log(response.products);
       // hideLoadingModal(async () => {
       if (response.ok) {
         if (skip.current == 0) {
@@ -87,14 +86,7 @@ export default function ListProductsScreen({ navigation, route }: any) {
     }, 1000);
   };
 
-  // const searchProduct = async (text: any) => {
-  //   const value = await text
-  //     .trim()
-  //     .normalize("NFD")
-  //     .replace(/[\u0300-\u036f]/g, "")
-  //     .toLowerCase();
-  //   searchProductApp(value);
-  // };
+ 
 
   const onRefresh = () => {
     fetchProduct();

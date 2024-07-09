@@ -52,7 +52,7 @@
   "listPharmaciesSearchPlaceholder": "Rechercher le nom d'une pharmacie ou d'une ville",
   "homeModalFilterLabel": "Filtrer",
   "homeModalCategoriesLabel": "Catégories",
-  "homeLocationText": "Pharmacie actuelle",
+  "homeLocationText": "Catégorie actuelle",
   "homePopularText": "Pack populaire",
   "homeViewAllText": "Tout voir",
   "homeNoProductsText": "Aucun produit disponible dans cet immeuble...",
