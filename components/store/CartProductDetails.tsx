@@ -244,7 +244,8 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>IVU Municipal</Text>
+          {(route.params.data.isoCode === 'DO')?<Text>ITBIS</Text>
+              :<Text>IVU Municipal</Text>}
           </View>
           <View>
             <Text style={styles.cartPrice}>

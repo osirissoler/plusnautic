@@ -163,7 +163,15 @@ export default function PayDetails({ navigation, route }: any) {
           </View>
         )}
       </View>
-      <View style={{ width: "100%", marginTop: 10, height: "18%", borderWidth:0, paddingHorizontal: 8, }}>
+      <View
+        style={{
+          width: "100%",
+          marginTop: 10,
+          height: "18%",
+          borderWidth: 0,
+          paddingHorizontal: 8,
+        }}
+      >
         <View style={styles.cartPrices}>
           <Text>Sub Total</Text>
           <Text style={styles.cartPrice}>{formatter(item.amount)}</Text>
@@ -178,7 +186,11 @@ export default function PayDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>IVU Municipal</Text>
+            {item.isoCode === "DO" ? (
+              <Text>ITBIS </Text>
+            ) : (
+              <Text>IVU Municipal</Text>
+            )}
           </View>
           <View>
             <Text style={styles.cartPrice}>{formatter(item.municipalTax)}</Text>

@@ -59,9 +59,11 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       .required(
         translation.t("signUpEmailRequiredText") /* Email is required */
       ),
-      address: yup
+    address: yup
       .string()
-      .required(translation.t("addressAddressRequiredText")) /* Address is required */,
+      .required(
+        translation.t("addressAddressRequiredText")
+      ) /* Address is required */,
   });
 
   useEffect(() => {
@@ -99,12 +101,12 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
   const updateData = (values: any) => {
     const url = "/user/updateCliente";
 
-    if(values.password){
-      if(values.password != values.passwordConfirmation){
-        showErrorToast(translation.t("PasswordNoMatch"))
-        return
+    if (values.password) {
+      if (values.password != values.passwordConfirmation) {
+        showErrorToast(translation.t("PasswordNoMatch"));
+        return;
       }
-      
+
       setShowLoading(true);
       const data = {
         first_name: values.fullName,
@@ -113,27 +115,31 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
         password: values.password,
         country_id: country_id,
         user_id: values.id,
-        address: values.address
+        address: values.address,
       };
 
       sendData(url, data)
-      .then((response) => {
-        hideLoadingModal(() => {
-          if (response.ok) {
-            navigation.navigate("Profile", {userUpdateData: response.user});
-            asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.user.country_id));
-            showGoodToast(translation.t("UserUpdated"));
-          } else {
-            showErrorToast(translation.t("ErrorUserUpdated"));
-          }
+        .then((response: any) => {
+          hideLoadingModal(() => {
+            if (response.ok) {
+              asyncStorage.setItem(
+                "USER_LOGGED_COUNTRY",
+                JSON.stringify(response.user.country_id)
+              );
+              
+              showGoodToast(translation.t("UserUpdated"));
+              navigation.navigate("Profile", {userUpdateData: response.user});
+            } else {
+              showErrorToast(translation.t("ErrorUserUpdated"));
+            }
+          });
+        })
+        .catch((error) => {
+          hideLoadingModal(() => {
+            showErrorToast(translation.t("httpConnectionError"));
+          });
         });
-      })
-      .catch((error) => {
-        hideLoadingModal(() => {
-          showErrorToast(translation.t("httpConnectionError"));
-        });
-      });
-      return
+      return;
     }
     setShowLoading(true);
     const data = {
@@ -142,15 +148,22 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
       phone: values.phone,
       country_id: country_id,
       user_id: values.id,
-      address: values.address
+      address: values.address,
     };
     sendData(url, data)
       .then((response) => {
         hideLoadingModal(() => {
           if (response.ok) {
-            navigation.navigate("Profile", {userUpdateData: response.user});
-            asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.user.country_id));
+            asyncStorage.setItem(
+              "USER_LOGGED_COUNTRY",
+              JSON.stringify(response.user.country_id)
+            );
+            asyncStorage.setItem(
+              "DATA_COUNTRY",
+              JSON.stringify(response.user.Country)
+            );
             showGoodToast(translation.t("UserUpdated"));
+            navigation.navigate("Profile", { userUpdateData: response.user });
           } else {
             showErrorToast(translation.t("ErrorUserUpdated"));
           }
@@ -247,7 +260,7 @@ export default function UpdateUserDataScreen({ navigation, route }: any) {
           }: any) => (
             <View>
               <Text style={styles.labelInput}>
-                {translation.t("userFullNameLabel")  /*  Full Name */}
+                {translation.t("userFullNameLabel") /*  Full Name */}
               </Text>
               <TextInput
                 style={styles.textInput}
@@ -445,7 +458,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   loginText: {
     textAlign: "center",
@@ -466,7 +479,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#CCCCCD",
     paddingLeft: 10,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   selectedTextStyle: {
     height: 50,
@@ -479,7 +492,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     borderRadius: 5,
     marginBottom: 3,
-    fontSize: 15
+    fontSize: 15,
   },
   iconStyle: {
     width: 20,
@@ -491,7 +504,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     borderRadius: 5,
   },
-  
+
   scrollViewContainer: {
     justifyContent: "center",
     paddingHorizontal: 15,

@@ -41,11 +41,16 @@ export default function CartStore({ navigation, route }: any) {
   const [driver_price, setDriver_price]: any = useState(0);
   const [toolTipVisible, setToolTipVisible]: any = useState(0);
   const [user_id, setUser_id]: any = useState(null);
-  useEffect(() => fetchProduct(), []);
+  const [isoCode, setIsoCode]: any = useState(null);
+  useEffect(() => {
+    fetchProduct();
+    getContrycode();
+  }, []);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
       fetchProduct();
+      getContrycode();
     });
   }, []);
 
@@ -67,6 +72,13 @@ export default function CartStore({ navigation, route }: any) {
     setTimeout(() => {
       setShowLoading(false);
     }, 1000);
+  };
+
+  const getContrycode = () => {
+    checkStorage("DATA_COUNTRY", (data: any) => {
+      // console.log(JSON.parse(data).isoCode)
+      setIsoCode(JSON.parse(data).isoCode);
+    });
   };
 
   const deleteProductcartStore = (id: number) => {
@@ -162,7 +174,7 @@ export default function CartStore({ navigation, route }: any) {
                           <TouchableOpacity
                             onPress={() => {
                               navigation.navigate("CartProductDetails", {
-                                data: item2,
+                                data: {...item2, isoCode},
                               });
                             }}
                           >
@@ -277,7 +289,8 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              <Text>IVU Municipal</Text>
+              {(isoCode === 'DO')?<Text>ITBIS </Text>
+              :<Text>IVU Municipal</Text>}
             </View>
             <View>
               <Text style={styles.cartPrice}>
@@ -323,6 +336,7 @@ export default function CartStore({ navigation, route }: any) {
               navigation.navigate("PayDetails", {
                 item: {
                   ...total,
+                  isoCode,
                   user_id: Number(user_id),
                   shippingPrice: driver_price,
                 },
