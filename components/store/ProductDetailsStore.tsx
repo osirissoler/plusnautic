@@ -25,7 +25,6 @@ export default function ProductDetailsStore({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
 
   const [item, setItem]: any = useState(route.params.item);
-  console.log(item.price, "jejejej")
   const [showLoading, setShowLoading]: any = useState(false);
   const [product, setProduct]: any = useState({});
   const [showModalImagen, setShowModalImagen]: any = useState(false);

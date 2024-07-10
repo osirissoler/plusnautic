@@ -24,7 +24,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { formatter } from "../../utils";
 
 export default function OrderDetails({ navigation, route }: any) {
-    console.log(route.params.item.user_id)
+  const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [history, setHistory]: any = useState([]);
@@ -165,7 +165,7 @@ export default function OrderDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo de Transaccion</Text>
+            <Text>{ translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -175,7 +175,7 @@ export default function OrderDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo por Envio</Text>
+            <Text>{ translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>

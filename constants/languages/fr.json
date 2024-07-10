@@ -341,5 +341,12 @@
   "ViewProducts": "Voir les produits",
   "BuyTickets": "Acheter des billets",
   "SelectTicketsMsg": "Sélectionnez les billets à acheter",
-  "AddProductCar": "Ajouter au panier"
+  "AddProductCar": "Ajouter au panier",
+  "Products":"Liste des produits",
+  "Cart":"Panier",
+  "SeeShippingOptions":"Voir les options d'expédition",
+  "CompletePurchase":"Finaliser l'achat",
+  "TransactionCost":"Coût de transaction",
+  "ShippingCost":"Frais de port",
+  "optionSend":"Dans les options d'expédition, vous pouvez configurer si vous souhaitez récupérer ou recevoir l'envoi."
 }

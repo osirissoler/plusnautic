@@ -53,7 +53,6 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           await setProducts([...response.products]);
         } else {
           setProducts([...product, ...response.products]);
-          // console.log(response.products.length)
         }
       } else {
         skip.current = await 0;
@@ -147,7 +146,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                 <AntDesign name="filter" size={22} color="#5f7ceb" />
               </TouchableOpacity>
               <View>
-                <Text style={{ color: "#5f7ceb" }}>Category</Text>
+                <Text style={{ color: "#5f7ceb" }}>{translation.t("Category")}</Text>
               </View>
             </View>
           </View>
