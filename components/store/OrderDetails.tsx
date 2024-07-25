@@ -133,7 +133,7 @@ export default function OrderDetails({ navigation, route }: any) {
                       precio:{" "}
                     </Text>
                     <Text style={{ fontSize: 16, fontWeight: "500" }}>
-                      {item.price}
+                      {formatter(item.price)}
                     </Text>
                   </Text>
                 </View>
@@ -142,7 +142,14 @@ export default function OrderDetails({ navigation, route }: any) {
           )}
         ></FlatList>
       </View>
-      <View style={{ width: "100%", marginTop: 10, maxHeight:'18%', borderWidth:0 }}>
+      <View
+        style={{
+          width: "100%",
+          marginTop: 10,
+          maxHeight: "18%",
+          borderWidth: 0,
+        }}
+      >
         <View style={styles.cartPrices}>
           <Text>Sub Total</Text>
           <Text style={styles.cartPrice}>{formatter(item.amount)}</Text>
@@ -165,7 +172,7 @@ export default function OrderDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>{ translation.t("TransactionCost")}</Text>
+            <Text>{translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -175,7 +182,7 @@ export default function OrderDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>{ translation.t("ShippingCost")}</Text>
+            <Text>{translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -194,24 +201,33 @@ export default function OrderDetails({ navigation, route }: any) {
           </View>
         </View>
       </View>
-      {(history.length > 0) &&<View style={{marginTop:15, borderWidth:0, width:'100%', height:'50%'}}> 
-        <Timeline
-          data={history}
-          circleSize={25}
-          lineColor="red"
-          // isUsingFlatlist={true}
-          // innerCircle={"icon"}
-          // timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-          // timeStyle={{
-          //   textAlign: "center",
-          //   backgroundColor: "#ff9797",
-          //   color: "white",
-          //   padding: 5,
-          //   borderRadius: 13,
-          // }}
-          showTime={false}
-        />
-      </View>}
+      {history.length > 0 && (
+        <View
+          style={{
+            marginTop: 15,
+            borderWidth: 0,
+            width: "100%",
+            height: "50%",
+          }}
+        >
+          <Timeline
+            data={history}
+            circleSize={25}
+            lineColor="red"
+            // isUsingFlatlist={true}
+            // innerCircle={"icon"}
+            // timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
+            // timeStyle={{
+            //   textAlign: "center",
+            //   backgroundColor: "#ff9797",
+            //   color: "white",
+            //   padding: 5,
+            //   borderRadius: 13,
+            // }}
+            showTime={false}
+          />
+        </View>
+      )}
     </View>
   );
 }
