@@ -338,5 +338,13 @@
   "ViewProducts": "View products",
   "BuyTickets": "Buy tickets",
   "SelectTicketsMsg": "Select tickets to buy",
-  "AddProductCar":"Add to cart"
+  "AddProductCar": "Add to cart",
+  "ProductDetails": "Product detail",
+  "Products": "Product list",
+  "Cart":"Shopping cart",
+  "SeeShippingOptions":"See shipping options",
+  "CompletePurchase":"Complete purchase",
+  "TransactionCost":"Transaction Cost",
+  "ShippingCost":"Shipping Cost",
+  "optionSend":"In the shipping options you can configure whether you want to collect or receive the shipment."
 }

@@ -255,7 +255,7 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo de Transaccion</Text>
+            <Text>{ translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -265,7 +265,7 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo por Envio</Text>
+            <Text>{ translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>

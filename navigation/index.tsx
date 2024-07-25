@@ -324,7 +324,7 @@ function RootNavigator({ route }: any) {
         options={{
           headerTitle: translation.t(
             "headerTitleProductDetails"
-          ) /* Product Details */,
+          ) ,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}
@@ -351,7 +351,7 @@ function RootNavigator({ route }: any) {
         name="ListScreen"
         component={ListScreen}
         options={{
-          headerTitle: translation.t("listServices") /* Search Products */,
+          headerTitle: translation.t("listServices"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -372,7 +372,6 @@ function RootNavigator({ route }: any) {
         name="GuestDetailsScreen"
         component={GuestDetailsScreen}
         options={{
-          // headerTitle: translation.t('listServices') /* Search Products */,
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "slide_from_right",
@@ -587,7 +586,7 @@ function RootNavigator({ route }: any) {
         name="ProductStoreScreen"
         component={ProductStoreScreen}
         options={{
-          headerTitle: "Products",
+          headerTitle:  translation.t("Products"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -599,7 +598,7 @@ function RootNavigator({ route }: any) {
         name="ProductDetailsStore"
         component={ProductDetailsStore}
         options={{
-          headerTitle: "Product Details ",
+          headerTitle: translation.t("ProductDetails"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -623,7 +622,7 @@ function RootNavigator({ route }: any) {
         name="CartProductDetails"
         component={CartProductDetails}
         options={{
-          headerTitle: "Cart Store",
+          headerTitle:  translation.t("Cart"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -634,7 +633,7 @@ function RootNavigator({ route }: any) {
         name="PayDetails"
         component={PayDetails}
         options={{
-          headerTitle: "Pay",
+          headerTitle:translation.t("checkoutPayNowText"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",

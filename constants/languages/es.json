@@ -340,5 +340,13 @@
   "ViewProducts": "Ver productos",
   "BuyTickets": "Comprar tickets",
   "SelectTicketsMsg": "Selecciona tickets a comprar",
-  "AddProductCar": "Agregar al carrito"
+  "AddProductCar": "Agregar al carrito",
+  "ProductDetails": "Detalle de producto",
+  "Products":"Lista de productos",
+  "Cart":"Carrito de compra",
+  "SeeShippingOptions":"Ver opciones de envio",
+  "CompletePurchase":"Finalizar compra",
+  "TransactionCost":"Costo de transaccìon",
+  "ShippingCost":"Costo por Envio",
+  "optionSend":"En las opciones de envio puede configurar si quiere recoger o recibir el envio."
 }

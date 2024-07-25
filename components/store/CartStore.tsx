@@ -76,7 +76,6 @@ export default function CartStore({ navigation, route }: any) {
 
   const getContrycode = () => {
     checkStorage("DATA_COUNTRY", (data: any) => {
-      // console.log(JSON.parse(data).isoCode)
       setIsoCode(JSON.parse(data).isoCode);
     });
   };
@@ -150,10 +149,7 @@ export default function CartStore({ navigation, route }: any) {
                             isVisible={toolTipVisible}
                             content={
                               <Text>
-                                En las opcione de envio puede configurar si
-                                quiere recoger orecibir el envio, pude
-                                selecionar el lugar en donde sera entregado el
-                                pauete!
+                               { translation.t("optionSend")}
                               </Text>
                             }
                             placement="top"
@@ -179,7 +175,8 @@ export default function CartStore({ navigation, route }: any) {
                             }}
                           >
                             <Text style={{ color: "#5f7ceb" }}>
-                              Ver opciones de envio
+                              
+                             { translation.t("SeeShippingOptions")}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -300,7 +297,7 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              <Text>Costo de Transaccion</Text>
+              <Text>{ translation.t("TransactionCost")}</Text>
             </View>
             <View>
               <Text style={styles.cartPrice}>
@@ -310,7 +307,7 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              <Text>Costo por Envio</Text>
+              <Text>{ translation.t("ShippingCost")}</Text>
             </View>
             <View>
               <Text style={styles.cartPrice}>{formatter(driver_price)}</Text>
@@ -354,7 +351,7 @@ export default function CartStore({ navigation, route }: any) {
             }}
           >
             <Text style={{ fontSize: 16, color: "#fff", fontWeight: "500" }}>
-              Finalizar compra
+            { translation.t("CompletePurchase")}
             </Text>
           </TouchableOpacity>
         </View>

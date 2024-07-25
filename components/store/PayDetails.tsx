@@ -28,7 +28,6 @@ import AddressesScreen from "../../screens/AddressesScreen";
 import { formatter } from "../../utils";
 
 export default function PayDetails({ navigation, route }: any) {
-  console.log(route.params.item);
   const [item, setItem]: any = useState(route.params.item);
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
@@ -71,7 +70,6 @@ export default function PayDetails({ navigation, route }: any) {
         setShowLoading(false);
       })
       .catch((e) => {
-        console.log("Razon del  fallo", e);
         setShowLoading(false);
       });
     setShowLoading(false);
@@ -151,7 +149,6 @@ export default function PayDetails({ navigation, route }: any) {
             translation={translation}
             direction={(value: any) => {
               setClientDirection_id(value);
-              //   console.log(value, "aqui");
             }}
           />
         ) : (
@@ -198,7 +195,7 @@ export default function PayDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo de Transaccion</Text>
+            <Text> { translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -208,7 +205,7 @@ export default function PayDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>Costo por Envio</Text>
+            <Text> { translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
