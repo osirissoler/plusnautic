@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   body: {
     padding: 10,
     flexDirection: "column",
-    height: "20%",
+    height: "10%",
   },
 
   // Tickets

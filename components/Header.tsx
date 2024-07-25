@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { checkStorage } from "./Shared";
 import { LanguageContext } from "../LanguageContext";
@@ -76,7 +76,7 @@ export default function HeaderComponent({
 
 const styles = StyleSheet.create({
   header: {
-    marginTop: 10,
+    marginTop: Platform.OS === "android" ? 0 : 10,
     height: 50,
     width: "100%",
     alignItems: "center",

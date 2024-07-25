@@ -34,7 +34,7 @@ interface Address {
   longitude: number;
 }
 
-export default function AddressesScreen({ navigation, direction }: any) {
+export default function AddressesScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [addresses, setAddresses]: any = useState([]);
   const [isFetching, setIsFetching]: any = useState(false);
@@ -57,21 +57,22 @@ export default function AddressesScreen({ navigation, direction }: any) {
         user_id: userId,
       };
       sendData(url, data).then((response: any) => {
-        if (Object.keys(response).length > 0) {
-          const addresses = response["clientDirection"];
+        if (response.ok) {
+          const addressesDirection = response["clientDirection"];
           const url = `/user/getUserById/${userId}`;
           sendData(url, {}).then((response: any) => {
             const user = response["user"];
             // console.log(user.client_direction_id, "kkkkkk")
-            direction(user.client_direction_id)
-            const defaultAddress = addresses.find(
+            console.log(addressesDirection, "HOLA");
+            // direction(user.client_direction_id)
+            const defaultAddress = addressesDirection.find(
               (address: any) => address.id == user.client_direction_id
             );
             if (defaultAddress) {
               defaultAddress.default = true;
               // if (setAddress) setAddress(defaultAddress);
             }
-            setAddresses(addresses);
+            setAddresses(addressesDirection);
           });
         } else {
           // if (setAddress) setAddress({});
@@ -103,7 +104,7 @@ export default function AddressesScreen({ navigation, direction }: any) {
               client_direction_id: item.id,
             };
             // console.log(data.client_direction_id, "data jajaja")
-            direction(data.client_direction_id)
+            // direction(data.client_direction_id)
             sendData(url, data).then((response: any) => {
               fetchAddresses();
               // if (setAddress) setAddress(item);

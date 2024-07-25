@@ -1,31 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  Button,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  Alert,
-  Switch,
-  Dimensions,
-} from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
-export default function GoMap({ latitude, longitude }: { latitude: Float; longitude: Float }) {
-  const [MarkerPosition, setMarkerPosition] = useState({
-    latitude,
-    longitude,
-  });
+interface GoMapProps {
+  latitude: number;
+  longitude: number;
+}
+
+const GoMap = ({ latitude, longitude }: GoMapProps) => {
+  const [markerPosition, setMarkerPosition] = useState({ latitude, longitude });
+  const [locationPermission, setLocationPermission] = useState(false);
 
   useEffect(() => {
     // getLocation();
-    setMarkerPosition({ latitude, longitude });
   }, [latitude, longitude]);
 
   const getLocation = async () => {
@@ -34,6 +22,7 @@ export default function GoMap({ latitude, longitude }: { latitude: Float; longit
       console.log("Permission to access location was denied");
       return;
     }
+    setLocationPermission(true);
     let location = await Location.getCurrentPositionAsync({});
     let address = await Location.reverseGeocodeAsync(location.coords);
     const currentLocation = {
@@ -42,27 +31,34 @@ export default function GoMap({ latitude, longitude }: { latitude: Float; longit
     };
   };
 
+  if (!latitude || !longitude) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>No location</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ borderWidth: 0, borderRadius: 10 }}>
       <MapView
-        style={{ ...styles.map }}
+        style={styles.map}
         region={{
-          latitude: MarkerPosition.latitude,
-          longitude: MarkerPosition.longitude,
+          latitude: latitude,
+          longitude: longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
       >
         <Marker
-          coordinate={MarkerPosition}
+          coordinate={{ latitude, longitude }}
           pinColor="#FF4E02"
           draggable={false}
-          //onDragEnd={onDragMarkerEnd}
-        ></Marker>
+        />
       </MapView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   map: {
@@ -70,4 +66,15 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 10,
   },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 18,
+  },
 });
+
+export default GoMap;

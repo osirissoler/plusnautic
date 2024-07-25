@@ -37,8 +37,6 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
   const [tickets, setTickets]: any = useState([]);
   const [countries, setCountries]: any = useState([]);
 
-  console.log(tickets);
-
   useEffect(() => {
     getCountryActive();
   }, []);
@@ -191,8 +189,8 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
             }}
           >
             <GoMap
-              latitude={eventData?.latitude}
-              longitude={eventData?.longitude}
+              latitude={parseFloat(eventData?.latitude)}
+              longitude={parseFloat(eventData?.longitude)}
             />
           </TouchableOpacity>
         </View>
@@ -228,7 +226,7 @@ export default function ActivitisDetailScreen({ navigation, route }: any) {
               justifyContent: "center",
               gap: 25,
               paddingTop: 10,
-              paddingBottom: 60,
+              paddingBottom: Platform.OS == "ios" ? 60 : 100,
             }}
           >
             {eventData.facebook_url && (

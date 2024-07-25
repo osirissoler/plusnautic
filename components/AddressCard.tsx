@@ -23,8 +23,8 @@ interface Address {
   created_at?: string;
   updated_at?: string;
   default?: boolean;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 }
 
 type SetDefaultAddressFunction = (item: Address) => void;
@@ -172,7 +172,10 @@ export const AddressCard = ({
         <TouchableOpacity
           style={{ width: "40%", height: 90, borderRadius: 10 }}
         >
-          <GoMap latitude={item.latitude} longitude={item.longitude} />
+          <GoMap
+            latitude={parseFloat(item.latitude)}
+            longitude={parseFloat(item.longitude)}
+          />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>

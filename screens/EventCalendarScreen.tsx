@@ -49,7 +49,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
   };
 
   return (
-    <Container style={{ backgroundColor: "#425fc9" }}>
+    <View style={{ backgroundColor: "#425fc9" }}>
       <Loading showLoading={showLoading} translation={translation} />
 
       <View style={styles.upperContainer}>
@@ -126,7 +126,7 @@ export default function EventCalendarScreen({ navigation, route }: any) {
           </Text>
         </View>
       )}
-    </Container>
+    </View>
   );
 }
 
@@ -188,11 +188,6 @@ function TicketCard({ item, translation }: any) {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    padding: 10,
-    flexDirection: "column",
-    height: "20%",
-  },
   upperContainer: {
     paddingHorizontal: 20,
     borderBottomEndRadius: 30,
