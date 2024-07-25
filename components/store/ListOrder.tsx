@@ -21,6 +21,7 @@ import {
 } from "../../httpRequests";
 import { AntDesign } from "@expo/vector-icons";
 import { checkStorage } from "../Shared";
+import moment from "moment";
 
 export default function ListOrder({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -78,8 +79,12 @@ export default function ListOrder({ navigation, route }: any) {
                 />
               </View>
               <View style={{ justifyContent: "space-between", width: 160 }}>
-                <Text style={{ fontSize: 16, fontWeight: "500" }}>
+              <Text style={{ fontSize: 16, fontWeight: "500" }}>
                   {item.store_name}
+                </Text>
+                <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                {moment(item.created_at).format('DD/MM/YYYY h:mm A')}
+                 
                 </Text>
                 <View
                   style={{
