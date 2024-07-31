@@ -147,11 +147,12 @@ export default function ShoppingCartScreen({ navigation }: any) {
     const url = `/placetopay/save/saveRequesIdFacilitoPay`;
     const data = {
       ipAdress: await getIpClient(),
-      description: "Pago de mantenimiento",
+      description: "Pago de tickets",
       returnUrl: URLToRiderect,
       amount: totalPrice,
       reference: Math.random().toString(36).substring(2),
       paymentNumber: 1,
+      code: "PLAU",
     };
     await sendData(url, data)
       .then((response) => {

@@ -50,16 +50,19 @@ export default function PayDetails({ navigation, route }: any) {
     }
   }
 
+  console.log(item)
+
   const sendPayments = async () => {
     setShowLoading(true);
     const url = `/placetopay/save/saveRequesIdFacilitoPay`;
     const data = {
       ipAdress: await getIpClient(),
-      description: "Pago de mantenimiento",
+      description: "Pago de producto de tiendas",
       returnUrl: URLToRiderect,
       amount: item.total,
       reference: Math.random().toString(36).substring(2),
       user_id: item.user_id,
+      code: "PLUSNAUTICSTORE",
     };
     await sendData(url, data)
       .then((response) => {

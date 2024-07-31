@@ -153,6 +153,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
       pharmacy_id: 534,
       user_id: items.user_id,
       token_client: items.services_token,
+      code: "PLUSNAUTIC"
     };
     await sendData(url, data)
       .then((response) => {
