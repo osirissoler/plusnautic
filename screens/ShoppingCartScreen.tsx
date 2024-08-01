@@ -152,7 +152,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
       amount: totalPrice,
       reference: Math.random().toString(36).substring(2),
       paymentNumber: 1,
-      code: "PLAU",
+      code: "PLUSNAUTIC",
     };
     await sendData(url, data)
       .then((response) => {
