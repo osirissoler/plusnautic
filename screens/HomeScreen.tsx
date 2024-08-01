@@ -36,51 +36,7 @@ export default function HomeScreen({ navigation, route }: any) {
   const [visible, setVisible] = useState(true);
   const [error, setError] = useState(false);
 
-  const actions = [
-    {
-      text: "Abordo",
-      icon: require("../assets/images/abordo.png"),
-      name: "abordo",
-      position: 2,
-      buttonSize: 55,
-      color: "#5f7ceb",
-      size: 100,
-      textStyle: {
-        fontSize: 14,
-        fontWeight: "bold",
-        textTransform: "uppercase",
-      },
-    },
-    {
-      text: "Store",
-      icon: require("../assets/images/callcenter.png"),
-      name: "store",
-      position: 1,
-      size: 100,
-      color: "#5f7ceb",
-      buttonSize: 55,
-      textStyle: {
-        fontSize: 14,
-        fontWeight: "bold",
-        textTransform: "uppercase",
-      },
-    },
-    {
-      // size: -100,
-      text: "Call center",
-      icon: require("../assets/images/callcenter.png"),
-      name: "callcenter",
-      position: 3,
-      // color: "rgb(0,0,0,.1)",
-      color: "#5f7ceb",
-      buttonSize: 55,
-      textStyle: {
-        fontSize: 14,
-        fontWeight: "bold",
-        textTransform: "uppercase",
-      },
-    },
-  ];
+  
 
   const supportedURL = "https://abordo.page.link/abordoapp";
   const goAbordo = async () => {
@@ -218,22 +174,7 @@ export default function HomeScreen({ navigation, route }: any) {
         </View>
       )}
 
-      {/* <FloatingAction
-        actions={actions}
-        onPressItem={(name) => {
-          if (name == "abordo") return goAbordo();
-          if (name == "store") return goAbordo();
-          if (name == "callcenter") return console.log(name);
-        }}
-        // floatingIcon={require("./path-to-main-icon.png")}
-        position="left" // Puedes cambiar la posición a 'left' o 'center'
-        distanceToEdge={10}
-        actionsPaddingTopBottom={0} // Remueve el padding entre los botones
-        buttonSize={50}
-        color="#5f7ceb"
-        tintColor={"rgb(0,0,0)"}
-        showBackground={false}
-      /> */}
+      
     </Container>
   );
 }
