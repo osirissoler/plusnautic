@@ -41,7 +41,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
   const [userLogged, setUserLogged]: any = useState({});
 
   const [items, setItems]: any = useState(route.params.item);
-  console.log(items.driver_id, "item");
+  // console.log(items.driver_id, "item");
   const [priceP, setPriceP]: any = useState(route.params.item.price);
   const [currentPosition, setcurrentPosition]: any = useState(0);
   const URLToRiderect = "https://panel-plusnautic.netlify.app/success";
@@ -164,7 +164,7 @@ export default function AcceptedScreen({ navigation, route }: any) {
         setShowLoading(false);
       })
       .catch((e) => {
-        console.log("Razon del  fallo", e);
+        // console.log("Razon del  fallo", e);
         setShowLoading(false);
       });
     setShowLoading(false);

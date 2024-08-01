@@ -50,7 +50,7 @@ export default function PayDetails({ navigation, route }: any) {
     }
   }
 
-  console.log(item)
+  // console.log(item)
 
   const sendPayments = async () => {
     setShowLoading(true);

@@ -50,7 +50,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
       setUser_id(id);
       const url = `/tickets/getCart/${id}`;
       fetchData(url).then((response: any) => {
-        console.log(response);
+        // console.log(response);
         if (response.ok) {
           setTickets(response.ticketsCart);
           setTotalPrice(response.totalPrices);
@@ -131,7 +131,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
   };
 
   const onNavigationStateChange = (state: any) => {
-    console.log(state.url, "state", "placetoPayUrl", placetoPayUrl);
+    // console.log(state.url, "state", "placetoPayUrl", placetoPayUrl);
     // if (state.navigationType === "other") {
     if (state.url != placetoPayUrl) {
       if (contador === 0) {
@@ -163,7 +163,7 @@ export default function ShoppingCartScreen({ navigation }: any) {
         setShowLoading(false);
       })
       .catch((e) => {
-        console.log("Razon del  fallo", e);
+        // console.log("Razon del  fallo", e);
         setShowLoading(false);
       });
     setShowLoading(false);
@@ -199,10 +199,10 @@ export default function ShoppingCartScreen({ navigation }: any) {
 
     fetchData(url).then(async (res: any) => {
       if (res.payment_status == "REJECTED") {
-        console.log("REJECTED");
+        // console.log("REJECTED");
         navigation.goBack();
       } else if (res.payment_status == "PENDING") {
-        console.log("PENDING");
+        // console.log("PENDING");
         consulting();
       } else if (res.payment_status == "APPROVED") {
         const mappedData = tickets.map((ticket: any) => {
