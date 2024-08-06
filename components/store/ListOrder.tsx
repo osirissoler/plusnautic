@@ -26,7 +26,7 @@ import moment from "moment";
 export default function ListOrder({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [order, setOrder]: any = useState([{}, {}, {}, {}, {}]);
+  const [order, setOrder]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
   const [user_id, setUser_id]: any = useState(null);

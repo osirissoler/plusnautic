@@ -362,7 +362,8 @@ export default function ProfileScreen({ navigation, route }: any) {
           >
             {/* ListOrder */}
             <Text style={styles.optionText}>
-              Order
+              
+            {translation.t("order")}
             </Text>
             <AntDesign style={styles.optionIcon} name="right" size={16} />
           </Pressable>

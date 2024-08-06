@@ -346,5 +346,7 @@
   "CompletePurchase":"Complete purchase",
   "TransactionCost":"Transaction Cost",
   "ShippingCost":"Shipping Cost",
-  "optionSend":"In the shipping options you can configure whether you want to collect or receive the shipment."
+  "optionSend":"In the shipping options you can configure whether you want to collect or receive the shipment.",
+  "order":"orders",
+  "detail": "Detail"
 }

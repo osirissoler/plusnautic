@@ -348,5 +348,7 @@
   "CompletePurchase":"Finalizar compra",
   "TransactionCost":"Costo de transaccìon",
   "ShippingCost":"Costo por Envio",
-  "optionSend":"En las opciones de envio puede configurar si quiere recoger o recibir el envio."
+  "optionSend":"En las opciones de envio puede configurar si quiere recoger o recibir el envio.",
+  "order":"Pedidos",
+  "detail":"Detalle"
 }
