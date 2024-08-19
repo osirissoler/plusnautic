@@ -64,6 +64,7 @@ export default function PayDetails({ navigation, route }: any) {
       user_id: item.user_id,
       code: "PLUSNAUTICSTORE",
     };
+    console.log(data, "pli")
     await sendData(url, data)
       .then((response) => {
         setplacetoPayUrl(response.data.processUrl);

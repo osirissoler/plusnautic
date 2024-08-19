@@ -348,5 +348,7 @@
   "CompletePurchase":"Finaliser l'achat",
   "TransactionCost":"Coût de transaction",
   "ShippingCost":"Frais de port",
-  "optionSend":"Dans les options d'expédition, vous pouvez configurer si vous souhaitez récupérer ou recevoir l'envoi."
+  "optionSend":"Dans les options d'expédition, vous pouvez configurer si vous souhaitez récupérer ou recevoir l'envoi.",
+  "order":"ordres",
+  "detail":"Détalle"
 }

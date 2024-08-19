@@ -641,11 +641,11 @@ function RootNavigator({ route }: any) {
         }}
       />
       
-       <Stack.Screen
+      <Stack.Screen
         name="ListOrder"
         component={ListOrder}
         options={{
-          headerTitle: "Mis ordenes",
+          headerTitle: translation.t("order"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -656,7 +656,7 @@ function RootNavigator({ route }: any) {
         name="OrderDetails"
         component={OrderDetails}
         options={{
-          headerTitle: "Detalle",
+          headerTitle: translation.t("detail"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
