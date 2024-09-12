@@ -106,7 +106,7 @@ export default function ListScreen({ navigation }: any) {
               }}
             >
               <Text style={styles.seeAll}>{translation.t("home")}</Text>
-              <Ionicons name="md-exit-outline" size={20} color="#5f7ceb" />
+              <Ionicons name="exit-outline" size={20} color="#5f7ceb" />
             </TouchableOpacity>
           </View>
           <FlatList
@@ -286,7 +286,7 @@ export default function ListScreen({ navigation }: any) {
                         }}
                       >
                         <Ionicons
-                          name="md-exit-outline"
+                          name="exit-outline"
                           size={25}
                           color="#5f7ceb"
                         />

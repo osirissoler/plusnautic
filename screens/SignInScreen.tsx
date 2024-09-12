@@ -14,12 +14,10 @@ import Toast from "react-native-root-toast";
 import { sendData } from "../httpRequests";
 import asyncStorage from "@react-native-async-storage/async-storage";
 import { LanguageContext } from "../LanguageContext";
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import registerForPushNotificationsAsync from "./helper/TokenDevice";
 // import { db, firebase } from '../firebase';
 // import { collection, Firestore, onSnapshot, query, where } from '@firebase/firestore';
-import { string } from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Notifications.setNotificationHandler({

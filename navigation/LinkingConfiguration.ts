@@ -10,57 +10,57 @@ import * as Linking from 'expo-linking';
 import { RootStackParamList } from '../types';
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.makeUrl('/')],
+  prefixes: [Linking.createURL("/")],
   config: {
     screens: {
       Root: {
         screens: {
           Home: {
             screens: {
-              HomeScreen: 'home',
+              HomeScreen: "home",
             },
           },
           Service: {
             screens: {
-              ServiceScreen: 'service',
+              ServiceScreen: "service",
             },
           },
           ShoppingCart: {
             screens: {
-              ShoppingCartScreen: 'shoppingcart',
+              ShoppingCartScreen: "shoppingcart",
             },
           },
           Shopper: {
             screens: {
-              ShopperScreen: 'shopper',
+              ShopperScreen: "shopper",
             },
           },
           Profile: {
             screens: {
-              ProfileScreen: 'profile',
+              ProfileScreen: "profile",
             },
           },
         },
       },
-      Language: 'language',
-      Step1: 'step1',
-      Step2: 'step2',
-      Step3: 'step3',
-      SignIn: 'signin',
-      SignUp: 'signup',
-      MyOrders: 'myorders',
-      MyOrderDetails: 'myorderdetails',
-      Payments: 'payments',
-      Addresses: 'addresses',
-      ForgotPassword: 'forgotpassword',
-      SelectLanguage: 'selectlanguage',
-      NewAddress: 'newaddress',
-      NewCard: 'newcard',
-      ListPharmacies: 'listpharmacies',
-      ListProducts: 'listproducts',
-      ProductDetails: 'productdetails',
-      Checkout: 'checkout',
-      NotFound: '*',
+      Language: "language",
+      Step1: "step1",
+      Step2: "step2",
+      Step3: "step3",
+      SignIn: "signin",
+      SignUp: "signup",
+      MyOrders: "myorders",
+      MyOrderDetails: "myorderdetails",
+      Payments: "payments",
+      Addresses: "addresses",
+      ForgotPassword: "forgotpassword",
+      SelectLanguage: "selectlanguage",
+      NewAddress: "newaddress",
+      NewCard: "newcard",
+      ListPharmacies: "listpharmacies",
+      ListProducts: "listproducts",
+      ProductDetails: "productdetails",
+      Checkout: "checkout",
+      NotFound: "*",
     },
   },
 };
