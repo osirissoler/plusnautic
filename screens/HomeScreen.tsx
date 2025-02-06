@@ -204,7 +204,7 @@ export default function HomeScreen({ navigation, route }: any) {
           <AdsHome navigation={navigation} code="Home" />
         </View>
         <View style={{ borderWidth: 0 }}>
-          <ProductHome text="En ofertas"/>
+          <ProductHome text="En ofertas" init='0'/>
         </View>
         
         <View style={{ borderWidth: 0 }}>
@@ -212,7 +212,7 @@ export default function HomeScreen({ navigation, route }: any) {
         </View>
 
         <View style={{ borderWidth: 0 }}>
-          <ProductHome text="Vover a comprar" />
+          <ProductHome text="Vover a comprar" init='8' />
         </View>
         <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />

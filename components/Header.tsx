@@ -65,7 +65,7 @@ export default function HeaderComponent({
                 <Text style={styles.ticketsAmount}>{displayTicketsLength}</Text>
               </View>
 
-              <AntDesign name="shoppingcart" size={35} />
+              <AntDesign name="shoppingcart" size={25} />
             </TouchableOpacity>
           </View>
         </View>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5f7ceb",
     paddingVertical: 3,
     paddingHorizontal: 7,
-    minWidth: 25,
+    minWidth: 10,
     alignItems: "center",
     justifyContent: "center",
   },
