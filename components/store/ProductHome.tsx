@@ -14,7 +14,7 @@ import { fetchData } from "../../httpRequests";
 import { formatter } from "../../utils";
 // import { fetchData } from "../httpRequests";
 
-export default function ProductHome({ navigation, text }: any) {
+export default function ProductHome({ navigation, text, init }: any) {
   const [ads, setAds]: any = useState([
     { id: 1 },
     { id: 2 },
@@ -31,9 +31,7 @@ export default function ProductHome({ navigation, text }: any) {
   }, []);
 
   const getAds = async () => {
-    let url = `/store/getAllProductStoreAdmin/10/0 `;
-    console.log(url);
-
+    let url = `/store/getAllProductStoreAdmin/10/${init}`;
     await fetchData(url).then((response) => {
       if (response.ok) {
         console.log(response.products[0], "aqui erssfsdfsdfsdfs");
@@ -194,7 +192,7 @@ export default function ProductHome({ navigation, text }: any) {
               />
             </View>
             <View style={{ padding: 5 }}>
-              <Text style={{ fontWeight: 500, fontSize: 14 }}>
+              <Text numberOfLines={1} style={{ fontWeight: 500, fontSize: 14 }}>
                 {ads[5]?.name}
               </Text>
               <Text style={{ fontWeight: 500, color: "#B2B5C1", fontSize: 12 }}>
