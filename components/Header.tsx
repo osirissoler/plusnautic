@@ -5,6 +5,7 @@ import { checkStorage } from "./Shared";
 import { LanguageContext } from "../LanguageContext";
 import { fetchData } from "../httpRequests";
 import FloatingButton from "./FloatingButton";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default function HeaderComponent({
   screen,
@@ -53,7 +54,14 @@ export default function HeaderComponent({
               flexDirection: "row",
             }}
           >
-            <FloatingButton navigation={navigation} />
+            {/* <FloatingButton navigation={navigation} /> */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("YoutubeVideosScreen");
+              }}
+            >
+              <Icon name="youtube" size={35} color="red" />
+            </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.optionIcon}

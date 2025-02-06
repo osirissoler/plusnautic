@@ -73,6 +73,7 @@ export type RootStackParamList = {
   ListOrder: undefined;
   OrderDetails: undefined;
   NewsDetailsScreen: undefined;
+  YoutubeVideosScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

@@ -80,6 +80,7 @@ import PayDetails from "../components/store/PayDetails";
 import ListOrder from "../components/store/ListOrder";
 import OrderDetails from "../components/store/OrderDetails";
 import NewsDetailsScreen from "../screens/NewsDetailsScreen";
+import YoutubeVideosScreen from "../screens/YoutubeVideosScreen";
 
 export default function Navigation({
   colorScheme,
@@ -649,6 +650,17 @@ function RootNavigator({ route }: any) {
         component={NewsDetailsScreen}
         options={{
           headerTitle: "",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="YoutubeVideosScreen"
+        component={YoutubeVideosScreen}
+        options={{
+          headerTitle: "Youtube",
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",

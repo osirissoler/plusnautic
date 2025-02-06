@@ -9,11 +9,9 @@ export const HomeArticleCard = ({ article, onPress }: any) => {
         marginRight: 10,
         backgroundColor: "#fff",
         padding: 10,
-        borderRadius: 2,
-        shadowColor: "#000",
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
-        elevation: 1,
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: "rgba(0, 0, 0, 0.1)",
       }}
     >
       <Image
