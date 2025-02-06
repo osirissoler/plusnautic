@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
+  ScrollView
 } from "react-native";
 
 import HeaderComponent from "../components/Header";
@@ -22,8 +23,8 @@ import { LanguageContext } from "../LanguageContext";
 import AdsScreen from "./AdsScreen";
 import asyncStorage from "@react-native-async-storage/async-storage";
 import FloatingButton from "../components/FloatingButton";
-import { HomeArticleCard } from "../components/Articles/HomeArticleCard";
-import { ArticleList } from "../components/Articles/ArticleList";
+import AllStoreHome from "../components/store/AllStoreHome";
+import AdsHome from "./AdsHome";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -37,8 +38,6 @@ export default function HomeScreen({ navigation, route }: any) {
   const [listPharmacy, setListPharmacy]: any = useState([]);
   const [visible, setVisible] = useState(true);
   const [error, setError] = useState(false);
-
-  
 
   const supportedURL = "https://abordo.page.link/abordoapp";
   const goAbordo = async () => {
@@ -122,10 +121,8 @@ export default function HomeScreen({ navigation, route }: any) {
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
-      <ArticleList navigation={navigation}/>
-
-      <Loading showLoading={showLoading} translation={translation} />
-      {error ? (
+      {/* <Loading showLoading={showLoading} translation={translation} /> */}
+      {/* {error ? (
         <ServiceComponent />
       ) : (
         <View style={{ height: "100%" }}>
@@ -176,7 +173,46 @@ export default function HomeScreen({ navigation, route }: any) {
             numColumns={2}
           ></FlatList>
         </View>
-      )}
+      )} */}
+
+      <ScrollView
+        style={{
+          
+          borderWidth: 0,
+          height: "90.5%",
+          // flexDirection: "column",
+          // justifyContent: "space-between",
+          // paddingHorizontal: 5,
+          
+        }}
+      >
+        <View style={{ borderWidth: 0 }}>
+          <Text
+            style={{
+              marginHorizontal: 5,
+              fontSize: 17,
+              fontWeight: 500,
+              color: "#5f7ceb",
+              marginTop: 5,
+            }}
+          >
+            Destacadas en plusnautic
+          </Text>
+          <AllStoreHome navigation={navigation} />
+        </View>
+        <View style={{ borderWidth: 0 }}>
+          <AdsHome navigation={navigation} code="Home" />
+        </View>
+        <View style={{ borderWidth: 0, }}>
+          <AdsHome navigation={navigation} code="Home" />
+        </View>
+        <View style={{ borderWidth: 0, }}>
+          <AdsHome navigation={navigation} code="Home" />
+        </View>
+        <View style={{ borderWidth: 0,  }}>
+          <AdsHome navigation={navigation} code="Home" />
+        </View>
+      </ScrollView>
     </Container>
   );
 }
