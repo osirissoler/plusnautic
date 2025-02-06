@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -11,17 +11,14 @@ import {
   FlatList,
   Pressable,
 } from "react-native";
-import { Loading, checkStorage } from "../Shared";
 import { LanguageContext } from "../../LanguageContext";
 import AdsScreen from "../../screens/AdsScreen";
-import { formatter, formatter2 } from "../../utils";
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import { checkStorage, Loading } from "../Shared";
 import { fetchData } from "../../httpRequests";
-import FloatingButton from "../FloatingButton";
 
-const HomeStoreScreen = ({ navigation, route }: any) => {
+export default function AllStoreHome({ navigation, router }: any) {
   const { translation } = React.useContext(LanguageContext);
-
   const [showLoading, setShowLoading]: any = useState(false);
   const [store, setStore]: any = useState([{}, {}, {}]);
   const [count, setCount]: any = useState(0);
@@ -35,16 +32,10 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
 
   const skip = useRef<number>(0);
 
-  // useEffect(() => {
-  //   // getAllStore();
-  //   // getProductCartAmount();
-  // }, []);
-
   useEffect(() => {
-    navigation.addListener("focus", () => {
-      getProductCartAmount();
-      getAllStore();
-    });
+    //   navigation.addListener("focus", () => {
+    getProductCartAmount();
+    getAllStore();
   }, []);
 
   const getProductCartAmount = async () => {
@@ -74,12 +65,11 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
       setTimeout(() => {
         setShowLoading(false);
       }, 1000);
-    })
-    
+    });
   };
   return (
-    <View style={{ height: "100%", backgroundColor: "white" }}>
-      <View style={styles.header}>
+    <View style={{  backgroundColor: "white" }}>
+      {/* <View style={styles.header}>
         <Image
           style={{ height: 50, width: "50%", resizeMode: "contain" }}
           source={require("../../assets/images/slogan.png")}
@@ -93,7 +83,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
               flexDirection: "row",
             }}
           >
-            {/* <FloatingButton navigation={navigation} /> */}
+           
             <View></View>
 
             <TouchableOpacity
@@ -108,93 +98,90 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> */}
       <Loading showLoading={showLoading} translation={translation} />
-      
-      <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
+
+      <View style={{ borderWidth: 0, marginBottom:10, marginEnd: 10 }}>
         <FlatList
+          horizontal
+          pagingEnabled
           data={store}
-          refreshing={fetching}
           onRefresh={() => {
             getAllStore();
           }}
+          refreshing={fetching}
           ListEmptyComponent={
             <Text style={{ fontSize: 16, marginTop: 20 }}>
               {translation.t("homeNoProductsText")}
             </Text>
           }
-          ListHeaderComponent={
-            <View>
-              <View>
-                {visible ? (
-                  <AdsScreen code={"Home"} img={initialImg} />
-                ) : (
-                  // website
-                  <Image
-                    style={{
-                      marginBottom: 20,
-                      height: 180,
-                      width: "100%",
-                      borderRadius: 10,
-                    }}
-                    source={{ uri: initialImg }}
-                  />
-                )}
-              </View>
-            </View>
-          }
-          onEndReachedThreshold={0}
-          style={{ padding: 20, flexDirection: "column" }}
+          //   style={{ padding: 20, flexDirection: "column" }}
           renderItem={({ item }) => (
             <View>
-              <Pressable
+              <TouchableOpacity
                 style={styles.productCard}
                 onPress={() =>
                   navigation.navigate("ProductStoreScreen", { item })
                 }
               >
-                <View style={styles.productImage}>
+                <View style={{ width: "100%", height: "100%", borderWidth: 0 }}>
                   <Image
                     source={{
                       uri: item.img ? item.img : defaultProductImg,
                     }}
-                    style={{ flex: 1, resizeMode: "contain" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      flex: 1,
+                      resizeMode: "contain",
+                    }}
                   />
                 </View>
-                <View style={{ justifyContent: "space-between", width: 160 }}>
-                  <Text style={styles.productTitle}>{item.name}</Text>
-                  <View
+              </TouchableOpacity>
+              <View
+                style={{
+                  //   justifyContent: "space-between",
+                  //   width: "100%",
+                  //   borderWidth: 1,
+                  //   paddingHorizontal: 20,
+
+                  width: 160,
+                  //   height: 80,
+                  //   padding: 20,
+                  //   marginVertical: 10,
+                  marginHorizontal: 5,
+                  //   borderRadius: 10,
+                  //   borderWidth: 1,
+                  //   borderColor: "rgba(0, 0, 0, 0.1)",
+                  //   flexDirection: "row",
+                }}
+              >
+                <Text style={styles.productTitle}>{item.name}</Text>
+                {/* <View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
                       marginTop: 20,
                     }}
                   >
-                    {/* <Text style={styles.productPrice}>
-                      {formatter(item.price)}
-                    </Text> */}
+                    
                     <Pressable style={styles.productAdd}>
                       <Entypo
                         name="eye"
                         size={24}
                         style={styles.productAddIcon}
                       />
-                      {/* <AntDesign
-                        name="plus"
-                        size={18}
-                        style={styles.productAddIcon}
-                      /> */}
+                     
                     </Pressable>
-                  </View>
-                </View>
-              </Pressable>
+                  </View> */}
+              </View>
             </View>
           )}
         ></FlatList>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -265,22 +252,29 @@ const styles = StyleSheet.create({
     color: "#40AA54",
   },
   productCard: {
-    padding: 20,
-    marginVertical: 4,
-    borderRadius: 20,
+    width: 160,
+    height: 80,
+    // padding: 20,
+    marginVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
     flexDirection: "row",
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
     alignItems: "center",
+    shadowColor: "#000",
+    // shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 1,
   },
   productImage: {
-    height: 100,
-    width: 100,
+    // height: 100,
+    // width: 100,
   },
   productTitle: {
     fontSize: 16,
-    fontWeight: "500",
+    // fontWeight: "500",
   },
   productPrice: {
     fontSize: 16,
@@ -349,5 +343,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-export default HomeStoreScreen;
