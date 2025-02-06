@@ -244,6 +244,7 @@ export default function ProductHome({ navigation, text, init }: any) {
                   width: "100%",
                   borderTopLeftRadius: 5,
                   borderTopRightRadius: 5,
+                  resizeMode: "contain",
                 }}
               />
             </View>
