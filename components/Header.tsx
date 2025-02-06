@@ -66,7 +66,7 @@ export default function HeaderComponent({
             <TouchableOpacity
               style={styles.optionIcon}
               onPress={() =>
-                navigation.navigate("ShoppingCart", { showBack: true })
+                navigation.navigate("CartStoreScreen", { showBack: true })
               }
             >
               <View style={styles.ticketsContainer}>
