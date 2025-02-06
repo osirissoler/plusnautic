@@ -63,15 +63,16 @@ export type RootStackParamList = {
   TicketDetailsScreen: undefined;
   EventBoothsScreen: undefined;
   BoothProductsScreen: undefined;
-  HomeStoreScreen:undefined;
-  ProductDetailsStore:undefined;
-  CartStoreScreen:undefined;
+  HomeStoreScreen: undefined;
+  ProductDetailsStore: undefined;
+  CartStoreScreen: undefined;
   EventCalendarScreen: undefined;
-  ProductStoreScreen:undefined;
-  CartProductDetails:undefined;
-  PayDetails:undefined;
-  ListOrder:undefined;
-  OrderDetails:undefined;
+  ProductStoreScreen: undefined;
+  CartProductDetails: undefined;
+  PayDetails: undefined;
+  ListOrder: undefined;
+  OrderDetails: undefined;
+  NewsDetailsScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

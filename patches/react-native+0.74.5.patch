@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native/.DS_Store b/node_modules/react-native/.DS_Store
+new file mode 100644
+index 0000000..d63e908
+Binary files /dev/null and b/node_modules/react-native/.DS_Store differ
+diff --git a/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec b/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec
+index 19cce54..0c45392 100644
+--- a/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec
++++ b/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec
+@@ -44,7 +44,7 @@ Pod::Spec.new do |spec|
+       ss.source_files = "destroot/include/hermes/**/*.h"
+       ss.header_mappings_dir = "destroot/include"
+       ss.ios.vendored_frameworks = "destroot/Library/Frameworks/universal/hermes.xcframework"
+-      ss.visionos.vendored_frameworks = "destroot/Library/Frameworks/universal/hermes.xcframework"
++      # ss.visionos.vendored_frameworks = "destroot/Library/Frameworks/universal/hermes.xcframework"
+       ss.osx.vendored_frameworks = "destroot/Library/Frameworks/macosx/hermes.framework"
+     end
+ 

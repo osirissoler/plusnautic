@@ -79,6 +79,7 @@ import NewAddressScreen from "../screens/NewAddresssScreen";
 import PayDetails from "../components/store/PayDetails";
 import ListOrder from "../components/store/ListOrder";
 import OrderDetails from "../components/store/OrderDetails";
+import NewsDetailsScreen from "../screens/NewsDetailsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -195,7 +196,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="Step1"
         component={Step1Screen}
@@ -243,7 +243,6 @@ function RootNavigator({ route }: any) {
           animation: "slide_from_right",
         }}
       />
-
       <Stack.Screen
         name="MyOrders"
         component={MyOrdersScreen}
@@ -288,7 +287,6 @@ function RootNavigator({ route }: any) {
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}
       />
-
       <Stack.Screen
         name="NewCard"
         component={NewCardScreen}
@@ -322,9 +320,7 @@ function RootNavigator({ route }: any) {
         name="ProductDetails"
         component={ProductDetailsScreen}
         options={{
-          headerTitle: translation.t(
-            "headerTitleProductDetails"
-          ) ,
+          headerTitle: translation.t("headerTitleProductDetails"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
         }}
@@ -473,7 +469,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="ShoppingCart"
         component={ShoppingCartScreen}
@@ -485,7 +480,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="MyTicketsScreen"
         component={MyTicketsScreen}
@@ -497,7 +491,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="TicketDetailsScreen"
         component={TicketDetailsScreen}
@@ -509,7 +502,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="QrCodeScreen"
         component={QrCodeScreen}
@@ -520,7 +512,6 @@ function RootNavigator({ route }: any) {
           animation: "slide_from_right",
         }}
       />
-
       <Stack.Screen
         name="EventBoothsScreen"
         component={EventBoothsScreen}
@@ -532,7 +523,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="BoothProductsScreen"
         component={BoothProductsScreen}
@@ -544,7 +534,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="EventCalendarScreen"
         component={EventCalendarScreen}
@@ -556,7 +545,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -567,9 +555,7 @@ function RootNavigator({ route }: any) {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
-
       {/* store */}
-
       <Stack.Screen
         name="HomeStoreScreen"
         component={HomeStoreScreen}
@@ -581,19 +567,17 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="ProductStoreScreen"
         component={ProductStoreScreen}
         options={{
-          headerTitle:  translation.t("Products"),
+          headerTitle: translation.t("Products"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="ProductDetailsStore"
         component={ProductDetailsStore}
@@ -605,7 +589,6 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="CartStoreScreen"
         component={CartStore}
@@ -617,12 +600,11 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-
       <Stack.Screen
         name="CartProductDetails"
         component={CartProductDetails}
         options={{
-          headerTitle:  translation.t("Cart"),
+          headerTitle: translation.t("Cart"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
@@ -633,14 +615,13 @@ function RootNavigator({ route }: any) {
         name="PayDetails"
         component={PayDetails}
         options={{
-          headerTitle:translation.t("checkoutPayNowText"),
+          headerTitle: translation.t("checkoutPayNowText"),
           headerStyle: { backgroundColor: "#fff" },
           headerTitleStyle: { color: "#000", fontWeight: "400" },
           animation: "fade",
           headerShown: true,
         }}
       />
-      
       <Stack.Screen
         name="ListOrder"
         component={ListOrder}
@@ -663,7 +644,17 @@ function RootNavigator({ route }: any) {
           headerShown: true,
         }}
       />
-      
+      <Stack.Screen
+        name="NewsDetailsScreen"
+        component={NewsDetailsScreen}
+        options={{
+          headerTitle: "",
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { color: "#000", fontWeight: "400" },
+          animation: "fade",
+          headerShown: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }

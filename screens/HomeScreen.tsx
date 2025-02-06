@@ -22,6 +22,8 @@ import { LanguageContext } from "../LanguageContext";
 import AdsScreen from "./AdsScreen";
 import asyncStorage from "@react-native-async-storage/async-storage";
 import FloatingButton from "../components/FloatingButton";
+import { HomeArticleCard } from "../components/Articles/HomeArticleCard";
+import { ArticleList } from "../components/Articles/ArticleList";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -120,6 +122,8 @@ export default function HomeScreen({ navigation, route }: any) {
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
+      <ArticleList navigation={navigation}/>
+
       <Loading showLoading={showLoading} translation={translation} />
       {error ? (
         <ServiceComponent />
@@ -173,8 +177,6 @@ export default function HomeScreen({ navigation, route }: any) {
           ></FlatList>
         </View>
       )}
-
-      
     </Container>
   );
 }
