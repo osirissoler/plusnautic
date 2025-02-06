@@ -26,6 +26,7 @@ import FloatingButton from "../components/FloatingButton";
 import AllStoreHome from "../components/store/AllStoreHome";
 import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
+import ProductHome from "../components/store/ProductHome";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -191,7 +192,7 @@ export default function HomeScreen({ navigation, route }: any) {
               marginHorizontal: 5,
               fontSize: 17,
               fontWeight: 500,
-              color: "#5f7ceb",
+              // color: "#5f7ceb",
               marginTop: 5,
             }}
           >
@@ -200,14 +201,25 @@ export default function HomeScreen({ navigation, route }: any) {
           <AllStoreHome navigation={navigation} />
         </View>
         <View style={{ borderWidth: 0 }}>
+          <AdsHome navigation={navigation} code="Home" />
+        </View>
+        <View style={{ borderWidth: 0 }}>
+          <ProductHome text="En ofertas"/>
+        </View>
+        
+        <View style={{ borderWidth: 0 }}>
           <ArticleList navigation={navigation} />
+        </View>
+
+        <View style={{ borderWidth: 0 }}>
+          <ProductHome text="Vover a comprar" />
         </View>
         <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />
         </View>
-        {/* <View style={{ borderWidth: 0 }}>
-          <AdsHome navigation={navigation} code="Home" />
-        </View> */}
+
+        
+        
         {/* <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />
         </View> */}
@@ -225,6 +237,11 @@ function ServiceComponent() {
 }
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   body: {
     padding: 10,
     flexDirection: "column",
