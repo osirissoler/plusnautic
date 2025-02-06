@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 import HeaderComponent from "../components/Header";
@@ -25,6 +25,7 @@ import asyncStorage from "@react-native-async-storage/async-storage";
 import FloatingButton from "../components/FloatingButton";
 import AllStoreHome from "../components/store/AllStoreHome";
 import AdsHome from "./AdsHome";
+import { ArticleList } from "../components/Articles/ArticleList";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -177,13 +178,11 @@ export default function HomeScreen({ navigation, route }: any) {
 
       <ScrollView
         style={{
-          
           borderWidth: 0,
           height: "90.5%",
           // flexDirection: "column",
           // justifyContent: "space-between",
           // paddingHorizontal: 5,
-          
         }}
       >
         <View style={{ borderWidth: 0 }}>
@@ -201,17 +200,17 @@ export default function HomeScreen({ navigation, route }: any) {
           <AllStoreHome navigation={navigation} />
         </View>
         <View style={{ borderWidth: 0 }}>
+          <ArticleList navigation={navigation} />
+        </View>
+        <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />
         </View>
-        <View style={{ borderWidth: 0, }}>
+        {/* <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />
-        </View>
-        <View style={{ borderWidth: 0, }}>
+        </View> */}
+        {/* <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Home" />
-        </View>
-        <View style={{ borderWidth: 0,  }}>
-          <AdsHome navigation={navigation} code="Home" />
-        </View>
+        </View> */}
       </ScrollView>
     </Container>
   );
