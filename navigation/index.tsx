@@ -81,6 +81,7 @@ import ListOrder from "../components/store/ListOrder";
 import OrderDetails from "../components/store/OrderDetails";
 import NewsDetailsScreen from "../screens/NewsDetailsScreen";
 import YoutubeVideosScreen from "../screens/YoutubeVideosScreen";
+import HomePlusnautic from "../screens/HomePlusnautic";
 
 export default function Navigation({
   colorScheme,
@@ -809,12 +810,12 @@ function BottomTabNavigator({ navigation, route }: any) {
         initialParams={route.params}
       /> */}
 
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="App"
-        component={HomeScreen}
+        component={HomePlusnautic}
         options={{
           headerShown: false,
-          title: "Abordo",
+          title: "",
           tabBarIcon: ({ color }) => (
             <View
               style={{
@@ -832,12 +833,12 @@ function BottomTabNavigator({ navigation, route }: any) {
           ),
         }}
         initialParams={route.params}
-        listeners={{
-          tabPress: (e: any) => {
-            goAbordo();
-          },
-        }}
-      /> */}
+        // listeners={{
+        //   tabPress: (e: any) => {
+        //     goAbordo();
+        //   },
+        // }}
+      />
 
       {/* <BottomTab.Screen
 				name='Request'
@@ -877,7 +878,7 @@ function TabBarIcon(props: {
     return (
       <Image
         style={{ height: 85, width: 85 }}
-        source={require("../assets/images/abordo.png")}
+        source={require("../assets/images/adaptive-icon-plusnautic.png")}
       />
     );
   } else {

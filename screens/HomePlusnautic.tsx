@@ -28,7 +28,7 @@ import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
 import ProductHome from "../components/store/ProductHome";
 
-export default function HomeScreen({ navigation, route }: any) {
+export default function HomePlusnautic({ navigation, route }: any) {
   const defaultProductImg =
     "http://openmart.online/frontend/imgs/no_image.png?";
   const [initialImg, setinitialImage] = useState(
@@ -123,8 +123,8 @@ export default function HomeScreen({ navigation, route }: any) {
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
-      {/* <Loading showLoading={showLoading} translation={translation} /> */}
-      {/* {error ? (
+      <Loading showLoading={showLoading} translation={translation} />
+      {error ? (
         <ServiceComponent />
       ) : (
         <View style={{ height: "100%" }}>
@@ -175,15 +175,12 @@ export default function HomeScreen({ navigation, route }: any) {
             numColumns={2}
           ></FlatList>
         </View>
-      )} */}
+      )}
 
-      <ScrollView
+      {/* <ScrollView
         style={{
           borderWidth: 0,
           height: "90.5%",
-          // flexDirection: "column",
-          // justifyContent: "space-between",
-          // paddingHorizontal: 5,
         }}
       >
         <View style={{ borderWidth: 0 }}>
@@ -218,7 +215,7 @@ export default function HomeScreen({ navigation, route }: any) {
           <AdsHome navigation={navigation} code="Courses" />
         </View>
 
-      </ScrollView>
+      </ScrollView> */}
     </Container>
   );
 }
