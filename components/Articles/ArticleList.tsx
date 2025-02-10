@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -96,7 +97,13 @@ export const ArticleList = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Articulos</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            style={{ height: 45, width: 40 }}
+            source={require("../../assets/images/abordo.png")}
+          />
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Abordo</Text>
+        </View>
         <TouchableOpacity>
           <Text style={{ fontSize: 15 }}>Ver todos</Text>
         </TouchableOpacity>
