@@ -27,6 +27,7 @@ import AllStoreHome from "../components/store/AllStoreHome";
 import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
 import ProductHome from "../components/store/ProductHome";
+import { ProductList } from "../components/products/ProductList";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -204,9 +205,10 @@ export default function HomeScreen({ navigation, route }: any) {
           <AdsHome navigation={navigation} code="Home" />
         </View>
         <View style={{ borderWidth: 0 }}>
-          <ProductHome text="En ofertas" init='0'/>
+          {/* <ProductHome text="En ofertas" init='0'/> */}
+          <ProductList navigation={navigation} />
         </View>
-        
+
         <View style={{ borderWidth: 0 }}>
           <ArticleList navigation={navigation} />
         </View>
@@ -217,7 +219,6 @@ export default function HomeScreen({ navigation, route }: any) {
         <View style={{ borderWidth: 0 }}>
           <AdsHome navigation={navigation} code="Courses" />
         </View>
-
       </ScrollView>
     </Container>
   );

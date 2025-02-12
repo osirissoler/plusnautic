@@ -8,44 +8,45 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { HomeArticleCard } from "./HomeArticleCard";
+import { ProductCard } from "./ProductCard";
 import { fetchData } from "../../httpRequests";
-import { Articles } from "../../types/Articles";
+import { Products } from "../../types/Products";
 
-export const ArticleList = ({ navigation }: any) => {
-  const [articles, setArticles] = useState<Articles[]>([]);
+export const ProductList = ({ navigation }: any) => {
+  const [products, setProducts] = useState<Products[]>([]);
   const [skip, setKip] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [fetching, setFetching] = useState<boolean>(false);
 
-  const handlePress = (article: Articles) => {
-    navigation.navigate("NewsDetailsScreen", {
-      news_id: article.id,
+  const handlePress = (item: Products) => {
+    navigation.navigate("ProductDetailsStore", {
+      item,
     });
-    console.log("Artículo seleccionado:", article.title);
+    // console.log("Artículo seleccionado:", article.title);
   };
 
   useEffect(() => {
     // setShowLoading(true);
-    getNews();
+    getProducts();
   }, []);
 
   useEffect(() => {
     if (skip !== -1) {
-      getNews();
+      getProducts();
     }
   }, [skip]);
 
-  const getNews = async () => {
+  const getProducts = async () => {
     setFetching(true);
-    const url = `/news/getNewsMobile/${skip}/${limit}`;
+    const url = `/store/getProductWithDiscounts/${limit}/${skip}`;
     await fetchData(url).then((response) => {
+      console.log(response);
       if (response.ok) {
         // hideLoadingModal(() => {
-        setArticles([...articles, ...response.news]);
+        setProducts([...products, ...response.products]);
         // }, setFetching);
       } else {
-        setArticles([]);
+        setProducts([]);
         setFetching(false);
         // setError(true);
       }
@@ -57,14 +58,9 @@ export const ArticleList = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{ height: 45, width: 40 }}
-            source={require("../../assets/images/abordo.png")}
-          />
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Abordo</Text>
-        </View>
-
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          Productos en oferta
+        </Text>
         <TouchableOpacity>
           <Text style={{ fontSize: 15 }}>Ver todos</Text>
         </TouchableOpacity>
@@ -72,16 +68,16 @@ export const ArticleList = ({ navigation }: any) => {
 
       <FlatList
         refreshing={fetching}
-        data={articles}
+        data={products}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item: Articles) => item.id.toString()}
+        keyExtractor={(item: Products) => item.id.toString()}
         renderItem={({ item }) => (
-          <HomeArticleCard article={item} onPress={handlePress} />
+          <ProductCard item={item} onPress={handlePress} />
         )}
         onRefresh={() => {
           setFetching(true);
-          setArticles([]);
+          setProducts([]);
           setTimeout(async () => {
             await setKip(-1);
             await setKip(0);
@@ -89,18 +85,18 @@ export const ArticleList = ({ navigation }: any) => {
           }, 100);
         }}
         onEndReached={() => {
-          if (!fetching && articles.length > 3) {
+          if (!fetching && products.length > 3) {
             setKip(skip + limit);
           }
         }}
         ListFooterComponent={() =>
-          articles.length > 3 && fetching == false ? (
+          products.length > 3 && fetching == false ? (
             <View style={{ alignItems: "center" }}>
               <ActivityIndicator size="small" color="#0F3D87" />
             </View>
           ) : null
         }
-        contentContainerStyle={{ alignItems: "center", gap: 10 }}
+        contentContainerStyle={{ paddingVertical: 5, alignItems: "center" }}
       />
     </View>
   );
@@ -114,5 +110,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 5
   },
 });
