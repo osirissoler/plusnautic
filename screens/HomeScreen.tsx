@@ -28,6 +28,7 @@ import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
 import ProductHome from "../components/store/ProductHome";
 import { ProductList } from "../components/products/ProductList";
+import { OrderedProductsList } from "../components/products/OrderedProductsList";
 
 export default function HomeScreen({ navigation, route }: any) {
   const defaultProductImg =
@@ -107,7 +108,6 @@ export default function HomeScreen({ navigation, route }: any) {
     await fetchData(url).then((response) => {
       if (response.ok) {
         setListPharmacy(response.menu);
-        console.log(response.menu[0]);
       } else {
         setListPharmacy([]);
         setFetching(false);
@@ -124,6 +124,7 @@ export default function HomeScreen({ navigation, route }: any) {
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
+
       {/* <Loading showLoading={showLoading} translation={translation} /> */}
       {/* {error ? (
         <ServiceComponent />
@@ -180,11 +181,8 @@ export default function HomeScreen({ navigation, route }: any) {
 
       <ScrollView
         style={{
-          borderWidth: 0,
           height: "90.5%",
-          // flexDirection: "column",
-          // justifyContent: "space-between",
-          // paddingHorizontal: 5,
+          gap: 5,
         }}
       >
         <View style={{ borderWidth: 0 }}>
@@ -193,32 +191,24 @@ export default function HomeScreen({ navigation, route }: any) {
               marginHorizontal: 5,
               fontSize: 17,
               fontWeight: 500,
-              // color: "#5f7ceb",
-              marginTop: 5,
+              marginTop: 10,
             }}
           >
             Destacadas en plusnautic
           </Text>
           <AllStoreHome navigation={navigation} />
         </View>
-        <View style={{ borderWidth: 0 }}>
-          <AdsHome navigation={navigation} code="Home" />
-        </View>
-        <View style={{ borderWidth: 0 }}>
-          {/* <ProductHome text="En ofertas" init='0'/> */}
-          <ProductList navigation={navigation} />
-        </View>
 
-        <View style={{ borderWidth: 0 }}>
-          <ArticleList navigation={navigation} />
-        </View>
+        <AdsHome navigation={navigation} code="Home" />
 
-        <View style={{ borderWidth: 0 }}>
-          <ProductHome text="Vover a comprar" init='6' />
-        </View>
-        <View style={{ borderWidth: 0 }}>
-          <AdsHome navigation={navigation} code="Courses" />
-        </View>
+        <ProductList navigation={navigation} />
+
+        <ArticleList navigation={navigation} />
+
+        {/* <ProductHome text="Vover a comprar" init="6" /> */}
+        <OrderedProductsList navigation={navigation} />
+
+        <AdsHome navigation={navigation} code="Courses" />
       </ScrollView>
     </Container>
   );

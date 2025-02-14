@@ -146,7 +146,7 @@ export default function ProfileScreen({ navigation, route }: any) {
     formData.append("image", { uri: resultUri, name: fileName, fileType });
 
     const url = "/user/updateClientImage/" + user.id;
-    const data = formData;w
+    const data = formData;
 
     sendData(url, data).then((response) => {
       hideLoadingModal(() => {

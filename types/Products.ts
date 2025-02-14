@@ -1,4 +1,5 @@
 export interface Products {
+  map(arg0: (product: any) => import("react").JSX.Element): unknown;
   id: number;
   gpi: string;
   upc: string;

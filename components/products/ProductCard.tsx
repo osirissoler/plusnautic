@@ -7,11 +7,18 @@ import { Ionicons } from "@expo/vector-icons";
 interface props {
   item: Products;
   onPress: (item: Products) => void;
+  isDiscounted?: boolean;
 }
 
-export const ProductCard = ({ item, onPress }: props) => {
+export const ProductCard = ({ item, onPress, isDiscounted }: props) => {
   return (
-    <TouchableOpacity style={styles.item} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      style={[
+        styles.item,
+        { justifyContent: isDiscounted ? "flex-start" : "space-between" },
+      ]}
+      onPress={() => onPress(item)}
+    >
       <View style={{ height: "60%", borderWidth: 0 }}>
         {item.img ? (
           <Image
@@ -39,22 +46,55 @@ export const ProductCard = ({ item, onPress }: props) => {
           </View>
         )}
       </View>
-      <View style={{ justifyContent: "flex-end" }}>
-        <Text numberOfLines={1} style={{ fontWeight: "bold", fontSize: 13 }}>
-          - {item.discountPercentage}%
-        </Text>
-        <Text
-          numberOfLines={1}
-          style={{ fontWeight: 500, fontSize: 14, marginTop: 5, color: "grey" }}
-        >
-          Antes: {formatter(item.price)}
-        </Text>
-        {/* <Text style={{ fontWeight: 500, color: "#B2B5C1", fontSize: 12 }}>
+      <View
+        style={{
+          paddingHorizontal: 5,
+          marginBottom: !isDiscounted ? 0 : 5,
+        }}
+      >
+        {isDiscounted ? (
+          <Text numberOfLines={1} style={{ fontWeight: "bold", fontSize: 13 }}>
+            - {item.discountPercentage}%
+          </Text>
+        ) : (
+          <Text numberOfLines={1} style={{ fontWeight: "bold", fontSize: 13 }}>
+            {item.name}
+          </Text>
+        )}
+        {isDiscounted ? (
+          <>
+            <Text
+              numberOfLines={1}
+              style={{
+                fontWeight: 500,
+                fontSize: 14,
+                marginTop: 5,
+                color: "grey",
+              }}
+            >
+              Antes: {formatter(item.price)}
+            </Text>
+            {/* <Text style={{ fontWeight: 500, color: "#B2B5C1", fontSize: 12 }}>
           Costo de envio:USD
         </Text> */}
-        <Text style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 14 }}>
-          Ahora {formatter(item.totalPriceWithDiscount)}
-        </Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 14 }}
+            >
+              Ahora {formatter(item.totalPriceWithDiscount)}
+            </Text>
+          </>
+        ) : (
+          <View style={{ marginTop: 5 }}>
+            {/* <Text
+              style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 14 }}
+            >
+              {item.amount}
+            </Text> */}
+            <Text style={{ fontWeight: "bold", color: "grey", fontSize: 13 }}>
+              {formatter(item.price)}
+            </Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );

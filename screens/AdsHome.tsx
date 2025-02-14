@@ -9,31 +9,32 @@ import {
   Linking,
 } from "react-native";
 import { fetchData } from "../httpRequests";
+import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AdsHome({ navigation, code }: any) {
   const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [fetching, setFetching] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
+  const scrollIndex = useRef(0);
 
   useEffect(() => {
+    setLoading(true)
     getAds();
   }, []);
 
   const getAds = async () => {
     let url = `/advertisements/getAdsBycode/${code}`;
-    console.log(url);
 
     await fetchData(url).then((response) => {
       if (response.ok) {
-        console.log(response, "aqui erssfsdfsdfsdf");
         setAds(response.ads);
       } else {
         console.log(response, "aqui error");
       }
     });
+    setLoading(false)
   };
-
-  const [fetching, setFetching] = useState(false);
-  const flatListRef = useRef<FlatList>(null);
-  const scrollIndex = useRef(0);
 
   // Función para hacer scroll automático cada 5 segundos
   useEffect(() => {
@@ -54,7 +55,6 @@ export default function AdsHome({ navigation, code }: any) {
   //   Función para manejar clics en anuncios
   const handleAdPress = async (url: string) => {
     if (url) {
-      console.log(url);
       Alert.alert("Ir a la página", "¿Quieres ir a este enlace?", [
         { text: "Cancelar", style: "cancel" },
         {
@@ -66,6 +66,7 @@ export default function AdsHome({ navigation, code }: any) {
       ]);
     }
   };
+
   const open = async (url: any) => {
     const supported = await Linking.canOpenURL(url);
     if (supported) {
@@ -76,7 +77,7 @@ export default function AdsHome({ navigation, code }: any) {
   };
 
   return (
-    <View style={{ marginBottom: 15, borderWidth: 0 }}>
+    <View style={{ borderWidth: 0 }}>
       <FlatList
         ref={flatListRef}
         horizontal
@@ -84,6 +85,7 @@ export default function AdsHome({ navigation, code }: any) {
         data={ads}
         onRefresh={() => {}}
         refreshing={fetching}
+        contentContainerStyle={{ gap: 10, paddingHorizontal: 5 }}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -92,7 +94,6 @@ export default function AdsHome({ navigation, code }: any) {
               backgroundColor: "white",
               height: 130,
               width: 366,
-              marginHorizontal: 5,
               borderRadius: 15,
             }}
           >
@@ -102,6 +103,21 @@ export default function AdsHome({ navigation, code }: any) {
             />
           </TouchableOpacity>
         )}
+      />
+
+      <Skeleton
+        containerStyle={{
+          flex: 1,
+          width: "100%",
+          flexDirection: "row",
+          gap: 10,
+          marginTop: 10
+        }}
+        isLoading={loading}
+        layout={[
+          { key: "1", height: 130, width: 366, borderRadius: 15 },
+          { key: "2", height: 130, width: 366, borderRadius: 15 },
+        ]}
       />
     </View>
   );

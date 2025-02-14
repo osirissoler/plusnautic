@@ -63,7 +63,6 @@ export default function AddressesScreen({ navigation }: any) {
           sendData(url, {}).then((response: any) => {
             const user = response["user"];
             // console.log(user.client_direction_id, "kkkkkk")
-            console.log(addressesDirection, "HOLA");
             // direction(user.client_direction_id)
             const defaultAddress = addressesDirection.find(
               (address: any) => address.id == user.client_direction_id

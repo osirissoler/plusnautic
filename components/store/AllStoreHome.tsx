@@ -12,259 +12,114 @@ import {
   Pressable,
 } from "react-native";
 import { LanguageContext } from "../../LanguageContext";
-import AdsScreen from "../../screens/AdsScreen";
-import { AntDesign, Entypo } from "@expo/vector-icons";
 import { checkStorage, Loading } from "../Shared";
 import { fetchData } from "../../httpRequests";
+import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AllStoreHome({ navigation, router }: any) {
   const { translation } = React.useContext(LanguageContext);
-  const [showLoading, setShowLoading]: any = useState(false);
-  const [store, setStore]: any = useState([{}, {}, {}]);
-  const [count, setCount]: any = useState(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [store, setStore]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
-
-  const [visible, setVisible] = useState(true);
-  const [initialImg, setinitialImage] = useState(
-    "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
-  );
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
 
-  const skip = useRef<number>(0);
-
   useEffect(() => {
-    //   navigation.addListener("focus", () => {
-    getProductCartAmount();
     getAllStore();
   }, []);
 
-  const getProductCartAmount = async () => {
-    checkStorage("USER_LOGGED", (id: any) => {
-      const url = `/store/getProductCartAmount/${id}`;
-      fetchData(url).then(async (response) => {
-        if (response.ok) {
-          setCount(response.count);
-        } else {
-          setCount(0);
-        }
-      });
-    });
-  };
-
   const getAllStore = async () => {
-    setShowLoading(true);
-    checkStorage("USER_LOGGED_COUNTRY", (id: any) => {
+    checkStorage("USER_LOGGED_COUNTRY", async (id: any) => {
       const url = `/store/getAllStoreByContry/${id}`;
-      fetchData(url).then(async (response) => {
+      await fetchData(url).then(async (response) => {
         if (response.ok) {
           setStore(response.store);
         } else {
           setStore([]);
         }
       });
-      setTimeout(() => {
-        setShowLoading(false);
-      }, 1000);
+      setLoading(false);
     });
   };
   return (
-    <View style={{  backgroundColor: "white" }}>
-      {/* <View style={styles.header}>
-        <Image
-          style={{ height: 50, width: "50%", resizeMode: "contain" }}
-          source={require("../../assets/images/slogan.png")}
-        />
-        <View style={[styles.screenOptions, { justifyContent: "flex-end" }]}>
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-              flexDirection: "row",
-            }}
-          >
-           
-            <View></View>
-
+    <View style={{ backgroundColor: "white" }}>
+      <FlatList
+        horizontal
+        pagingEnabled
+        data={store}
+        onRefresh={() => {
+          getAllStore();
+        }}
+        refreshing={fetching}
+        // ListEmptyComponent={
+        //   <>
+        //     {!loading && (
+        //       <Text style={{ fontSize: 16, marginTop: 20 }}>
+        //         {translation.t("homeNoProductsText")}
+        //       </Text>
+        //     )}
+        //   </>
+        // }
+        contentContainerStyle={{ paddingHorizontal: 5, paddingVertical: 10, gap: 10 }}
+        renderItem={({ item }) => (
+          <View style={{ alignItems: "center", gap: 5 }}>
             <TouchableOpacity
-              style={styles.optionIcon}
-              onPress={() => navigation.navigate("CartStoreScreen")}
+              style={styles.productCard}
+              onPress={() =>
+                navigation.navigate("ProductStoreScreen", { item })
+              }
             >
-              <View style={styles.ticketsContainer}>
-                <Text style={styles.ticketsAmount}>{count}</Text>
+              <View style={{ width: "100%", height: "100%", borderWidth: 0 }}>
+                <Image
+                  source={{
+                    uri: item.img ? item.img : defaultProductImg,
+                  }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    flex: 1,
+                    resizeMode: "contain",
+                  }}
+                />
               </View>
-
-              <AntDesign name="shoppingcart" size={35} />
             </TouchableOpacity>
-          </View>
-        </View>
-      </View> */}
-      <Loading showLoading={showLoading} translation={translation} />
 
-      <View style={{ borderWidth: 0, marginBottom:10, marginEnd: 10 }}>
-        <FlatList
-          horizontal
-          pagingEnabled
-          data={store}
-          onRefresh={() => {
-            getAllStore();
-          }}
-          refreshing={fetching}
-          ListEmptyComponent={
-            <Text style={{ fontSize: 16, marginTop: 20 }}>
-              {translation.t("homeNoProductsText")}
+            <Text numberOfLines={1} style={styles.productTitle}>
+              {item.name}
             </Text>
-          }
-          //   style={{ padding: 20, flexDirection: "column" }}
-          renderItem={({ item }) => (
-            <View>
-              <TouchableOpacity
-                style={styles.productCard}
-                onPress={() =>
-                  navigation.navigate("ProductStoreScreen", { item })
-                }
-              >
-                <View style={{ width: "100%", height: "100%", borderWidth: 0 }}>
-                  <Image
-                    source={{
-                      uri: item.img ? item.img : defaultProductImg,
-                    }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      flex: 1,
-                      resizeMode: "contain",
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
-              <View
-                style={{
-                  //   justifyContent: "space-between",
-                  //   width: "100%",
-                  //   borderWidth: 1,
-                  //   paddingHorizontal: 20,
+          </View>
+        )}
+      ></FlatList>
 
-                  width: 160,
-                  //   height: 80,
-                  //   padding: 20,
-                  //   marginVertical: 10,
-                  marginHorizontal: 5,
-                  //   borderRadius: 10,
-                  //   borderWidth: 1,
-                  //   borderColor: "rgba(0, 0, 0, 0.1)",
-                  //   flexDirection: "row",
-                }}
-              >
-                <Text style={styles.productTitle}>{item.name}</Text>
-                {/* <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 20,
-                    }}
-                  >
-                    
-                    <Pressable style={styles.productAdd}>
-                      <Entypo
-                        name="eye"
-                        size={24}
-                        style={styles.productAddIcon}
-                      />
-                     
-                    </Pressable>
-                  </View> */}
-              </View>
-            </View>
-          )}
-        ></FlatList>
-      </View>
+      <Skeleton
+        containerStyle={{
+          flex: 1,
+          width: "100%",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 10,
+        }}
+        isLoading={loading}
+        layout={[
+          { key: "1", width: 160, height: 80, borderRadius: 10 },
+          { key: "2", width: 160, height: 80, borderRadius: 10 },
+          { key: "3", width: 160, height: 80, borderRadius: 10 },
+          { key: "4", width: 160, height: 80, borderRadius: 10 },
+        ]}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 10,
-    height: 50,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 10000,
-  },
-  body: {
-    padding: 20,
-    flexDirection: "column",
-  },
-  locationTitle: {
-    marginHorizontal: 5,
-    alignSelf: "flex-end",
-  },
-  locationText: {
-    marginTop: 5,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "rgba(22, 22, 46, 0.3)",
-  },
-  headerImage: {
-    marginBottom: 20,
-    height: 180,
-    width: "100%",
-    borderRadius: 10,
-    // aspectRatio:1/1
-  },
-  listCategories: {},
-  categoryCard: {
-    padding: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F7F7F7",
-    borderRadius: 15,
-    marginVertical: 10,
-    width: "43%",
-    height: 120,
-  },
-  categoryCardActive: {
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  categoryIcon: {
-    marginBottom: 15,
-  },
-  categoryName: {
-    fontSize: 15,
-    fontWeight: "400",
-    textAlign: "center",
-  },
-  productsContainer: {},
-  productsContainerHeader: {
-    marginVertical: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  productsContainerBody: {
-    marginBottom: 30,
-  },
-  productsPopularTitle: {
-    fontSize: 16,
-  },
-  productsViewAll: {
-    color: "#40AA54",
-  },
   productCard: {
     width: 160,
     height: 80,
-    // padding: 20,
-    marginVertical: 10,
-    marginHorizontal: 5,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
     flexDirection: "row",
-    // justifyContent: "space-around",
     alignItems: "center",
     shadowColor: "#000",
-    // shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 1,
   },
@@ -274,7 +129,8 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontSize: 16,
-    // fontWeight: "500",
+    fontWeight: "500",
+    width: "90%",
   },
   productPrice: {
     fontSize: 16,

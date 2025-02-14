@@ -22,26 +22,15 @@ import GoMap from "./GoMap";
 import RenderHTML from "react-native-render-html";
 import moment from "moment";
 import { hideLoadingModal } from "../utils";
+import { Articles } from "../types/Articles";
 
-interface News {
-  id: number;
-  title: string;
-  img: string;
-  description: string;
-  descriptionPromo: string;
-  writer: string;
-  created_at: string;
-  elapsedTime: string;
-  // isDeleted: boolean;
-  // status: boolean;
-}
 
 export default function NewsDetailsScreen({ navigation, route }: any) {
   const scrollViewRef = useRef<ScrollView | null>(null); // Crea la referencia al ScrollView
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [error, setError] = useState(false);
-  const [newsData, setNewsData] = useState<News>();
+  const [newsData, setNewsData] = useState<Articles>();
   const [next, setNext] = useState<number>(0);
   const [previous, setPrevious] = useState<number>(0);
 

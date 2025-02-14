@@ -11,22 +11,23 @@ import {
 import { HomeArticleCard } from "./HomeArticleCard";
 import { fetchData } from "../../httpRequests";
 import { Articles } from "../../types/Articles";
+import Skeleton from "react-native-reanimated-skeleton";
 
 export const ArticleList = ({ navigation }: any) => {
   const [articles, setArticles] = useState<Articles[]>([]);
   const [skip, setKip] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(10);
   const [fetching, setFetching] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handlePress = (article: Articles) => {
     navigation.navigate("NewsDetailsScreen", {
       news_id: article.id,
     });
-    console.log("Artículo seleccionado:", article.title);
   };
 
   useEffect(() => {
-    // setShowLoading(true);
+    setLoading(true);
     getNews();
   }, []);
 
@@ -51,12 +52,12 @@ export const ArticleList = ({ navigation }: any) => {
       }
     });
     setFetching(false);
-    // setShowLoading(false);
+    setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
+      {!loading && <View style={styles.titleContainer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             style={{ height: 45, width: 40 }}
@@ -68,7 +69,7 @@ export const ArticleList = ({ navigation }: any) => {
         <TouchableOpacity>
           <Text style={{ fontSize: 15 }}>Ver todos</Text>
         </TouchableOpacity>
-      </View>
+      </View>}
 
       <FlatList
         refreshing={fetching}
@@ -85,7 +86,6 @@ export const ArticleList = ({ navigation }: any) => {
           setTimeout(async () => {
             await setKip(-1);
             await setKip(0);
-            console.log("entro");
           }, 100);
         }}
         onEndReached={() => {
@@ -102,13 +102,36 @@ export const ArticleList = ({ navigation }: any) => {
         }
         contentContainerStyle={{ alignItems: "center", gap: 10 }}
       />
+
+      <Skeleton
+        containerStyle={{
+          flex: 1,
+          width: "100%",
+          flexDirection: "column",
+          gap: 10,
+        }}
+        isLoading={loading}
+        layout={[
+          { key: "1", height: 20, width: 170, borderRadius: 15 },
+          {
+            key: "group", // Grupo para las tres cajas inferiores
+            flexDirection: "row", // Hace que estén en fila
+            gap: 10,
+            children: [
+              { key: "2", height: 170, width: 140, borderRadius: 15 },
+              { key: "3", height: 170, width: 140, borderRadius: 15 },
+              { key: "4", height: 170, width: 140, borderRadius: 15 },
+            ],
+          },
+        ]}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    paddingHorizontal: 10,
   },
   titleContainer: {
     flexDirection: "row",

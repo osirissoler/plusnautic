@@ -1,34 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-  Image,
-  Linking,
-  Alert,
-  Text,
-  FlatList,
-  Pressable,
-  Modal,
-  ScrollView,
-} from "react-native";
+import { View, TouchableOpacity, StyleSheet, Alert, Text } from "react-native";
 import { LanguageContext } from "../../LanguageContext";
-import {
-  deleteData,
-  fetchData,
-  sendData,
-  sendDataPut,
-} from "../../httpRequests";
+import { fetchData, sendData } from "../../httpRequests";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { Loading } from "../Shared";
 import WebView from "react-native-webview";
 import AddressesScreen from "../../screens/AddressesScreen";
 import { formatter } from "../../utils";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import usePayment from "../../hooks/usePayment";
 
 export default function PayDetails({ navigation, route }: any) {
-  const [item, setItem]: any = useState(route.params.item);
+  const { item } = route.params;
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const URLToRiderect = "https://panel-plusnautic.netlify.app/success";
@@ -40,6 +24,8 @@ export default function PayDetails({ navigation, route }: any) {
     useState(false);
   const [contador, setContador]: any = useState(0);
   const [clientDirection_id, setClientDirection_id]: any = useState(null);
+
+  const { publishableKey, initializePaymentSheet } = usePayment(item?.total);
 
   async function getIpClient() {
     try {
@@ -64,7 +50,7 @@ export default function PayDetails({ navigation, route }: any) {
       user_id: item.user_id,
       code: "PLUSNAUTICSTORE",
     };
-    console.log(data, "pli")
+    console.log(data, "pli");
     await sendData(url, data)
       .then((response) => {
         setplacetoPayUrl(response.data.processUrl);
@@ -94,31 +80,6 @@ export default function PayDetails({ navigation, route }: any) {
             navigation.goBack();
           }
         });
-        // navigation.goBack();
-        // alerta();
-        // const url2 = `/services/updateUserServicesCompleted/${items.id}/${id}`;
-        // sendDataPut(url2, {}).then((res) => {
-        //   if (res.ok) {
-        //     showErrorToastGood("Request made correctly");
-        //     // navigation.navigate("Profile");
-        //     const data = {
-        //       typeServices_id: items.Services.TypeServices.id,
-        //       user_id: items.user_id,
-        //       driver_id: items.driver_id,
-        //       amountOfPayments: items.Services.TypeServices.amountOfPayments,
-        //       userServices_id: items.id,
-        //     };
-        //     sendData(
-        //       `/servicesNotification/createServicesNotificationPayment`,
-        //       data
-        //     ).then((res2) => {
-        //       if (res2.ok) {
-        //         // navigation.navigate("Profile");
-        //         navigation.goBack();
-        //       }
-        //     });
-        //   }
-        // });
       }
     });
   };
@@ -137,6 +98,10 @@ export default function PayDetails({ navigation, route }: any) {
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
       <Loading showLoading={showLoading} translation={translation} />
+
+      <StripeProvider publishableKey={publishableKey}>
+        <View></View>
+      </StripeProvider>
 
       {!placeToPayOperationFineshed && showPlaceToPayview && (
         <View style={{ height: "100%" }}>
@@ -199,7 +164,7 @@ export default function PayDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text> { translation.t("TransactionCost")}</Text>
+            <Text> {translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -209,7 +174,7 @@ export default function PayDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text> { translation.t("ShippingCost")}</Text>
+            <Text> {translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -249,7 +214,8 @@ export default function PayDetails({ navigation, route }: any) {
                 {
                   text: "Yes",
                   onPress: () => {
-                    sendPayments();
+                    // sendPayments();
+                    initializePaymentSheet()
                   },
                 },
                 {

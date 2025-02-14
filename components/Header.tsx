@@ -25,7 +25,6 @@ export default function HeaderComponent({
     checkStorage("USER_LOGGED", (id: number) => {
       const url = `/tickets/getCart/${id}`;
       fetchData(url).then((response) => {
-        console.log(response);
         if (response.ok) {
           setTicketsLength(response.ticketsCart.length);
         } else {
