@@ -74,12 +74,6 @@ export default function PayDetails({ navigation, route }: any) {
         consulting();
       } else if (res.payment_status == "APPROVED") {
         setShowLoading(true);
-        const url = `/store/createOrder/${item.user_id}`;
-        sendData(url, { ...item, clientDirection_id }).then((res) => {
-          if (res.ok) {
-            navigation.goBack();
-          }
-        });
       }
     });
   };
@@ -92,6 +86,19 @@ export default function PayDetails({ navigation, route }: any) {
           consulting();
         }
       }
+    }
+  };
+
+  const createOrder = () => {
+    try {
+      const url = `/store/createOrder/${item.user_id}`;
+      sendData(url, { ...item, clientDirection_id }).then((res) => {
+        if (res.ok) {
+          navigation.goBack();
+        }
+      });
+    } catch (err) {
+
     }
   };
 
@@ -215,7 +222,7 @@ export default function PayDetails({ navigation, route }: any) {
                   text: "Yes",
                   onPress: () => {
                     // sendPayments();
-                    initializePaymentSheet()
+                    initializePaymentSheet(createOrder);
                   },
                 },
                 {

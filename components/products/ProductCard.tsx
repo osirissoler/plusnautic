@@ -67,7 +67,7 @@ export const ProductCard = ({ item, onPress, isDiscounted }: props) => {
               numberOfLines={1}
               style={{
                 fontWeight: 500,
-                fontSize: 14,
+                fontSize: 13,
                 marginTop: 5,
                 color: "grey",
               }}
@@ -78,7 +78,8 @@ export const ProductCard = ({ item, onPress, isDiscounted }: props) => {
           Costo de envio:USD
         </Text> */}
             <Text
-              style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 14 }}
+              numberOfLines={1}
+              style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 13 }}
             >
               Ahora {formatter(item.totalPriceWithDiscount)}
             </Text>

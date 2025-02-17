@@ -23,10 +23,10 @@ export default function HeaderComponent({
 
   const getTicketsCart = () => {
     checkStorage("USER_LOGGED", (id: number) => {
-      const url = `/tickets/getCart/${id}`;
+      const url = `/store/getProductCartStoreByUser/${id}`;
       fetchData(url).then((response) => {
         if (response.ok) {
-          setTicketsLength(response.ticketsCart.length);
+          setTicketsLength(response.products.length);
         } else {
           setTicketsLength(0);
         }

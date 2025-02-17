@@ -13,8 +13,6 @@ export default function usePayment(price: string) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [publishableKey, setPublishableKey] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
-  console.log(publishableKey)
-
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   useEffect(() => {
@@ -70,7 +68,7 @@ export default function usePayment(price: string) {
     };
   };
 
-  const initializePaymentSheet = async () => {
+  const initializePaymentSheet = async (callback: () => void) => {
     // if (appointment) {
     //   takeAnotherAppoimentsByPatients(appointmentSelected, appointment._id);
     //   return;
@@ -91,7 +89,7 @@ export default function usePayment(price: string) {
     });
 
     if (!error) {
-      openPaymentSheet();
+      openPaymentSheet(callback);
       return true;
     } else {
       setShowDialog(true);
@@ -99,15 +97,16 @@ export default function usePayment(price: string) {
     }
   };
 
-  const openPaymentSheet = async () => {
+  const openPaymentSheet = async (callback: () => void) => {
     const { error } = await presentPaymentSheet();
 
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message);
       setShowDialog(false);
     } else {
-    //   takeAppoimentsByPatients(appointmentSelected);
-    console.log("Hecho")
+      //   takeAppoimentsByPatients(appointmentSelected);
+      callback();
+      console.log("Hecho");
     }
   };
 

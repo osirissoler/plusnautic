@@ -45,9 +45,16 @@ export const ProductList = ({ navigation }: any) => {
     const url2 = `/store/getProductsRandomly/${limit}/${skip}`;
     let response;
     response = await fetchData(url);
+    console.log(response)
     if (response.ok) {
       setProducts([...products, ...response.products]);
-    } else {
+      setFetching(false);
+      setLoading(false);
+      setAreDiscountedProduct(true);
+      return;
+    }
+
+    if (response.count == 0) {
       response = await fetchData(url2);
       if (response.ok) {
         setProducts([...products, ...response.products]);
@@ -57,10 +64,6 @@ export const ProductList = ({ navigation }: any) => {
       setLoading(false);
       return;
     }
-
-    setFetching(false);
-    setLoading(false);
-    setAreDiscountedProduct(true);
   };
 
   if (!loading && products.length == 0) {
