@@ -147,11 +147,7 @@ export default function CartStore({ navigation, route }: any) {
                         >
                           <Tooltip
                             isVisible={toolTipVisible}
-                            content={
-                              <Text>
-                               { translation.t("optionSend")}
-                              </Text>
-                            }
+                            content={<Text>{translation.t("optionSend")}</Text>}
                             placement="top"
                             onClose={() => setToolTipVisible(false)}
                           >
@@ -170,13 +166,12 @@ export default function CartStore({ navigation, route }: any) {
                           <TouchableOpacity
                             onPress={() => {
                               navigation.navigate("CartProductDetails", {
-                                data: {...item2, isoCode},
+                                data: { ...item2, isoCode },
                               });
                             }}
                           >
                             <Text style={{ color: "#5f7ceb" }}>
-                              
-                             { translation.t("SeeShippingOptions")}
+                              {translation.t("SeeShippingOptions")}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -226,8 +221,9 @@ export default function CartStore({ navigation, route }: any) {
                           >
                             {/* <Text>{item2.name}</Text> */}
                             <Text style={styles.productPrice}>
-                              {item2.price}
+                              {formatter(item2.price)}
                             </Text>
+
                             <View style={styles.productAdd}>
                               <TouchableOpacity
                                 onPress={() => modifyPrice(2, item2)}
@@ -255,6 +251,28 @@ export default function CartStore({ navigation, route }: any) {
                               </TouchableOpacity>
                             </View>
                           </View>
+
+                          {Boolean(item2.isDiscounted) && (
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Text
+                                style={[
+                                  styles.productTitle,
+                                  { color: "#FC808E", fontWeight: "bold" },
+                                ]}
+                              >
+                                - {item2.discountPercentage}%
+                              </Text>
+
+                              <Text style={styles.productTitle}>
+                                {formatter(item2.totalPriceWithDiscount)}
+                              </Text>
+                            </View>
+                          )}
                         </View>
                       </View>
                     </View>
@@ -286,8 +304,11 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              {(isoCode === 'DO')?<Text>ITBIS </Text>
-              :<Text>IVU Municipal</Text>}
+              {isoCode === "DO" ? (
+                <Text>ITBIS </Text>
+              ) : (
+                <Text>IVU Municipal</Text>
+              )}
             </View>
             <View>
               <Text style={styles.cartPrice}>
@@ -297,7 +318,7 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              <Text>{ translation.t("TransactionCost")}</Text>
+              <Text>{translation.t("TransactionCost")}</Text>
             </View>
             <View>
               <Text style={styles.cartPrice}>
@@ -307,7 +328,7 @@ export default function CartStore({ navigation, route }: any) {
           </View>
           <View style={styles.cartPrices}>
             <View>
-              <Text>{ translation.t("ShippingCost")}</Text>
+              <Text>{translation.t("ShippingCost")}</Text>
             </View>
             <View>
               <Text style={styles.cartPrice}>{formatter(driver_price)}</Text>
@@ -351,7 +372,7 @@ export default function CartStore({ navigation, route }: any) {
             }}
           >
             <Text style={{ fontSize: 16, color: "#fff", fontWeight: "500" }}>
-            { translation.t("CompletePurchase")}
+              {translation.t("CompletePurchase")}
             </Text>
           </TouchableOpacity>
         </View>

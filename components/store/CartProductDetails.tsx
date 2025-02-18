@@ -181,6 +181,27 @@ export default function CartProductDetails({ navigation, route }: any) {
                         </TouchableOpacity>
                       </View>
                     </View>
+                    {Boolean(item.isDiscounted) && (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.productTitle,
+                            { color: "#FC808E", fontWeight: "bold" },
+                          ]}
+                        >
+                          - {item.discountPercentage}%
+                        </Text>
+
+                        <Text style={styles.productTitle}>
+                          {formatter(item.totalPriceWithDiscount)}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -244,8 +265,11 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-          {(route.params.data.isoCode === 'DO')?<Text>ITBIS</Text>
-              :<Text>IVU Municipal</Text>}
+            {route.params.data.isoCode === "DO" ? (
+              <Text>ITBIS</Text>
+            ) : (
+              <Text>IVU Municipal</Text>
+            )}
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -255,7 +279,7 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>{ translation.t("TransactionCost")}</Text>
+            <Text>{translation.t("TransactionCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>
@@ -265,7 +289,7 @@ export default function CartProductDetails({ navigation, route }: any) {
         </View>
         <View style={styles.cartPrices}>
           <View>
-            <Text>{ translation.t("ShippingCost")}</Text>
+            <Text>{translation.t("ShippingCost")}</Text>
           </View>
           <View>
             <Text style={styles.cartPrice}>

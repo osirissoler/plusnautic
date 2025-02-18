@@ -9,11 +9,12 @@ import { showErrorToast, showGoodToast } from "../utils";
 import { Alert, Linking } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 
-export default function usePayment(price: string) {
+export default function usePayment(item: any) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [publishableKey, setPublishableKey] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [paymentIntentId, setPaymentIntentId] = useState<string>("")
 
   useEffect(() => {
     // navigation.addListener("blur", () => {
@@ -44,12 +45,13 @@ export default function usePayment(price: string) {
     const url = `/payment/getPaymentIntent`;
     const data = {
       metadata: {
+        ...item,
         // name: userData.name,
         // email: userData.email,
         // phone: userData.phone,
       },
-      description: `Pago de citas`,
-      price
+      description: `Pago de producto de tiendas`,
+      price: item.total,
     };
 
     const response = await sendData(url, data);
@@ -61,6 +63,8 @@ export default function usePayment(price: string) {
 
     const initialUrl = await Linking.getInitialURL();
     const { paymentIntent } = response;
+    console.log(response.paymentIntentId);
+    setPaymentIntentId(response.paymentIntentId);
 
     return {
       paymentIntent,
@@ -105,10 +109,29 @@ export default function usePayment(price: string) {
       setShowDialog(false);
     } else {
       //   takeAppoimentsByPatients(appointmentSelected);
-      callback();
+      splitThePayment()
+      // callback();
       console.log("Hecho");
     }
   };
+
+   const splitThePayment = async () => {
+     const url = `/payment/splitThePayment`;
+     const data = {
+       description: `Pago de producto de tiendas`,
+       user_id: item.user_id,
+       paymentIntentId,
+     };
+
+     const response = await sendData(url, data);
+           console.log(response)
+
+     if (!response.ok) {
+       // showErrorToast(response.mensaje);
+       showErrorToast("Error al procesar el pago");
+       return
+     }
+   };
 
   return {
     showLoading,

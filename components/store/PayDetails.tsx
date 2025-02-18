@@ -25,7 +25,7 @@ export default function PayDetails({ navigation, route }: any) {
   const [contador, setContador]: any = useState(0);
   const [clientDirection_id, setClientDirection_id]: any = useState(null);
 
-  const { publishableKey, initializePaymentSheet } = usePayment(item?.total);
+  const { publishableKey, initializePaymentSheet } = usePayment(item);
 
   async function getIpClient() {
     try {
