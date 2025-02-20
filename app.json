@@ -22,7 +22,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "bundleIdentifier": "com.plusnautica2.app",
-      "buildNumber": "2",
+      "buildNumber": "4",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you change your profile image.",
         "NSCameraUsageDescription": "The app uses your camera to let you take a picture and set it as your profile image.",
@@ -55,7 +55,10 @@
           "photosPermission": "The app accesses your photos to let you change your profile image.",
           "cameraPermission": "The app uses your camera to let you take a picture and set it as your profile image."
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font",
+      "expo-localization"
     ],
     "extra": {
       "eas": {

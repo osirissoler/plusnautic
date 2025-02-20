@@ -2,56 +2,27 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Linking,
-  Alert,
   ScrollView,
 } from "react-native";
 
 import HeaderComponent from "../components/Header";
 import {
   checkLoggedUser,
-  checkStorage,
   Container,
-  Loading,
 } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
-import AdsScreen from "./AdsScreen";
 import asyncStorage from "@react-native-async-storage/async-storage";
-import FloatingButton from "../components/FloatingButton";
 import AllStoreHome from "../components/store/AllStoreHome";
 import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
-import ProductHome from "../components/store/ProductHome";
 import { ProductList } from "../components/products/ProductList";
 import { OrderedProductsList } from "../components/products/OrderedProductsList";
 
 export default function HomeScreen({ navigation, route }: any) {
-  const defaultProductImg =
-    "http://openmart.online/frontend/imgs/no_image.png?";
-  const [initialImg, setinitialImage] = useState(
-    "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
-  );
   const { translation } = React.useContext(LanguageContext);
-  const [fetching, setFetching]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
-  const [listPharmacy, setListPharmacy]: any = useState([]);
-  const [visible, setVisible] = useState(true);
-  const [error, setError] = useState(false);
-
-  const supportedURL = "https://abordo.page.link/abordoapp";
-  const goAbordo = async () => {
-    const supported = await Linking.canOpenURL(supportedURL);
-    if (supported) {
-      await Linking.openURL(supportedURL);
-    } else {
-      Alert.alert(`Don't know how to open this URL: ${supportedURL}`);
-    }
-  };
 
   useEffect(() => {
     checkLoggedUser(
@@ -97,30 +68,6 @@ export default function HomeScreen({ navigation, route }: any) {
     }, 1000);
   };
 
-  useEffect(() => {
-    getPharmaciesByUSer();
-  }, []);
-
-  const getPharmaciesByUSer = async () => {
-    // checkStorage('USER_LOGGED', async (id: any) => {
-    setFetching(true);
-    let url = `/menu/getMenuApp`;
-    await fetchData(url).then((response) => {
-      if (response.ok) {
-        setListPharmacy(response.menu);
-      } else {
-        setListPharmacy([]);
-        setFetching(false);
-        setError(true);
-      }
-      setFetching(false);
-    });
-    // })
-  };
-  const goMuelles = (id: number) => {
-    navigation.navigate("Muelles", { id: id });
-  };
-
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
@@ -154,14 +101,6 @@ export default function HomeScreen({ navigation, route }: any) {
         <AdsHome navigation={navigation} code="Courses" />
       </ScrollView>
     </Container>
-  );
-}
-
-function ServiceComponent() {
-  return (
-    <View>
-      <Text>Error vuelva a intentar mas tarde</Text>
-    </View>
   );
 }
 

@@ -11,7 +11,7 @@ import {
 import { ProductCard } from "./ProductCard";
 import { fetchData } from "../../httpRequests";
 import { Products } from "../../types/Products";
-import Skeleton from "react-native-reanimated-skeleton";
+// import Skeleton from "react-native-reanimated-skeleton";
 import { checkLoggedUser, checkStorage } from "../Shared";
 
 export const OrderedProductsList = ({ navigation }: any) => {
@@ -116,7 +116,7 @@ export const OrderedProductsList = ({ navigation }: any) => {
         contentContainerStyle={{ paddingVertical: 5, alignItems: "center" }}
       />
 
-      <Skeleton
+      {/* <Skeleton
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -147,7 +147,7 @@ export const OrderedProductsList = ({ navigation }: any) => {
             ],
           },
         ]}
-      />
+      /> */}
     </View>
   );
 };

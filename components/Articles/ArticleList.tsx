@@ -11,7 +11,7 @@ import {
 import { HomeArticleCard } from "./HomeArticleCard";
 import { fetchData } from "../../httpRequests";
 import { Articles } from "../../types/Articles";
-import Skeleton from "react-native-reanimated-skeleton";
+// import Skeleton from "react-native-reanimated-skeleton";
 
 export const ArticleList = ({ navigation }: any) => {
   const [articles, setArticles] = useState<Articles[]>([]);
@@ -103,7 +103,7 @@ export const ArticleList = ({ navigation }: any) => {
         contentContainerStyle={{ alignItems: "center", gap: 10 }}
       />
 
-      <Skeleton
+      {/* <Skeleton
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -124,7 +124,7 @@ export const ArticleList = ({ navigation }: any) => {
             ],
           },
         ]}
-      />
+      /> */}
     </View>
   );
 };

@@ -9,7 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { fetchData } from "../httpRequests";
-import Skeleton from "react-native-reanimated-skeleton";
+// import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AdsHome({ navigation, code }: any) {
   const [ads, setAds] = useState([]);
@@ -108,7 +108,7 @@ export default function AdsHome({ navigation, code }: any) {
         )}
       />
 
-      <Skeleton
+      {/* <Skeleton
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -121,7 +121,7 @@ export default function AdsHome({ navigation, code }: any) {
           { key: "1", height: 130, width: 366, borderRadius: 15 },
           { key: "2", height: 130, width: 366, borderRadius: 15 },
         ]}
-      />
+      /> */}
     </View>
   );
 }

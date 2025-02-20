@@ -11,7 +11,7 @@ import {
 import { ProductCard } from "./ProductCard";
 import { fetchData } from "../../httpRequests";
 import { Products } from "../../types/Products";
-import Skeleton from "react-native-reanimated-skeleton";
+// import Skeleton from "react-native-reanimated-skeleton";
 
 export const ProductList = ({ navigation }: any) => {
   const [products, setProducts] = useState<Products[]>([]);
@@ -122,7 +122,7 @@ export const ProductList = ({ navigation }: any) => {
         contentContainerStyle={{ paddingVertical: 5, alignItems: "center" }}
       />
 
-      <Skeleton
+      {/* <Skeleton
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -143,7 +143,7 @@ export const ProductList = ({ navigation }: any) => {
             ],
           },
         ]}
-      />
+      /> */}
     </View>
   );
 };

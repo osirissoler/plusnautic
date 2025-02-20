@@ -14,7 +14,7 @@ import {
 import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Loading } from "../Shared";
 import { fetchData } from "../../httpRequests";
-import Skeleton from "react-native-reanimated-skeleton";
+// import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AllStoreHome({ navigation, router }: any) {
   const { translation } = React.useContext(LanguageContext);
@@ -90,7 +90,7 @@ export default function AllStoreHome({ navigation, router }: any) {
         )}
       ></FlatList>
 
-      <Skeleton
+      {/* <Skeleton
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -105,7 +105,7 @@ export default function AllStoreHome({ navigation, router }: any) {
           { key: "3", width: 160, height: 80, borderRadius: 10 },
           { key: "4", width: 160, height: 80, borderRadius: 10 },
         ]}
-      />
+      /> */}
     </View>
   );
 }
