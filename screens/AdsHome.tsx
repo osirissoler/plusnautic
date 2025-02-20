@@ -19,7 +19,7 @@ export default function AdsHome({ navigation, code }: any) {
   const scrollIndex = useRef(0);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     getAds();
   }, []);
 
@@ -33,7 +33,7 @@ export default function AdsHome({ navigation, code }: any) {
         console.log(response, "aqui error");
       }
     });
-    setLoading(false)
+    setLoading(false);
   };
 
   // Función para hacer scroll automático cada 5 segundos
@@ -42,10 +42,13 @@ export default function AdsHome({ navigation, code }: any) {
       if (flatListRef.current) {
         scrollIndex.current =
           scrollIndex.current >= ads.length - 1 ? 0 : scrollIndex.current + 1;
-        flatListRef.current.scrollToIndex({
-          index: scrollIndex.current,
-          animated: true,
-        });
+
+        if (ads.length > 0) {
+          flatListRef.current.scrollToIndex({
+            index: scrollIndex.current,
+            animated: true,
+          });
+        }
       }
     }, 7000); // Cambia cada 7 segundos
 
@@ -111,7 +114,7 @@ export default function AdsHome({ navigation, code }: any) {
           width: "100%",
           flexDirection: "row",
           gap: 10,
-          marginTop: 10
+          marginTop: 10,
         }}
         isLoading={loading}
         layout={[

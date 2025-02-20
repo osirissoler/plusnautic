@@ -124,64 +124,8 @@ export default function HomeScreen({ navigation, route }: any) {
   return (
     <Container>
       <HeaderComponent screen={"home"} navigation={navigation} />
-
-      {/* <Loading showLoading={showLoading} translation={translation} /> */}
-      {/* {error ? (
-        <ServiceComponent />
-      ) : (
-        <View style={{ height: "100%" }}>
-          <FlatList
-            columnWrapperStyle={{ justifyContent: "space-around" }}
-            refreshing={fetching}
-            data={listPharmacy}
-            onRefresh={getPharmaciesByUSer}
-            ListHeaderComponent={
-              <View>
-                {visible ? (
-                  <AdsScreen code={"Home"} img={initialImg} />
-                ) : (
-                  <Image
-                    style={styles.headerImage}
-                    source={{ uri: initialImg }}
-                  />
-                )}
-              </View>
-            }
-            style={styles.body}
-            renderItem={({ item, index }: any) => (
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "35%",
-                }}
-                onPress={() => {
-                  navigation.navigate(item.router, { showBack: true });
-                }}
-                key={item.id}
-              >
-                <View style={{ height: 150, width: 150, marginBottom: 5 }}>
-                  <Image
-                    source={{ uri: item.img }}
-                    style={{ flex: 1, resizeMode: "contain" }}
-                  />
-                </View>
-                <Text style={styles.categoryName}>
-                  {(translation.locale.includes("en") && item.name) ||
-                    (translation.locale.includes("es") && item.nombre) ||
-                    (translation.locale.includes("fr") && item.nom)}
-                </Text>
-              </TouchableOpacity>
-            )}
-            numColumns={2}
-          ></FlatList>
-        </View>
-      )} */}
-
       <ScrollView
         style={{
-          height: "90.5%",
           gap: 5,
         }}
       >
@@ -205,7 +149,6 @@ export default function HomeScreen({ navigation, route }: any) {
 
         <ArticleList navigation={navigation} />
 
-        {/* <ProductHome text="Vover a comprar" init="6" /> */}
         <OrderedProductsList navigation={navigation} />
 
         <AdsHome navigation={navigation} code="Courses" />
