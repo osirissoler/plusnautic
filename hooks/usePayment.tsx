@@ -14,7 +14,6 @@ export default function usePayment(item: any) {
   const [publishableKey, setPublishableKey] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const [paymentIntentId, setPaymentIntentId] = useState<string>("")
 
   useEffect(() => {
     // navigation.addListener("blur", () => {
@@ -62,13 +61,12 @@ export default function usePayment(item: any) {
     }
 
     const initialUrl = await Linking.getInitialURL();
-    const { paymentIntent } = response;
-    console.log(response.paymentIntentId);
-    setPaymentIntentId(response.paymentIntentId);
+    const { paymentIntent, paymentIntentId } = response;
 
     return {
       paymentIntent,
       initialUrl,
+      paymentIntentId,
     };
   };
 
@@ -78,7 +76,8 @@ export default function usePayment(item: any) {
     //   return;
     // }
 
-    const { paymentIntent, initialUrl } = await fetchPaymentSheetParams();
+    const { paymentIntent, initialUrl, paymentIntentId } =
+      await fetchPaymentSheetParams();
 
     const { error } = await initPaymentSheet({
       merchantDisplayName: "Plusnautic",
@@ -93,7 +92,7 @@ export default function usePayment(item: any) {
     });
 
     if (!error) {
-      openPaymentSheet(callback);
+      openPaymentSheet(callback, paymentIntentId);
       return true;
     } else {
       setShowDialog(true);
@@ -101,7 +100,7 @@ export default function usePayment(item: any) {
     }
   };
 
-  const openPaymentSheet = async (callback: () => void) => {
+  const openPaymentSheet = async (callback: () => void, paymentIntentId: string) => {
     const { error } = await presentPaymentSheet();
 
     if (error) {
@@ -109,13 +108,13 @@ export default function usePayment(item: any) {
       setShowDialog(false);
     } else {
       //   takeAppoimentsByPatients(appointmentSelected);
-      splitThePayment()
-      // callback();
+      splitThePayment(paymentIntentId);
+      callback();
       console.log("Hecho");
     }
   };
 
-   const splitThePayment = async () => {
+   const splitThePayment = async (paymentIntentId: string) => {
      const url = `/payment/splitThePayment`;
      const data = {
        description: `Pago de producto de tiendas`,
@@ -124,12 +123,12 @@ export default function usePayment(item: any) {
      };
 
      const response = await sendData(url, data);
-           console.log(response)
+     console.log(response);
 
      if (!response.ok) {
        // showErrorToast(response.mensaje);
        showErrorToast("Error al procesar el pago");
-       return
+       return;
      }
    };
 
