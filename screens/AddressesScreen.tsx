@@ -13,7 +13,7 @@ import { Loading, checkStorage } from "../components/Shared";
 import { LanguageContext } from "../LanguageContext";
 import { sendData } from "../httpRequests";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import GoMap from "./GoMap";
+// import GoMap from "./GoMap";
 import { AddressCard } from "../components/AddressCard";
 
 interface Address {
@@ -34,7 +34,7 @@ interface Address {
   longitude: number;
 }
 
-export default function AddressesScreen({ navigation }: any) {
+export default function AddressesScreen({ navigation, direction }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [addresses, setAddresses]: any = useState([]);
   const [isFetching, setIsFetching]: any = useState(false);
@@ -97,13 +97,12 @@ export default function AddressesScreen({ navigation }: any) {
           const user = response["user"];
           const url = "/user/updateCliente";
           if (item.id != user.client_direction_id) {
-           
             const data = {
               user_id: user.id,
               client_direction_id: item.id,
             };
             // console.log(data.client_direction_id, "data jajaja")
-            // direction(data.client_direction_id)
+            direction(data.client_direction_id);
             sendData(url, data).then((response: any) => {
               fetchAddresses();
               // if (setAddress) setAddress(item);

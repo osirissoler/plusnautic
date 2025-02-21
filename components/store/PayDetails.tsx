@@ -124,6 +124,7 @@ export default function PayDetails({ navigation, route }: any) {
             navigation={navigation}
             translation={translation}
             direction={(value: any) => {
+              console.log(value)
               setClientDirection_id(value);
             }}
           />
