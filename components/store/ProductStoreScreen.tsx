@@ -22,12 +22,12 @@ import {
 import { fetchData } from "../../httpRequests";
 
 const ProductStoreScreen = ({ navigation, route }: any) => {
+  const { item } = route.params;
   const { translation } = React.useContext(LanguageContext);
   const [fetchingCategories, setFetchingCategories]: any = useState(false);
   const [showLoading, setShowLoading]: any = useState(false);
   const [product, setProducts]: any = useState([]);
   const [fetching, setFetching]: any = useState(false);
-  const [store, setStore]: any = useState(route.params.item);
   const [openModal, setOpenModal]: any = useState(false);
   const [visible, setVisible] = useState(true);
   const [initialImg, setinitialImage] = useState(
@@ -36,63 +36,62 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
   const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
   const [category, setCategory]: any = useState([]);
   const [category_name, setCategory_name]: any = useState(null);
-  const [limit, setLimit]: any = useState(100);
-  const skip = useRef<number>(0);
+  const [limit, setLimit]: any = useState(10);
+  const [skip, setSkip] = useState<number>(0);
   const category_id = useRef<number>(0);
+
   useEffect(() => {
+    setSkip(0);
+    setShowLoading(true);
     getProduct();
   }, []);
 
+  const clear = () => {
+    setSkip(0);
+    setProducts([]);
+    setCategory_name(null);
+    category_id.current = 0;
+  };
+
   const getProduct = async () => {
-    setShowLoading(true);
-    const url = `/store/getAllProductStore/${store.id}/${limit}/${skip.current}`;
+    const url = `/store/getAllProductStore/${item.id}/${limit}/${skip}`;
     fetchData(url).then(async (response: any) => {
       if (response.ok) {
-        if (skip.current === 0) {
-          await setProducts([]);
-          await setProducts([...response.products]);
+        if (skip === 0) {
+          // await setProducts([]);
+          setProducts([...response.products]);
         } else {
-          setProducts([...product, ...response.products]);
+            setProducts((prev: any) => [...prev, ...response.products]);
         }
       } else {
-        skip.current = await 0;
-        await setProducts([]);
-        setCategory_name(null);
-        category_id.current = 0;
+        clear();
       }
     });
-    setTimeout(() => {
-      setShowLoading(false);
-    }, 1000);
+    setShowLoading(false);
   };
 
   const getProductByCategoryStore = async () => {
     setShowLoading(true);
     if (category_id.current !== 0) {
-      const url = `/store/getProductByCategoryStore/${category_id.current}/${limit}/${skip.current}`;
+      const url = `/store/getProductByCategoryStore/${category_id.current}/${limit}/${skip}`;
       fetchData(url).then(async (response) => {
         if (response.ok) {
-          if (skip.current == 0) {
-            await setProducts([]);
-            await setProducts([...response.products]);
+          if (skip == 0) {
+            //  setProducts([]);
+            setProducts([...response.products]);
           } else {
-            setProducts([...product, ...response.products]);
+            setProducts((prev: any) => [...prev, ...response.products]);
           }
         } else {
-          skip.current = await 0;
-          await setProducts([]);
-          setCategory_name(null);
-          category_id.current = 0;
+          clear();
         }
       });
     }
-    setTimeout(() => {
-      setShowLoading(false);
-    }, 1000);
+    setShowLoading(false);
   };
 
   const getCategoryByStoreIdApp = async () => {
-    const url = `/store/getCategoryByStoreIdApp/${store.id}`;
+    const url = `/store/getCategoryByStoreIdApp/${item.id}`;
     fetchData(url).then(async (response) => {
       if (response.ok) {
         setCategory(response.category);
@@ -105,7 +104,8 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
     await setCategory_name(category.name);
     category_id.current = await category.id;
     await setOpenModal(false);
-    skip.current = await 0;
+    setSkip(0);
+    setProducts([]);
     await getProductByCategoryStore();
   };
   return (
@@ -129,7 +129,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
               style={styles.optionIcon}
               onPress={() =>
                 navigation.navigate("ListProducts", {
-                  data: { store_id: store.id },
+                  data: { store_id: item.id },
                 })
               }
             >
@@ -146,7 +146,9 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                 <AntDesign name="filter" size={22} color="#5f7ceb" />
               </TouchableOpacity>
               <View>
-                <Text style={{ color: "#5f7ceb" }}>{translation.t("Category")}</Text>
+                <Text style={{ color: "#5f7ceb" }}>
+                  {translation.t("Category")}
+                </Text>
               </View>
             </View>
           </View>
@@ -211,6 +213,7 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           numColumns={2}
         ></FlatList>
       </Modal>
+
       {category_name != null && (
         <View style={styles.header}>
           <Pressable style={{ flexDirection: "row" }} onPress={() => {}}>
@@ -245,8 +248,9 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           //   </Text>
           // }
           onEndReached={async () => {
-            skip.current = (await skip.current) + limit;
+            setSkip(skip + limit);
             if (category_id.current !== 0) {
+              // setProducts([]);
               await getProductByCategoryStore();
             } else {
               await getProduct();

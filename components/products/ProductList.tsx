@@ -11,11 +11,12 @@ import {
 import { ProductCard } from "./ProductCard";
 import { fetchData } from "../../httpRequests";
 import { Products } from "../../types/Products";
+import SkeletonPlaceholder from "../SkeletonPlaceholder";
 // import Skeleton from "react-native-reanimated-skeleton";
 
 export const ProductList = ({ navigation }: any) => {
   const [products, setProducts] = useState<Products[]>([]);
-  const [skip, setKip] = useState<number>(0);
+  const [skip, setSkip] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [fetching, setFetching] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,15 +30,20 @@ export const ProductList = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getProducts();
-  }, []);
-
-  useEffect(() => {
-    if (skip !== -1) {
+    if (skip == 0) {
+      setLoading(true);
+    }
+   if (skip !== -1) {
       getProducts();
     }
   }, [skip]);
+
+  // useEffect(() => {
+  //   if (skip !== -1) {
+  //     getProducts();
+  //     console.log("skip", skip);
+  //   }
+  // }, [skip]);
 
   const getProducts = async () => {
     setFetching(true);
@@ -45,9 +51,12 @@ export const ProductList = ({ navigation }: any) => {
     const url2 = `/store/getProductsRandomly/${limit}/${skip}`;
     let response;
     response = await fetchData(url);
-    console.log(response)
     if (response.ok) {
-      setProducts([...products, ...response.products]);
+      if (skip == 0) {
+        setProducts(response.products);
+      } else {
+        setProducts([...products, ...response.products]);
+      }
       setFetching(false);
       setLoading(false);
       setAreDiscountedProduct(true);
@@ -57,7 +66,11 @@ export const ProductList = ({ navigation }: any) => {
     if (response.count == 0) {
       response = await fetchData(url2);
       if (response.ok) {
-        setProducts([...products, ...response.products]);
+        if (skip == 0) {
+          setProducts(response.products);
+        } else {
+          setProducts([...products, ...response.products]);
+        }
         setAreDiscountedProduct(false);
       }
       setFetching(false);
@@ -79,9 +92,9 @@ export const ProductList = ({ navigation }: any) => {
               ? "Productos en oferta"
               : "Productos en ventas"}
           </Text>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Text style={{ fontSize: 15 }}>Ver todos</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
 
@@ -89,7 +102,6 @@ export const ProductList = ({ navigation }: any) => {
         refreshing={fetching}
         data={products}
         horizontal
-        showsHorizontalScrollIndicator={false}
         keyExtractor={(item: Products, index) => index.toString()}
         renderItem={({ item }) => (
           <ProductCard
@@ -99,17 +111,17 @@ export const ProductList = ({ navigation }: any) => {
           />
         )}
         onRefresh={() => {
-          setFetching(true);
-          setProducts([]);
-          setTimeout(async () => {
-            await setKip(-1);
-            await setKip(0);
-            console.log("entro");
+          // setFetching(true);
+          // setLoading(true);
+          // setProducts([]);
+          setSkip(-1);
+          setTimeout(() => {
+            setSkip(0);
           }, 100);
         }}
         onEndReached={() => {
           if (!fetching && products.length > 3) {
-            setKip(skip + limit);
+            setSkip(skip + limit);
           }
         }}
         ListFooterComponent={() =>
@@ -122,14 +134,14 @@ export const ProductList = ({ navigation }: any) => {
         contentContainerStyle={{ paddingVertical: 5, alignItems: "center" }}
       />
 
-      {/* <Skeleton
+      <SkeletonPlaceholder
+        isLoading={loading}
         containerStyle={{
           flex: 1,
           width: "100%",
           flexDirection: "column",
           gap: 10,
         }}
-        isLoading={loading}
         layout={[
           { key: "1", height: 20, width: 170, borderRadius: 15 },
           {
@@ -143,7 +155,7 @@ export const ProductList = ({ navigation }: any) => {
             ],
           },
         ]}
-      /> */}
+      />
     </View>
   );
 };
@@ -151,6 +163,7 @@ export const ProductList = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    paddingBottom: 0
   },
   titleContainer: {
     flexDirection: "row",

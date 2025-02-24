@@ -14,6 +14,7 @@ import {
 import { LanguageContext } from "../../LanguageContext";
 import { checkStorage, Loading } from "../Shared";
 import { fetchData } from "../../httpRequests";
+import SkeletonPlaceholder from "../SkeletonPlaceholder";
 // import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AllStoreHome({ navigation, router }: any) {
@@ -59,7 +60,11 @@ export default function AllStoreHome({ navigation, router }: any) {
         //     )}
         //   </>
         // }
-        contentContainerStyle={{ paddingHorizontal: 5, paddingVertical: 10, gap: 10 }}
+        contentContainerStyle={{
+          paddingHorizontal: 5,
+          paddingVertical: 10,
+          gap: 10,
+        }}
         renderItem={({ item }) => (
           <View style={{ alignItems: "center", gap: 5 }}>
             <TouchableOpacity
@@ -90,7 +95,8 @@ export default function AllStoreHome({ navigation, router }: any) {
         )}
       ></FlatList>
 
-      {/* <Skeleton
+      <SkeletonPlaceholder
+        isLoading={loading}
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -98,14 +104,13 @@ export default function AllStoreHome({ navigation, router }: any) {
           alignItems: "center",
           gap: 10,
         }}
-        isLoading={loading}
         layout={[
           { key: "1", width: 160, height: 80, borderRadius: 10 },
           { key: "2", width: 160, height: 80, borderRadius: 10 },
           { key: "3", width: 160, height: 80, borderRadius: 10 },
           { key: "4", width: 160, height: 80, borderRadius: 10 },
         ]}
-      /> */}
+      />
     </View>
   );
 }

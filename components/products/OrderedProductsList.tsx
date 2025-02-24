@@ -13,6 +13,7 @@ import { fetchData } from "../../httpRequests";
 import { Products } from "../../types/Products";
 // import Skeleton from "react-native-reanimated-skeleton";
 import { checkLoggedUser, checkStorage } from "../Shared";
+import SkeletonPlaceholder from "../SkeletonPlaceholder";
 
 export const OrderedProductsList = ({ navigation }: any) => {
   const [products, setProducts] = useState<any>([]);
@@ -54,17 +55,17 @@ export const OrderedProductsList = ({ navigation }: any) => {
     });
   };
 
-  const groupProducts = (products: Products[]) => {
-    const grouped = [];
-    for (let i = 0; i < products.length; i += 2) {
-      if (i + 1 < products.length) {
-        grouped.push([products[i], products[i + 1]]);
-      } else {
-        grouped.push([products[i], null]); // Si queda solo uno, el segundo es `null`
-      }
-    }
-    return grouped;
-  };
+  // const groupProducts = (products: Products[]) => {
+  //   const grouped = [];
+  //   for (let i = 0; i < products.length; i += 2) {
+  //     if (i + 1 < products.length) {
+  //       grouped.push([products[i], products[i + 1]]);
+  //     } else {
+  //       grouped.push([products[i], null]); // Si queda solo uno, el segundo es `null`
+  //     }
+  //   }
+  //   return grouped;
+  // };
 
   if (!loading && products.length == 0) {
     return <></>;
@@ -116,38 +117,38 @@ export const OrderedProductsList = ({ navigation }: any) => {
         contentContainerStyle={{ paddingVertical: 5, alignItems: "center" }}
       />
 
-      {/* <Skeleton
+      <SkeletonPlaceholder
         containerStyle={{
           flex: 1,
           width: "100%",
           flexDirection: "column",
-          gap: 10,
+          gap: 10
         }}
         isLoading={loading}
         layout={[
           { key: "1", height: 20, width: 170, borderRadius: 15 },
           {
             key: "group", // Grupo para las tres cajas inferiores
-            flexDirection: "row", // Hace que estén en fila
+            flexDirection: "row", 
             gap: 10,
             children: [
+              { key: "1", height: 170, width: 140, borderRadius: 15 },
               { key: "2", height: 170, width: 140, borderRadius: 15 },
               { key: "3", height: 170, width: 140, borderRadius: 15 },
-              { key: "4", height: 170, width: 140, borderRadius: 15 },
             ],
           },
           {
-            key: "group", // Grupo para las tres cajas inferiores
-            flexDirection: "row", // Hace que estén en fila
+            key: "group2", // Grupo para las tres cajas inferiores
+            flexDirection: "row", 
             gap: 10,
             children: [
+              { key: "1", height: 170, width: 140, borderRadius: 15 },
               { key: "2", height: 170, width: 140, borderRadius: 15 },
               { key: "3", height: 170, width: 140, borderRadius: 15 },
-              { key: "4", height: 170, width: 140, borderRadius: 15 },
             ],
           },
         ]}
-      /> */}
+      />
     </View>
   );
 };
@@ -155,7 +156,7 @@ export const OrderedProductsList = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    marginTop: 10
+    marginTop: 15
   },
   titleContainer: {
     flexDirection: "row",

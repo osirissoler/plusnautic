@@ -11,11 +11,12 @@ import {
 import { HomeArticleCard } from "./HomeArticleCard";
 import { fetchData } from "../../httpRequests";
 import { Articles } from "../../types/Articles";
+import SkeletonPlaceholder from "../SkeletonPlaceholder";
 // import Skeleton from "react-native-reanimated-skeleton";
 
 export const ArticleList = ({ navigation }: any) => {
   const [articles, setArticles] = useState<Articles[]>([]);
-  const [skip, setKip] = useState<number>(0);
+  const [skip, setSkip] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const [fetching, setFetching] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,15 +28,24 @@ export const ArticleList = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getNews();
-  }, []);
-
-  useEffect(() => {
+    if (skip == 0) {
+      setLoading(true);
+    }
     if (skip !== -1) {
       getNews();
     }
   }, [skip]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getNews();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (skip !== -1) {
+  //     getNews();
+  //   }
+  // }, [skip]);
 
   const getNews = async () => {
     setFetching(true);
@@ -43,7 +53,11 @@ export const ArticleList = ({ navigation }: any) => {
     await fetchData(url).then((response) => {
       if (response.ok) {
         // hideLoadingModal(() => {
-        setArticles([...articles, ...response.news]);
+        if (skip == 0) {
+          setArticles(response.news);
+        } else {
+          setArticles([...articles, ...response.news]);
+        }
         // }, setFetching);
       } else {
         setArticles([]);
@@ -57,19 +71,21 @@ export const ArticleList = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      {!loading && <View style={styles.titleContainer}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{ height: 45, width: 40 }}
-            source={require("../../assets/images/abordo.png")}
-          />
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Abordo</Text>
-        </View>
+      {!loading && (
+        <View style={styles.titleContainer}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Image
+              style={{ height: 45, width: 40 }}
+              source={require("../../assets/images/abordo.png")}
+            />
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Abordo</Text>
+          </View>
 
-        <TouchableOpacity>
-          <Text style={{ fontSize: 15 }}>Ver todos</Text>
-        </TouchableOpacity>
-      </View>}
+          {/* <TouchableOpacity>
+            <Text style={{ fontSize: 15 }}>Ver todos</Text>
+          </TouchableOpacity> */}
+        </View>
+      )}
 
       <FlatList
         refreshing={fetching}
@@ -81,16 +97,17 @@ export const ArticleList = ({ navigation }: any) => {
           <HomeArticleCard article={item} onPress={handlePress} />
         )}
         onRefresh={() => {
-          setFetching(true);
-          setArticles([]);
-          setTimeout(async () => {
-            await setKip(-1);
-            await setKip(0);
+          // setFetching(true);
+          // setLoading(true);
+          // setProducts([]);
+          setSkip(-1);
+          setTimeout(() => {
+            setSkip(0);
           }, 100);
         }}
         onEndReached={() => {
           if (!fetching && articles.length > 3) {
-            setKip(skip + limit);
+            setSkip(skip + limit);
           }
         }}
         ListFooterComponent={() =>
@@ -103,16 +120,17 @@ export const ArticleList = ({ navigation }: any) => {
         contentContainerStyle={{ alignItems: "center", gap: 10 }}
       />
 
-      {/* <Skeleton
+      <SkeletonPlaceholder
         containerStyle={{
           flex: 1,
           width: "100%",
           flexDirection: "column",
           gap: 10,
+          marginTop: 10,
         }}
         isLoading={loading}
         layout={[
-          { key: "1", height: 20, width: 170, borderRadius: 15 },
+          { key: "1", height: 20, width: 150, borderRadius: 15 },
           {
             key: "group", // Grupo para las tres cajas inferiores
             flexDirection: "row", // Hace que estén en fila
@@ -124,7 +142,7 @@ export const ArticleList = ({ navigation }: any) => {
             ],
           },
         ]}
-      /> */}
+      />
     </View>
   );
 };

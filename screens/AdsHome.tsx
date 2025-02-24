@@ -9,6 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { fetchData } from "../httpRequests";
+import SkeletonPlaceholder from "../components/SkeletonPlaceholder";
 // import Skeleton from "react-native-reanimated-skeleton";
 
 export default function AdsHome({ navigation, code }: any) {
@@ -108,7 +109,8 @@ export default function AdsHome({ navigation, code }: any) {
         )}
       />
 
-      {/* <Skeleton
+      <SkeletonPlaceholder
+        isLoading={loading}
         containerStyle={{
           flex: 1,
           width: "100%",
@@ -116,12 +118,11 @@ export default function AdsHome({ navigation, code }: any) {
           gap: 10,
           marginTop: 10,
         }}
-        isLoading={loading}
         layout={[
           { key: "1", height: 130, width: 366, borderRadius: 15 },
           { key: "2", height: 130, width: 366, borderRadius: 15 },
         ]}
-      /> */}
+      />
     </View>
   );
 }

@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Animated } from "react-native";
 
 import HeaderComponent from "../components/Header";
-import {
-  checkLoggedUser,
-  Container,
-} from "../components/Shared";
+import { checkLoggedUser, Container } from "../components/Shared";
 import { fetchData, sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
 import asyncStorage from "@react-native-async-storage/async-storage";
@@ -19,6 +11,7 @@ import AdsHome from "./AdsHome";
 import { ArticleList } from "../components/Articles/ArticleList";
 import { ProductList } from "../components/products/ProductList";
 import { OrderedProductsList } from "../components/products/OrderedProductsList";
+import SkeletonPlaceholder from "../components/SkeletonPlaceholder";
 
 export default function HomeScreen({ navigation, route }: any) {
   const { translation } = React.useContext(LanguageContext);
