@@ -33,7 +33,7 @@ export const ProductList = ({ navigation }: any) => {
     if (skip == 0) {
       setLoading(true);
     }
-   if (skip !== -1) {
+    if (skip !== -1) {
       getProducts();
     }
   }, [skip]);
@@ -51,16 +51,19 @@ export const ProductList = ({ navigation }: any) => {
     const url2 = `/store/getProductsRandomly/${limit}/${skip}`;
     let response;
     response = await fetchData(url);
+
     if (response.ok) {
       if (skip == 0) {
         setProducts(response.products);
       } else {
         setProducts([...products, ...response.products]);
       }
-      setFetching(false);
-      setLoading(false);
-      setAreDiscountedProduct(true);
-      return;
+      if (response.count > 0) {
+        setFetching(false);
+        setLoading(false);
+        setAreDiscountedProduct(true);
+        return;
+      }
     }
 
     if (response.count == 0) {
@@ -163,7 +166,7 @@ export const ProductList = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   titleContainer: {
     flexDirection: "row",
