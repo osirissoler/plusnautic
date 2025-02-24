@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation, route }: any) {
         }}
       >
         <View style={{ borderWidth: 0 }}>
-          <Text
+          {/* <Text
             style={{
               marginHorizontal: 5,
               fontSize: 17,
@@ -79,7 +79,7 @@ export default function HomeScreen({ navigation, route }: any) {
             }}
           >
             Destacadas en plusnautic
-          </Text>
+          </Text> */}
           <AllStoreHome navigation={navigation} />
         </View>
 
