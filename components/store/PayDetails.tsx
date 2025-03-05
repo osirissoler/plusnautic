@@ -7,7 +7,7 @@ import axios from "axios";
 import { Loading } from "../Shared";
 import WebView from "react-native-webview";
 import AddressesScreen from "../../screens/AddressesScreen";
-import { formatter } from "../../utils";
+import { formatter, showGoodToast } from "../../utils";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import usePayment from "../../hooks/usePayment";
 
@@ -95,7 +95,8 @@ export default function PayDetails({ navigation, route }: any) {
       const url = `/store/createOrder/${item.user_id}`;
       sendData(url, { ...item, clientDirection_id }).then((res) => {
         if (res.ok) {
-          navigation.goBack();
+          showGoodToast(res.mensaje)
+          navigation.navigate("Home");
         }
       });
     } catch (err) {

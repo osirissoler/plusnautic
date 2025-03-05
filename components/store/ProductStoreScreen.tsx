@@ -60,8 +60,9 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
         if (skip === 0) {
           // await setProducts([]);
           setProducts([...response.products]);
+          console.log(response.products);
         } else {
-            setProducts((prev: any) => [...prev, ...response.products]);
+          setProducts((prev: any) => [...prev, ...response.products]);
         }
       } else {
         clear();
@@ -300,11 +301,55 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                       flexDirection: "row",
                       justifyContent: "space-between",
                       marginTop: 20,
+                      alignItems: "flex-end",
                     }}
                   >
-                    <Text style={styles.productPrice}>
+                    {/* <Text style={styles.productPrice}>
                       {formatter(item.price)}
-                    </Text>
+                    </Text> */}
+                    {item.isDiscounted ? (
+                      <View style={{ flexDirection: "column" }}>
+                        <Text
+                          numberOfLines={1}
+                          style={{ fontWeight: "bold", fontSize: 15 }}
+                        >
+                          - {item.discountPercentage}%
+                        </Text>
+                        <Text
+                          numberOfLines={1}
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 14,
+                            marginTop: 5,
+                            color: "grey",
+                          }}
+                        >
+                          Antes: {formatter(item.price)}
+                        </Text>
+                        <Text
+                          numberOfLines={1}
+                          style={{
+                            fontWeight: "bold",
+                            color: "#5f7ceb",
+                            fontSize: 15,
+                          }}
+                        >
+                          Ahora {formatter(item.totalPriceWithDiscount)}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={{ marginTop: 5 }}>
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            color: "grey",
+                            fontSize: 15,
+                          }}
+                        >
+                          {formatter(item.price)}
+                        </Text>
+                      </View>
+                    )}
                     <Pressable style={styles.productAdd}>
                       <AntDesign
                         name="plus"

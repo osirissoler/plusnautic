@@ -60,7 +60,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
         storeProduct_id: item.id,
         user_id: id,
         amount: productQuantity,
-        store_id:item.store_id,
+        store_id: item.store_id,
         // productPrice:0
       };
 
@@ -136,7 +136,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
     <SafeAreaView style={styles.container}>
       <Loading showLoading={showLoading} translation={translation} />
       <View style={styles.body}>
-        {product_img.url != '' ? (
+        {product_img.url != "" ? (
           <View style={styles.productImage}>
             <TouchableOpacity
               style={{ height: 150, width: "100%", alignItems: "center" }}
@@ -154,7 +154,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{justifyContent:'center', alignItems:'center'}}>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Text>No hay imagen que mostrar</Text>
           </View>
         )}
@@ -225,9 +225,54 @@ export default function ProductDetailsStore({ navigation, route }: any) {
             justifyContent: "space-between",
             marginBottom: 20,
             borderWidth: 0,
+            alignItems: "flex-end",
           }}
         >
-          <Text style={styles.productPrice}>{formatter(productPrice)}</Text>
+          {/* <Text style={styles.productPrice}>{formatter(productPrice)}</Text> */}
+          {item.isDiscounted ? (
+            <View style={{ flexDirection: "column", gap: 3 }}>
+              <Text
+                numberOfLines={1}
+                style={{ fontWeight: "bold", fontSize: 17 }}
+              >
+                - {item.discountPercentage}%
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontWeight: 500,
+                  fontSize: 18,
+                  marginTop: 5,
+                  color: "grey",
+                }}
+              >
+                Antes: {formatter(item.price)}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontWeight: "bold",
+                  color: "#5f7ceb",
+                  fontSize: 20,
+                }}
+              >
+                Ahora {formatter(item.totalPriceWithDiscount)}
+              </Text>
+            </View>
+          ) : (
+            <View style={{ marginTop: 5 }}>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#5f7ceb",
+                  fontSize: 20,
+                }}
+              >
+                {formatter(item.price)}
+              </Text>
+            </View>
+          )}
+
           {item.amount > 0 && (
             <View
               style={{ flexDirection: "row", justifyContent: "space-around" }}
@@ -251,7 +296,7 @@ export default function ProductDetailsStore({ navigation, route }: any) {
           )}
         </View>
 
-        <Text style={{ fontSize: 16 }}>
+        <Text style={{ fontSize: 16, marginTop: 10 }}>
           {translation.t("headerTitleProductDetails")}
         </Text>
 

@@ -86,11 +86,6 @@ export const ProductCard = ({ item, onPress, isDiscounted }: props) => {
           </>
         ) : (
           <View style={{ marginTop: 5 }}>
-            {/* <Text
-              style={{ fontWeight: "bold", color: "#5f7ceb", fontSize: 14 }}
-            >
-              {item.amount}
-            </Text> */}
             <Text style={{ fontWeight: "bold", color: "grey", fontSize: 13 }}>
               {formatter(item.price)}
             </Text>
