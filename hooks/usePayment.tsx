@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  deleteData,
-  fetchData,
-  sendData,
-  sendDataPut,
-} from "../httpRequests";
+import { deleteData, fetchData, sendData, sendDataPut } from "../httpRequests";
 import { showErrorToast, showGoodToast } from "../utils";
 import { Alert, Linking } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
+import { checkStorage } from "../components/Shared";
 
 export default function usePayment(item: any) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [publishableKey, setPublishableKey] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [country_id, setCountry_id] = useState<string>("");
 
   useEffect(() => {
     // navigation.addListener("blur", () => {
@@ -26,8 +23,12 @@ export default function usePayment(item: any) {
     //   socket.on(`${_id}-reminderMobile`, handleReminderWithSocket);
     // });
     // });
-    setShowLoading(true);
+    // setShowLoading(true);
     getPublishableKey();
+    checkStorage("DATA_COUNTRY", (country: any) => {
+      const countryData = JSON.parse(country);
+      setCountry_id(countryData.id);
+    });
   }, []);
 
   const getPublishableKey = async () => {
@@ -41,8 +42,9 @@ export default function usePayment(item: any) {
   };
 
   const fetchPaymentSheetParams = async () => {
+    setShowLoading(true);
     const url = `/payment/getPaymentIntent`;
-    const data = {
+    let data = {
       metadata: {
         ...item,
         // name: userData.name,
@@ -51,6 +53,7 @@ export default function usePayment(item: any) {
       },
       description: `Pago de producto de tiendas`,
       price: item.total,
+      country_id,
     };
 
     const response = await sendData(url, data);
@@ -61,12 +64,13 @@ export default function usePayment(item: any) {
     }
 
     const initialUrl = await Linking.getInitialURL();
-    const { paymentIntent, paymentIntentId } = response;
+    const { paymentIntent, paymentIntentId, transferGroup } = response;
 
     return {
       paymentIntent,
       initialUrl,
       paymentIntentId,
+      transferGroup,
     };
   };
 
@@ -76,7 +80,7 @@ export default function usePayment(item: any) {
     //   return;
     // }
 
-    const { paymentIntent, initialUrl, paymentIntentId } =
+    const { paymentIntent, initialUrl, paymentIntentId, transferGroup } =
       await fetchPaymentSheetParams();
 
     const { error } = await initPaymentSheet({
@@ -92,7 +96,7 @@ export default function usePayment(item: any) {
     });
 
     if (!error) {
-      openPaymentSheet(callback, paymentIntentId);
+      openPaymentSheet(callback, transferGroup);
       return true;
     } else {
       setShowDialog(true);
@@ -100,7 +104,10 @@ export default function usePayment(item: any) {
     }
   };
 
-  const openPaymentSheet = async (callback: () => void, paymentIntentId: string) => {
+  const openPaymentSheet = async (
+    callback: () => void,
+    transferGroup: string
+  ) => {
     const { error } = await presentPaymentSheet();
 
     if (error) {
@@ -108,29 +115,31 @@ export default function usePayment(item: any) {
       setShowDialog(false);
     } else {
       //   takeAppoimentsByPatients(appointmentSelected);
-      splitThePayment(paymentIntentId);
+      splitThePayment(transferGroup);
       callback();
       console.log("Hecho");
     }
   };
 
-   const splitThePayment = async (paymentIntentId: string) => {
-     const url = `/payment/splitThePayment`;
-     const data = {
-       description: `Pago de producto de tiendas`,
-       user_id: item.user_id,
-       paymentIntentId,
-     };
+  const splitThePayment = async (paymentIntentId: string) => {
+    const url = `/payment/splitThePayment`;
+    const data = {
+      description: `Pago de producto de tiendas`,
+      user_id: item.user_id,
+      paymentIntentId,
+      country_id,
+    };
 
-     const response = await sendData(url, data);
-     console.log(response);
+    const response = await sendData(url, data);
 
-     if (!response.ok) {
-       // showErrorToast(response.mensaje);
-       showErrorToast("Error al procesar el pago");
-       return;
-     }
-   };
+    if (!response.ok) {
+      // showErrorToast(response.mensaje);
+      showErrorToast("Error al procesar el pago");
+      return;
+    }
+
+
+  };
 
   return {
     showLoading,

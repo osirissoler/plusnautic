@@ -101,7 +101,6 @@ export default function SignInScreen({ navigation }: any) {
           setAuthUser(response.id);
           asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.country_id));
           asyncStorage.setItem("DATA_COUNTRY", JSON.stringify(response.data.Country));
-          console.log(response.data.Country)
         }else{
           // showErrorToast(response.message);
           setError(true);

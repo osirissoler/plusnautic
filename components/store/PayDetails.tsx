@@ -14,7 +14,7 @@ import usePayment from "../../hooks/usePayment";
 export default function PayDetails({ navigation, route }: any) {
   const { item } = route.params;
   const { translation } = React.useContext(LanguageContext);
-  const [showLoading, setShowLoading]: any = useState(false);
+  // const [showLoading, setShowLoading]: any = useState(false);
   const URLToRiderect = "https://panel-plusnautic.netlify.app/success";
   const [placetoPayUrl, setplacetoPayUrl]: any = useState("");
   const [showPlaceToPayview, setshowPlaceToPayview]: any = useState(false);
@@ -25,7 +25,8 @@ export default function PayDetails({ navigation, route }: any) {
   const [contador, setContador]: any = useState(0);
   const [clientDirection_id, setClientDirection_id]: any = useState(null);
 
-  const { publishableKey, initializePaymentSheet } = usePayment(item);
+  const { publishableKey, initializePaymentSheet, showLoading, setShowLoading } =
+    usePayment(item);
 
   async function getIpClient() {
     try {

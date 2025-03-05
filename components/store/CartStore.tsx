@@ -22,7 +22,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Loading, checkLoggedUser, checkStorage } from "../Shared";
 import ImageViewer from "react-native-image-zoom-viewer";
-import { formatter } from "../../utils";
+import { formatter, showErrorToast } from "../../utils";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 import HeaderComponent from "../Header";
@@ -95,6 +95,8 @@ export default function CartStore({ navigation, route }: any) {
     sendDataPut(url, { type, amount: item.amount }).then((response: any) => {
       if (response.ok) {
         fetchProduct();
+      } else {
+        showErrorToast(response.mensaje);
       }
     });
   };
