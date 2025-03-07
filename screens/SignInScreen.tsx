@@ -51,6 +51,7 @@ export default function SignInScreen({ navigation }: any) {
     // clearAsyncStorage()
     // buscartoken();
   }, []);
+  
   const clearAsyncStorage = async () => {
     AsyncStorage.clear();
   };

@@ -29,12 +29,16 @@ import { CheckBox, Separator } from "react-native-btr";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Dropdown } from "react-native-element-dropdown";
 import { translate } from "i18n-js";
+import { useHandleNotifications } from "../hooks/useHandleNotifications";
+import registerForPushNotificationsAsync from "./helper/TokenDevice";
 export default function SignUpScreen({ navigation }: any) {
   const { translation } = React.useContext(LanguageContext);
   const [showLoading, setShowLoading]: any = useState(false);
   const [termAndCoditionAccepted, settermAndCoditionAccepted] = useState(false);
   const [country_id, setCountry_id]: any = useState(0);
   const [countries, setCountries]: any = useState([]);
+    const [expoPushToken, setExpoPushToken] = useState<string>("");
+
   const validationSchema = yup.object().shape({
     fullName: yup
       .string()
@@ -111,7 +115,9 @@ export default function SignUpScreen({ navigation }: any) {
   });
 
   useEffect(() => {
+    const cleanupNotifications = useHandleNotifications(navigation);
     getCountryActive();
+    getToken();
   }, []);
 
   const getCountryActive = async () => {
@@ -125,6 +131,14 @@ export default function SignUpScreen({ navigation }: any) {
         setCountries(mappedValues);
       }
     });
+  };
+
+  const getToken = async () => {
+    let token: any = await registerForPushNotificationsAsync();
+    if (token) {
+      setExpoPushToken(token);
+      asyncStorage.setItem("TOKEN", token);
+    }
   };
 
   const onSignUp = (values: any) => {
@@ -146,16 +160,18 @@ export default function SignUpScreen({ navigation }: any) {
           if (response.ok) {
             console.log(response.ok, "aqui1");
             const url = "/auth/login";
-            sendData(url, values).then((response: any) => {
-              if (response.ok) {
-                setAuthUser(response.id);
-                asyncStorage.setItem(
-                  "USER_LOGGED_COUNTRY",
-                  JSON.stringify(response.country_id)
-                );
-                // redirectToRecordBoats()
+            sendData(url, { ...values, token: expoPushToken }).then(
+              (response: any) => {
+                if (response.ok) {
+                  setAuthUser(response.id);
+                  asyncStorage.setItem(
+                    "USER_LOGGED_COUNTRY",
+                    JSON.stringify(response.country_id)
+                  );
+                  // redirectToRecordBoats()
+                }
               }
-            });
+            );
           } else {
             showErrorToast(response.message);
             console.log(response, "aqui2");
