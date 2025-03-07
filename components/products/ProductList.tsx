@@ -12,6 +12,7 @@ import { ProductCard } from "./ProductCard";
 import { fetchData } from "../../httpRequests";
 import { Products } from "../../types/Products";
 import SkeletonPlaceholder from "../SkeletonPlaceholder";
+import { checkStorage } from "../Shared";
 // import Skeleton from "react-native-reanimated-skeleton";
 
 export const ProductList = ({ navigation }: any) => {
@@ -22,6 +23,7 @@ export const ProductList = ({ navigation }: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [areDiscountedProduct, setAreDiscountedProduct] =
     useState<boolean>(true);
+  const [country_id, setCountry_id] = useState<string>("");
 
   const handlePress = (item: Products) => {
     navigation.navigate("ProductDetailsStore", {
@@ -30,12 +32,18 @@ export const ProductList = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    if (skip == 0) {
-      setLoading(true);
-    }
-    if (skip !== -1) {
-      getProducts();
-    }
+    checkStorage("DATA_COUNTRY", (country: any) => {
+      const countryData = JSON.parse(country);
+      
+      if (skip == 0) {
+        setLoading(true);
+      }
+      if (skip !== -1) {
+        getProducts(countryData.id);
+      }
+
+      // setCountry_id(countryData.id);
+    });
   }, [skip]);
 
   // useEffect(() => {
@@ -45,10 +53,10 @@ export const ProductList = ({ navigation }: any) => {
   //   }
   // }, [skip]);
 
-  const getProducts = async () => {
+  const getProducts = async (country: string) => {
     setFetching(true);
-    const url = `/store/getProductWithDiscounts/${limit}/${skip}`;
-    const url2 = `/store/getProductsRandomly/${limit}/${skip}`;
+    const url = `/store/getProductWithDiscounts/${limit}/${skip}/${country}`;
+    const url2 = `/store/getProductsRandomly/${limit}/${skip}/${country}`;
     let response;
     response = await fetchData(url);
 

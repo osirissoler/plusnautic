@@ -33,7 +33,8 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
   const [initialImg, setinitialImage] = useState(
     "https://plus-nautic.nyc3.digitaloceanspaces.com/mosaico-para-destinos.jpg__1200.0x960.0_q85_subsampling-2.jpg"
   );
-  const defaultProductImg = "https://totalcomp.com/images/no-image.jpeg";
+  const defaultProductImg =
+    "https://plus-nautic.nyc3.digitaloceanspaces.com/noProduct.png";
   const [category, setCategory]: any = useState([]);
   const [category_name, setCategory_name]: any = useState(null);
   const [limit, setLimit]: any = useState(10);
@@ -200,7 +201,11 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
             >
               <View style={{ height: 50, width: 50, marginBottom: 10 }}>
                 <Image
-                  source={{ uri: item.img }}
+                  source={{
+                    uri:
+                      item.img ??
+                      "https://plus-nautic.nyc3.digitaloceanspaces.com/llave-inglesa.png",
+                  }}
                   style={{ flex: 1, resizeMode: "contain" }}
                 />
               </View>
@@ -279,13 +284,13 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
           onEndReachedThreshold={0}
           style={{ padding: 20, flexDirection: "column" }}
           renderItem={({ item }) => (
-            <View key={item.id}>
-              <Pressable
-                style={styles.productCard}
-                onPress={() =>
-                  navigation.navigate("ProductDetailsStore", { item })
-                }
-              >
+            <TouchableOpacity
+              key={item.id}
+              onPress={() =>
+                navigation.navigate("ProductDetailsStore", { item })
+              }
+            >
+              <View style={styles.productCard}>
                 <View style={styles.productImage}>
                   <Image
                     source={{
@@ -359,8 +364,8 @@ const ProductStoreScreen = ({ navigation, route }: any) => {
                     </Pressable>
                   </View>
                 </View>
-              </Pressable>
-            </View>
+              </View>
+            </TouchableOpacity>
           )}
         ></FlatList>
       </View>

@@ -29,20 +29,28 @@ export const OrderedProductsList = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getProducts();
+    checkStorage("DATA_COUNTRY", (country: any) => {
+      const countryData = JSON.parse(country);
+
+      setLoading(true);
+      getProducts(countryData.id);
+    });
   }, []);
 
   useEffect(() => {
     if (skip !== -1) {
-      getProducts();
+      checkStorage("DATA_COUNTRY", (country: any) => {
+        const countryData = JSON.parse(country);
+
+        getProducts(countryData.id);
+      });
     }
   }, [skip]);
 
-  const getProducts = async () => {
+  const getProducts = async (country: string) => {
     setFetching(true);
     checkStorage("USER_LOGGED", async (id: string) => {
-      const url = `/store/getProductsOrdered/${id}`;
+      const url = `/store/getProductsOrdered/${id}/${country}`;
       const response = await fetchData(url);
       if (response.ok) {
         setProducts([...products, ...response.products]);
@@ -122,14 +130,14 @@ export const OrderedProductsList = ({ navigation }: any) => {
           flex: 1,
           width: "100%",
           flexDirection: "column",
-          gap: 10
+          gap: 10,
         }}
         isLoading={loading}
         layout={[
           { key: "1", height: 20, width: 170, borderRadius: 15 },
           {
             key: "group", // Grupo para las tres cajas inferiores
-            flexDirection: "row", 
+            flexDirection: "row",
             gap: 10,
             children: [
               { key: "1", height: 170, width: 140, borderRadius: 15 },
@@ -139,7 +147,7 @@ export const OrderedProductsList = ({ navigation }: any) => {
           },
           {
             key: "group2", // Grupo para las tres cajas inferiores
-            flexDirection: "row", 
+            flexDirection: "row",
             gap: 10,
             children: [
               { key: "1", height: 170, width: 140, borderRadius: 15 },
@@ -156,7 +164,7 @@ export const OrderedProductsList = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    marginTop: 15
+    marginTop: 15,
   },
   titleContainer: {
     flexDirection: "row",

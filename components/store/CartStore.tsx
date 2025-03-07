@@ -58,15 +58,18 @@ export default function CartStore({ navigation, route }: any) {
     setShowLoading(true);
     checkStorage("USER_LOGGED", (id: any) => {
       setUser_id(id);
-      const url = `/store/getProductCartStoreByUser/${id}`;
-      fetchData(url).then((response: any) => {
-        if (response.ok) {
-          setProducts(response.products);
-          setTotal(response.total);
-          setDriver_price(response.driver_price);
-        } else {
-          setProducts([]);
-        }
+      checkStorage("DATA_COUNTRY", (country: any) => {
+        const countryData = JSON.parse(country);
+        const url = `/store/getProductCartStoreByUser/${id}/${countryData.id}`;
+        fetchData(url).then((response: any) => {
+          if (response.ok) {
+            setProducts(response.products);
+            setTotal(response.total);
+            setDriver_price(response.driver_price);
+          } else {
+            setProducts([]);
+          }
+        });
       });
     });
     setTimeout(() => {
@@ -202,7 +205,7 @@ export default function CartStore({ navigation, route }: any) {
                             source={{
                               uri: item2.img
                                 ? item2.img
-                                : "https://back.tiendainval.com/backend/admin/backend/web/archivosDelCliente/items/images/20210108100138no_image_product.png",
+                                : "https://plus-nautic.nyc3.digitaloceanspaces.com/noProduct.png",
                             }}
                             style={{ flex: 1, resizeMode: "contain" }}
                           />

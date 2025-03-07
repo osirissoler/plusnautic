@@ -59,7 +59,9 @@ export default function usePayment(item: any) {
     const response = await sendData(url, data);
     if (!response.ok) {
       // showErrorToast(response.mensaje);
+      console.log(response)
       showErrorToast("Error al procesar el pago");
+      setShowLoading(false)
       return {};
     }
 

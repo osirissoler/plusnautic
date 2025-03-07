@@ -23,13 +23,16 @@ export default function HeaderComponent({
 
   const getTicketsCart = () => {
     checkStorage("USER_LOGGED", (id: number) => {
-      const url = `/store/getProductCartStoreByUser/${id}`;
-      fetchData(url).then((response) => {
-        if (response.ok) {
-          setTicketsLength(response.products.length);
-        } else {
-          setTicketsLength(0);
-        }
+      checkStorage("DATA_COUNTRY", (country: any) => {
+        const countryData = JSON.parse(country);
+        const url = `/store/getProductCartStoreByUser/${id}/${countryData.id}`;
+        fetchData(url).then((response) => {
+          if (response.ok) {
+            setTicketsLength(response.products.length);
+          } else {
+            setTicketsLength(0);
+          }
+        });
       });
     });
   };
