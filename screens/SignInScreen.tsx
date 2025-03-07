@@ -19,6 +19,7 @@ import registerForPushNotificationsAsync from "./helper/TokenDevice";
 // import { db, firebase } from '../firebase';
 // import { collection, Firestore, onSnapshot, query, where } from '@firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useHandleNotifications } from "../hooks/useHandleNotifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -37,15 +38,18 @@ export default function SignInScreen({ navigation }: any) {
   const [errorMesage, setErrorMesage]: any = useState("");
   const [error, setError]: any = useState(false);
 
-  const [notification, setNotification]:any = useState(null);
+  const [notification, setNotification]: any = useState(null);
 
-  const call:any = useRef(true);
-  const notificationListener:any = useRef();
-  const responseListener:any = useRef();
+  const call: any = useRef(true);
+  const notificationListener: any = useRef();
+  const responseListener: any = useRef();
 
   useEffect(() => {
+    const cleanupNotifications = useHandleNotifications(navigation);
+    getToken();
+
     // clearAsyncStorage()
-    buscartoken();
+    // buscartoken();
   }, []);
   const clearAsyncStorage = async () => {
     AsyncStorage.clear();
@@ -67,46 +71,37 @@ export default function SignInScreen({ navigation }: any) {
       else setShowLogin(true);
     });
   }, []);
-  const buscartoken = async () => {
-    let token: any = await registerForPushNotificationsAsync();
 
-    await setNotification(token);
-    // await setNotification2(token)
+  const getToken = async () => {
+    let token: any = await registerForPushNotificationsAsync();
     if (token) {
+      setExpoPushToken(token);
       asyncStorage.setItem("TOKEN", token);
     }
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response:any) => {});
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
   };
 
   const onSignIn = (values: any) => {
     setShowLoading(true);
     const url = "/auth/login";
-    sendData(url, values).then((response: any) => {
+    sendData(url, { ...values, token: expoPushToken }).then((response: any) => {
       console.log(response.id);
       hideLoadingModal(() => {
-        if(response.ok){
+        if (response.ok) {
           setAuthUser(response.id);
-          asyncStorage.setItem("USER_LOGGED_COUNTRY", JSON.stringify(response.country_id));
-          asyncStorage.setItem("DATA_COUNTRY", JSON.stringify(response.data.Country));
-        }else{
+          asyncStorage.setItem(
+            "USER_LOGGED_COUNTRY",
+            JSON.stringify(response.country_id)
+          );
+          asyncStorage.setItem(
+            "DATA_COUNTRY",
+            JSON.stringify(response.data.Country)
+          );
+        } else {
           // showErrorToast(response.message);
           setError(true);
-          if(translation.locale.includes("en")){
+          if (translation.locale.includes("en")) {
             setErrorMesage(response.message);
-          }else{
+          } else {
             setErrorMesage(response.mensaje);
           }
         }
@@ -250,7 +245,9 @@ export default function SignInScreen({ navigation }: any) {
                     style={{ alignItems: "center" }}
                     onPress={() => navigation.navigate("ForgotPassword")}
                   >
-                    <Text style={styles.registerLink}>{translation.t("signInForgotPassword")}</Text>
+                    <Text style={styles.registerLink}>
+                      {translation.t("signInForgotPassword")}
+                    </Text>
                   </TouchableOpacity>
 
                   <View
