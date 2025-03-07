@@ -160,7 +160,7 @@ export default function SignUpScreen({ navigation }: any) {
           if (response.ok) {
             console.log(response.ok, "aqui1");
             const url = "/auth/login";
-            sendData(url, { ...values, token: expoPushToken }).then(
+            sendData(url, { ...values, expoToken: expoPushToken }).then(
               (response: any) => {
                 if (response.ok) {
                   setAuthUser(response.id);

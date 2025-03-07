@@ -51,7 +51,7 @@ export default function SignInScreen({ navigation }: any) {
     // clearAsyncStorage()
     // buscartoken();
   }, []);
-  
+
   const clearAsyncStorage = async () => {
     AsyncStorage.clear();
   };
@@ -84,30 +84,32 @@ export default function SignInScreen({ navigation }: any) {
   const onSignIn = (values: any) => {
     setShowLoading(true);
     const url = "/auth/login";
-    sendData(url, { ...values, token: expoPushToken }).then((response: any) => {
-      console.log(response.id);
-      hideLoadingModal(() => {
-        if (response.ok) {
-          setAuthUser(response.id);
-          asyncStorage.setItem(
-            "USER_LOGGED_COUNTRY",
-            JSON.stringify(response.country_id)
-          );
-          asyncStorage.setItem(
-            "DATA_COUNTRY",
-            JSON.stringify(response.data.Country)
-          );
-        } else {
-          // showErrorToast(response.message);
-          setError(true);
-          if (translation.locale.includes("en")) {
-            setErrorMesage(response.message);
+    sendData(url, { ...values, expoToken: expoPushToken }).then(
+      (response: any) => {
+        console.log(response.id);
+        hideLoadingModal(() => {
+          if (response.ok) {
+            setAuthUser(response.id);
+            asyncStorage.setItem(
+              "USER_LOGGED_COUNTRY",
+              JSON.stringify(response.country_id)
+            );
+            asyncStorage.setItem(
+              "DATA_COUNTRY",
+              JSON.stringify(response.data.Country)
+            );
           } else {
-            setErrorMesage(response.mensaje);
+            // showErrorToast(response.message);
+            setError(true);
+            if (translation.locale.includes("en")) {
+              setErrorMesage(response.message);
+            } else {
+              setErrorMesage(response.mensaje);
+            }
           }
-        }
-      });
-    });
+        });
+      }
+    );
   };
 
   const hideLoadingModal = (callback: Function) => {
