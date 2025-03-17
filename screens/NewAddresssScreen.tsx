@@ -67,6 +67,8 @@ export default function NewAddressScreen({ route, navigation }: any) {
   // }, []);
 
   useEffect(() => {
+    getLocation()
+
     if (!!route.params) {
       setShowLoading(true);
       hideLoadingModal(() => {
@@ -82,11 +84,40 @@ export default function NewAddressScreen({ route, navigation }: any) {
     };
   }, []);
 
+
+const getLocation = async () => {
+  try {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Debes aceptar los permisos para poder obtener tu ubicación.",
+        "",
+        [{ text: "OK", onPress: goBack }]
+      );
+      return;
+    }
+
+    let servicesEnabled = await Location.hasServicesEnabledAsync();
+    if (!servicesEnabled) {
+      Alert.alert("El servicio de ubicación está desactivado.");
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setMarkerPosition({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+  } catch (error) {
+    console.error("Error obteniendo la ubicación:", error);
+  }
+};
+
+
   const hideLoadingModal = (callback: Function) => {
-    setTimeout(() => {
       setShowLoading(false);
       callback();
-    }, 1500);
   };
 
   const saveAddress = (values: any) => {
