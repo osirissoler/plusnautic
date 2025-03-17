@@ -74,8 +74,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
       setTimeout(() => {
         setShowLoading(false);
       }, 1000);
-    })
-    
+    });
   };
   return (
     <View style={{ height: "100%", backgroundColor: "white" }}>
@@ -110,7 +109,7 @@ const HomeStoreScreen = ({ navigation, route }: any) => {
         </View>
       </View>
       <Loading showLoading={showLoading} translation={translation} />
-      
+
       <View style={{ borderWidth: 0, height: "90%", marginEnd: 10 }}>
         <FlatList
           data={store}
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   productAdd: {
-    backgroundColor: "#60941A",
+    backgroundColor: "#5f7ceb",
     padding: 4,
     borderRadius: 100,
   },

@@ -234,7 +234,7 @@ export default function CartProductDetails({ navigation, route }: any) {
             }}
           >
             {isChecked ? (
-              <AntDesign name="checkcircle" size={24} color="#60941A" />
+              <AntDesign name="checkcircle" size={24} color="#5f7ceb" />
             ) : (
               <View
                 style={{
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   productAddIcon: {
-    color: "#60941A",
+    color: "#5f7ceb",
     marginHorizontal: 15,
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   buttonCheckout: {
     width: "100%",
     height: 50,
-    backgroundColor: "#60941A",
+    backgroundColor: "#5f7ceb",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

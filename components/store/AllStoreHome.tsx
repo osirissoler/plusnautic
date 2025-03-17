@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   productAdd: {
-    backgroundColor: "#60941A",
+    backgroundColor: "#5f7ceb",
     padding: 4,
     borderRadius: 100,
   },

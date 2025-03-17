@@ -109,19 +109,18 @@ export default function CartStore({ navigation, route }: any) {
       style={{
         backgroundColor: "white",
         height: "100%",
-        paddingVertical: 10,
         paddingHorizontal: 8,
       }}
     >
       <Loading showLoading={showLoading} translation={translation} />
       <HeaderComponent />
 
-      {products.length > 0 ? (
-        <View style={{ height: "66%", borderWidth: 0 }}>
+      <View style={{ height: "60%" }}>
+        {products.length > 0 ? (
           <FlatList
             extraData={products}
-            style={{ height: "50%" }}
             refreshing={fetching}
+            // style={{ height: "50%" }}
             onRefresh={() => {
               fetchProduct();
             }}
@@ -286,74 +285,76 @@ export default function CartStore({ navigation, route }: any) {
               </View>
             )}
           />
-        </View>
-      ) : (
-        <View style={{ alignItems: "center" }}>
-          <Text>No hay productos en el carrito</Text>
-        </View>
-      )}
+        ) : (
+          <View style={{ alignItems: "center" }}>
+            <Text>No hay productos en el carrito</Text>
+          </View>
+        )}
+      </View>
 
-      {products.length > 0 && (
-        <View style={{ width: "100%", marginTop: 10 }}>
-          <View style={styles.cartPrices}>
-            <Text>Sub Total</Text>
-            <Text style={styles.cartPrice}>{formatter(total.amount)}</Text>
+      <View style={{ paddingHorizontal: 20, height: "40%", gap: 15 }}>
+        {products.length > 0 && (
+          <View style={{ width: "100%", marginTop: 10 }}>
+            <View style={styles.cartPrices}>
+              <Text>Sub Total</Text>
+              <Text style={styles.cartPrice}>{formatter(total.amount)}</Text>
+            </View>
+            <View style={styles.cartPrices}>
+              <View>
+                <Text>IVU Estatal</Text>
+              </View>
+              <View>
+                <Text style={styles.cartPrice}>
+                  {formatter(total.stateTax)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.cartPrices}>
+              <View>
+                {isoCode === "DO" ? (
+                  <Text>ITBIS </Text>
+                ) : (
+                  <Text>IVU Municipal</Text>
+                )}
+              </View>
+              <View>
+                <Text style={styles.cartPrice}>
+                  {formatter(total.municipalTax)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.cartPrices}>
+              <View>
+                <Text>{translation.t("TransactionCost")}</Text>
+              </View>
+              <View>
+                <Text style={styles.cartPrice}>
+                  {formatter(total.transationFee)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.cartPrices}>
+              <View>
+                <Text>{translation.t("ShippingCost")}</Text>
+              </View>
+              <View>
+                <Text style={styles.cartPrice}>{formatter(driver_price)}</Text>
+              </View>
+            </View>
+            <View style={styles.cartPrices}>
+              <View>
+                <Text style={{ fontWeight: "bold" }}>Total</Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.cartPrice, fontWeight: "bold" }}>
+                  {formatter(total.total)}
+                </Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.cartPrices}>
-            <View>
-              <Text>IVU Estatal</Text>
-            </View>
-            <View>
-              <Text style={styles.cartPrice}>{formatter(total.stateTax)}</Text>
-            </View>
-          </View>
-          <View style={styles.cartPrices}>
-            <View>
-              {isoCode === "DO" ? (
-                <Text>ITBIS </Text>
-              ) : (
-                <Text>IVU Municipal</Text>
-              )}
-            </View>
-            <View>
-              <Text style={styles.cartPrice}>
-                {formatter(total.municipalTax)}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.cartPrices}>
-            <View>
-              <Text>{translation.t("TransactionCost")}</Text>
-            </View>
-            <View>
-              <Text style={styles.cartPrice}>
-                {formatter(total.transationFee)}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.cartPrices}>
-            <View>
-              <Text>{translation.t("ShippingCost")}</Text>
-            </View>
-            <View>
-              <Text style={styles.cartPrice}>{formatter(driver_price)}</Text>
-            </View>
-          </View>
-          <View style={styles.cartPrices}>
-            <View>
-              <Text style={{ fontWeight: "bold" }}>Total</Text>
-            </View>
-            <View>
-              <Text style={{ ...styles.cartPrice, fontWeight: "bold" }}>
-                {formatter(total.total)}
-              </Text>
-            </View>
-          </View>
-        </View>
-      )}
+        )}
 
-      {products.length > 0 && (
-        <View style={{ width: "100%" }}>
+        {products.length > 0 && (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("PayDetails", {
@@ -369,7 +370,6 @@ export default function CartStore({ navigation, route }: any) {
               width: "100%",
               backgroundColor: "#5f7ceb",
               height: 45,
-
               borderRadius: 5,
               justifyContent: "center",
               alignItems: "center",
@@ -380,8 +380,8 @@ export default function CartStore({ navigation, route }: any) {
               {translation.t("CompletePurchase")}
             </Text>
           </TouchableOpacity>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
   },
   productImage: {
     height: 100,
-    width: 100,
+    width: "20%",
   },
   productTitle: {
     fontSize: 16,
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   productAddIcon: {
-    color: "#60941A",
+    color: "#5f7ceb",
     marginHorizontal: 15,
     borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.1)",
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
   buttonCheckout: {
     width: "100%",
     height: 50,
-    backgroundColor: "#60941A",
+    backgroundColor: "#5f7ceb",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

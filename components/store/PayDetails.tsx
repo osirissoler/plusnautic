@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity, StyleSheet, Alert, Text } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Alert, Text, ScrollView } from "react-native";
 import { LanguageContext } from "../../LanguageContext";
 import { fetchData, sendData } from "../../httpRequests";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
@@ -126,7 +126,7 @@ export default function PayDetails({ navigation, route }: any) {
             navigation={navigation}
             translation={translation}
             direction={(value: any) => {
-              console.log(value)
+              console.log(value);
               setClientDirection_id(value);
             }}
           />
@@ -139,10 +139,11 @@ export default function PayDetails({ navigation, route }: any) {
           </View>
         )}
       </View>
-      <View
+      
+      <ScrollView
         style={{
           width: "100%",
-          marginTop: 10,
+          marginTop: 5,
           height: "18%",
           borderWidth: 0,
           paddingHorizontal: 8,
@@ -202,7 +203,8 @@ export default function PayDetails({ navigation, route }: any) {
             </Text>
           </View>
         </View>
-      </View>
+      </ScrollView>
+
       <View style={{ height: "13%" }}>
         <TouchableOpacity
           style={{
