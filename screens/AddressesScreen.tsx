@@ -101,8 +101,7 @@ export default function AddressesScreen({ navigation, direction }: any) {
               user_id: user.id,
               client_direction_id: item.id,
             };
-            // console.log(data.client_direction_id, "data jajaja")
-            direction(data.client_direction_id);
+            if(direction) direction(data.client_direction_id);
             sendData(url, data).then((response: any) => {
               fetchAddresses();
               // if (setAddress) setAddress(item);

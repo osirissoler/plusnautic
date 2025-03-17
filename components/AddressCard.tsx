@@ -81,7 +81,7 @@ export const AddressCard = ({
           style={{ marginHorizontal: 8, padding: 3 }}
           name="pencil-square-o"
           size={20}
-          onPress={() => navigation("NewAddress", { address: item })}
+          onPress={() => navigation.navigate("NewAddress", { address: item })}
         />
         <FontAwesome
           name="trash-o"

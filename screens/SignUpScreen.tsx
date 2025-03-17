@@ -187,17 +187,17 @@ export default function SignUpScreen({ navigation }: any) {
 
   const setAuthUser = (id: number) => {
     asyncStorage.setItem("USER_LOGGED", id + "");
-    navigation.navigate("Marinas", { showBack: false });
-    // navigation.reset({
-    // 	index: 0,
-    // 	routes: [
-    // 		{
-    // 			name: 'Root',
-    // 			params: { phId: 536 },
-    // 			screen: 'Home'
-    // 		}
-    // 	]
-    // });
+    // navigation.navigate("Marinas", { showBack: false });
+    navigation.reset({
+    	index: 0,
+    	routes: [
+    		{
+    			name: 'Root',
+    			params: { phId: 536 },
+    			screen: 'Home'
+    		}
+    	]
+    });
   };
 
   const redirectToRecordBoats = () => {

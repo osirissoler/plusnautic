@@ -10,6 +10,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { BottomPopup } from "../components/BottomPopup";
 import * as yup from "yup";
@@ -41,23 +42,29 @@ export default function NewAddressScreen({ route, navigation }: any) {
     zip_Code: yup.string().required(translation.t("addressZIPRequiredText")), // ZIP Code is required
   });
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
+  // useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     console.log(status);
 
-      let location = await Location.getCurrentPositionAsync({});
-      console.log("paso 2");
-      const currentLocation = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      await setMarkerPosition(currentLocation);
-      console.log(MarkerPosition);
-    })();
-  }, []);
+  //     if (status !== "granted") {
+  //       Alert.alert(
+  //         "Debes aceptar los permisos para poder obtener tu ubicación.",
+  //         "",
+  //         [{ text: "OK", onPress: goBack }]
+  //       );
+  //       return;
+  //     }
+
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     const currentLocation = {
+  //       latitude: location.coords.latitude,
+  //       longitude: location.coords.longitude,
+  //     };
+  //     await setMarkerPosition(currentLocation);
+  //   })();
+  // }, []);
+
   useEffect(() => {
     if (!!route.params) {
       setShowLoading(true);
@@ -123,27 +130,12 @@ export default function NewAddressScreen({ route, navigation }: any) {
   const onRegionChange = (e: any) => {
     console.log(e);
   };
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
 
-      let location = await Location.getCurrentPositionAsync({});
-      console.log("paso 2");
-      await setMarkerPosition({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-      console.log(MarkerPosition);
-    })();
-  }, []);
   return (
     <>
       <Loading showLoading={showLoading} translation={translation} />
       <View style={styles.containerMap}>
-        <MapView
+        {/* <MapView
           style={styles.map}
           showsUserLocation={true}
           onRegionChange={onRegionChange}
@@ -160,7 +152,7 @@ export default function NewAddressScreen({ route, navigation }: any) {
             draggable={true}
             onDragEnd={onDragMarkerEnd}
           ></Marker>
-        </MapView>
+        </MapView> */}
       </View>
       <SafeAreaView style={styles.container}>
         <View
@@ -276,7 +268,7 @@ export default function NewAddressScreen({ route, navigation }: any) {
                       {translation.t("addressNotesLabel") /* Notes */}
                     </Text>
                     <TextInput
-                      style={[styles.textInput, { height: 80}]}
+                      style={[styles.textInput, { height: 80 }]}
                       onChangeText={handleChange("notes")}
                       onBlur={handleBlur("notes")}
                       value={values.notes}
