@@ -19,6 +19,7 @@ import { sendData } from "../httpRequests";
 import { LanguageContext } from "../LanguageContext";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+
 export default function NewAddressScreen({ route, navigation }: any) {
   const [MarkerPosition, setMarkerPosition] = useState({
     latitude: 0,
@@ -135,7 +136,7 @@ export default function NewAddressScreen({ route, navigation }: any) {
     <>
       <Loading showLoading={showLoading} translation={translation} />
       <View style={styles.containerMap}>
-        {/* <MapView
+        <MapView
           style={styles.map}
           showsUserLocation={true}
           onRegionChange={onRegionChange}
@@ -152,7 +153,7 @@ export default function NewAddressScreen({ route, navigation }: any) {
             draggable={true}
             onDragEnd={onDragMarkerEnd}
           ></Marker>
-        </MapView> */}
+        </MapView>
       </View>
       <SafeAreaView style={styles.container}>
         <View
