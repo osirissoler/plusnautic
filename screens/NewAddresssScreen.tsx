@@ -11,6 +11,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Linking,
 } from "react-native";
 import { BottomPopup } from "../components/BottomPopup";
 import * as yup from "yup";
@@ -67,7 +68,7 @@ export default function NewAddressScreen({ route, navigation }: any) {
   // }, []);
 
   useEffect(() => {
-    getLocation()
+      getLocation();
 
     if (!!route.params) {
       setShowLoading(true);
@@ -84,40 +85,44 @@ export default function NewAddressScreen({ route, navigation }: any) {
     };
   }, []);
 
+  const getLocation = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
 
-const getLocation = async () => {
-  try {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permiso requerido",
+          "Debes aceptar los permisos para obtener tu ubicación. ¿Quieres habilitarlos en la configuración?",
+          [
+            { text: "Cancelar", style: "cancel", onPress: goBack },
+            {
+              text: "Abrir Configuración",
+              onPress: () => {Linking.openSettings(); goBack()},
+            },
+          ]
+        );
+        return;
+      }
 
-    if (status !== "granted") {
-      Alert.alert(
-        "Debes aceptar los permisos para poder obtener tu ubicación.",
-        "",
-        [{ text: "OK", onPress: goBack }]
-      );
-      return;
+      let servicesEnabled = await Location.hasServicesEnabledAsync();
+      if (!servicesEnabled) {
+        Alert.alert("El servicio de ubicación está desactivado.");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setMarkerPosition({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    } catch (error) {
+      console.error("Error obteniendo la ubicación:", error);
     }
-
-    let servicesEnabled = await Location.hasServicesEnabledAsync();
-    if (!servicesEnabled) {
-      Alert.alert("El servicio de ubicación está desactivado.");
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setMarkerPosition({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-  } catch (error) {
-    console.error("Error obteniendo la ubicación:", error);
-  }
-};
-
+  };
 
   const hideLoadingModal = (callback: Function) => {
-      setShowLoading(false);
-      callback();
+    setShowLoading(false);
+    callback();
   };
 
   const saveAddress = (values: any) => {
